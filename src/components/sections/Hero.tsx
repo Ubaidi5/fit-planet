@@ -2,34 +2,7 @@ import Link from "next/link";
 
 const Hero: React.FC = () => {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 -z-10">
-        <svg
-          className="absolute left-[max(50%,25rem)] top-0 h-[64rem] w-[128rem] -translate-x-1/2 stroke-emerald-200 [mask-image:radial-gradient(64rem_64rem_at_top,white,transparent)]"
-          aria-hidden="true"
-        >
-          <defs>
-            <pattern
-              id="hero-pattern"
-              width={200}
-              height={200}
-              x="50%"
-              y={-1}
-              patternUnits="userSpaceOnUse"
-            >
-              <path d="M100 200V.5M.5 .5H200" fill="none" />
-            </pattern>
-          </defs>
-          <rect
-            width="100%"
-            height="100%"
-            strokeWidth={0}
-            fill="url(#hero-pattern)"
-          />
-        </svg>
-      </div>
-
+    <section className="relative overflow-hidden bg-linear-to-br from-emerald-50 via-white to-teal-50">
       <div className="container mx-auto px-4 py-20 sm:py-28 lg:py-32">
         <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}

@@ -4,7 +4,7 @@ const CTA: React.FC = () => {
   return (
     <section className="bg-white py-20 lg:py-28">
       <div className="container mx-auto px-4">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-600 to-teal-700 px-6 py-16 sm:px-12 sm:py-20 lg:px-20">
+        <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-emerald-600 to-teal-700 px-6 py-16 sm:px-12 sm:py-20 lg:px-20">
           {/* Background Pattern */}
           <div className="absolute inset-0 -z-10 opacity-30">
             <svg
