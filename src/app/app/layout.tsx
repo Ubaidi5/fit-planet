@@ -89,6 +89,25 @@ const navItems: NavItem[] = [
     ),
   },
   {
+    href: "/app/social",
+    label: "Social",
+    icon: (
+      <svg
+        className="w-5 h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+        />
+      </svg>
+    ),
+  },
+  {
     href: "/app/checkins",
     label: "Check-ins",
     icon: (
@@ -166,29 +185,29 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-1">
+            <div className="hidden lg:flex items-center gap-1">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+                    "flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                     pathname === item.href
                       ? "bg-emerald-50 text-emerald-700"
                       : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
                   )}
                 >
                   {item.icon}
-                  {item.label}
+                  <span className="hidden xl:inline">{item.label}</span>
                 </Link>
               ))}
             </div>
 
             {/* Right Side */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               {/* Find Gyms Button */}
               <Link href="/gyms" className="hidden sm:block">
-                <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors">
+                <button className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors">
                   <svg
                     className="w-5 h-5"
                     fill="none"
@@ -202,7 +221,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                       d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                     />
                   </svg>
-                  Find Gyms
+                  <span className="hidden md:inline">Find Gyms</span>
                 </button>
               </Link>
 
@@ -237,7 +256,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+                className="lg:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
               >
                 {mobileMenuOpen ? (
                   <svg
@@ -275,7 +294,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200">
+          <div className="lg:hidden border-t border-gray-200">
             <div className="px-4 py-3 space-y-1">
               {navItems.map((item) => (
                 <Link
