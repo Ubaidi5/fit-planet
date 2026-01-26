@@ -47,6 +47,12 @@ const buttonVariants = cva(
           "focus:ring-red-500/20",
           "shadow-sm hover:shadow-md",
         ],
+        outline: [
+          "bg-transparent text-gray-700 border border-gray-300",
+          "hover:bg-gray-50 hover:border-gray-400",
+          "focus:ring-gray-500/20",
+          "shadow-sm",
+        ],
         ghost: [
           "bg-transparent text-gray-700 border border-transparent",
           "hover:bg-gray-100 hover:text-gray-900",
