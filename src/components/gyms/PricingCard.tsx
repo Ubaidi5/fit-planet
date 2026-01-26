@@ -23,6 +23,7 @@ interface PricingCardProps {
   annualPass?: number;
   specialPackages?: SpecialPackage[];
   className?: string;
+  onSelectPlan?: (planType: string) => void;
 }
 
 export function PricingCard({
@@ -32,6 +33,7 @@ export function PricingCard({
   annualPass,
   specialPackages,
   className,
+  onSelectPlan,
 }: PricingCardProps) {
   const plans: PricingPlan[] = [
     {
@@ -147,6 +149,9 @@ export function PricingCard({
                 "w-full mt-6",
                 plan.popular ? "" : "bg-gray-900 hover:bg-gray-800",
               )}
+              onClick={() =>
+                onSelectPlan?.(plan.name.toLowerCase().replace(" pass", ""))
+              }
             >
               Select {plan.name}
             </Button>
@@ -210,6 +215,7 @@ export function PricingCard({
                 <Button
                   outline
                   className="w-full mt-4 border-amber-400 text-amber-700 hover:bg-amber-100"
+                  onClick={() => onSelectPlan?.("month")}
                 >
                   Get This Package
                 </Button>

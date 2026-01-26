@@ -20,12 +20,14 @@ import {
   CapacityIndicator,
   CrowdChart,
 } from "@/components/gyms/CapacityIndicator";
+import { BookingModal } from "@/components/booking/BookingModal";
 
 // Tabs for the page
 type TabType = "overview" | "pricing" | "classes" | "trainers" | "reviews";
 
 export default function GymDetailPage() {
   const [activeTab, setActiveTab] = useState<TabType>("overview");
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
   const params = useParams();
   // Find the gym from mock data - support both id and slug
   const gym = mockGyms.find((g) => g.id === params.id || g.slug === params.id);
@@ -394,6 +396,7 @@ export default function GymDetailPage() {
                     monthPass={gym.pricing.monthPass}
                     annualPass={details.annualPass}
                     specialPackages={details.specialPackages}
+                    onSelectPlan={() => setIsBookingOpen(true)}
                   />
                 </div>
               )}
@@ -732,7 +735,12 @@ export default function GymDetailPage() {
                   </div>
                 </div>
 
-                <Button className="w-full" size="lg">
+                <Button
+                  variant="secondary"
+                  className="w-full"
+                  size="lg"
+                  onClick={() => setIsBookingOpen(true)}
+                >
                   Book Now
                 </Button>
 
@@ -908,6 +916,13 @@ export default function GymDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Booking Modal */}
+      <BookingModal
+        gym={gym}
+        isOpen={isBookingOpen}
+        onClose={() => setIsBookingOpen(false)}
+      />
     </div>
   );
 }
