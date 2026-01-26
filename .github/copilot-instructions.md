@@ -217,6 +217,54 @@ export function BookingButton({ gymId }: Props) {
 }
 ```
 
+### UI Component Library
+
+#### Button Component (`src/components/ui/Button.tsx`)
+
+Uses **class-variance-authority (CVA)** for type-safe variants.
+
+**Available Variants:**
+
+| Variant     | Description                   | Usage                         |
+| ----------- | ----------------------------- | ----------------------------- |
+| `primary`   | Emerald green, solid          | Main CTAs: "Book Now", "Save" |
+| `secondary` | Teal, solid                   | Secondary actions             |
+| `success`   | Green, solid                  | Confirmations: "Complete"     |
+| `warning`   | Yellow/Orange, solid          | Caution actions               |
+| `danger`    | Red, solid                    | Destructive: "Delete"         |
+| `outline`   | Transparent with border       | Neutral: "Cancel", "Go Back"  |
+| `ghost`     | Transparent, no border        | Subtle actions                |
+| `link`      | Text-only, underline on hover | Navigation links              |
+
+**Usage Examples:**
+
+```typescript
+import { Button } from "@/components/ui/Button";
+
+// Primary (default)
+<Button>Book Now</Button>
+
+// With variant
+<Button variant="outline">Cancel</Button>
+<Button variant="danger">Delete</Button>
+
+// With size (sm, md, lg, xl, icon)
+<Button variant="outline" size="sm">Small Button</Button>
+
+// Full width
+<Button fullWidth>Submit</Button>
+```
+
+**⚠️ IMPORTANT - Common Mistakes:**
+
+```typescript
+// ❌ WRONG - Don't use outline as boolean prop
+<Button outline>Cancel</Button>
+
+// ✅ CORRECT - Use variant="outline"
+<Button variant="outline">Cancel</Button>
+```
+
 ---
 
 ## Routing Conventions
