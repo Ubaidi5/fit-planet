@@ -28,10 +28,37 @@ const mockUser = {
     notifications: true,
     emailUpdates: true,
     marketingEmails: false,
+    smsAlerts: true,
   },
+  privacy: {
+    profileVisibility: "friends" as "public" | "friends" | "private",
+    showActivity: true,
+    showRoutines: true,
+    showStats: false,
+  },
+  paymentMethods: [
+    {
+      id: "pm1",
+      type: "card" as const,
+      brand: "Visa",
+      last4: "4242",
+      expiryMonth: 12,
+      expiryYear: 2027,
+      isDefault: true,
+    },
+    {
+      id: "pm2",
+      type: "card" as const,
+      brand: "Mastercard",
+      last4: "8888",
+      expiryMonth: 6,
+      expiryYear: 2026,
+      isDefault: false,
+    },
+  ],
 };
 
-type TabType = "profile" | "security" | "preferences";
+type TabType = "profile" | "security" | "payments" | "privacy" | "preferences";
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<TabType>("profile");
@@ -44,6 +71,7 @@ export default function ProfilePage() {
     dateOfBirth: user.dateOfBirth,
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [showAddPayment, setShowAddPayment] = useState(false);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -53,9 +81,28 @@ export default function ProfilePage() {
     setIsEditing(false);
   };
 
+  const setDefaultPayment = (paymentId: string) => {
+    setUser({
+      ...user,
+      paymentMethods: user.paymentMethods.map((pm) => ({
+        ...pm,
+        isDefault: pm.id === paymentId,
+      })),
+    });
+  };
+
+  const removePayment = (paymentId: string) => {
+    setUser({
+      ...user,
+      paymentMethods: user.paymentMethods.filter((pm) => pm.id !== paymentId),
+    });
+  };
+
   const tabs = [
     { id: "profile" as const, label: "Profile", icon: "👤" },
     { id: "security" as const, label: "Security", icon: "🔒" },
+    { id: "payments" as const, label: "Payments", icon: "💳" },
+    { id: "privacy" as const, label: "Privacy", icon: "👁️" },
     { id: "preferences" as const, label: "Preferences", icon: "⚙️" },
   ];
 
@@ -160,13 +207,13 @@ export default function ProfilePage() {
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-6 mt-6 border-b border-gray-200">
+          <div className="flex gap-4 md:gap-6 mt-6 border-b border-gray-200 overflow-x-auto scrollbar-hide">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "pb-3 px-1 text-sm font-medium border-b-2 transition-colors flex items-center gap-2",
+                  "pb-3 px-1 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 whitespace-nowrap shrink-0",
                   activeTab === tab.id
                     ? "border-emerald-600 text-emerald-600"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
@@ -423,65 +470,565 @@ export default function ProfilePage() {
         )}
 
         {activeTab === "preferences" && (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <div className="p-6 border-b border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Notification Preferences
-              </h3>
-            </div>
-            <div className="divide-y divide-gray-100">
-              {[
-                {
-                  key: "notifications",
-                  title: "Push Notifications",
-                  description: "Receive alerts about check-ins and pass expiry",
-                },
-                {
-                  key: "emailUpdates",
-                  title: "Email Updates",
-                  description:
-                    "Get booking confirmations and pass details via email",
-                },
-                {
-                  key: "marketingEmails",
-                  title: "Marketing Emails",
-                  description: "Receive offers, promotions, and gym updates",
-                },
-              ].map((pref) => (
-                <div
-                  key={pref.key}
-                  className="p-6 flex items-center justify-between"
-                >
-                  <div>
-                    <p className="font-medium text-gray-900">{pref.title}</p>
-                    <p className="text-sm text-gray-500">{pref.description}</p>
+          <div className="space-y-6">
+            {/* Notification Preferences */}
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="p-6 border-b border-gray-100">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Notification Preferences
+                </h3>
+                <p className="text-sm text-gray-500 mt-1">
+                  Control how and when you receive notifications
+                </p>
+              </div>
+              <div className="divide-y divide-gray-100">
+                {[
+                  {
+                    key: "notifications",
+                    title: "Push Notifications",
+                    description:
+                      "Receive alerts about check-ins and pass expiry",
+                    icon: "🔔",
+                  },
+                  {
+                    key: "emailUpdates",
+                    title: "Email Updates",
+                    description:
+                      "Get booking confirmations and pass details via email",
+                    icon: "📧",
+                  },
+                  {
+                    key: "smsAlerts",
+                    title: "SMS Alerts",
+                    description: "Receive important alerts via text message",
+                    icon: "💬",
+                  },
+                  {
+                    key: "marketingEmails",
+                    title: "Marketing Emails",
+                    description: "Receive offers, promotions, and gym updates",
+                    icon: "📢",
+                  },
+                ].map((pref) => (
+                  <div
+                    key={pref.key}
+                    className="p-6 flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-4">
+                      <span className="text-xl">{pref.icon}</span>
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          {pref.title}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {pref.description}
+                        </p>
+                      </div>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={
+                          user.preferences[
+                            pref.key as keyof typeof user.preferences
+                          ]
+                        }
+                        onChange={() =>
+                          setUser({
+                            ...user,
+                            preferences: {
+                              ...user.preferences,
+                              [pref.key]:
+                                !user.preferences[
+                                  pref.key as keyof typeof user.preferences
+                                ],
+                            },
+                          })
+                        }
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                    </label>
                   </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={
-                        user.preferences[
-                          pref.key as keyof typeof user.preferences
-                        ]
-                      }
-                      onChange={() =>
-                        setUser({
-                          ...user,
-                          preferences: {
-                            ...user.preferences,
-                            [pref.key]:
-                              !user.preferences[
-                                pref.key as keyof typeof user.preferences
-                              ],
-                          },
-                        })
-                      }
-                      className="sr-only peer"
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
-                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* App Settings */}
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="p-6 border-b border-gray-100">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  App Settings
+                </h3>
+              </div>
+              <div className="divide-y divide-gray-100">
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <span className="text-xl">🌍</span>
+                    <div>
+                      <p className="font-medium text-gray-900">Language</p>
+                      <p className="text-sm text-gray-500">
+                        Select your preferred language
+                      </p>
+                    </div>
+                  </div>
+                  <select className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <option value="en">English</option>
+                    <option value="ur">Urdu</option>
+                  </select>
                 </div>
-              ))}
+                <div className="p-6 flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <span className="text-xl">📏</span>
+                    <div>
+                      <p className="font-medium text-gray-900">Distance Unit</p>
+                      <p className="text-sm text-gray-500">
+                        Choose kilometers or miles
+                      </p>
+                    </div>
+                  </div>
+                  <select className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <option value="km">Kilometers</option>
+                    <option value="mi">Miles</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "payments" && (
+          <div className="space-y-6">
+            {/* Payment Methods */}
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    Payment Methods
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Manage your saved payment methods
+                  </p>
+                </div>
+                <Button size="sm" onClick={() => setShowAddPayment(true)}>
+                  + Add Card
+                </Button>
+              </div>
+
+              {user.paymentMethods.length === 0 ? (
+                <div className="p-8 text-center">
+                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl">💳</span>
+                  </div>
+                  <h4 className="font-medium text-gray-900 mb-1">
+                    No payment methods
+                  </h4>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Add a card to make bookings faster
+                  </p>
+                  <Button size="sm" onClick={() => setShowAddPayment(true)}>
+                    Add Payment Method
+                  </Button>
+                </div>
+              ) : (
+                <div className="divide-y divide-gray-100">
+                  {user.paymentMethods.map((method) => (
+                    <div key={method.id} className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div
+                            className={cn(
+                              "w-12 h-8 rounded flex items-center justify-center text-white text-xs font-bold",
+                              method.brand === "Visa"
+                                ? "bg-blue-600"
+                                : "bg-orange-500",
+                            )}
+                          >
+                            {method.brand === "Visa" ? "VISA" : "MC"}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <p className="font-medium text-gray-900">
+                                {method.brand} ending in {method.last4}
+                              </p>
+                              {method.isDefault && (
+                                <Badge variant="success" size="sm">
+                                  Default
+                                </Badge>
+                              )}
+                            </div>
+                            <p className="text-sm text-gray-500">
+                              Expires{" "}
+                              {method.expiryMonth.toString().padStart(2, "0")}/
+                              {method.expiryYear}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {!method.isDefault && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => setDefaultPayment(method.id)}
+                            >
+                              Set Default
+                            </Button>
+                          )}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removePayment(method.id)}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Add Payment Modal */}
+            {showAddPayment && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+                <div className="bg-white rounded-xl max-w-md w-full p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      Add Payment Method
+                    </h3>
+                    <button
+                      onClick={() => setShowAddPayment(false)}
+                      className="text-gray-400 hover:text-gray-600"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Card Number
+                      </label>
+                      <Input placeholder="1234 5678 9012 3456" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Expiry Date
+                        </label>
+                        <Input placeholder="MM/YY" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          CVV
+                        </label>
+                        <Input placeholder="123" type="password" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Cardholder Name
+                      </label>
+                      <Input placeholder="Name on card" />
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      <input
+                        type="checkbox"
+                        id="setDefault"
+                        className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                      />
+                      <label
+                        htmlFor="setDefault"
+                        className="text-sm text-gray-600"
+                      >
+                        Set as default payment method
+                      </label>
+                    </div>
+                  </div>
+                  <div className="flex gap-3 mt-6">
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      onClick={() => setShowAddPayment(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      className="flex-1"
+                      onClick={() => setShowAddPayment(false)}
+                    >
+                      Add Card
+                    </Button>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-4 text-center">
+                    🔒 Your payment info is encrypted and secure
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Billing History */}
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    Billing History
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-1">
+                    View your recent transactions
+                  </p>
+                </div>
+                <Button variant="outline" size="sm">
+                  Download All
+                </Button>
+              </div>
+              <div className="divide-y divide-gray-100">
+                {[
+                  {
+                    id: "INV-001",
+                    desc: "Monthly Pass - FitZone Karachi",
+                    amount: 4999,
+                    date: "Jan 20, 2026",
+                    status: "paid",
+                  },
+                  {
+                    id: "INV-002",
+                    desc: "Day Pass - Iron Paradise",
+                    amount: 500,
+                    date: "Jan 15, 2026",
+                    status: "paid",
+                  },
+                  {
+                    id: "INV-003",
+                    desc: "Weekly Pass - PowerHouse Gym",
+                    amount: 1500,
+                    date: "Jan 8, 2026",
+                    status: "paid",
+                  },
+                ].map((invoice) => (
+                  <div
+                    key={invoice.id}
+                    className="p-4 flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
+                        <span className="text-emerald-600">✓</span>
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          {invoice.desc}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {invoice.date} • {invoice.id}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-semibold text-gray-900">
+                        Rs. {invoice.amount.toLocaleString()}
+                      </p>
+                      <Badge variant="success" size="sm">
+                        Paid
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="p-4 border-t border-gray-100 text-center">
+                <Button variant="link" size="sm">
+                  View All Transactions →
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "privacy" && (
+          <div className="space-y-6">
+            {/* Profile Visibility */}
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="p-6 border-b border-gray-100">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Profile Visibility
+                </h3>
+                <p className="text-sm text-gray-500 mt-1">
+                  Control who can see your profile and activity
+                </p>
+              </div>
+              <div className="p-6">
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Who can see your profile?
+                </label>
+                <div className="space-y-3">
+                  {[
+                    {
+                      value: "public",
+                      label: "Everyone",
+                      desc: "Anyone on Fit Planet can view your profile",
+                    },
+                    {
+                      value: "friends",
+                      label: "Friends Only",
+                      desc: "Only your fitness buddies can view your profile",
+                    },
+                    {
+                      value: "private",
+                      label: "Private",
+                      desc: "Only you can see your profile details",
+                    },
+                  ].map((option) => (
+                    <label
+                      key={option.value}
+                      className={cn(
+                        "flex items-start gap-3 p-4 border rounded-lg cursor-pointer transition-colors",
+                        user.privacy.profileVisibility === option.value
+                          ? "border-emerald-500 bg-emerald-50"
+                          : "border-gray-200 hover:border-gray-300",
+                      )}
+                    >
+                      <input
+                        type="radio"
+                        name="visibility"
+                        value={option.value}
+                        checked={
+                          user.privacy.profileVisibility === option.value
+                        }
+                        onChange={() =>
+                          setUser({
+                            ...user,
+                            privacy: {
+                              ...user.privacy,
+                              profileVisibility: option.value as
+                                | "public"
+                                | "friends"
+                                | "private",
+                            },
+                          })
+                        }
+                        className="mt-1 text-emerald-600 focus:ring-emerald-500"
+                      />
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          {option.label}
+                        </p>
+                        <p className="text-sm text-gray-500">{option.desc}</p>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Activity Sharing */}
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="p-6 border-b border-gray-100">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Activity Sharing
+                </h3>
+                <p className="text-sm text-gray-500 mt-1">
+                  Choose what others can see about your fitness journey
+                </p>
+              </div>
+              <div className="divide-y divide-gray-100">
+                {[
+                  {
+                    key: "showActivity",
+                    title: "Show Workout Activity",
+                    description: "Let others see when you check in at gyms",
+                    icon: "🏃",
+                  },
+                  {
+                    key: "showRoutines",
+                    title: "Share Routines",
+                    description:
+                      "Allow your public routines to appear in social feed",
+                    icon: "📋",
+                  },
+                  {
+                    key: "showStats",
+                    title: "Display Stats",
+                    description: "Show your workout statistics on your profile",
+                    icon: "📊",
+                  },
+                ].map((setting) => (
+                  <div
+                    key={setting.key}
+                    className="p-6 flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-4">
+                      <span className="text-xl">{setting.icon}</span>
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          {setting.title}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {setting.description}
+                        </p>
+                      </div>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={
+                          user.privacy[
+                            setting.key as keyof typeof user.privacy
+                          ] as boolean
+                        }
+                        onChange={() =>
+                          setUser({
+                            ...user,
+                            privacy: {
+                              ...user.privacy,
+                              [setting.key]:
+                                !user.privacy[
+                                  setting.key as keyof typeof user.privacy
+                                ],
+                            },
+                          })
+                        }
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Data & Privacy */}
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="p-6 border-b border-gray-100">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Data & Privacy
+                </h3>
+              </div>
+              <div className="divide-y divide-gray-100">
+                <div className="p-6 flex items-center justify-between">
+                  <div>
+                    <p className="font-medium text-gray-900">
+                      Download Your Data
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Get a copy of your Fit Planet data
+                    </p>
+                  </div>
+                  <Button variant="outline" size="sm">
+                    Request Data
+                  </Button>
+                </div>
+                <div className="p-6 flex items-center justify-between">
+                  <div>
+                    <p className="font-medium text-gray-900">Blocked Users</p>
+                    <p className="text-sm text-gray-500">
+                      Manage users you&apos;ve blocked
+                    </p>
+                  </div>
+                  <Button variant="outline" size="sm">
+                    View List
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         )}
