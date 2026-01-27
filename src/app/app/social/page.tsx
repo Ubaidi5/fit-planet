@@ -59,20 +59,23 @@ export default function SocialFeedPage() {
             See what your fitness community is up to
           </p>
         </div>
-        <Button>
-          <svg
-            className="mr-2 h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
+        <Button
+          beforeIcon={
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+          }
+        >
           Share Routine
         </Button>
       </div>
@@ -126,7 +129,7 @@ export default function SocialFeedPage() {
                 <GymVisitCard key={visit.id} visit={visit} />
               ))}
             </div>
-            <Button variant="ghost" fullWidth className="mt-4">
+            <Button variant="outline" fullWidth className="mt-4">
               Post Your Gym Visit
             </Button>
           </Card>
@@ -141,7 +144,7 @@ export default function SocialFeedPage() {
                 <TrendingRoutineCard key={routine.id} routine={routine} />
               ))}
             </div>
-            <Button variant="ghost" fullWidth className="mt-4">
+            <Button variant="outline" fullWidth className="mt-4">
               Browse All Routines
             </Button>
           </Card>

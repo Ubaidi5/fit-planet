@@ -33,6 +33,12 @@ body {
     sans-serif;
 }
 
+/* Ensure native selects and their options use black text by default */
+select,
+select option {
+  color: #000000;
+}
+
 /* Smooth scrolling for anchor links */
 html {
   scroll-behavior: smooth;

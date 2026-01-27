@@ -2,31 +2,31 @@ import React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-// Button variants using CVA
+// Button variants using CVA (matching Fit Planet emerald/teal theme)
 const buttonVariants = cva(
   // Base styles
   [
     "inline-flex items-center justify-center cursor-pointer",
-    "rounded-lg font-medium",
+    "rounded-xl font-semibold",
     "transition-all duration-200 ease-in-out",
     "focus:outline-none focus:ring-2 focus:ring-offset-2",
     "disabled:pointer-events-none disabled:opacity-50",
     "relative overflow-hidden",
-    "active:scale-95",
+    "active:scale-[0.98]",
   ],
   {
     variants: {
       variant: {
         primary: [
-          "bg-primary text-white border border-primary",
-          "hover:bg-primary/80 hover:border-primary/80",
-          "focus:ring-primary/20",
+          "bg-emerald-600 text-white border border-emerald-600",
+          "hover:bg-emerald-700 hover:border-emerald-700",
+          "focus:ring-emerald-500/20",
           "shadow-sm hover:shadow-md",
         ],
         secondary: [
-          "bg-secondary text-white border border-secondary",
-          "hover:bg-secondary/80 hover:border-secondary/80",
-          "focus:ring-secondary/20",
+          "bg-teal-600 text-white border border-teal-600",
+          "hover:bg-teal-700 hover:border-teal-700",
+          "focus:ring-teal-500/20",
           "shadow-sm hover:shadow-md",
         ],
         success: [
@@ -36,9 +36,9 @@ const buttonVariants = cva(
           "shadow-sm hover:shadow-md",
         ],
         warning: [
-          "bg-warning text-white border border-warning",
-          "hover:bg-warning/80 hover:border-warning/80",
-          "focus:ring-warning/20",
+          "bg-amber-500 text-white border border-amber-500",
+          "hover:bg-amber-600 hover:border-amber-600",
+          "focus:ring-amber-400/20",
           "shadow-sm hover:shadow-md",
         ],
         danger: [
@@ -50,104 +50,45 @@ const buttonVariants = cva(
         outline: [
           "bg-transparent text-gray-700 border border-gray-300",
           "hover:bg-gray-50 hover:border-gray-400",
-          "focus:ring-gray-500/20",
+          "focus:ring-gray-400/20",
           "shadow-sm",
         ],
         ghost: [
           "bg-transparent text-gray-700 border border-transparent",
           "hover:bg-gray-100 hover:text-gray-900",
-          "focus:ring-gray-500/20",
+          "focus:ring-gray-400/20",
         ],
         link: [
-          "bg-transparent text-primary border border-transparent",
-          "hover:text-primary hover:underline",
-          "focus:ring-primary/20",
+          "bg-transparent text-emerald-600 border border-transparent",
+          "hover:text-emerald-700 hover:underline",
+          "focus:ring-emerald-500/20",
           "shadow-none",
+          "h-auto px-0",
         ],
       },
       size: {
-        sm: "h-8 px-3 text-xs gap-1.5",
+        sm: "h-9 px-3 text-sm gap-1.5",
         md: "h-10 px-4 text-sm gap-2",
         lg: "h-12 px-6 text-base gap-2.5",
-        xl: "h-14 px-8 text-lg gap-3",
+        xl: "h-14 px-8 text-base gap-3",
         icon: "h-10 w-10 p-0",
       },
-      outline: {
-        true: "",
+      fullWidth: {
+        true: "w-full",
         false: "",
-      },
-      rounded: {
-        none: "rounded-none",
-        sm: "rounded-sm",
-        md: "rounded-md",
-        lg: "rounded-lg",
-        xl: "rounded-xl",
-        full: "rounded-full",
       },
     },
     compoundVariants: [
-      // Primary outline variants
+      // Outline style variant (deprecated but kept for backward compatibility)
       {
         variant: "primary",
-        outline: true,
-        className: [
-          "bg-transparent text-primary border-primary",
-          "hover:bg-primary hover:text-white",
-          "focus:ring-primary/20",
-        ],
-      },
-      // Secondary outline variants
-      {
-        variant: "secondary",
-        outline: true,
-        className: [
-          "bg-transparent text-secondary border-secondary",
-          "hover:bg-secondary hover:text-white",
-          "focus:ring-secondary/20",
-        ],
-      },
-      // Success outline variants
-      {
-        variant: "success",
-        outline: true,
-        className: [
-          "bg-transparent text-green-600 border-green-600",
-          "hover:bg-green-600 hover:text-white",
-          "focus:ring-green-500/20",
-        ],
-      },
-      // Warning outline variants
-      {
-        variant: "warning",
-        outline: true,
-        className: [
-          "bg-transparent text-warning border-warning",
-          "hover:bg-warning hover:text-white",
-          "focus:ring-warning/20",
-        ],
-      },
-      // Danger outline variants
-      {
-        variant: "danger",
-        outline: true,
-        className: [
-          "bg-transparent text-danger border-danger",
-          "hover:bg-danger hover:text-white",
-          "focus:ring-danger/20",
-        ],
-      },
-      // Icon size adjustments
-      {
-        size: "icon",
-        variant: ["primary", "secondary", "success", "warning", "danger"],
-        className: "rounded-lg",
+        className: "",
       },
     ],
     defaultVariants: {
       variant: "primary",
       size: "md",
-      outline: false,
-      rounded: "lg",
+      fullWidth: false,
     },
   },
 );
@@ -197,8 +138,6 @@ export interface ButtonProps
   loading?: boolean;
   /** Loading text to display when loading */
   loadingText?: string;
-  /** Whether button should take full width */
-  fullWidth?: boolean;
   /** Custom class name */
   className?: string;
   /** Button content */
@@ -206,30 +145,37 @@ export interface ButtonProps
 }
 
 /**
- * Modern Button component with Tailwind CSS and CVA variants
+ * Modern Button component matching Fit Planet theme (Emerald/Teal)
  *
  * Features:
- * - Multiple variants (primary, secondary, success, warning, danger, ghost, link)
- * - Outline variants for each color
+ * - Primary: Emerald green (brand color)
+ * - Secondary: Teal (secondary brand color)
+ * - Success, Warning, Danger variants for different actions
+ * - Outline and Ghost for subtle CTAs
  * - Multiple sizes (sm, md, lg, xl, icon)
- * - Before/after icons
- * - Loading states
+ * - Before/after icons support
+ * - Loading states with spinner
  * - Full width option
- * - Customizable border radius
  * - Accessibility features
  * - Smooth animations
+ *
+ * @example
+ * ```tsx
+ * <Button>Book Now</Button>
+ * <Button variant="outline">Cancel</Button>
+ * <Button size="lg" beforeIcon={<Icon />}>Get Started</Button>
+ * <Button loading loadingText="Saving...">Save</Button>
+ * ```
  */
 export function Button({
   className,
   variant,
   size,
-  outline,
-  rounded,
+  fullWidth,
   beforeIcon,
   afterIcon,
   loading = false,
   loadingText,
-  fullWidth = false,
   disabled,
   children,
   ...props
@@ -238,30 +184,37 @@ export function Button({
 
   return (
     <button
-      className={cn(
-        buttonVariants({ variant, size, outline, rounded }),
-        fullWidth && "w-full",
-        className,
-      )}
+      className={cn(buttonVariants({ variant, size, fullWidth }), className)}
       disabled={isDisabled}
       {...props}
     >
       {loading ? (
-        <LoadingSpinner
-          size={
-            size === "sm" ? "sm" : size === "lg" || size === "xl" ? "lg" : "md"
-          }
-        />
+        <>
+          <LoadingSpinner
+            size={
+              size === "sm"
+                ? "sm"
+                : size === "lg" || size === "xl"
+                  ? "lg"
+                  : "md"
+            }
+          />
+          {loadingText && <span>{loadingText}</span>}
+        </>
       ) : (
-        beforeIcon && (
-          <span className={cn("shrink-0", children && "mr-1")}>
-            {beforeIcon}
-          </span>
-        )
-      )}
-      {children && <span className="flex-1 truncate">{children}</span>}
-      {afterIcon && (
-        <span className={cn("shrink-0", children && "ml-1")}>{afterIcon}</span>
+        <>
+          {beforeIcon && (
+            <span className={cn("shrink-0", children && "-ml-0.5")}>
+              {beforeIcon}
+            </span>
+          )}
+          {children && <span className="flex-1 truncate">{children}</span>}
+          {afterIcon && (
+            <span className={cn("shrink-0", children && "-mr-0.5")}>
+              {afterIcon}
+            </span>
+          )}
+        </>
       )}
     </button>
   );

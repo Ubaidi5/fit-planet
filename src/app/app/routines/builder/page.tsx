@@ -13,6 +13,7 @@ import {
   type RoutineCategory,
   type Exercise,
 } from "@/lib/data/mock-routines";
+import Select from "@/components/ui/Select";
 
 const categories: { value: RoutineCategory; label: string }[] = [
   { value: "push", label: "Push" },
@@ -144,7 +145,7 @@ export default function RoutineBuilderPage() {
             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
               Category
             </label>
-            <select
+            <Select
               value={category}
               onChange={(e) => setCategory(e.target.value as RoutineCategory)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -154,7 +155,7 @@ export default function RoutineBuilderPage() {
                   {cat.label}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
 
           <div className="sm:col-span-2">
@@ -166,7 +167,7 @@ export default function RoutineBuilderPage() {
               onChange={(e) => setRoutineDescription(e.target.value)}
               placeholder="Describe your routine..."
               rows={2}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+              className="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
             />
           </div>
 
@@ -174,7 +175,7 @@ export default function RoutineBuilderPage() {
             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
               Difficulty
             </label>
-            <select
+            <Select
               value={difficulty}
               onChange={(e) =>
                 setDifficulty(
@@ -186,7 +187,7 @@ export default function RoutineBuilderPage() {
               <option value="beginner">Beginner</option>
               <option value="intermediate">Intermediate</option>
               <option value="advanced">Advanced</option>
-            </select>
+            </Select>
           </div>
 
           <div className="flex items-center gap-3">

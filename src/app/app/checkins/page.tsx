@@ -15,6 +15,7 @@ import {
   getStreakDays,
   type CheckIn,
 } from "@/lib/data/mock-checkins";
+import Select from "@/components/ui/Select";
 
 type ViewType = "list" | "calendar";
 
@@ -186,7 +187,7 @@ export default function CheckInHistoryPage() {
           {/* Filters & View Toggle */}
           <div className="flex items-center justify-between mt-6">
             <div className="flex items-center gap-4">
-              <select
+              <Select
                 value={selectedGym}
                 onChange={(e) => setSelectedGym(e.target.value)}
                 className="px-4 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -197,7 +198,7 @@ export default function CheckInHistoryPage() {
                     {gym.name}
                   </option>
                 ))}
-              </select>
+              </Select>
             </div>
 
             <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">

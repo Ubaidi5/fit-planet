@@ -623,7 +623,7 @@ export default function GymDetailPage() {
                               {trainer.availability}
                             </div>
 
-                            <Button className="w-full" outline>
+                            <Button fullWidth variant="outline">
                               Book Session
                             </Button>
                           </div>
@@ -736,7 +736,6 @@ export default function GymDetailPage() {
                 </div>
 
                 <Button
-                  variant="secondary"
                   className="w-full"
                   size="lg"
                   onClick={() => setIsBookingOpen(true)}
@@ -831,7 +830,7 @@ export default function GymDetailPage() {
                           href={`https://instagram.com/${details.contact.instagram.replace("@", "")}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 bg-gray-100 rounded-lg hover:bg-pink-100 hover:text-pink-600 transition-colors"
+                          className="p-2 bg-gray-100 text-gray-500 rounded-lg hover:bg-pink-50 hover:text-pink-600 transition-colors"
                         >
                           <svg
                             className="h-5 w-5"
@@ -847,7 +846,7 @@ export default function GymDetailPage() {
                           href={`https://facebook.com/${details.contact.facebook}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 bg-gray-100 rounded-lg hover:bg-blue-100 hover:text-blue-600 transition-colors"
+                          className="p-2 bg-gray-100 text-gray-500 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors"
                         >
                           <svg
                             className="h-5 w-5"
@@ -889,26 +888,31 @@ export default function GymDetailPage() {
                 <p className="text-gray-600 text-sm">
                   {gym.address.street}, {gym.address.area}, {gym.address.city}
                 </p>
-                <Button outline className="w-full mt-3">
-                  <svg
-                    className="h-4 w-4 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
+                <Button
+                  className="mt-4"
+                  fullWidth
+                  beforeIcon={
+                    <svg
+                      className="h-4 w-4 mr-2"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                  }
+                >
                   Get Directions
                 </Button>
               </div>

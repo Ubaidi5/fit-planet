@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import Select from "@/components/ui/Select";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Input } from "@/components/ui/Input";
@@ -166,16 +167,18 @@ export default function SavedGymsPage() {
             className="pl-10"
           />
         </div>
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value as SortOption)}
-          className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-        >
-          <option value="recent">Recently Saved</option>
-          <option value="rating">Highest Rated</option>
-          <option value="distance">Nearest First</option>
-          <option value="price">Lowest Price</option>
-        </select>
+        <div className="w-48">
+          <Select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as SortOption)}
+            options={[
+              { value: "recent", label: "Recently Saved" },
+              { value: "rating", label: "Highest Rated" },
+              { value: "distance", label: "Nearest First" },
+              { value: "price", label: "Lowest Price" },
+            ]}
+          />
+        </div>
       </div>
 
       {/* Stats */}
