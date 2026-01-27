@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Input } from "@/components/ui/Input";
 import {
@@ -12,6 +13,7 @@ import {
   CardFooter,
 } from "@/components/ui/Card";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/Button";
 
 interface FormData {
   // Owner Details
@@ -27,6 +29,7 @@ interface FormData {
 }
 
 export default function StudioRegisterPage() {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     ownerName: "",
@@ -134,6 +137,9 @@ export default function StudioRegisterPage() {
 
     setIsLoading(false);
     console.log("Registration submitted:", formData);
+    
+    // Redirect to Studio dashboard
+    router.push("/studio/dashboard");
   };
 
   return (
@@ -729,42 +735,29 @@ export default function StudioRegisterPage() {
 
                     {/* Buttons */}
                     <div className="flex gap-3">
-                      <button
+                      <Button
                         type="button"
                         onClick={handleBack}
-                        className={cn(
-                          "flex h-12 flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white text-sm font-semibold text-gray-700 shadow-sm",
-                          "transition-all duration-200",
-                          "hover:bg-gray-50",
-                          "focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2",
-                        )}
+                        variant="outline"
+                        beforeIcon={
+                          <svg
+                            className="h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                            />
+                          </svg>
+                        }
                       >
-                        <svg
-                          className="h-4 w-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-                          />
-                        </svg>
                         Back
-                      </button>
-                      <button
-                        type="submit"
-                        disabled={isLoading}
-                        className={cn(
-                          "relative flex h-12 flex-[2] items-center justify-center rounded-lg bg-emerald-600 text-sm font-semibold text-white shadow-sm",
-                          "transition-all duration-200",
-                          "hover:bg-emerald-700 hover:shadow-md",
-                          "focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2",
-                          "disabled:cursor-not-allowed disabled:opacity-70",
-                        )}
-                      >
+                      </Button>
+                      <Button type="submit" disabled={isLoading} loading={isLoading}>
                         {isLoading ? (
                           <>
                             <svg
@@ -791,7 +784,7 @@ export default function StudioRegisterPage() {
                         ) : (
                           "Create Studio Account"
                         )}
-                      </button>
+                      </Button>
                     </div>
                   </>
                 )}
