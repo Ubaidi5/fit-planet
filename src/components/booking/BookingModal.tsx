@@ -520,7 +520,7 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
                       disabled={promoApplied}
                     />
                     <Button
-                      outline
+                      variant="outline"
                       onClick={handleApplyPromo}
                       disabled={promoApplied || !formData.promoCode}
                     >
@@ -907,11 +907,7 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
                 </p>
 
                 <div className="flex gap-3">
-                  <Button
-                    outline
-                    className="flex-1"
-                    onClick={resetAndClose}
-                  >
+                  <Button variant="outline" className="flex-1" onClick={resetAndClose}>
                     Close
                   </Button>
                   <Button className="flex-1">View My Passes</Button>
@@ -925,7 +921,7 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
             <div className="bg-gray-50 px-6 py-4 flex items-center justify-between gap-3">
               {step !== "pass-selection" && (
                 <Button
-                  outline
+                  variant="outline"
                   onClick={() => {
                     if (step === "payment") setStep("details");
                     else if (step === "details") setStep("pass-selection");

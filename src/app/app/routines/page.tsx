@@ -56,7 +56,26 @@ export default function RoutinesPage() {
           </p>
         </div>
         <Link href="/app/routines/builder">
-          <Button className="w-full sm:w-auto">+ New Routine</Button>
+          <Button
+            className="w-full sm:w-auto"
+            beforeIcon={
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+            }
+          >
+            New Routine
+          </Button>
         </Link>
       </div>
 

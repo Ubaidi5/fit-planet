@@ -213,7 +213,7 @@ export function PricingCard({
                   ))}
                 </ul>
                 <Button
-                  outline
+                  variant="outline"
                   className="w-full mt-4 border-amber-400 text-amber-700 hover:bg-amber-100"
                   onClick={() => onSelectPlan?.("month")}
                 >
