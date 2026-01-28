@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { Input } from "../ui/Input";
+import Select from "../ui/Select";
 
 interface Amenity {
   id: string;
@@ -277,7 +279,7 @@ export default function AmenitiesSelector() {
                 <label className="mb-2 block text-sm font-medium text-gray-700">
                   Equipment Name
                 </label>
-                <input
+                <Input
                   type="text"
                   placeholder="e.g., Treadmill, Bench Press"
                   value={newEquipment.name}
@@ -295,7 +297,7 @@ export default function AmenitiesSelector() {
                 <label className="mb-2 block text-sm font-medium text-gray-700">
                   Quantity
                 </label>
-                <input
+                <Input
                   type="number"
                   min="1"
                   value={newEquipment.quantity}
@@ -313,7 +315,7 @@ export default function AmenitiesSelector() {
                 <label className="mb-2 block text-sm font-medium text-gray-700">
                   Category
                 </label>
-                <select
+                <Select
                   value={newEquipment.category}
                   onChange={(e) =>
                     setNewEquipment((prev) => ({
@@ -328,7 +330,7 @@ export default function AmenitiesSelector() {
                       {category}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
 
               <div className="flex items-end">

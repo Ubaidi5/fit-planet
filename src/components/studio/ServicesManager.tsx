@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { cn } from "@/lib/utils";
+import Select from "../ui/Select";
+import Textarea from "../ui/Textarea";
 
 interface Trainer {
   id: string;
@@ -231,7 +233,7 @@ export default function ServicesManager() {
                   <label className="mb-2 block text-sm font-medium text-gray-700">
                     Description
                   </label>
-                  <textarea
+                  <Textarea
                     rows={3}
                     placeholder="Describe the service..."
                     value={newService.description}
@@ -241,7 +243,6 @@ export default function ServicesManager() {
                         description: e.target.value,
                       }))
                     }
-                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
 
@@ -249,7 +250,7 @@ export default function ServicesManager() {
                   <label className="mb-2 block text-sm font-medium text-gray-700">
                     Category
                   </label>
-                  <select
+                  <Select
                     value={newService.category}
                     onChange={(e) =>
                       setNewService((prev) => ({
@@ -264,7 +265,7 @@ export default function ServicesManager() {
                         {cat.label}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </div>
 
                 <div>
@@ -459,7 +460,7 @@ export default function ServicesManager() {
                   <label className="mb-2 block text-sm font-medium text-gray-700">
                     Bio
                   </label>
-                  <textarea
+                  <Textarea
                     rows={3}
                     placeholder="Brief bio about the trainer..."
                     value={newTrainer.bio}
@@ -469,7 +470,6 @@ export default function ServicesManager() {
                         bio: e.target.value,
                       }))
                     }
-                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
 
@@ -578,7 +578,7 @@ export default function ServicesManager() {
                   <label className="mb-2 block text-sm font-medium text-gray-700">
                     Description
                   </label>
-                  <textarea
+                  <Textarea
                     rows={3}
                     placeholder="Event details..."
                     value={newEvent.description}
@@ -588,7 +588,6 @@ export default function ServicesManager() {
                         description: e.target.value,
                       }))
                     }
-                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                   />
                 </div>
 
