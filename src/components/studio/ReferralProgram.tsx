@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { Input } from "../ui/Input";
+import Select from "../ui/Select";
 
 interface Referral {
   id: string;
@@ -156,7 +158,7 @@ export default function ReferralProgram() {
                 Reward per Referral
               </label>
               <div className="flex items-center space-x-2">
-                <input
+                <Input
                   type="number"
                   defaultValue={500}
                   className="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -197,7 +199,7 @@ export default function ReferralProgram() {
                 Minimum Purchase for Referee
               </label>
               <div className="flex items-center space-x-2">
-                <input
+                <Input
                   type="number"
                   defaultValue={1000}
                   className="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"

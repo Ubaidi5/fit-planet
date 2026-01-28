@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { Input } from "../ui/Input";
 
 interface ActiveMember {
   id: string;
@@ -199,7 +200,7 @@ export default function ActiveMembers() {
           </div>
 
           <div className="flex-1 sm:ml-4 sm:max-w-xs">
-            <input
+            <Input
               type="text"
               placeholder="Search by name or phone..."
               value={searchQuery}

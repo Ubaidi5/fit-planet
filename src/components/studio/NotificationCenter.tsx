@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { Input } from "../ui/Input";
+import Textarea from "../ui/Textarea";
 
 interface Notification {
   id: string;
@@ -222,7 +224,9 @@ export default function NotificationCenter() {
                   )}
                 >
                   <span className="text-2xl">📱</span>
-                  <span className="text-sm font-medium">Push</span>
+                  <span className="text-sm text-gray-900 font-medium">
+                    Push
+                  </span>
                 </button>
 
                 <button
@@ -237,7 +241,9 @@ export default function NotificationCenter() {
                   )}
                 >
                   <span className="text-2xl">📧</span>
-                  <span className="text-sm font-medium">Email</span>
+                  <span className="text-sm text-gray-900 font-medium">
+                    Email
+                  </span>
                 </button>
 
                 <button
@@ -252,7 +258,7 @@ export default function NotificationCenter() {
                   )}
                 >
                   <span className="text-2xl">💬</span>
-                  <span className="text-sm font-medium">SMS</span>
+                  <span className="text-sm text-gray-900 font-medium">SMS</span>
                 </button>
               </div>
             </div>
@@ -261,7 +267,7 @@ export default function NotificationCenter() {
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Title *
               </label>
-              <input
+              <Input
                 type="text"
                 placeholder="e.g., Weekend Special Offer"
                 value={formData.title}
@@ -276,14 +282,13 @@ export default function NotificationCenter() {
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Message *
               </label>
-              <textarea
+              <Textarea
                 rows={4}
                 placeholder="Write your message here..."
                 value={formData.message}
                 onChange={(e) =>
                   setFormData((prev) => ({ ...prev, message: e.target.value }))
                 }
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
               <p className="mt-1 text-xs text-gray-600">
                 {formData.message.length}/160 characters
@@ -313,7 +318,7 @@ export default function NotificationCenter() {
                 <label className="mb-2 block text-sm font-medium text-gray-700">
                   Schedule Date (Optional)
                 </label>
-                <input
+                <Input
                   type="date"
                   value={formData.scheduledDate}
                   onChange={(e) =>
@@ -330,7 +335,7 @@ export default function NotificationCenter() {
                 <label className="mb-2 block text-sm font-medium text-gray-700">
                   Schedule Time (Optional)
                 </label>
-                <input
+                <Input
                   type="time"
                   value={formData.scheduledTime}
                   onChange={(e) =>

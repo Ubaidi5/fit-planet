@@ -258,7 +258,7 @@ export default function ServicesManager() {
                         category: e.target.value as Service["category"],
                       }))
                     }
-                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    className="w-full"
                   >
                     {SERVICE_CATEGORIES.map((cat) => (
                       <option key={cat.value} value={cat.value}>
