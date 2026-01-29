@@ -20,6 +20,7 @@ import {
   CapacityIndicator,
   CrowdChart,
 } from "@/components/gyms/CapacityIndicator";
+import { AddOnsSection } from "@/components/gyms/AddOnsSection";
 import { BookingModal } from "@/components/booking/BookingModal";
 
 // Tabs for the page
@@ -357,6 +358,14 @@ export default function GymDetailPage() {
                       })}
                     </div>
                   </div>
+
+                  {/* Add-Ons Section */}
+                  {details.addOns && details.addOns.length > 0 && (
+                    <AddOnsSection
+                      addOns={details.addOns}
+                      onSelectAddOn={() => setIsBookingOpen(true)}
+                    />
+                  )}
 
                   {/* Popular Times */}
                   {details.crowdData.length > 0 && (
