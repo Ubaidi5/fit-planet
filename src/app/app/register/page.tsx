@@ -430,10 +430,8 @@ export default function RegisterPage() {
                     Phone Number
                   </label>
                   <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">
-                      +92
-                    </span>
                     <Input
+                      leftIcon={"+92"}
                       id="phone"
                       type="tel"
                       placeholder="3XX XXXXXXX"
@@ -501,7 +499,7 @@ export default function RegisterPage() {
                   </label>
                   <div className="flex gap-2 justify-between">
                     {otp.map((digit, index) => (
-                      <input
+                      <Input
                         key={index}
                         id={`otp-${index}`}
                         type="text"
