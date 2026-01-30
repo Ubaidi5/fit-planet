@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import Select from "../ui/Select";
+import { Input } from "../ui/Input";
 
 interface Booking {
   id: string;
@@ -246,8 +248,8 @@ export default function BookingHistory() {
           </div>
 
           {/* Status Filter */}
-          <div className="flex space-x-2">
-            <select
+          <div className="flex space-x-2 gap-2">
+            <Select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -258,9 +260,9 @@ export default function BookingHistory() {
               <option value="completed">Completed</option>
               <option value="cancelled">Cancelled</option>
               <option value="expired">Expired</option>
-            </select>
+            </Select>
 
-            <Button variant="outline" onClick={handleExport}>
+            <Button fullWidth variant="outline" onClick={handleExport}>
               📥 Export
             </Button>
           </div>
@@ -268,7 +270,7 @@ export default function BookingHistory() {
 
         {/* Search */}
         <div className="mt-4">
-          <input
+          <Input
             type="text"
             placeholder="Search by name, phone, or booking ID..."
             value={searchQuery}

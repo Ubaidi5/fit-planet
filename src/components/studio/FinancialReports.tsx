@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { Input } from "../ui/Input";
 
 export default function FinancialReports() {
   const [reportType, setReportType] = useState<"revenue" | "tax" | "custom">(
@@ -230,7 +231,7 @@ export default function FinancialReports() {
                   <label className="mb-2 block text-xs font-medium text-blue-900">
                     Start Date
                   </label>
-                  <input
+                  <Input
                     type="date"
                     value={customStartDate}
                     onChange={(e) => setCustomStartDate(e.target.value)}
@@ -242,7 +243,7 @@ export default function FinancialReports() {
                   <label className="mb-2 block text-xs font-medium text-blue-900">
                     End Date
                   </label>
-                  <input
+                  <Input
                     type="date"
                     value={customEndDate}
                     onChange={(e) => setCustomEndDate(e.target.value)}

@@ -69,6 +69,17 @@ export interface OperatingHours {
   isClosed: boolean;
 }
 
+export interface AddOn {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: "Equipment" | "Service" | "Access";
+  icon?: string;
+  isAvailable: boolean;
+  limitations?: string;
+}
+
 export interface GymDetail {
   id: string;
   // Extended description
@@ -104,6 +115,9 @@ export interface GymDetail {
     staff: number;
     value: number;
   };
+
+  // Add-ons
+  addOns: AddOn[];
 
   // Additional pricing
   annualPass?: number;
@@ -476,6 +490,53 @@ Join FitZone today and experience the difference of training at a facility that 
       value: 4.3,
     },
 
+    addOns: [
+      {
+        id: "addon-1",
+        name: "Guest Pass",
+        description: "Bring a friend to workout with you for the day",
+        price: 600,
+        category: "Access",
+        isAvailable: true,
+        limitations: "Valid for single day use only",
+      },
+      {
+        id: "addon-2",
+        name: "Locker Rental",
+        description: "Secure locker for your belongings during workout",
+        price: 200,
+        category: "Service",
+        isAvailable: true,
+        limitations: "Per day rental",
+      },
+      {
+        id: "addon-3",
+        name: "Personal Training Session",
+        description: "One-on-one training with certified personal trainer",
+        price: 3000,
+        category: "Service",
+        isAvailable: true,
+        limitations: "60-minute session, advance booking required",
+      },
+      {
+        id: "addon-4",
+        name: "Towel Service",
+        description: "Fresh towel provided for your workout",
+        price: 100,
+        category: "Equipment",
+        isAvailable: true,
+      },
+      {
+        id: "addon-5",
+        name: "Yoga Mat Rental",
+        description: "Premium yoga mat for classes or stretching",
+        price: 150,
+        category: "Equipment",
+        isAvailable: true,
+        limitations: "Per session rental",
+      },
+    ],
+
     annualPass: 72000,
 
     specialPackages: [
@@ -583,6 +644,24 @@ export function generateDefaultDetails(gymId: string): GymDetail {
       staff: 4.0,
       value: 4.0,
     },
+    addOns: [
+      {
+        id: "addon-default-1",
+        name: "Guest Pass",
+        description: "Bring a friend to workout with you",
+        price: 500,
+        category: "Access",
+        isAvailable: true,
+      },
+      {
+        id: "addon-default-2",
+        name: "Locker Rental",
+        description: "Secure locker for your belongings",
+        price: 150,
+        category: "Service",
+        isAvailable: true,
+      },
+    ],
     policies: {
       cancellation: "Please contact us for our cancellation policy.",
       guestPolicy: "Guest passes available at reception.",

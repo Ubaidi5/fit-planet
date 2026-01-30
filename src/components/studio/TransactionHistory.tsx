@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { Input } from "../ui/Input";
+import Select from "../ui/Select";
 
 interface Transaction {
   id: string;
@@ -265,7 +267,7 @@ export default function TransactionHistory() {
             <label className="mb-2 block text-sm font-medium text-gray-700">
               Search
             </label>
-            <input
+            <Input
               type="text"
               placeholder="Search by name or ID..."
               value={searchQuery}
@@ -279,7 +281,7 @@ export default function TransactionHistory() {
             <label className="mb-2 block text-sm font-medium text-gray-700">
               Filter by Status
             </label>
-            <select
+            <Select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
               className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -289,7 +291,7 @@ export default function TransactionHistory() {
               <option value="refunded">Refunded</option>
               <option value="pending">Pending</option>
               <option value="failed">Failed</option>
-            </select>
+            </Select>
           </div>
 
           {/* Filter by Payment Method */}
@@ -297,7 +299,7 @@ export default function TransactionHistory() {
             <label className="mb-2 block text-sm font-medium text-gray-700">
               Filter by Payment
             </label>
-            <select
+            <Select
               value={filterPaymentMethod}
               onChange={(e) => setFilterPaymentMethod(e.target.value)}
               className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -307,7 +309,7 @@ export default function TransactionHistory() {
               <option value="bank">🏦 Bank Transfer</option>
               <option value="wallet">👛 Wallet</option>
               <option value="cash">💵 Cash</option>
-            </select>
+            </Select>
           </div>
         </div>
       </div>

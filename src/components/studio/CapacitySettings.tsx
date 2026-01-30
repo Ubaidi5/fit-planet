@@ -271,7 +271,7 @@ export default function CapacitySettings() {
                     <label className="mb-1 block text-xs font-medium text-gray-700">
                       Start Time
                     </label>
-                    <input
+                    <Input
                       type="time"
                       value={hour.startTime}
                       onChange={(e) =>
@@ -284,7 +284,7 @@ export default function CapacitySettings() {
                     <label className="mb-1 block text-xs font-medium text-gray-700">
                       End Time
                     </label>
-                    <input
+                    <Input
                       type="time"
                       value={hour.endTime}
                       onChange={(e) =>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { Input } from "../ui/Input";
 
 interface CheckInResult {
   success: boolean;
@@ -169,7 +170,7 @@ export default function CheckInSystem() {
               Phone Number or Name
             </label>
             <div className="flex space-x-3">
-              <input
+              <Input
                 type="text"
                 placeholder="Enter phone number or member name"
                 value={searchQuery}

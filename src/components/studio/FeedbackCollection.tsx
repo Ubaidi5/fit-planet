@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import Select from "../ui/Select";
 
 export default function FeedbackCollection() {
   const [selectedPromptType, setSelectedPromptType] = useState<
@@ -147,7 +148,7 @@ export default function FeedbackCollection() {
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Send Request After
               </label>
-              <select
+              <Select
                 value={promptSettings.timing}
                 onChange={(e) =>
                   setPromptSettings((prev) => ({
@@ -162,7 +163,7 @@ export default function FeedbackCollection() {
                 <option value="24hours">24 hours after visit</option>
                 <option value="48hours">48 hours after visit</option>
                 <option value="1week">1 week after visit</option>
-              </select>
+              </Select>
             </div>
 
             {/* Incentive Toggle */}
@@ -205,7 +206,7 @@ export default function FeedbackCollection() {
                 <label className="mb-2 block text-sm font-medium text-gray-700">
                   Incentive Type
                 </label>
-                <select
+                <Select
                   value={promptSettings.incentiveType}
                   onChange={(e) =>
                     setPromptSettings((prev) => ({
@@ -219,7 +220,7 @@ export default function FeedbackCollection() {
                   <option value="freeclass">Free group class</option>
                   <option value="credits">Rs. 100 credit</option>
                   <option value="merchandise">Free gym merchandise</option>
-                </select>
+                </Select>
               </div>
             )}
 

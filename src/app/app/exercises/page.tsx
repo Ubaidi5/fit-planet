@@ -14,6 +14,7 @@ import {
   type MuscleGroup,
   type Equipment,
 } from "@/lib/data/mock-routines";
+import Select from "@/components/ui/Select";
 
 const muscleGroups: MuscleGroup[] = [
   "chest",
@@ -133,12 +134,12 @@ export default function ExercisesPage() {
         {/* Filter Row */}
         <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
           {/* Muscle Group */}
-          <select
+          <Select
             value={selectedMuscle}
             onChange={(e) =>
               setSelectedMuscle(e.target.value as MuscleGroup | "all")
             }
-            className="w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            // className="w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
             <option value="all">All Muscles</option>
             {muscleGroups.map((muscle) => (
@@ -146,15 +147,15 @@ export default function ExercisesPage() {
                 {muscleGroupIcons[muscle]} {formatMuscleGroup(muscle)}
               </option>
             ))}
-          </select>
+          </Select>
 
           {/* Equipment */}
-          <select
+          <Select
             value={selectedEquipment}
             onChange={(e) =>
               setSelectedEquipment(e.target.value as Equipment | "all")
             }
-            className="w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            // className="w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
             <option value="all">All Equipment</option>
             {equipmentList.map((equip) => (
@@ -162,10 +163,10 @@ export default function ExercisesPage() {
                 {formatEquipment(equip)}
               </option>
             ))}
-          </select>
+          </Select>
 
           {/* Difficulty */}
-          <select
+          <Select   
             value={selectedDifficulty}
             onChange={(e) =>
               setSelectedDifficulty(
@@ -176,13 +177,13 @@ export default function ExercisesPage() {
                   | "advanced",
               )
             }
-            className="w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            // className="w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
             <option value="all">All Levels</option>
             <option value="beginner">Beginner</option>
             <option value="intermediate">Intermediate</option>
             <option value="advanced">Advanced</option>
-          </select>
+          </Select>
 
           {hasFilters && (
             <Button variant="ghost" size="sm" onClick={clearFilters}>

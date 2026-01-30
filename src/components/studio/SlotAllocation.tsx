@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { Input } from "../ui/Input";
 
 interface TimeSlot {
   id: string;
@@ -196,13 +197,17 @@ export default function SlotAllocation() {
           </p>
         </div>
         <div className="flex items-center space-x-3">
-          <input
+          <Input
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
             className="rounded-lg border border-gray-300 px-4 py-2 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
           />
-          <Button variant="outline" onClick={() => setShowBlockForm(true)}>
+          <Button
+            fullWidth
+            variant="outline"
+            onClick={() => setShowBlockForm(true)}
+          >
             🚫 Block Period
           </Button>
         </div>
@@ -219,7 +224,7 @@ export default function SlotAllocation() {
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Date
               </label>
-              <input
+              <Input
                 type="date"
                 value={blockFormData.date}
                 onChange={(e) =>
@@ -236,7 +241,7 @@ export default function SlotAllocation() {
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Slots to Block
               </label>
-              <input
+              <Input
                 type="number"
                 min="0"
                 value={blockFormData.slotsBlocked}
@@ -254,7 +259,7 @@ export default function SlotAllocation() {
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Start Time
               </label>
-              <input
+              <Input
                 type="time"
                 value={blockFormData.startTime}
                 onChange={(e) =>
@@ -271,7 +276,7 @@ export default function SlotAllocation() {
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 End Time
               </label>
-              <input
+              <Input
                 type="time"
                 value={blockFormData.endTime}
                 onChange={(e) =>
@@ -288,7 +293,7 @@ export default function SlotAllocation() {
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Reason for Blocking
               </label>
-              <input
+              <Input
                 type="text"
                 placeholder="e.g., Equipment maintenance, Special event"
                 value={blockFormData.reason}

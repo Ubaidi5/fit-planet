@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { cn } from "@/lib/utils";
+import Select from "../ui/Select";
+import Textarea from "../ui/Textarea";
 
 interface Discount {
   id: string;
@@ -247,7 +249,7 @@ export default function DiscountsManager() {
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Discount Type <span className="text-red-500">*</span>
               </label>
-              <select
+              <Select
                 value={formData.type}
                 onChange={(e) =>
                   setFormData((prev) => ({
@@ -263,7 +265,7 @@ export default function DiscountsManager() {
                     {type.label} - {type.example}
                   </option>
                 ))}
-              </select>
+              </Select>
             </div>
 
             {/* Discount Value */}
@@ -297,7 +299,7 @@ export default function DiscountsManager() {
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Description
               </label>
-              <textarea
+              <Textarea
                 rows={2}
                 placeholder="Brief description of the offer..."
                 value={formData.description}
@@ -307,7 +309,6 @@ export default function DiscountsManager() {
                     description: e.target.value,
                   }))
                 }
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
               />
             </div>
 

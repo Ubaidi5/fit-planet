@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { Input } from "../ui/Input";
+import Select from "../ui/Select";
 
 interface Review {
   id: string;
@@ -188,7 +190,7 @@ export default function ReviewMonitoring() {
             <label className="mb-2 block text-sm font-medium text-gray-700">
               Search Reviews
             </label>
-            <input
+            <Input
               type="text"
               placeholder="Search by name or comment..."
               value={searchQuery}
@@ -202,7 +204,7 @@ export default function ReviewMonitoring() {
             <label className="mb-2 block text-sm font-medium text-gray-700">
               Filter by Rating
             </label>
-            <select
+            <Select
               value={filterRating}
               onChange={(e) =>
                 setFilterRating(
@@ -217,7 +219,7 @@ export default function ReviewMonitoring() {
               <option value="3">⭐⭐⭐ (3 Stars)</option>
               <option value="2">⭐⭐ (2 Stars)</option>
               <option value="1">⭐ (1 Star)</option>
-            </select>
+            </Select>
           </div>
 
           {/* Sort by */}
@@ -225,7 +227,7 @@ export default function ReviewMonitoring() {
             <label className="mb-2 block text-sm font-medium text-gray-700">
               Sort By
             </label>
-            <select
+            <Select
               value={sortBy}
               onChange={(e) =>
                 setSortBy(
@@ -238,7 +240,7 @@ export default function ReviewMonitoring() {
               <option value="oldest">Oldest First</option>
               <option value="highest">Highest Rating</option>
               <option value="lowest">Lowest Rating</option>
-            </select>
+            </Select>
           </div>
         </div>
       </div>

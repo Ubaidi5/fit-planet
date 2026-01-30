@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { cn } from "@/lib/utils";
+import Select from "../ui/Select";
+import Textarea from "../ui/Textarea";
 
 interface AddOn {
   id: string;
@@ -225,7 +227,7 @@ export default function AddOnsManager() {
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Category <span className="text-red-500">*</span>
               </label>
-              <select
+              <Select
                 value={formData.category}
                 onChange={(e) =>
                   setFormData((prev) => ({
@@ -241,7 +243,7 @@ export default function AddOnsManager() {
                     {cat.icon} {cat.label}
                   </option>
                 ))}
-              </select>
+              </Select>
             </div>
 
             {/* Description */}
@@ -249,7 +251,7 @@ export default function AddOnsManager() {
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Description
               </label>
-              <textarea
+              <Textarea
                 rows={2}
                 placeholder="Brief description..."
                 value={formData.description}
@@ -259,7 +261,7 @@ export default function AddOnsManager() {
                     description: e.target.value,
                   }))
                 }
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                // className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
               />
             </div>
 

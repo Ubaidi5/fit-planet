@@ -14,12 +14,14 @@ export interface SelectProps extends Omit<
 > {
   options?: Option[];
   selectSize?: "sm" | "md" | "lg";
+  wrapperClassName?: string;
 }
 
 export function Select({
   options,
   className,
   selectSize = "md",
+  wrapperClassName,
   children,
   ...props
 }: SelectProps) {
@@ -31,7 +33,12 @@ export function Select({
         : "h-10 px-4 text-sm";
 
   return (
-    <div className={cn("relative inline-block text-left w-full")}>
+    <div
+      className={cn(
+        "relative inline-block text-left w-full sm:w-auto",
+        wrapperClassName,
+      )}
+    >
       <select
         {...props}
         className={cn(

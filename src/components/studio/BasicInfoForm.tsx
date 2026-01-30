@@ -350,7 +350,7 @@ export default function BasicInfoForm() {
 
               {hours.isOpen ? (
                 <div className="flex items-center space-x-2">
-                  <input
+                  <Input
                     type="time"
                     value={hours.openTime}
                     onChange={(e) =>
@@ -363,7 +363,7 @@ export default function BasicInfoForm() {
                     className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                   <span className="text-gray-500">to</span>
-                  <input
+                  <Input
                     type="time"
                     value={hours.closeTime}
                     onChange={(e) =>
