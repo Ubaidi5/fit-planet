@@ -5,6 +5,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import Select from "@/components/ui/Select";
 
 type Step = "info" | "phone" | "otp";
 
@@ -307,7 +308,7 @@ export default function RegisterPage() {
                     >
                       Gender
                     </label>
-                    <select
+                    <Select
                       id="gender"
                       value={formData.gender}
                       onChange={(e) =>
@@ -316,13 +317,13 @@ export default function RegisterPage() {
                           gender: e.target.value as FormData["gender"],
                         })
                       }
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                      className="px-20"
                     >
                       <option value="">Select</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                       <option value="other">Other</option>
-                    </select>
+                    </Select>
                   </div>
 
                   <div>

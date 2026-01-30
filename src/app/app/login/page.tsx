@@ -5,6 +5,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { text } from "stream/consumers";
 
 type Step = "phone" | "otp";
 
@@ -177,11 +178,9 @@ export default function LoginPage() {
                   >
                     Phone Number
                   </label>
-                  <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">
-                      +92
-                    </span>
+                  <div className="relative"> 
                     <Input
+                    leftIcon={"+92"}
                       id="phone"
                       type="tel"
                       placeholder="3XX XXXXXXX"
@@ -253,7 +252,7 @@ export default function LoginPage() {
                   </label>
                   <div className="flex gap-2 justify-between">
                     {otp.map((digit, index) => (
-                      <input
+                      <Input
                         key={index}
                         id={`otp-${index}`}
                         type="text"
