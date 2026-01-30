@@ -27,10 +27,38 @@ export default function LoginPage() {
     }
 
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsLoading(false);
-    setStep("otp");
+
+    try {
+      // Format phone number
+      let formattedPhone = phone.replace(/\s/g, "");
+      if (formattedPhone.startsWith("0")) {
+        formattedPhone = "+92" + formattedPhone.substring(1);
+      } else if (!formattedPhone.startsWith("+92")) {
+        formattedPhone = "+92" + formattedPhone;
+      }
+
+      const response = await fetch("/api/auth/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone: formattedPhone }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || "Failed to send OTP");
+        setIsLoading(false);
+        return;
+      }
+
+      console.log("OTP sent successfully. Use: 123456");
+      setStep("otp");
+    } catch (error) {
+      console.error("Send OTP error:", error);
+      setError("Failed to send OTP. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleOTPChange = (index: number, value: string) => {
@@ -65,12 +93,39 @@ export default function LoginPage() {
     }
 
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsLoading(false);
 
-    // In real app, redirect to dashboard after successful login
-    window.location.href = "/app/dashboard";
+    try {
+      // Format phone number
+      let formattedPhone = phone.replace(/\s/g, "");
+      if (formattedPhone.startsWith("0")) {
+        formattedPhone = "+92" + formattedPhone.substring(1);
+      } else if (!formattedPhone.startsWith("+92")) {
+        formattedPhone = "+92" + formattedPhone;
+      }
+
+      // Import signIn dynamically
+      const { signIn } = await import("next-auth/react");
+
+      const result = await signIn("phone-otp", {
+        phone: formattedPhone,
+        otp: otpValue,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError("Invalid OTP or phone number. Please try again.");
+        setIsLoading(false);
+        return;
+      }
+
+      if (result?.ok) {
+        window.location.href = "/app/dashboard";
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("Login failed. Please try again.");
+      setIsLoading(false);
+    }
   };
 
   const handleResendOTP = async () => {

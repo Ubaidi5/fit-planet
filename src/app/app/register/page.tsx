@@ -63,9 +63,39 @@ export default function RegisterPage() {
     }
 
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsLoading(false);
-    setStep("otp");
+
+    try {
+      // Format phone number
+      let formattedPhone = formData.phone.replace(/\s/g, "");
+      if (formattedPhone.startsWith("0")) {
+        formattedPhone = "+92" + formattedPhone.substring(1);
+      } else if (!formattedPhone.startsWith("+92")) {
+        formattedPhone = "+92" + formattedPhone;
+      }
+
+      const response = await fetch("/api/auth/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone: formattedPhone }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || "Failed to send OTP");
+        setIsLoading(false);
+        return;
+      }
+
+      console.log("OTP sent successfully. Use: 123456");
+      setFormData({ ...formData, phone: formattedPhone });
+      setStep("otp");
+    } catch (error) {
+      console.error("Send OTP error:", error);
+      setError("Failed to send OTP. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleOTPChange = (index: number, value: string) => {
@@ -98,12 +128,58 @@ export default function RegisterPage() {
       return;
     }
 
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsLoading(false);
+    // Verify OTP (hardcoded as 123456)
+    if (otpValue !== "123456") {
+      setError("Invalid OTP. Please try again.");
+      return;
+    }
 
-    // Redirect to dashboard after successful registration
-    window.location.href = "/app/dashboard";
+    setIsLoading(true);
+
+    try {
+      // Register user
+      const registerResponse = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const registerData = await registerResponse.json();
+
+      if (!registerResponse.ok) {
+        setError(registerData.error || "Registration failed");
+        setIsLoading(false);
+        return;
+      }
+
+      // Auto-login after registration
+      const { signIn } = await import("next-auth/react");
+
+      const result = await signIn("phone-otp", {
+        phone: formData.phone,
+        otp: otpValue,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError(
+          "Registration successful but login failed. Please login manually.",
+        );
+        setIsLoading(false);
+        setTimeout(() => {
+          window.location.href = "/app/login";
+        }, 2000);
+        return;
+      }
+
+      if (result?.ok) {
+        window.location.href = "/app/dashboard";
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      setError("Registration failed. Please try again.");
+      setIsLoading(false);
+    }
   };
 
   return (
