@@ -171,7 +171,11 @@ export default function TransactionHistory() {
   };
 
   // Payment method breakdown
-  const paymentMethodBreakdown = [
+  const paymentMethodBreakdown: {
+    method: "card" | "bank" | "wallet" | "cash";
+    count: number;
+    percentage: number;
+  }[] = [
     {
       method: "card",
       count: transactions.filter((t) => t.paymentMethod === "card").length,

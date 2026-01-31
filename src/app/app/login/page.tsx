@@ -5,12 +5,9 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { text } from "stream/consumers";
-
-type Step = "phone" | "otp";
 
 export default function LoginPage() {
-  const [step, setStep] = useState<Step>("phone");
+  const [step, setStep] = useState<"phone" | "otp">("phone");
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
@@ -178,9 +175,9 @@ export default function LoginPage() {
                   >
                     Phone Number
                   </label>
-                  <div className="relative"> 
+                  <div className="relative">
                     <Input
-                    leftIcon={"+92"}
+                      leftIcon={"+92"}
                       id="phone"
                       type="tel"
                       placeholder="3XX XXXXXXX"

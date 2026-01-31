@@ -2,7 +2,7 @@
 
 import { MongoClient, ServerApiVersion, Db } from "mongodb";
 
-const uri = process.env.DB_URI || process.env.MONGODB_URI;
+const uri = process.env.DB_URI;
 const db_name = process.env.DB_NAME;
 
 if (!uri) {
