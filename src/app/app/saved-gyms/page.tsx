@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { HiOutlineSearch, HiHeart } from "react-icons/hi";
 import { Button } from "@/components/ui/Button";
 import Select from "@/components/ui/Select";
 import { Card } from "@/components/ui/Card";
@@ -125,19 +126,7 @@ export default function SavedGymsPage() {
         </div>
         <Link href="/gyms">
           <Button>
-            <svg
-              className="mr-2 h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
+            <HiOutlineSearch className="mr-2 h-4 w-4" />
             Discover More
           </Button>
         </Link>
@@ -146,19 +135,7 @@ export default function SavedGymsPage() {
       {/* Search and Sort */}
       <div className="flex flex-col gap-4 sm:flex-row">
         <div className="relative flex-1">
-          <svg
-            className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
+          <HiOutlineSearch className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
           <Input
             type="text"
             placeholder="Search saved gyms..."
@@ -291,13 +268,7 @@ export default function SavedGymsPage() {
                     className="rounded-full p-2 text-red-500 transition-colors hover:bg-red-50"
                     title="Remove from saved"
                   >
-                    <svg
-                      className="h-5 w-5"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                    </svg>
+                    <HiHeart className="h-5 w-5" />
                   </button>
                 </div>
 

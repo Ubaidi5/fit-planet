@@ -3,6 +3,12 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { filterOptions } from "@/lib/data/mock-gyms";
+import {
+  HiOutlineSearch,
+  HiOutlineAdjustments,
+  HiOutlineChevronDown,
+  HiOutlineCheckCircle,
+} from "react-icons/hi";
 
 interface SearchFiltersProps {
   onFilterChange?: (filters: FilterState) => void;
@@ -84,19 +90,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
       {/* Search Bar */}
       <div className="flex gap-3">
         <div className="relative flex-1">
-          <svg
-            className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-            />
-          </svg>
+          <HiOutlineSearch className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             placeholder="Search gyms by name or area..."
@@ -117,19 +111,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
               : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50",
           )}
         >
-          <svg
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
-            />
-          </svg>
+          <HiOutlineAdjustments className="h-5 w-5" />
           Filters
           {activeFiltersCount > 0 && (
             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-600 text-xs text-white">
@@ -154,19 +136,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
               </option>
             ))}
           </select>
-          <svg
-            className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-            />
-          </svg>
+          <HiOutlineChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
         </div>
 
         {/* Distance Dropdown */}
@@ -184,19 +154,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
               </option>
             ))}
           </select>
-          <svg
-            className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-            />
-          </svg>
+          <HiOutlineChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
         </div>
 
         {/* Quick Toggle Filters */}
@@ -223,19 +181,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
               : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50",
           )}
         >
-          <svg
-            className="mr-1 inline h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+          <HiOutlineCheckCircle className="mr-1 inline h-4 w-4" />
           Verified Only
         </button>
 
@@ -311,22 +257,12 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
                 className="mb-3 flex w-full items-center justify-between text-sm font-medium text-gray-900"
               >
                 Amenities
-                <svg
+                <HiOutlineChevronDown
                   className={cn(
                     "h-4 w-4 transition-transform",
                     expandedSections.includes("amenities") && "rotate-180",
                   )}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
+                />
               </button>
               <div
                 className={cn(
@@ -361,22 +297,12 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
                 className="mb-3 flex w-full items-center justify-between text-sm font-medium text-gray-900"
               >
                 Equipment Types
-                <svg
+                <HiOutlineChevronDown
                   className={cn(
                     "h-4 w-4 transition-transform",
                     expandedSections.includes("equipment") && "rotate-180",
                   )}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
+                />
               </button>
               <div
                 className={cn(

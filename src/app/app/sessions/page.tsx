@@ -3,6 +3,15 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import {
+  HiOutlineDeviceMobile,
+  HiOutlineDesktopComputer,
+  HiOutlineShieldCheck,
+  HiOutlineLocationMarker,
+  HiOutlineClock,
+  HiOutlineServer,
+  HiOutlineInformationCircle,
+} from "react-icons/hi";
 
 interface Session {
   id: string;
@@ -65,53 +74,9 @@ export default function SessionManagementPage() {
 
   const getDeviceIcon = (device: string) => {
     if (device.includes("iPhone") || device.includes("Android")) {
-      return (
-        <svg
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={1.5}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
-          />
-        </svg>
-      );
-    } else if (device.includes("Mac")) {
-      return (
-        <svg
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={1.5}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25"
-          />
-        </svg>
-      );
+      return <HiOutlineDeviceMobile className="h-5 w-5" />;
     } else {
-      return (
-        <svg
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={1.5}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25"
-          />
-        </svg>
-      );
+      return <HiOutlineDesktopComputer className="h-5 w-5" />;
     }
   };
 
@@ -135,19 +100,7 @@ export default function SessionManagementPage() {
             </p>
           </div>
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
-            <svg
-              className="h-8 w-8 text-emerald-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"
-              />
-            </svg>
+            <HiOutlineShieldCheck className="h-8 w-8 text-emerald-600" />
           </div>
         </div>
       </div>
@@ -211,56 +164,15 @@ export default function SessionManagementPage() {
                   </p>
                   <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
                     <span className="flex items-center gap-1">
-                      <svg
-                        className="h-3.5 w-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                        />
-                      </svg>
+                      <HiOutlineLocationMarker className="h-3.5 w-3.5" />
                       {session.location}
                     </span>
                     <span className="flex items-center gap-1">
-                      <svg
-                        className="h-3.5 w-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
+                      <HiOutlineClock className="h-3.5 w-3.5" />
                       {session.lastActive}
                     </span>
                     <span className="flex items-center gap-1">
-                      <svg
-                        className="h-3.5 w-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M5.25 14.25h13.5m-13.5 0a3 3 0 01-3-3m3 3a3 3 0 100 6h13.5a3 3 0 100-6m-16.5-3a3 3 0 013-3h13.5a3 3 0 013 3m-19.5 0a4.5 4.5 0 01.9-2.7L5.737 5.1a3.375 3.375 0 012.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 01.9 2.7m0 0a3 3 0 01-3 3m0 3h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008zm-3 6h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008z"
-                        />
-                      </svg>
+                      <HiOutlineServer className="h-3.5 w-3.5" />
                       {session.ip}
                     </span>
                   </div>
@@ -288,19 +200,7 @@ export default function SessionManagementPage() {
       {/* Info Card */}
       <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
         <div className="flex gap-3">
-          <svg
-            className="h-5 w-5 flex-shrink-0 text-blue-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
-            />
-          </svg>
+          <HiOutlineInformationCircle className="h-5 w-5 flex-shrink-0 text-blue-600" />
           <div className="flex-1">
             <h4 className="font-medium text-blue-900">Security Tip</h4>
             <p className="mt-1 text-sm text-blue-700">

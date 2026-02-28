@@ -1,4 +1,10 @@
 import Link from "next/link";
+import {
+  HiOutlineCheckCircle,
+  HiOutlineLocationMarker,
+  HiOutlineSearch,
+  HiOutlineArrowRight,
+} from "react-icons/hi";
 
 const Hero: React.FC = () => {
   return (
@@ -7,19 +13,7 @@ const Hero: React.FC = () => {
         <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}
           <div className="mb-8 inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1.5 text-sm font-medium text-emerald-700">
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+            <HiOutlineCheckCircle className="h-4 w-4" />
             <span>No membership cards needed</span>
           </div>
 
@@ -40,24 +34,7 @@ const Hero: React.FC = () => {
           <div className="mx-auto mt-10 max-w-xl">
             <form className="flex flex-col gap-3 sm:flex-row">
               <div className="relative flex-1">
-                <svg
-                  className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                  />
-                </svg>
+                <HiOutlineLocationMarker className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Enter your location or area..."
@@ -68,19 +45,7 @@ const Hero: React.FC = () => {
                 href="/gyms"
                 className="inline-flex h-14 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-8 text-base font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
-                <svg
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                  />
-                </svg>
+                <HiOutlineSearch className="h-5 w-5" />
                 Find Gyms
               </Link>
             </form>
@@ -96,19 +61,7 @@ const Hero: React.FC = () => {
               className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-gray-900 px-6 text-sm font-medium text-white shadow-sm transition-colors hover:bg-gray-800"
             >
               Browse All Gyms
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                />
-              </svg>
+              <HiOutlineArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href="/studio/register"

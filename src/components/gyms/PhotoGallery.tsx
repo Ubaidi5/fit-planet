@@ -3,6 +3,11 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import {
+  HiOutlineX,
+  HiOutlineChevronLeft,
+  HiOutlineChevronRight,
+} from "react-icons/hi";
 
 interface GalleryImage {
   url: string;
@@ -164,20 +169,7 @@ export function PhotoGallery({ images, className }: PhotoGalleryProps) {
             className="absolute top-4 right-4 text-white p-2 hover:bg-white/10 rounded-full transition-colors z-10"
             onClick={closeLightbox}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-8 w-8"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            <HiOutlineX className="h-8 w-8" />
           </button>
 
           {/* Previous Button */}
@@ -188,20 +180,7 @@ export function PhotoGallery({ images, className }: PhotoGalleryProps) {
               goToPrevious();
             }}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-8 w-8"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
+            <HiOutlineChevronLeft className="h-8 w-8" />
           </button>
 
           {/* Next Button */}
@@ -212,20 +191,7 @@ export function PhotoGallery({ images, className }: PhotoGalleryProps) {
               goToNext();
             }}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-8 w-8"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+            <HiOutlineChevronRight className="h-8 w-8" />
           </button>
 
           {/* Main Image */}

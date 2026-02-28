@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { HiOutlineChevronRight } from "react-icons/hi";
 
 interface QuickAction {
   id: string;
@@ -95,19 +96,7 @@ export default function QuickActions() {
                 {action.description}
               </p>
             </div>
-            <svg
-              className="h-4 w-4 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+            <HiOutlineChevronRight className="h-4 w-4 text-gray-400" />
           </Link>
         ))}
       </div>

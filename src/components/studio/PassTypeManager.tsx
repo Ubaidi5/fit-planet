@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/Input";
 import { cn } from "@/lib/utils";
 import Select from "../ui/Select";
 import Textarea from "../ui/Textarea";
+import { HiOutlineX, HiOutlineCheck } from "react-icons/hi";
 
 interface PassType {
   id: string;
@@ -447,19 +448,7 @@ export default function PassTypeManager() {
                         onClick={() => removeFeature(index)}
                         className="text-red-600 hover:text-red-700"
                       >
-                        <svg
-                          className="h-4 w-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
+                        <HiOutlineX className="h-4 w-4" />
                       </button>
                     </li>
                   ))}
@@ -597,19 +586,7 @@ export default function PassTypeManager() {
                           key={index}
                           className="flex items-center text-sm text-gray-600"
                         >
-                          <svg
-                            className="mr-2 h-4 w-4 text-emerald-500"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
+                          <HiOutlineCheck className="mr-2 h-4 w-4 text-emerald-500" />
                           {feature}
                         </li>
                       ))}

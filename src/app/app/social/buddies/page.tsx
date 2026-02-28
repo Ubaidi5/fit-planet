@@ -6,6 +6,11 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Input } from "@/components/ui/Input";
 import {
+  HiOutlineUserAdd,
+  HiOutlineSearch,
+  HiOutlineLocationMarker,
+} from "react-icons/hi";
+import {
   mockWorkoutBuddies,
   mockUsers,
   getStatusColor,
@@ -61,38 +66,14 @@ export default function BuddiesPage() {
           </p>
         </div>
         <Button>
-          <svg
-            className="mr-2 h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-            />
-          </svg>
+          <HiOutlineUserAdd className="mr-2 h-4 w-4" />
           Find Friends
         </Button>
       </div>
 
       {/* Search */}
       <div className="relative">
-        <svg
-          className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-          />
-        </svg>
+        <HiOutlineSearch className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
         <Input
           type="text"
           placeholder="Search friends by name or username..."
@@ -296,25 +277,7 @@ function BuddyCard({
           <div className="mt-2">
             {buddy.status === "at_gym" && buddy.currentGym && (
               <div className="flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
+                <HiOutlineLocationMarker className="h-4 w-4" />
                 <span className="truncate">{buddy.currentGym}</span>
               </div>
             )}
@@ -391,19 +354,7 @@ function UserCard({
           {/* Gym Context */}
           {gymContext && (
             <div className="mt-2 flex items-center gap-1 text-xs text-emerald-600">
-              <svg
-                className="h-3 w-3"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                />
-              </svg>
+              <HiOutlineLocationMarker className="h-3 w-3" />
               Works out at {gymContext}
             </div>
           )}

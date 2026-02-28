@@ -5,6 +5,14 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import {
+  HiOutlineLightningBolt,
+  HiOutlineArrowLeft,
+  HiOutlineLockClosed,
+  HiOutlineDeviceMobile,
+  HiOutlineShieldCheck,
+  HiOutlineClock,
+} from "react-icons/hi";
 
 export default function LoginPage() {
   const [step, setStep] = useState<"phone" | "otp">("phone");
@@ -141,19 +149,7 @@ export default function LoginPage() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 mb-8">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-linear-to-br from-emerald-500 to-teal-600">
-              <svg
-                className="h-6 w-6 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
+              <HiOutlineLightningBolt className="h-6 w-6 text-white" />
             </div>
             <span className="text-xl font-bold text-gray-900">Fit Planet</span>
           </Link>
@@ -218,19 +214,7 @@ export default function LoginPage() {
                 onClick={() => setStep("phone")}
                 className="flex items-center text-gray-600 hover:text-gray-900 mb-6"
               >
-                <svg
-                  className="h-5 w-5 mr-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
+                <HiOutlineArrowLeft className="h-5 w-5 mr-1" />
                 Back
               </button>
 
@@ -302,19 +286,7 @@ export default function LoginPage() {
 
           {/* Security Note */}
           <div className="mt-10 flex items-start gap-3 p-4 bg-gray-100 rounded-lg">
-            <svg
-              className="h-5 w-5 text-gray-500 shrink-0 mt-0.5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-              />
-            </svg>
+            <HiOutlineLockClosed className="h-5 w-5 text-gray-500 shrink-0 mt-0.5" />
             <div>
               <p className="text-sm font-medium text-gray-700">
                 Phone as Identity
@@ -342,19 +314,7 @@ export default function LoginPage() {
           <div className="space-y-6">
             <div className="flex items-start gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/20">
-                <svg
-                  className="h-5 w-5 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
-                  />
-                </svg>
+                <HiOutlineDeviceMobile className="h-5 w-5 text-white" />
               </div>
               <div>
                 <h3 className="font-semibold text-white">Phone-Based Entry</h3>
@@ -366,19 +326,7 @@ export default function LoginPage() {
 
             <div className="flex items-start gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/20">
-                <svg
-                  className="h-5 w-5 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                  />
-                </svg>
+                <HiOutlineShieldCheck className="h-5 w-5 text-white" />
               </div>
               <div>
                 <h3 className="font-semibold text-white">Secure & Private</h3>
@@ -391,19 +339,7 @@ export default function LoginPage() {
 
             <div className="flex items-start gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/20">
-                <svg
-                  className="h-5 w-5 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
+                <HiOutlineClock className="h-5 w-5 text-white" />
               </div>
               <div>
                 <h3 className="font-semibold text-white">Track Your Journey</h3>

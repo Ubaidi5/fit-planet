@@ -6,6 +6,14 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
+import {
+  HiOutlineLightningBolt,
+  HiOutlineCheck,
+  HiOutlineArrowLeft,
+  HiOutlineLocationMarker,
+  HiOutlineTicket,
+  HiOutlineQrcode,
+} from "react-icons/hi";
 
 type Step = "info" | "phone" | "otp";
 
@@ -191,19 +199,7 @@ export default function RegisterPage() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 mb-8">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-linear-to-br from-emerald-500 to-teal-600">
-              <svg
-                className="h-6 w-6 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
+              <HiOutlineLightningBolt className="h-6 w-6 text-white" />
             </div>
             <span className="text-xl font-bold text-gray-900">Fit Planet</span>
           </Link>
@@ -223,17 +219,7 @@ export default function RegisterPage() {
                   )}
                 >
                   {i < ["info", "phone", "otp"].indexOf(step) ? (
-                    <svg
-                      className="w-4 h-4"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <HiOutlineCheck className="w-4 h-4" />
                   ) : (
                     i + 1
                   )}
@@ -398,19 +384,7 @@ export default function RegisterPage() {
                 onClick={() => setStep("info")}
                 className="flex items-center text-gray-600 hover:text-gray-900 mb-6"
               >
-                <svg
-                  className="h-5 w-5 mr-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
+                <HiOutlineArrowLeft className="h-5 w-5 mr-1" />
                 Back
               </button>
 
@@ -466,19 +440,7 @@ export default function RegisterPage() {
                 onClick={() => setStep("phone")}
                 className="flex items-center text-gray-600 hover:text-gray-900 mb-6"
               >
-                <svg
-                  className="h-5 w-5 mr-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
+                <HiOutlineArrowLeft className="h-5 w-5 mr-1" />
                 Back
               </button>
 
@@ -565,25 +527,7 @@ export default function RegisterPage() {
           <div className="space-y-6">
             <div className="flex items-start gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/20">
-                <svg
-                  className="h-5 w-5 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
+                <HiOutlineLocationMarker className="h-5 w-5 text-white" />
               </div>
               <div>
                 <h3 className="font-semibold text-white">Discover Gyms</h3>
@@ -596,19 +540,7 @@ export default function RegisterPage() {
 
             <div className="flex items-start gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/20">
-                <svg
-                  className="h-5 w-5 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
-                  />
-                </svg>
+                <HiOutlineTicket className="h-5 w-5 text-white" />
               </div>
               <div>
                 <h3 className="font-semibold text-white">Flexible Passes</h3>
@@ -620,19 +552,7 @@ export default function RegisterPage() {
 
             <div className="flex items-start gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/20">
-                <svg
-                  className="h-5 w-5 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"
-                  />
-                </svg>
+                <HiOutlineQrcode className="h-5 w-5 text-white" />
               </div>
               <div>
                 <h3 className="font-semibold text-white">Digital Check-In</h3>

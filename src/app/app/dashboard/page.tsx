@@ -7,6 +7,15 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import {
+  HiOutlineBell,
+  HiOutlineSearch,
+  HiOutlineTicket,
+  HiOutlineClipboardCheck,
+  HiOutlineClock,
+  HiOutlineQrcode,
+  HiOutlineShieldCheck,
+} from "react-icons/hi";
 import { mockBookings, getActiveBookings } from "@/lib/data/mock-bookings";
 import {
   mockCheckIns,
@@ -142,23 +151,7 @@ export default function UserDashboardPage() {
         </div>
         <div className="flex gap-2">
           <Link href="/app/notifications">
-            <Button
-              beforeIcon={
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                  />
-                </svg>
-              }
-            >
+            <Button beforeIcon={<HiOutlineBell className="h-4 w-4" />}>
               Notifications
               <Badge variant="danger" size="sm" className="ml-2">
                 2
@@ -166,23 +159,7 @@ export default function UserDashboardPage() {
             </Button>
           </Link>
           <Link href="/gyms">
-            <Button
-              beforeIcon={
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              }
-            >
+            <Button beforeIcon={<HiOutlineSearch className="h-4 w-4" />}>
               Find Gyms
             </Button>
           </Link>
@@ -224,19 +201,7 @@ export default function UserDashboardPage() {
               <Card className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100">
-                    <svg
-                      className="h-5 w-5 text-emerald-600"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
-                      />
-                    </svg>
+                    <HiOutlineTicket className="h-5 w-5 text-emerald-600" />
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-gray-900">
@@ -250,19 +215,7 @@ export default function UserDashboardPage() {
               <Card className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100">
-                    <svg
-                      className="h-5 w-5 text-blue-600"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-                      />
-                    </svg>
+                    <HiOutlineClipboardCheck className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-gray-900">
@@ -288,19 +241,7 @@ export default function UserDashboardPage() {
               <Card className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100">
-                    <svg
-                      className="h-5 w-5 text-purple-600"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
+                    <HiOutlineClock className="h-5 w-5 text-purple-600" />
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-gray-900">
@@ -327,19 +268,7 @@ export default function UserDashboardPage() {
               {activeBookings.length === 0 ? (
                 <div className="p-8 text-center">
                   <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
-                    <svg
-                      className="h-6 w-6 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
-                      />
-                    </svg>
+                    <HiOutlineTicket className="h-6 w-6 text-gray-400" />
                   </div>
                   <p className="mb-4 text-gray-600">No active passes</p>
                   <Link href="/gyms">
@@ -479,19 +408,7 @@ export default function UserDashboardPage() {
 
               <div className="rounded-lg bg-white/10 p-4 text-center">
                 <div className="mx-auto mb-3 flex h-24 w-24 items-center justify-center rounded-lg bg-white">
-                  <svg
-                    className="h-16 w-16 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"
-                    />
-                  </svg>
+                  <HiOutlineQrcode className="h-16 w-16 text-gray-400" />
                 </div>
                 <p className="text-sm text-emerald-100">
                   Your digital identity for gym access
@@ -499,19 +416,7 @@ export default function UserDashboardPage() {
               </div>
 
               <div className="mt-4 flex items-center gap-2 text-sm text-emerald-100">
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                  />
-                </svg>
+                <HiOutlineShieldCheck className="h-4 w-4" />
                 Phone Verified
               </div>
             </div>

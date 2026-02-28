@@ -16,6 +16,18 @@ import {
   type CheckIn,
 } from "@/lib/data/mock-checkins";
 import Select from "@/components/ui/Select";
+import {
+  HiOutlineClipboardCheck,
+  HiOutlineClipboardList,
+  HiOutlineClock,
+  HiOutlineOfficeBuilding,
+  HiOutlineViewList,
+  HiOutlineCalendar,
+  HiOutlineLogin,
+  HiOutlineLogout,
+  HiOutlineChevronLeft,
+  HiOutlineChevronRight,
+} from "react-icons/hi";
 
 type ViewType = "list" | "calendar";
 
@@ -94,19 +106,7 @@ export default function CheckInHistoryPage() {
             <div className="bg-emerald-50 rounded-xl p-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-emerald-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-                    />
-                  </svg>
+                  <HiOutlineClipboardCheck className="w-5 h-5 text-emerald-600" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-emerald-700">
@@ -120,19 +120,7 @@ export default function CheckInHistoryPage() {
             <div className="bg-blue-50 rounded-xl p-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-blue-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
+                  <HiOutlineClock className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-blue-700">
@@ -146,19 +134,7 @@ export default function CheckInHistoryPage() {
             <div className="bg-purple-50 rounded-xl p-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-purple-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                    />
-                  </svg>
+                  <HiOutlineOfficeBuilding className="w-5 h-5 text-purple-600" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-purple-700">
@@ -211,19 +187,7 @@ export default function CheckInHistoryPage() {
                     : "text-gray-600 hover:text-gray-900",
                 )}
               >
-                <svg
-                  className="w-4 h-4 inline mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 10h16M4 14h16M4 18h16"
-                  />
-                </svg>
+                <HiOutlineViewList className="w-4 h-4 inline mr-2" />
                 List
               </button>
               <button
@@ -235,19 +199,7 @@ export default function CheckInHistoryPage() {
                     : "text-gray-600 hover:text-gray-900",
                 )}
               >
-                <svg
-                  className="w-4 h-4 inline mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
+                <HiOutlineCalendar className="w-4 h-4 inline mr-2" />
                 Calendar
               </button>
             </div>
@@ -262,19 +214,7 @@ export default function CheckInHistoryPage() {
             {filteredCheckIns.length === 0 ? (
               <div className="text-center py-16 bg-white rounded-xl border border-gray-200">
                 <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg
-                    className="w-8 h-8 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                    />
-                  </svg>
+                  <HiOutlineClipboardList className="w-8 h-8 text-gray-400" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   No check-ins yet
@@ -344,19 +284,7 @@ function CheckInCard({ checkIn }: { checkIn: CheckIn }) {
 
           <div className="flex items-center gap-6 mt-2 text-sm">
             <div className="flex items-center gap-1.5 text-gray-600">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
+              <HiOutlineCalendar className="w-4 h-4" />
               {checkInDate.toLocaleDateString("en-US", {
                 weekday: "short",
                 month: "short",
@@ -365,19 +293,7 @@ function CheckInCard({ checkIn }: { checkIn: CheckIn }) {
             </div>
 
             <div className="flex items-center gap-1.5 text-emerald-600">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                />
-              </svg>
+              <HiOutlineLogin className="w-4 h-4" />
               {checkInDate.toLocaleTimeString("en-US", {
                 hour: "numeric",
                 minute: "2-digit",
@@ -386,19 +302,7 @@ function CheckInCard({ checkIn }: { checkIn: CheckIn }) {
 
             {checkOutDate && (
               <div className="flex items-center gap-1.5 text-red-500">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                  />
-                </svg>
+                <HiOutlineLogout className="w-4 h-4" />
                 {checkOutDate.toLocaleTimeString("en-US", {
                   hour: "numeric",
                   minute: "2-digit",
@@ -408,19 +312,7 @@ function CheckInCard({ checkIn }: { checkIn: CheckIn }) {
 
             {checkIn.duration && (
               <div className="flex items-center gap-1.5 text-gray-600">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
+                <HiOutlineClock className="w-4 h-4" />
                 {formatDuration(checkIn.duration)}
               </div>
             )}
@@ -476,19 +368,7 @@ function CalendarView({
           onClick={() => onChangeMonth(-1)}
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
         >
-          <svg
-            className="w-5 h-5 text-gray-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
+          <HiOutlineChevronLeft className="w-5 h-5 text-gray-600" />
         </button>
         <h3 className="text-lg font-semibold text-gray-900">
           {selectedMonth.toLocaleDateString("en-US", {
@@ -500,19 +380,7 @@ function CalendarView({
           onClick={() => onChangeMonth(1)}
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
         >
-          <svg
-            className="w-5 h-5 text-gray-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
+          <HiOutlineChevronRight className="w-5 h-5 text-gray-600" />
         </button>
       </div>
 

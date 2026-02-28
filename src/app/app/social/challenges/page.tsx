@@ -5,6 +5,11 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import {
+  HiOutlinePlus,
+  HiOutlineUserGroup,
+  HiOutlineChevronDown,
+} from "react-icons/hi";
+import {
   mockChallenges,
   getChallengeStatusBadge,
   formatNumber,
@@ -93,19 +98,7 @@ export default function ChallengesPage() {
           </p>
         </div>
         <Button>
-          <svg
-            className="mr-2 h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
+          <HiOutlinePlus className="mr-2 h-4 w-4" />
           Create Challenge
         </Button>
       </div>
@@ -333,19 +326,7 @@ function ChallengeCard({
         {/* Stats */}
         <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-gray-500">
           <span className="flex items-center gap-1">
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
+            <HiOutlineUserGroup className="h-4 w-4" />
             {formatNumber(challenge.participants)} participants
           </span>
           {challenge.prize && (
@@ -365,19 +346,9 @@ function ChallengeCard({
             <span className="flex items-center gap-2">
               <span>🏅</span> Leaderboard
             </span>
-            <svg
+            <HiOutlineChevronDown
               className={`h-4 w-4 transition-transform ${showLeaderboard ? "rotate-180" : ""}`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
+            />
           </button>
         )}
 

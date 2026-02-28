@@ -2,6 +2,14 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import {
+  HiOutlineLocationMarker,
+  HiOutlineViewGrid,
+  HiOutlineViewList,
+  HiOutlineSearch,
+  HiOutlineArrowDown,
+  HiOutlineArrowRight,
+} from "react-icons/hi";
 import { GymCard } from "@/components/gyms/GymCard";
 import { SearchFilters, FilterState } from "@/components/gyms/SearchFilters";
 import { mockGyms } from "@/lib/data/mock-gyms";
@@ -113,24 +121,7 @@ export default function GymsPage() {
           <div className="mx-auto mt-8 max-w-2xl">
             <div className="flex items-center gap-3 rounded-xl bg-white p-2 shadow-lg">
               <div className="relative flex-1">
-                <svg
-                  className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                  />
-                </svg>
+                <HiOutlineLocationMarker className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Enter your location or area..."
@@ -142,24 +133,7 @@ export default function GymsPage() {
                 type="button"
                 className="flex h-12 items-center gap-2 rounded-lg bg-emerald-600 px-6 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
               >
-                <svg
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                  />
-                </svg>
+                <HiOutlineLocationMarker className="h-5 w-5" />
                 <span className="hidden sm:inline">Use My Location</span>
               </button>
             </div>
@@ -205,19 +179,7 @@ export default function GymsPage() {
                 )}
                 aria-label="Grid view"
               >
-                <svg
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"
-                  />
-                </svg>
+                <HiOutlineViewGrid className="h-5 w-5" />
               </button>
               <button
                 type="button"
@@ -230,19 +192,7 @@ export default function GymsPage() {
                 )}
                 aria-label="List view"
               >
-                <svg
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z"
-                  />
-                </svg>
+                <HiOutlineViewList className="h-5 w-5" />
               </button>
             </div>
           </div>
@@ -264,19 +214,7 @@ export default function GymsPage() {
             /* Empty State */
             <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-300 bg-white py-16">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
-                <svg
-                  className="h-8 w-8 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                  />
-                </svg>
+                <HiOutlineSearch className="h-8 w-8 text-gray-400" />
               </div>
               <h3 className="mt-4 text-lg font-semibold text-gray-900">
                 No gyms found
@@ -301,19 +239,7 @@ export default function GymsPage() {
                 type="button"
                 className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50"
               >
-                <svg
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"
-                  />
-                </svg>
+                <HiOutlineArrowDown className="h-5 w-5" />
                 Load More Gyms
               </button>
             </div>
@@ -334,19 +260,7 @@ export default function GymsPage() {
             className="mt-6 inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-700"
           >
             Register Your Gym
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-              />
-            </svg>
+            <HiOutlineArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>

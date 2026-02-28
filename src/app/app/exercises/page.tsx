@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
+import { HiOutlineChevronDown } from "react-icons/hi";
 import {
   mockExercises,
   formatMuscleGroup,
@@ -166,7 +167,7 @@ export default function ExercisesPage() {
           </Select>
 
           {/* Difficulty */}
-          <Select   
+          <Select
             value={selectedDifficulty}
             onChange={(e) =>
               setSelectedDifficulty(
@@ -280,21 +281,11 @@ function ExerciseCard({ exercise, isExpanded, onToggle }: ExerciseCardProps) {
         </div>
 
         {/* Expand Icon */}
-        <svg
+        <HiOutlineChevronDown
           className={`w-5 h-5 text-gray-400 transition-transform ${
             isExpanded ? "rotate-180" : ""
           }`}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+        />
       </button>
 
       {/* Expanded Content */}

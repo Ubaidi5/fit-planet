@@ -4,6 +4,13 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import type { Review } from "@/lib/data/mock-gym-details";
+import {
+  HiStar,
+  HiCheckCircle,
+  HiOutlineReply,
+  HiOutlineThumbUp,
+  HiThumbUp,
+} from "react-icons/hi";
 
 interface ReviewCardProps {
   review: Review;
@@ -66,17 +73,7 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
               <h4 className="font-semibold text-gray-900">{review.userName}</h4>
               {review.isVerified && (
                 <span className="inline-flex items-center gap-1 text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                  <svg
-                    className="h-3 w-3"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <HiCheckCircle className="h-3 w-3" />
                   Verified
                 </span>
               )}
@@ -88,17 +85,13 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
         {/* Star Rating */}
         <div className="flex items-center gap-1">
           {[1, 2, 3, 4, 5].map((star) => (
-            <svg
+            <HiStar
               key={star}
               className={cn(
                 "h-5 w-5",
                 star <= review.rating ? "text-amber-400" : "text-gray-200",
               )}
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
+            />
           ))}
         </div>
       </div>
@@ -125,13 +118,7 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
               {category}
             </div>
             <div className="flex items-center justify-center gap-1">
-              <svg
-                className="h-4 w-4 text-amber-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
+              <HiStar className="h-4 w-4 text-amber-400" />
               <span className="text-sm font-medium text-gray-700">
                 {rating.toFixed(1)}
               </span>
@@ -163,19 +150,7 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
       {review.gymResponse && (
         <div className="mt-4 bg-gray-50 rounded-lg p-4 border-l-4 border-emerald-500">
           <div className="flex items-center gap-2 mb-2">
-            <svg
-              className="h-5 w-5 text-emerald-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
-              />
-            </svg>
+            <HiOutlineReply className="h-5 w-5 text-emerald-600" />
             <span className="font-semibold text-gray-900 text-sm">
               Response from the gym
             </span>
@@ -199,19 +174,11 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
           )}
           disabled={hasVoted}
         >
-          <svg
-            className="h-4 w-4"
-            fill={hasVoted ? "currentColor" : "none"}
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
-            />
-          </svg>
+          {hasVoted ? (
+            <HiThumbUp className="h-4 w-4" />
+          ) : (
+            <HiOutlineThumbUp className="h-4 w-4" />
+          )}
           Helpful ({helpful})
         </button>
 
@@ -264,7 +231,7 @@ export function ReviewsSummary({
           <div className="text-5xl font-bold text-gray-900">{rating}</div>
           <div className="flex items-center justify-center gap-1 mt-2">
             {[1, 2, 3, 4, 5].map((star) => (
-              <svg
+              <HiStar
                 key={star}
                 className={cn(
                   "h-5 w-5",
@@ -272,11 +239,7 @@ export function ReviewsSummary({
                     ? "text-amber-400"
                     : "text-gray-200",
                 )}
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
+              />
             ))}
           </div>
           <p className="text-sm text-gray-500 mt-1">

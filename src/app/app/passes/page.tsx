@@ -7,6 +7,12 @@ import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import {
+  HiOutlinePlus,
+  HiOutlineQrcode,
+  HiOutlineTicket,
+  HiOutlineSearch,
+} from "react-icons/hi";
+import {
   mockBookings,
   getActiveBookings,
   getUpcomingBookings,
@@ -44,23 +50,7 @@ export default function MyPassesPage() {
               </p>
             </div>
             <Link href="/gyms">
-              <Button
-                beforeIcon={
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                }
-              >
+              <Button beforeIcon={<HiOutlinePlus className="h-5 w-5" />}>
                 Book New Pass
               </Button>
             </Link>
@@ -272,19 +262,7 @@ function PassCard({ booking }: { booking: Booking }) {
                 <div className="inline-block bg-white p-4 rounded-lg border-2 border-gray-200">
                   <div className="w-32 h-32 bg-gray-100 rounded flex items-center justify-center">
                     <div className="text-center">
-                      <svg
-                        className="h-12 w-12 mx-auto text-gray-400 mb-2"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"
-                        />
-                      </svg>
+                      <HiOutlineQrcode className="h-12 w-12 mx-auto text-gray-400 mb-2" />
                       <p className="text-xs text-gray-500">QR Code</p>
                     </div>
                   </div>
@@ -309,21 +287,7 @@ function PassCard({ booking }: { booking: Booking }) {
                 variant="outline"
                 fullWidth
                 onClick={() => setShowQR(true)}
-                beforeIcon={
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"
-                    />
-                  </svg>
-                }
+                beforeIcon={<HiOutlineQrcode className="h-5 w-5" />}
               >
                 Show QR Code
               </Button>
@@ -362,19 +326,7 @@ function EmptyState({ tab }: { tab: TabType }) {
   return (
     <div className="text-center py-16">
       <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 mb-6">
-        <svg
-          className="h-10 w-10 text-gray-400"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
-          />
-        </svg>
+        <HiOutlineTicket className="h-10 w-10 text-gray-400" />
       </div>
       <h3 className="text-xl font-semibold text-gray-900 mb-2">
         {tab === "active"
@@ -392,19 +344,7 @@ function EmptyState({ tab }: { tab: TabType }) {
       </p>
       <Link href="/gyms">
         <Button>
-          <svg
-            className="h-5 w-5 mr-2"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
+          <HiOutlineSearch className="h-5 w-5 mr-2" />
           Find Gyms Near You
         </Button>
       </Link>

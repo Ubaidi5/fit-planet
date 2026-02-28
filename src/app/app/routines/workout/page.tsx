@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { HiOutlineChevronLeft } from "react-icons/hi";
 import {
   mockRoutines,
   getExerciseById,
@@ -165,19 +166,7 @@ export default function WorkoutPage() {
         <div className="flex items-center gap-3">
           <Link href="/app/routines">
             <button className="p-2 hover:bg-gray-100 rounded-lg">
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
+              <HiOutlineChevronLeft className="w-5 h-5" />
             </button>
           </Link>
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900">

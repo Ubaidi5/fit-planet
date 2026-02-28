@@ -4,6 +4,24 @@ import { useState } from "react";
 import { notFound, useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import {
+  HiOutlineArrowLeft,
+  HiOutlineBadgeCheck,
+  HiStar,
+  HiOutlineLocationMarker,
+  HiOutlineTrendingUp,
+  HiOutlineCheck,
+  HiOutlineCalendar,
+  HiOutlineClock,
+  HiOutlineUser,
+  HiOutlineUserGroup,
+  HiOutlineChat,
+  HiOutlinePhone,
+  HiOutlineMail,
+  HiOutlineGlobe,
+  HiOutlineMap,
+} from "react-icons/hi";
+import { FaInstagram, FaFacebook } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import { mockGyms } from "@/lib/data/mock-gyms";
 import {
@@ -77,19 +95,7 @@ export default function GymDetailPage() {
             href="/gyms"
             className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-lg text-white hover:bg-white/20 transition-colors"
           >
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
+            <HiOutlineArrowLeft className="h-5 w-5" />
             Back to Gyms
           </Link>
         </div>
@@ -101,17 +107,7 @@ export default function GymDetailPage() {
               {gym.isFeatured && <Badge variant="warning">Featured</Badge>}
               {gym.isVerified && (
                 <Badge variant="success">
-                  <svg
-                    className="h-3 w-3 mr-1"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <HiOutlineBadgeCheck className="h-3 w-3 mr-1" />
                   Verified
                 </Badge>
               )}
@@ -124,13 +120,7 @@ export default function GymDetailPage() {
 
             <div className="flex flex-wrap items-center gap-4 text-white/90">
               <div className="flex items-center gap-1">
-                <svg
-                  className="h-5 w-5 text-amber-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
+                <HiStar className="h-5 w-5 text-amber-400" />
                 <span className="font-semibold">{gym.rating}</span>
                 <span className="text-white/70">
                   ({gym.totalReviews} reviews)
@@ -138,25 +128,7 @@ export default function GymDetailPage() {
               </div>
 
               <div className="flex items-center gap-1">
-                <svg
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
+                <HiOutlineLocationMarker className="h-5 w-5" />
                 <span>
                   {gym.address.area}, {gym.address.city}
                 </span>
@@ -164,19 +136,7 @@ export default function GymDetailPage() {
 
               {gym.distance && (
                 <div className="flex items-center gap-1">
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                    />
-                  </svg>
+                  <HiOutlineTrendingUp className="h-5 w-5" />
                   <span>{gym.distance} km away</span>
                 </div>
               )}
@@ -244,19 +204,7 @@ export default function GymDetailPage() {
                           key={amenity}
                           className="flex items-center gap-2 text-gray-600"
                         >
-                          <svg
-                            className="h-5 w-5 text-emerald-500"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
+                          <HiOutlineCheck className="h-5 w-5 text-emerald-500" />
                           {amenity}
                         </div>
                       ))}
@@ -420,19 +368,7 @@ export default function GymDetailPage() {
 
                     {details.classes.length === 0 ? (
                       <div className="text-center py-12 text-gray-500">
-                        <svg
-                          className="h-12 w-12 mx-auto mb-4 text-gray-300"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                          />
-                        </svg>
+                        <HiOutlineCalendar className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                         <p>No group classes available at this gym</p>
                       </div>
                     ) : (
@@ -475,35 +411,11 @@ export default function GymDetailPage() {
                               </p>
                               <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
                                 <div className="flex items-center gap-1">
-                                  <svg
-                                    className="h-4 w-4"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                    />
-                                  </svg>
+                                  <HiOutlineClock className="h-4 w-4" />
                                   {cls.duration} min
                                 </div>
                                 <div className="flex items-center gap-1">
-                                  <svg
-                                    className="h-4 w-4"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                                    />
-                                  </svg>
+                                  <HiOutlineUser className="h-4 w-4" />
                                   {cls.instructor}
                                 </div>
                               </div>
@@ -552,19 +464,7 @@ export default function GymDetailPage() {
 
                     {details.trainers.length === 0 ? (
                       <div className="text-center py-12 text-gray-500">
-                        <svg
-                          className="h-12 w-12 mx-auto mb-4 text-gray-300"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                          />
-                        </svg>
+                        <HiOutlineUserGroup className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                         <p>No trainer information available</p>
                       </div>
                     ) : (
@@ -588,13 +488,7 @@ export default function GymDetailPage() {
                                   {trainer.name}
                                 </h3>
                                 <div className="flex items-center gap-1 mt-1">
-                                  <svg
-                                    className="h-4 w-4 text-amber-400"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                  </svg>
+                                  <HiStar className="h-4 w-4 text-amber-400" />
                                   <span className="text-sm font-medium text-gray-700">
                                     {trainer.rating}
                                   </span>
@@ -671,19 +565,7 @@ export default function GymDetailPage() {
                   {/* Reviews List */}
                   {details.reviews.length === 0 ? (
                     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center text-gray-500">
-                      <svg
-                        className="h-12 w-12 mx-auto mb-4 text-gray-300"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                        />
-                      </svg>
+                      <HiOutlineChat className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                       <p>No reviews yet. Be the first to review!</p>
                     </div>
                   ) : (
@@ -769,19 +651,7 @@ export default function GymDetailPage() {
                         href={`tel:${details.contact.phone}`}
                         className="flex items-center gap-3 text-gray-600 hover:text-emerald-600 transition-colors"
                       >
-                        <svg
-                          className="h-5 w-5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                          />
-                        </svg>
+                        <HiOutlinePhone className="h-5 w-5" />
                         {details.contact.phone}
                       </a>
                     )}
@@ -790,19 +660,7 @@ export default function GymDetailPage() {
                         href={`mailto:${details.contact.email}`}
                         className="flex items-center gap-3 text-gray-600 hover:text-emerald-600 transition-colors"
                       >
-                        <svg
-                          className="h-5 w-5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                          />
-                        </svg>
+                        <HiOutlineMail className="h-5 w-5" />
                         {details.contact.email}
                       </a>
                     )}
@@ -813,19 +671,7 @@ export default function GymDetailPage() {
                         rel="noopener noreferrer"
                         className="flex items-center gap-3 text-gray-600 hover:text-emerald-600 transition-colors"
                       >
-                        <svg
-                          className="h-5 w-5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-                          />
-                        </svg>
+                        <HiOutlineGlobe className="h-5 w-5" />
                         Visit Website
                       </a>
                     )}
@@ -841,13 +687,7 @@ export default function GymDetailPage() {
                           rel="noopener noreferrer"
                           className="p-2 bg-gray-100 text-gray-500 rounded-lg hover:bg-pink-50 hover:text-pink-600 transition-colors"
                         >
-                          <svg
-                            className="h-5 w-5"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                          </svg>
+                          <FaInstagram className="h-5 w-5" />
                         </a>
                       )}
                       {details.contact.facebook && (
@@ -857,13 +697,7 @@ export default function GymDetailPage() {
                           rel="noopener noreferrer"
                           className="p-2 bg-gray-100 text-gray-500 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors"
                         >
-                          <svg
-                            className="h-5 w-5"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                          </svg>
+                          <FaFacebook className="h-5 w-5" />
                         </a>
                       )}
                     </div>
@@ -878,19 +712,7 @@ export default function GymDetailPage() {
                 </h3>
                 <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center mb-4">
                   <div className="text-center text-gray-500">
-                    <svg
-                      className="h-12 w-12 mx-auto mb-2 text-gray-300"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
-                      />
-                    </svg>
+                    <HiOutlineMap className="h-12 w-12 mx-auto mb-2 text-gray-300" />
                     <p className="text-sm">Map integration coming soon</p>
                   </div>
                 </div>
@@ -901,25 +723,7 @@ export default function GymDetailPage() {
                   className="mt-4"
                   fullWidth
                   beforeIcon={
-                    <svg
-                      className="h-4 w-4 mr-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                    </svg>
+                    <HiOutlineLocationMarker className="h-4 w-4 mr-2" />
                   }
                 >
                   Get Directions

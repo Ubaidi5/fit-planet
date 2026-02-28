@@ -2,6 +2,7 @@
 
 import React, { forwardRef } from "react";
 import { cn } from "@/lib/utils";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -98,19 +99,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             id={`${inputId}-error`}
             className="mt-1.5 flex items-center gap-1 text-sm text-red-600"
           >
-            <svg
-              className="h-4 w-4 flex-shrink-0"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
-              />
-            </svg>
+            <HiOutlineExclamationCircle className="h-4 w-4 flex-shrink-0" />
             {error}
           </p>
         )}

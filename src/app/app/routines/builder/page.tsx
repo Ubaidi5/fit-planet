@@ -5,6 +5,12 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
 import {
+  HiOutlineX,
+  HiOutlineChevronUp,
+  HiOutlineChevronDown,
+  HiOutlineTrash,
+} from "react-icons/hi";
+import {
   mockExercises,
   formatMuscleGroup,
   formatDifficulty,
@@ -288,19 +294,7 @@ export default function RoutineBuilderPage() {
                   onClick={() => setShowExercisePicker(false)}
                   className="p-2 hover:bg-gray-100 rounded-lg"
                 >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
+                  <HiOutlineX className="w-5 h-5" />
                 </button>
               </div>
               <Input
@@ -387,56 +381,20 @@ function ExerciseItem({
             disabled={index === 0}
             className="p-1.5 hover:bg-gray-100 rounded disabled:opacity-30"
           >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 15l7-7 7 7"
-              />
-            </svg>
+            <HiOutlineChevronUp className="w-4 h-4" />
           </button>
           <button
             onClick={() => onMove("down")}
             disabled={index === total - 1}
             className="p-1.5 hover:bg-gray-100 rounded disabled:opacity-30"
           >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
+            <HiOutlineChevronDown className="w-4 h-4" />
           </button>
           <button
             onClick={onRemove}
             className="p-1.5 hover:bg-red-50 rounded text-red-500"
           >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-              />
-            </svg>
+            <HiOutlineTrash className="w-4 h-4" />
           </button>
         </div>
       </div>

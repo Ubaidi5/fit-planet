@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { HiOutlineInformationCircle } from "react-icons/hi";
 
 interface DigestPreference {
   id: string;
@@ -330,19 +331,7 @@ export default function EmailDigestPage() {
       {/* Info Card */}
       <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
         <div className="flex gap-3">
-          <svg
-            className="h-5 w-5 shrink-0 text-blue-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+          <HiOutlineInformationCircle className="h-5 w-5 shrink-0 text-blue-600" />
           <div>
             <h4 className="font-medium text-blue-900">About Email Digests</h4>
             <p className="mt-1 text-sm text-blue-800">

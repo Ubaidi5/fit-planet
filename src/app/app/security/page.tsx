@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { PasswordStrength } from "@/components/ui/PasswordStrength";
 import { cn } from "@/lib/utils";
+import { HiOutlineLockClosed } from "react-icons/hi";
 
 export default function SecuritySettingsPage() {
   const [activeTab, setActiveTab] = useState<
@@ -129,21 +130,7 @@ export default function SecuritySettingsPage() {
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 disabled={isChangingPassword}
-                leftIcon={
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={1.5}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
-                    />
-                  </svg>
-                }
+                leftIcon={<HiOutlineLockClosed className="h-5 w-5" />}
               />
 
               <Input
@@ -153,21 +140,7 @@ export default function SecuritySettingsPage() {
                 onChange={(e) => setNewPassword(e.target.value)}
                 disabled={isChangingPassword}
                 hint="At least 8 characters"
-                leftIcon={
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={1.5}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
-                    />
-                  </svg>
-                }
+                leftIcon={<HiOutlineLockClosed className="h-5 w-5" />}
               />
 
               <PasswordStrength password={newPassword} />
@@ -178,21 +151,7 @@ export default function SecuritySettingsPage() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 disabled={isChangingPassword}
-                leftIcon={
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={1.5}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
-                    />
-                  </svg>
-                }
+                leftIcon={<HiOutlineLockClosed className="h-5 w-5" />}
               />
 
               <div className="flex items-center gap-2">

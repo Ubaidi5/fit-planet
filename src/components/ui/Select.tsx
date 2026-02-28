@@ -2,6 +2,7 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
+import { HiOutlineChevronDown } from "react-icons/hi";
 
 export interface Option {
   value: string;
@@ -57,19 +58,7 @@ export function Select({
       </select>
 
       <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400">
-        <svg
-          className="h-4 w-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+        <HiOutlineChevronDown className="h-4 w-4" />
       </span>
     </div>
   );

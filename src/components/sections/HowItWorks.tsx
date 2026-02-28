@@ -1,3 +1,11 @@
+import {
+  HiOutlineSearch,
+  HiOutlineTicket,
+  HiOutlineCreditCard,
+  HiOutlineCheckCircle,
+  HiOutlineArrowRight,
+} from "react-icons/hi";
+
 const steps = [
   {
     step: "01",
@@ -6,19 +14,7 @@ const steps = [
       "Enter your location or allow GPS access to discover gyms near you. Filter by price, amenities, ratings, and more.",
     image: (
       <div className="flex items-center justify-center h-48 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl">
-        <svg
-          className="h-20 w-20 text-emerald-600"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={1.5}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-          />
-        </svg>
+        <HiOutlineSearch className="h-20 w-20 text-emerald-600" />
       </div>
     ),
   },
@@ -29,19 +25,7 @@ const steps = [
       "Select from day passes, week passes, or monthly memberships. Compare prices, check availability, and pick what suits you best.",
     image: (
       <div className="flex items-center justify-center h-48 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl">
-        <svg
-          className="h-20 w-20 text-emerald-600"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={1.5}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z"
-          />
-        </svg>
+        <HiOutlineTicket className="h-20 w-20 text-emerald-600" />
       </div>
     ),
   },
@@ -52,19 +36,7 @@ const steps = [
       "Complete your booking in seconds with secure online payment. No waiting, no queues — just instant confirmation.",
     image: (
       <div className="flex items-center justify-center h-48 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl">
-        <svg
-          className="h-20 w-20 text-emerald-600"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={1.5}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"
-          />
-        </svg>
+        <HiOutlineCreditCard className="h-20 w-20 text-emerald-600" />
       </div>
     ),
   },
@@ -75,19 +47,7 @@ const steps = [
       "Get your digital pass with a unique QR code. Just show it at the gym entrance, scan, and start your workout!",
     image: (
       <div className="flex items-center justify-center h-48 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl">
-        <svg
-          className="h-20 w-20 text-emerald-600"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={1.5}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
+        <HiOutlineCheckCircle className="h-20 w-20 text-emerald-600" />
       </div>
     ),
   },
@@ -153,19 +113,7 @@ const HowItWorks: React.FC = () => {
             className="mt-4 inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-emerald-600 px-8 text-base font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
           >
             Get Started Now
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-              />
-            </svg>
+            <HiOutlineArrowRight className="h-5 w-5" />
           </a>
         </div>
       </div>

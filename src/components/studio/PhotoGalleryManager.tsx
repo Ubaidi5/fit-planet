@@ -4,6 +4,11 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/Button";
 import Image from "next/image";
 import { uploadToR2, deleteFromR2, validateImageFile } from "@/lib/utils/r2";
+import {
+  HiOutlinePhotograph,
+  HiOutlineChevronLeft,
+  HiOutlineChevronRight,
+} from "react-icons/hi";
 
 interface Photo {
   id: string;
@@ -166,19 +171,7 @@ export default function PhotoGalleryManager() {
 
           <div className="space-y-4">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
-              <svg
-                className="h-8 w-8 text-emerald-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
+              <HiOutlinePhotograph className="h-8 w-8 text-emerald-600" />
             </div>
 
             <div>
@@ -290,19 +283,7 @@ export default function PhotoGalleryManager() {
                     disabled={index === 0}
                     className="rounded p-1 text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-30"
                   >
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 19l-7-7 7-7"
-                      />
-                    </svg>
+                    <HiOutlineChevronLeft className="h-5 w-5" />
                   </button>
                   <span className="text-xs text-gray-500">
                     Position {index + 1}
@@ -318,19 +299,7 @@ export default function PhotoGalleryManager() {
                     disabled={index === photos.length - 1}
                     className="rounded p-1 text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-30"
                   >
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
+                    <HiOutlineChevronRight className="h-5 w-5" />
                   </button>
                 </div>
               </div>
