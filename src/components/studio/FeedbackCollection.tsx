@@ -72,31 +72,31 @@ export default function FeedbackCollection() {
     <div className="space-y-6">
       {/* Stats Overview */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Requests Sent</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">{stats.sent}</p>
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">{stats.sent}</p>
           <p className="mt-1 text-xs text-gray-600">This month</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Completed</p>
-          <p className="mt-2 text-3xl font-bold text-emerald-600">
+          <p className="mt-2 text-3xl font-semibold text-emerald-600 tracking-tight">
             {stats.completed}
           </p>
           <p className="mt-1 text-xs text-emerald-600">Reviews received</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Pending</p>
-          <p className="mt-2 text-3xl font-bold text-orange-600">
+          <p className="mt-2 text-3xl font-semibold text-orange-600 tracking-tight">
             {stats.pending}
           </p>
           <p className="mt-1 text-xs text-gray-600">Awaiting response</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Response Rate</p>
-          <p className="mt-2 text-3xl font-bold text-blue-600">
+          <p className="mt-2 text-3xl font-semibold text-blue-600 tracking-tight">
             {stats.responseRate}%
           </p>
           <p className="mt-1 text-xs text-blue-600">↑ 5% vs last month</p>
@@ -106,7 +106,7 @@ export default function FeedbackCollection() {
       {/* Prompt Configuration */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Left: Settings */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <h3 className="mb-6 text-lg font-semibold text-gray-900">
             Feedback Prompt Settings
           </h3>
@@ -225,7 +225,7 @@ export default function FeedbackCollection() {
             )}
 
             {/* Save Button */}
-            <button className="w-full rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white transition-colors hover:bg-emerald-700">
+            <button className="w-full rounded-full bg-emerald-600 px-4 py-2 font-semibold text-white transition-colors hover:bg-emerald-700">
               Save Settings
             </button>
           </div>
@@ -234,7 +234,7 @@ export default function FeedbackCollection() {
         {/* Right: Preview */}
         <div className="space-y-6">
           {/* Prompt Types */}
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
             <h3 className="mb-4 text-lg font-semibold text-gray-900">
               Prompt Types
             </h3>
@@ -290,7 +290,7 @@ export default function FeedbackCollection() {
           </div>
 
           {/* Message Preview */}
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
             <h3 className="mb-4 text-lg font-semibold text-gray-900">
               Message Preview
             </h3>
@@ -341,7 +341,7 @@ export default function FeedbackCollection() {
                     leaving a review.
                   </p>
                   <div className="flex items-center space-x-2">
-                    <button className="flex-1 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white">
+                    <button className="flex-1 rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white">
                       Rate Now
                     </button>
                     <button className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700">
@@ -375,7 +375,7 @@ export default function FeedbackCollection() {
       </div>
 
       {/* Recent Requests */}
-      <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface shadow-soft">
         <div className="border-b border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-900">
             Recent Feedback Requests

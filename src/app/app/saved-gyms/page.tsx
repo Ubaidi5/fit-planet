@@ -117,7 +117,7 @@ export default function SavedGymsPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+          <h1 className="text-2xl font-semibold text-ink sm:text-3xl tracking-tight">
             Saved Gyms
           </h1>
           <p className="mt-1 text-gray-500">
@@ -166,7 +166,7 @@ export default function SavedGymsPage() {
               ❤️
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-2xl font-semibold text-ink tracking-tight">
                 {savedGyms.length}
               </p>
               <p className="text-sm text-gray-500">Saved Gyms</p>
@@ -179,7 +179,7 @@ export default function SavedGymsPage() {
               🏷️
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-2xl font-semibold text-ink tracking-tight">
                 {savedGyms.filter((g) => g.hasOffer).length}
               </p>
               <p className="text-sm text-gray-500">With Offers</p>
@@ -192,7 +192,7 @@ export default function SavedGymsPage() {
               ✅
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-2xl font-semibold text-ink tracking-tight">
                 {savedGyms.filter((g) => g.isOpen).length}
               </p>
               <p className="text-sm text-gray-500">Open Now</p>

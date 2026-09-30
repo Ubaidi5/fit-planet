@@ -71,7 +71,7 @@ export default function CheckInSystem() {
   return (
     <div className="space-y-6">
       {/* Mode Selector */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-4 text-lg font-semibold text-gray-900">
           Check-In Method
         </h3>
@@ -126,7 +126,7 @@ export default function CheckInSystem() {
 
       {/* Check-In Interface */}
       {scanMode === "qr" ? (
-        <div className="rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-8 shadow-soft">
           <div className="flex flex-col items-center">
             <div className="mb-6 flex h-64 w-64 items-center justify-center rounded-lg border-4 border-dashed border-gray-300 bg-gray-50">
               {isScanning ? (
@@ -160,7 +160,7 @@ export default function CheckInSystem() {
           </div>
         </div>
       ) : (
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <h3 className="mb-4 text-lg font-semibold text-gray-900">
             Search Member
           </h3>
@@ -285,7 +285,7 @@ export default function CheckInSystem() {
       )}
 
       {/* Recent Check-Ins */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-4 text-lg font-semibold text-gray-900">
           Recent Check-Ins (Today)
         </h3>

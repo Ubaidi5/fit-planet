@@ -1,177 +1,110 @@
 import Link from "next/link";
-import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
-import { HiOutlineLightningBolt } from "react-icons/hi";
+import { FaFacebookF, FaInstagram, FaXTwitter, FaYoutube } from "react-icons/fa6";
+import { Logo } from "@/components/brand/Logo";
 
-const footerLinks = {
-  product: [
-    { href: "/gyms", label: "Find Gyms" },
-    { href: "/#how-it-works", label: "How It Works" },
-    { href: "/pricing", label: "Pricing" },
-    { href: "/app/routines", label: "Workout Routines" },
-  ],
-  company: [
-    { href: "/about", label: "About Us" },
-    { href: "/contact", label: "Contact" },
-    { href: "/careers", label: "Careers" },
-    { href: "/blog", label: "Blog" },
-  ],
-  forOwners: [
-    { href: "/studio/register", label: "Register Your Gym" },
-    { href: "/studio/login", label: "Gym Owner Login" },
-    { href: "/studio-features", label: "Features" },
-    { href: "/success-stories", label: "Success Stories" },
-  ],
-  legal: [
-    { href: "/privacy", label: "Privacy Policy" },
-    { href: "/terms", label: "Terms of Service" },
-    { href: "/cookies", label: "Cookie Policy" },
-  ],
-};
+const footerLinks = [
+  {
+    title: "Members",
+    links: [
+      { href: "/gyms", label: "Find gyms" },
+      { href: "/#how-it-works", label: "How it works" },
+      { href: "/app/register", label: "Create account" },
+      { href: "/app/login", label: "Member login" },
+    ],
+  },
+  {
+    title: "Gym owners",
+    links: [
+      { href: "/#for-owners", label: "Why Fit Planet" },
+      { href: "/studio/register", label: "List your gym" },
+      { href: "/studio/login", label: "Studio login" },
+    ],
+  },
+  {
+    title: "Explore",
+    links: [
+      { href: "/#members", label: "Routines & social" },
+      { href: "/#stories", label: "Pilot stories" },
+      { href: "/gyms?q=Clifton", label: "Gyms in Clifton" },
+      { href: "/gyms?q=DHA", label: "Gyms in DHA" },
+    ],
+  },
+];
 
 const socialLinks = [
-  {
-    name: "Facebook",
-    href: "https://facebook.com",
-    icon: <FaFacebook className="h-5 w-5" />,
-  },
-  {
-    name: "Instagram",
-    href: "https://instagram.com",
-    icon: <FaInstagram className="h-5 w-5" />,
-  },
-  {
-    name: "Twitter",
-    href: "https://twitter.com",
-    icon: <FaTwitter className="h-5 w-5" />,
-  },
-  {
-    name: "YouTube",
-    href: "https://youtube.com",
-    icon: <FaYoutube className="h-5 w-5" />,
-  },
+  { name: "Instagram", href: "https://instagram.com", icon: FaInstagram },
+  { name: "X", href: "https://x.com", icon: FaXTwitter },
+  { name: "Facebook", href: "https://facebook.com", icon: FaFacebookF },
+  { name: "YouTube", href: "https://youtube.com", icon: FaYoutube },
 ];
 
 const Footer: React.FC = () => {
   return (
-    <footer className="border-t border-gray-200 bg-gray-50">
-      <div className="container mx-auto px-4 py-12 lg:py-16">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
-          {/* Brand Column */}
-          <div className="col-span-2 md:col-span-4 lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600">
-                <HiOutlineLightningBolt className="h-5 w-5 text-white" />
-              </div>
-              <span className="text-xl font-bold text-gray-900">
-                Fit Planet
-              </span>
-            </Link>
-            <p className="mt-4 text-sm text-gray-600 max-w-xs">
-              Your gym service broker. Discover, book, and manage gym
-              memberships with ease. No physical cards needed.
+    <footer className="px-3 pb-3 sm:px-4 sm:pb-4">
+      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-4xl border border-gray-900/[0.06] bg-surface">
+        <div className="grid gap-12 px-6 pt-12 pb-10 sm:px-10 lg:grid-cols-[1.2fr_2fr] lg:gap-16 lg:px-14 lg:pt-16">
+          <div>
+            <Logo />
+            <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-gray-500">
+              The gym network for your city. Members find and book any gym in
+              seconds. Owners fill capacity without building their own tech.
             </p>
-            {/* Social Links */}
-            <div className="mt-6 flex gap-4">
-              {socialLinks.map((social) => (
+            <div className="mt-6 flex gap-2">
+              {socialLinks.map(({ name, href, icon: Icon }) => (
                 <a
-                  key={social.name}
-                  href={social.href}
+                  key={name}
+                  href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-500 transition-colors hover:text-emerald-600"
-                  aria-label={social.name}
+                  aria-label={name}
+                  className="flex size-10 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition-all duration-300 hover:-translate-y-0.5 hover:border-gray-300 hover:text-ink"
                 >
-                  {social.icon}
+                  <Icon className="size-4" />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Product Links */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-900">Product</h3>
-            <ul className="mt-4 space-y-3">
-              {footerLinks.product.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-gray-600 transition-colors hover:text-emerald-600"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company Links */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-900">Company</h3>
-            <ul className="mt-4 space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-gray-600 transition-colors hover:text-emerald-600"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* For Gym Owners Links */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-900">
-              For Gym Owners
-            </h3>
-            <ul className="mt-4 space-y-3">
-              {footerLinks.forOwners.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-gray-600 transition-colors hover:text-emerald-600"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Legal Links */}
-          <div className="col-span-2 md:col-span-1">
-            <h3 className="text-sm font-semibold text-gray-900">Legal</h3>
-            <ul className="mt-4 space-y-3">
-              {footerLinks.legal.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-gray-600 transition-colors hover:text-emerald-600"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
+            {footerLinks.map((group) => (
+              <div key={group.title}>
+                <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-400">
+                  {group.title}
+                </h3>
+                <ul className="mt-4 space-y-3">
+                  {group.links.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="text-[15px] text-gray-600 transition-colors hover:text-ink"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Bottom Section */}
-        <div className="mt-12 border-t border-gray-200 pt-8">
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <p className="text-sm text-gray-500">
-              &copy; {new Date().getFullYear()} Fit Planet. All rights reserved.
-            </p>
-            <p className="text-sm text-gray-500">
-              Made with{" "}
-              <span className="text-red-500" aria-label="love">
-                ❤️
-              </span>{" "}
-              for fitness enthusiasts
-            </p>
-          </div>
+        {/* Oversized wordmark */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none select-none px-4 text-center font-serif text-[21vw] leading-[0.8] tracking-tight text-gray-900/[0.05] italic lg:text-[15.5rem]"
+        >
+          Fit Planet
+        </div>
+
+        <div className="flex flex-col items-center justify-between gap-3 border-t border-gray-900/[0.06] px-6 py-6 text-sm text-gray-500 sm:flex-row sm:px-10 lg:px-14">
+          <p>&copy; {new Date().getFullYear()} Fit Planet. All rights reserved.</p>
+          <p className="flex items-center gap-2">
+            <span className="relative flex size-2">
+              <span className="absolute inset-0 animate-pulse-ring rounded-full bg-emerald-500" />
+              <span className="relative size-2 rounded-full bg-emerald-500" />
+            </span>
+            Now live in Karachi
+          </p>
         </div>
       </div>
     </footer>

@@ -111,7 +111,7 @@ export default function RealTimeMonitor() {
       {/* Real-Time Overview */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Capacity Gauge */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="text-lg font-semibold text-gray-900">
               Current Occupancy
@@ -190,7 +190,7 @@ export default function RealTimeMonitor() {
         {/* Breakdown */}
         <div className="space-y-4">
           {/* Member vs Day Pass */}
-          <div className="rounded-lg border border-gray-200 bg-white p-6">
+          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
             <h3 className="mb-4 text-lg font-semibold text-gray-900">
               User Breakdown
             </h3>
@@ -236,19 +236,19 @@ export default function RealTimeMonitor() {
           </div>
 
           {/* Available Slots */}
-          <div className="rounded-lg border border-gray-200 bg-white p-6">
+          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
             <h3 className="mb-4 text-lg font-semibold text-gray-900">
               Available Slots
             </h3>
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
-                <p className="text-3xl font-bold text-gray-900">
+                <p className="text-3xl font-semibold text-ink tracking-tight">
                   {capacityData.max - capacityData.current}
                 </p>
                 <p className="text-sm text-gray-600">Total Available</p>
               </div>
               <div className="text-center">
-                <p className="text-3xl font-bold text-gray-900">5</p>
+                <p className="text-3xl font-semibold text-ink tracking-tight">5</p>
                 <p className="text-sm text-gray-600">On Waitlist</p>
               </div>
             </div>
@@ -257,7 +257,7 @@ export default function RealTimeMonitor() {
       </div>
 
       {/* Live Check-Ins */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg font-semibold text-gray-900">
             Currently Checked In

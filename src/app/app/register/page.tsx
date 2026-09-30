@@ -2,17 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { AuthShell } from "@/components/auth/AuthShell";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import {
-  HiOutlineLightningBolt,
   HiOutlineCheck,
   HiOutlineArrowLeft,
-  HiOutlineLocationMarker,
-  HiOutlineTicket,
-  HiOutlineQrcode,
 } from "react-icons/hi";
 
 type Step = "info" | "phone" | "otp";
@@ -192,17 +189,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Left Side - Form */}
-      <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24">
-        <div className="mx-auto w-full max-w-md">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 mb-8">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-linear-to-br from-emerald-500 to-teal-600">
-              <HiOutlineLightningBolt className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-xl font-bold text-gray-900">Fit Planet</span>
-          </Link>
+    <AuthShell variant="member" width="md" aside={{ text: "Already a member?", href: "/app/login", label: "Log in" }}>
 
           {/* Progress Steps */}
           <div className="flex items-center gap-2 mb-8">
@@ -240,7 +227,7 @@ export default function RegisterPage() {
 
           {step === "info" && (
             <>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="mb-2 text-3xl font-semibold tracking-[-0.03em] text-ink">
                 Create your account
               </h2>
               <p className="text-gray-600 mb-8">
@@ -388,7 +375,7 @@ export default function RegisterPage() {
                 Back
               </button>
 
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="mb-2 text-3xl font-semibold tracking-[-0.03em] text-ink">
                 Add your phone number
               </h2>
               <p className="text-gray-600 mb-8">
@@ -444,7 +431,7 @@ export default function RegisterPage() {
                 Back
               </button>
 
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="mb-2 text-3xl font-semibold tracking-[-0.03em] text-ink">
                 Verify your phone
               </h2>
               <p className="text-gray-600 mb-8">
@@ -510,77 +497,6 @@ export default function RegisterPage() {
               </form>
             </>
           )}
-        </div>
-      </div>
-
-      {/* Right Side - Image/Info */}
-      <div className="hidden lg:flex lg:w-1/2 bg-linear-to-br from-emerald-600 to-teal-700 lg:flex-col lg:justify-center lg:px-12 xl:px-16">
-        <div className="max-w-md">
-          <h2 className="text-3xl font-bold text-white mb-6">
-            Your Fitness Journey Starts Here
-          </h2>
-          <p className="text-emerald-100 text-lg mb-8">
-            Create your free account and get instant access to hundreds of gyms
-            across Pakistan.
-          </p>
-
-          <div className="space-y-6">
-            <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/20">
-                <HiOutlineLocationMarker className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-white">Discover Gyms</h3>
-                <p className="text-emerald-100 text-sm mt-1">
-                  Find the perfect gym near you with detailed profiles and
-                  reviews.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/20">
-                <HiOutlineTicket className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-white">Flexible Passes</h3>
-                <p className="text-emerald-100 text-sm mt-1">
-                  Day, week, or month passes. No long-term commitments required.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/20">
-                <HiOutlineQrcode className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-white">Digital Check-In</h3>
-                <p className="text-emerald-100 text-sm mt-1">
-                  Skip the counter. Just show your QR code and start your
-                  workout.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Stats */}
-          <div className="mt-12 grid grid-cols-3 gap-6">
-            <div>
-              <p className="text-3xl font-bold text-white">500+</p>
-              <p className="text-emerald-100 text-sm">Partner Gyms</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-white">50K+</p>
-              <p className="text-emerald-100 text-sm">Active Users</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-white">4.8★</p>
-              <p className="text-emerald-100 text-sm">App Rating</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </AuthShell>
   );
 }

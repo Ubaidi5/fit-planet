@@ -152,7 +152,7 @@ export function NotificationPreferences() {
   return (
     <div className="space-y-6">
       {/* Notification Channels */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="text-lg font-semibold text-gray-900">
           Notification Channels
         </h3>
@@ -193,7 +193,7 @@ export function NotificationPreferences() {
       </div>
 
       {/* Notification Categories */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="text-lg font-semibold text-gray-900">
           Notification Categories
         </h3>
@@ -293,7 +293,7 @@ export function NotificationPreferences() {
       </div>
 
       {/* Quiet Hours */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <div className="flex items-start justify-between">
           <div>
             <h3 className="text-lg font-semibold text-gray-900">Quiet Hours</h3>
@@ -358,7 +358,7 @@ export function NotificationPreferences() {
       </div>
 
       {/* Quick Actions */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
         <div className="mt-4 flex flex-wrap gap-3">
           <Button

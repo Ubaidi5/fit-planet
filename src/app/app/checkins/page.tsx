@@ -81,13 +81,13 @@ export default function CheckInHistoryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-2xl font-semibold text-ink tracking-tight">
                 Check-in History
               </h1>
               <p className="text-gray-600 mt-1">
@@ -109,7 +109,7 @@ export default function CheckInHistoryPage() {
                   <HiOutlineClipboardCheck className="w-5 h-5 text-emerald-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-emerald-700">
+                  <p className="text-2xl font-semibold text-emerald-700 tracking-tight">
                     {stats.totalCheckIns}
                   </p>
                   <p className="text-sm text-emerald-600">Total Check-ins</p>
@@ -123,7 +123,7 @@ export default function CheckInHistoryPage() {
                   <HiOutlineClock className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-blue-700">
+                  <p className="text-2xl font-semibold text-blue-700 tracking-tight">
                     {formatDuration(stats.totalDuration)}
                   </p>
                   <p className="text-sm text-blue-600">Total Time</p>
@@ -137,7 +137,7 @@ export default function CheckInHistoryPage() {
                   <HiOutlineOfficeBuilding className="w-5 h-5 text-purple-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-purple-700">
+                  <p className="text-2xl font-semibold text-purple-700 tracking-tight">
                     {stats.gymsVisited}
                   </p>
                   <p className="text-sm text-purple-600">Gyms Visited</p>
@@ -151,7 +151,7 @@ export default function CheckInHistoryPage() {
                   <span className="text-xl">🔥</span>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-orange-700">
+                  <p className="text-2xl font-semibold text-orange-700 tracking-tight">
                     {stats.streak}
                   </p>
                   <p className="text-sm text-orange-600">Day Streak</p>
@@ -252,7 +252,7 @@ function CheckInCard({ checkIn }: { checkIn: CheckIn }) {
     : null;
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition-shadow">
+    <div className="bg-surface rounded-3xl border border-gray-900/[0.06] p-4 hover:shadow-lift transition-shadow shadow-soft">
       <div className="flex items-center gap-4">
         {/* Gym Logo */}
         <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0">
@@ -361,7 +361,7 @@ function CalendarView({
     today.getFullYear() === year && today.getMonth() === month;
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <div className="bg-surface rounded-3xl border border-gray-900/[0.06] overflow-hidden shadow-soft">
       {/* Calendar Header */}
       <div className="p-4 border-b border-gray-200 flex items-center justify-between">
         <button

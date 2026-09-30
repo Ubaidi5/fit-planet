@@ -118,7 +118,7 @@ export default function MemberInsights() {
       {/* Overview Stats */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Engagement Overview */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm lg:col-span-2">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft lg:col-span-2">
           <h3 className="mb-4 text-lg font-semibold text-gray-900">
             Engagement Overview
           </h3>
@@ -128,7 +128,7 @@ export default function MemberInsights() {
               <p className="text-sm font-medium text-emerald-700">
                 Active Members
               </p>
-              <p className="mt-2 text-3xl font-bold text-emerald-900">85</p>
+              <p className="mt-2 text-3xl font-semibold text-emerald-900 tracking-tight">85</p>
               <p className="mt-1 text-xs text-emerald-600">
                 Visited in last 7 days
               </p>
@@ -138,7 +138,7 @@ export default function MemberInsights() {
               <p className="text-sm font-medium text-orange-700">
                 Inactive Members
               </p>
-              <p className="mt-2 text-3xl font-bold text-orange-900">23</p>
+              <p className="mt-2 text-3xl font-semibold text-orange-900 tracking-tight">23</p>
               <p className="mt-1 text-xs text-orange-600">
                 No visit for 14+ days
               </p>
@@ -146,7 +146,7 @@ export default function MemberInsights() {
 
             <div className="rounded-lg bg-blue-50 p-4">
               <p className="text-sm font-medium text-blue-700">New Members</p>
-              <p className="mt-2 text-3xl font-bold text-blue-900">12</p>
+              <p className="mt-2 text-3xl font-semibold text-blue-900 tracking-tight">12</p>
               <p className="mt-1 text-xs text-blue-600">Joined this month</p>
             </div>
           </div>
@@ -155,19 +155,19 @@ export default function MemberInsights() {
           <div className="mt-6 grid grid-cols-2 gap-4 border-t border-gray-200 pt-4">
             <div>
               <p className="text-sm text-gray-600">Avg Visits/Member</p>
-              <p className="mt-1 text-2xl font-bold text-gray-900">18.5</p>
+              <p className="mt-1 text-2xl font-semibold text-ink tracking-tight">18.5</p>
               <p className="text-xs text-gray-500">per month</p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Avg Session Duration</p>
-              <p className="mt-1 text-2xl font-bold text-gray-900">1h 45m</p>
+              <p className="mt-1 text-2xl font-semibold text-ink tracking-tight">1h 45m</p>
               <p className="text-xs text-gray-500">per visit</p>
             </div>
           </div>
         </div>
 
         {/* Member Feedback */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <h3 className="mb-4 text-lg font-semibold text-gray-900">
             Member Satisfaction
           </h3>
@@ -178,7 +178,7 @@ export default function MemberInsights() {
                 <span className="text-sm font-medium text-gray-700">
                   Overall Rating
                 </span>
-                <span className="text-2xl font-bold text-emerald-600">4.7</span>
+                <span className="text-2xl font-semibold text-emerald-600 tracking-tight">4.7</span>
               </div>
               <div className="flex items-center space-x-1">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -241,7 +241,7 @@ export default function MemberInsights() {
       </div>
 
       {/* Top Frequent Visitors */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <div className="mb-4 flex items-center justify-between">
           <div>
             <h3 className="text-lg font-semibold text-gray-900">
@@ -275,7 +275,7 @@ export default function MemberInsights() {
               </div>
 
               <div className="text-right">
-                <p className="text-2xl font-bold text-emerald-600">
+                <p className="text-2xl font-semibold text-emerald-600 tracking-tight">
                   {member.visits}
                 </p>
                 <p className="text-xs text-gray-600">visits</p>
@@ -305,7 +305,7 @@ export default function MemberInsights() {
           {inactiveMembers.map((member, index) => (
             <div
               key={index}
-              className="flex items-center justify-between rounded-lg border border-orange-200 bg-white p-4"
+              className="flex items-center justify-between rounded-3xl border border-orange-200 bg-surface p-4 shadow-soft"
             >
               <div>
                 <p className="font-semibold text-gray-900">{member.name}</p>
@@ -347,7 +347,7 @@ export default function MemberInsights() {
           {newMembers.map((member, index) => (
             <div
               key={index}
-              className="flex items-center justify-between rounded-lg border border-blue-200 bg-white p-4"
+              className="flex items-center justify-between rounded-3xl border border-blue-200 bg-surface p-4 shadow-soft"
             >
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">👋</span>

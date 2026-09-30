@@ -1,121 +1,112 @@
+import Link from "next/link";
 import {
-  HiOutlineSearch,
-  HiOutlineTicket,
+  HiArrowRight,
   HiOutlineCreditCard,
-  HiOutlineCheckCircle,
-  HiOutlineArrowRight,
-} from "react-icons/hi";
+  HiOutlineMagnifyingGlass,
+  HiOutlineQrCode,
+  HiOutlineTicket,
+} from "react-icons/hi2";
+import { Reveal } from "@/components/motion/Reveal";
+import { platformStats } from "@/lib/data/mock-platform";
+import { Accent, SectionHeading } from "./SectionHeading";
 
 const steps = [
   {
-    step: "01",
-    title: "Search for Gyms",
+    title: "Search for gyms",
     description:
-      "Enter your location or allow GPS access to discover gyms near you. Filter by price, amenities, ratings, and more.",
-    image: (
-      <div className="flex items-center justify-center h-48 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl">
-        <HiOutlineSearch className="h-20 w-20 text-emerald-600" />
-      </div>
-    ),
+      "Type an area or use your location. Filter by price, amenities, rating and how busy it is right now.",
+    icon: HiOutlineMagnifyingGlass,
+    meta: `${platformStats.launchCity} · ${platformStats.partnerGyms} gyms nearby`,
   },
   {
-    step: "02",
-    title: "Choose Your Pass",
+    title: "Choose your pass",
     description:
-      "Select from day passes, week passes, or monthly memberships. Compare prices, check availability, and pick what suits you best.",
-    image: (
-      <div className="flex items-center justify-center h-48 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl">
-        <HiOutlineTicket className="h-20 w-20 text-emerald-600" />
-      </div>
-    ),
+      "Day, week or monthly. Compare what each gym offers and pick what fits your week, not a year-long contract.",
+    icon: HiOutlineTicket,
+    meta: `From Rs. ${platformStats.lowestDayPass} a day`,
   },
   {
-    step: "03",
-    title: "Book & Pay Online",
+    title: "Book and pay online",
     description:
-      "Complete your booking in seconds with secure online payment. No waiting, no queues — just instant confirmation.",
-    image: (
-      <div className="flex items-center justify-center h-48 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl">
-        <HiOutlineCreditCard className="h-20 w-20 text-emerald-600" />
-      </div>
-    ),
+      "Secure checkout with instant confirmation. Add-ons like a trainer session or locker in one tap.",
+    icon: HiOutlineCreditCard,
+    meta: "Confirmed in under a minute",
   },
   {
-    step: "04",
-    title: "Show QR & Work Out",
+    title: "Show your QR and train",
     description:
-      "Get your digital pass with a unique QR code. Just show it at the gym entrance, scan, and start your workout!",
-    image: (
-      <div className="flex items-center justify-center h-48 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-xl">
-        <HiOutlineCheckCircle className="h-20 w-20 text-emerald-600" />
-      </div>
-    ),
+      "Your pass lives in the app. The gym scans it at the door and you are in. That is the whole process.",
+    icon: HiOutlineQrCode,
+    meta: "No card, no paperwork",
   },
 ];
 
 const HowItWorks: React.FC = () => {
   return (
-    <section id="how-it-works" className="bg-gray-50 py-20 lg:py-28">
-      <div className="container mx-auto px-4">
-        {/* Section Header */}
-        <div className="mx-auto max-w-2xl text-center">
-          <span className="inline-block rounded-full bg-emerald-100 px-4 py-1.5 text-sm font-medium text-emerald-700">
-            Simple Process
-          </span>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            How It Works
-          </h2>
-          <p className="mt-4 text-lg text-gray-600">
-            Getting started with Fit Planet is easy. Just four simple steps to
-            your perfect workout.
-          </p>
+    <section id="how-it-works" className="relative py-24 lg:py-32">
+      <div className="mx-auto grid max-w-7xl gap-14 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20 lg:px-8">
+        <div className="lg:sticky lg:top-32 lg:self-start">
+          <SectionHeading
+            align="left"
+            eyebrow="How it works"
+            title={
+              <>
+                From couch to squat rack in <Accent>four steps</Accent>
+              </>
+            }
+            description="We removed every step that made joining a gym painful. What is left takes about a minute."
+            className="mx-auto text-center lg:mx-0 lg:text-left"
+          />
+          <Reveal delay={120} className="mt-8 flex justify-center lg:justify-start">
+            <Link
+              href="/gyms"
+              className="group inline-flex h-12 items-center gap-2 rounded-full bg-ink pr-1.5 pl-6 text-[15px] font-medium text-white transition-colors hover:bg-gray-800"
+            >
+              Find a gym now
+              <span className="flex size-9 items-center justify-center rounded-full bg-volt text-ink transition-transform duration-500 ease-out-expo group-hover:-rotate-45">
+                <HiArrowRight className="size-4" />
+              </span>
+            </Link>
+          </Reveal>
         </div>
 
-        {/* Steps */}
-        <div className="mx-auto mt-16 max-w-6xl">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {steps.map((step, index) => (
-              <div key={index} className="relative">
-                {/* Connector Line (hidden on mobile) */}
-                {index < steps.length - 1 && (
-                  <div className="absolute left-1/2 top-24 hidden h-0.5 w-full bg-emerald-200 lg:block" />
-                )}
-
-                <div className="relative rounded-2xl bg-white p-6 shadow-sm">
-                  {/* Step Number */}
-                  <div className="absolute -top-4 left-6 flex h-8 w-12 items-center justify-center rounded-full bg-emerald-600 text-sm font-bold text-white">
-                    {step.step}
+        <ol className="relative space-y-4">
+          <span
+            aria-hidden="true"
+            className="absolute top-8 bottom-8 left-10 w-px bg-linear-to-b from-emerald-300 via-gray-300 to-transparent sm:left-13"
+          />
+          {steps.map((step, index) => {
+            const Icon = step.icon;
+            return (
+              <Reveal
+                as="li"
+                key={step.title}
+                delay={index * 90}
+                className="group relative flex gap-5 rounded-4xl border border-gray-900/[0.06] bg-surface p-5 shadow-soft transition-all duration-500 ease-out-expo hover:-translate-y-0.5 hover:shadow-lift sm:gap-7 sm:p-7"
+              >
+                <span className="relative z-10 flex size-10 shrink-0 items-center justify-center rounded-2xl bg-canvas text-emerald-700 ring-1 ring-gray-900/[0.06] transition-colors duration-500 group-hover:bg-ink group-hover:text-volt sm:size-12">
+                  <Icon className="size-5" />
+                </span>
+                <div className="flex-1">
+                  <div className="flex items-baseline justify-between gap-4">
+                    <h3 className="text-lg font-semibold tracking-tight text-ink sm:text-xl">
+                      {step.title}
+                    </h3>
+                    <span className="font-serif text-2xl text-gray-300 italic tabular-nums sm:text-3xl">
+                      0{index + 1}
+                    </span>
                   </div>
-
-                  {/* Image/Icon Area */}
-                  <div className="mt-4">{step.image}</div>
-
-                  {/* Content */}
-                  <h3 className="mt-6 text-lg font-semibold text-gray-900">
-                    {step.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-600 leading-relaxed">
+                  <p className="mt-2 text-[15px] leading-relaxed text-gray-600">
                     {step.description}
                   </p>
+                  <p className="mt-4 inline-flex rounded-full bg-canvas px-3 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-900/[0.05]">
+                    {step.meta}
+                  </p>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Bottom CTA */}
-        <div className="mt-16 text-center">
-          <p className="text-lg text-gray-600">
-            Ready to find your perfect gym?
-          </p>
-          <a
-            href="/gyms"
-            className="mt-4 inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-emerald-600 px-8 text-base font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
-          >
-            Get Started Now
-            <HiOutlineArrowRight className="h-5 w-5" />
-          </a>
-        </div>
+              </Reveal>
+            );
+          })}
+        </ol>
       </div>
     </section>
   );

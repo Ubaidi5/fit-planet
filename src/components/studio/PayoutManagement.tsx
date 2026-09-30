@@ -103,31 +103,31 @@ export default function PayoutManagement() {
     <div className="space-y-6">
       {/* Stats Overview */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Pending Payout</p>
-          <p className="mt-2 text-3xl font-bold text-orange-600">
+          <p className="mt-2 text-3xl font-semibold text-orange-600 tracking-tight">
             Rs. {(stats.pending / 1000).toFixed(0)}K
           </p>
           <p className="mt-1 text-xs text-gray-600">Processing in 3 days</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Total Paid Out</p>
-          <p className="mt-2 text-3xl font-bold text-emerald-600">
+          <p className="mt-2 text-3xl font-semibold text-emerald-600 tracking-tight">
             Rs. {(stats.completed / 1000).toFixed(0)}K
           </p>
           <p className="mt-1 text-xs text-emerald-600">This month</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Payout Count</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">{stats.count}</p>
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">{stats.count}</p>
           <p className="mt-1 text-xs text-gray-600">Successful payouts</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Avg. Payout</p>
-          <p className="mt-2 text-3xl font-bold text-blue-600">
+          <p className="mt-2 text-3xl font-semibold text-blue-600 tracking-tight">
             Rs. {(stats.completed / stats.count / 1000).toFixed(0)}K
           </p>
           <p className="mt-1 text-xs text-gray-600">Per transaction</p>
@@ -135,7 +135,7 @@ export default function PayoutManagement() {
       </div>
 
       {/* Payout Schedule */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-4 text-lg font-semibold text-gray-900">
           Payout Schedule
         </h3>
@@ -160,7 +160,7 @@ export default function PayoutManagement() {
             </div>
 
             <div className="text-right">
-              <p className="text-2xl font-bold text-blue-900">3 Days</p>
+              <p className="text-2xl font-semibold text-blue-900 tracking-tight">3 Days</p>
               <p className="text-xs text-blue-700">Until payout</p>
             </div>
           </div>
@@ -206,17 +206,17 @@ export default function PayoutManagement() {
         </div>
 
         <div className="flex items-center space-x-2">
-          <button className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50">
+          <button className="rounded-full border border-gray-200 bg-surface px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50">
             Download Statement
           </button>
-          <button className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
+          <button className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
             Update Bank Details
           </button>
         </div>
       </div>
 
       {/* Payout History Table */}
-      <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface shadow-soft">
         <div className="border-b border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-900">
             Payout History
@@ -336,7 +336,7 @@ export default function PayoutManagement() {
       </div>
 
       {/* Bank Account Info */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-4 text-lg font-semibold text-gray-900">
           Bank Account Details
         </h3>

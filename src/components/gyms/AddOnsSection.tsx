@@ -45,7 +45,7 @@ export function AddOnsSection({ addOns, onSelectAddOn }: AddOnsSectionProps) {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+    <div className="bg-surface rounded-3xl shadow-soft border border-gray-900/[0.06] p-6">
       <div className="flex items-center gap-2 mb-6">
         <HiOutlinePlus className="h-6 w-6 text-emerald-600" />
         <h2 className="text-xl font-semibold text-gray-900">
@@ -110,7 +110,7 @@ export function AddOnsSection({ addOns, onSelectAddOn }: AddOnsSectionProps) {
             {/* Price & Action */}
             <div className="flex items-center justify-between pt-3 border-t border-gray-100">
               <div>
-                <span className="text-2xl font-bold text-gray-900">
+                <span className="text-2xl font-semibold text-ink tracking-tight">
                   Rs. {addOn.price.toLocaleString()}
                 </span>
                 <span className="text-sm text-gray-500 ml-1">per use</span>

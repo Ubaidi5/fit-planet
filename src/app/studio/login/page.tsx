@@ -1,14 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { AuthShell } from "@/components/auth/AuthShell";
 import { useState } from "react";
 import {
-  HiOutlineLightningBolt,
   HiOutlineMail,
   HiOutlineLockClosed,
   HiOutlineEye,
   HiOutlineEyeOff,
-  HiOutlineArrowLeft,
 } from "react-icons/hi";
 import { CgSpinner } from "react-icons/cg";
 import { Input } from "@/components/ui/Input";
@@ -75,20 +74,7 @@ export default function StudioLoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Left Side - Form */}
-      <div className="flex w-full flex-col justify-center px-4 py-12 sm:px-6 lg:w-1/2 lg:px-8 xl:px-12">
-        <div className="mx-auto w-full max-w-md">
-          {/* Logo */}
-          <Link href="/" className="mb-8 flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600">
-              <HiOutlineLightningBolt className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-xl font-bold text-gray-100">Fit Planet</span>
-            <span className="ml-1 rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">
-              Studio
-            </span>
-          </Link>
+    <AuthShell variant="studio" width="md" aside={{ text: "New gym?", href: "/studio/register", label: "List your gym" }}>
 
           {/* Card */}
           <Card variant="elevated" padding="lg">
@@ -194,67 +180,6 @@ export default function StudioLoginPage() {
               </p>
             </CardFooter>
           </Card>
-
-          {/* Back to Website */}
-          <p className="mt-8 text-center text-sm text-gray-500">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-1 hover:text-gray-700"
-            >
-              <HiOutlineArrowLeft className="h-4 w-4" />
-              Back to main website
-            </Link>
-          </p>
-        </div>
-      </div>
-
-      {/* Right Side - Branding */}
-      <div className="hidden bg-gradient-to-br from-emerald-600 to-teal-700 lg:flex lg:w-1/2 lg:flex-col lg:justify-center lg:px-12 xl:px-16">
-        <div className="mx-auto max-w-md">
-          {/* Quote / Feature Highlight */}
-          <div className="relative">
-            <span className="absolute -left-4 -top-4 text-5xl font-serif text-emerald-400/50">
-              &ldquo;
-            </span>
-            <blockquote className="text-2xl font-medium leading-relaxed text-white">
-              "Fit Planet helped us reach 3x more customers without building our
-              own website. The capacity management feature alone saved us hours
-              every week."
-            </blockquote>
-            <div className="mt-6 flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20 text-lg font-bold text-white">
-                AK
-              </div>
-              <div>
-                <p className="font-semibold text-white">Ahmed Khan</p>
-                <p className="text-sm text-emerald-200">
-                  Owner, FitZone Karachi
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Stats */}
-          <div className="mt-12 grid grid-cols-2 gap-6">
-            <div className="rounded-xl bg-white/10 p-4">
-              <p className="text-3xl font-bold text-white">500+</p>
-              <p className="text-sm text-emerald-200">Gyms on platform</p>
-            </div>
-            <div className="rounded-xl bg-white/10 p-4">
-              <p className="text-3xl font-bold text-white">100K+</p>
-              <p className="text-sm text-emerald-200">Bookings processed</p>
-            </div>
-            <div className="rounded-xl bg-white/10 p-4">
-              <p className="text-3xl font-bold text-white">40%</p>
-              <p className="text-sm text-emerald-200">Avg. revenue increase</p>
-            </div>
-            <div className="rounded-xl bg-white/10 p-4">
-              <p className="text-3xl font-bold text-white">24/7</p>
-              <p className="text-sm text-emerald-200">Bookings & support</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </AuthShell>
   );
 }

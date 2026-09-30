@@ -171,33 +171,33 @@ export default function BookingHistory() {
     <div className="space-y-6">
       {/* Summary Stats */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Total Bookings</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">1,248</p>
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">1,248</p>
           <p className="mt-1 text-xs text-emerald-600">↑ 15% this month</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-          <p className="mt-2 text-3xl font-bold text-emerald-600">Rs. 2.8M</p>
+          <p className="mt-2 text-3xl font-semibold text-emerald-600 tracking-tight">Rs. 2.8M</p>
           <p className="mt-1 text-xs text-gray-600">This month</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Active Passes</p>
-          <p className="mt-2 text-3xl font-bold text-blue-600">128</p>
+          <p className="mt-2 text-3xl font-semibold text-blue-600 tracking-tight">128</p>
           <p className="mt-1 text-xs text-gray-600">Currently valid</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Cancellation Rate</p>
-          <p className="mt-2 text-3xl font-bold text-orange-600">2.4%</p>
+          <p className="mt-2 text-3xl font-semibold text-orange-600 tracking-tight">2.4%</p>
           <p className="mt-1 text-xs text-emerald-600">↓ 0.5% vs last month</p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
           {/* Date Range */}
           <div className="flex space-x-2">
@@ -281,7 +281,7 @@ export default function BookingHistory() {
       </div>
 
       {/* Bookings Table */}
-      <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface shadow-soft">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="border-b border-gray-200 bg-gray-50">
