@@ -108,13 +108,13 @@ export default function ProfilePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>
+              <h1 className="text-2xl font-semibold text-ink tracking-tight">My Profile</h1>
               <p className="text-gray-600 mt-1">Manage your account settings</p>
             </div>
             <Link href="/app/dashboard">
@@ -127,7 +127,7 @@ export default function ProfilePage() {
           {/* User Summary */}
           <div className="flex items-center gap-6">
             <div className="relative">
-              <div className="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-2xl font-bold">
+              <div className="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-2xl font-semibold tracking-tight">
                 {user.avatar ? (
                   <Image
                     src={user.avatar}
@@ -164,25 +164,25 @@ export default function ProfilePage() {
           {/* Stats */}
           <div className="grid grid-cols-4 gap-4 mt-6">
             <div className="bg-gray-50 rounded-lg p-4 text-center">
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-2xl font-semibold text-ink tracking-tight">
                 {user.stats.totalCheckIns}
               </p>
               <p className="text-sm text-gray-600">Total Check-ins</p>
             </div>
             <div className="bg-gray-50 rounded-lg p-4 text-center">
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-2xl font-semibold text-ink tracking-tight">
                 {user.stats.gymsVisited}
               </p>
               <p className="text-sm text-gray-600">Gyms Visited</p>
             </div>
             <div className="bg-gray-50 rounded-lg p-4 text-center">
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-2xl font-semibold text-ink tracking-tight">
                 {user.stats.activePasses}
               </p>
               <p className="text-sm text-gray-600">Active Passes</p>
             </div>
             <div className="bg-gray-50 rounded-lg p-4 text-center">
-              <p className="text-2xl font-bold text-emerald-600">
+              <p className="text-2xl font-semibold text-emerald-600 tracking-tight">
                 🔥 {user.stats.streakDays}
               </p>
               <p className="text-sm text-gray-600">Day Streak</p>
@@ -213,7 +213,7 @@ export default function ProfilePage() {
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === "profile" && (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="bg-surface rounded-3xl border border-gray-900/[0.06] overflow-hidden shadow-soft">
             <div className="p-6 border-b border-gray-100 flex items-center justify-between">
               <h3 className="text-lg font-semibold text-gray-900">
                 Personal Information
@@ -361,7 +361,7 @@ export default function ProfilePage() {
 
         {activeTab === "security" && (
           <div className="space-y-6">
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="bg-surface rounded-3xl border border-gray-900/[0.06] overflow-hidden shadow-soft">
               <div className="p-6 border-b border-gray-100">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Phone Verification
@@ -385,7 +385,7 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="bg-surface rounded-3xl border border-gray-900/[0.06] overflow-hidden shadow-soft">
               <div className="p-6 border-b border-gray-100">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Recent Activity
@@ -443,7 +443,7 @@ export default function ProfilePage() {
         {activeTab === "preferences" && (
           <div className="space-y-6">
             {/* Notification Preferences */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="bg-surface rounded-3xl border border-gray-900/[0.06] overflow-hidden shadow-soft">
               <div className="p-6 border-b border-gray-100">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Notification Preferences
@@ -526,7 +526,7 @@ export default function ProfilePage() {
             </div>
 
             {/* App Settings */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="bg-surface rounded-3xl border border-gray-900/[0.06] overflow-hidden shadow-soft">
               <div className="p-6 border-b border-gray-100">
                 <h3 className="text-lg font-semibold text-gray-900">
                   App Settings
@@ -571,7 +571,7 @@ export default function ProfilePage() {
         {activeTab === "payments" && (
           <div className="space-y-6">
             {/* Payment Methods */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="bg-surface rounded-3xl border border-gray-900/[0.06] overflow-hidden shadow-soft">
               <div className="p-6 border-b border-gray-100 flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">
@@ -663,7 +663,7 @@ export default function ProfilePage() {
 
             {/* Add Payment Modal */}
             {showAddPayment && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/30 backdrop-blur-sm">
                 <div className="bg-white rounded-xl max-w-md w-full p-6">
                   <div className="flex items-center justify-between mb-6">
                     <h3 className="text-lg font-semibold text-gray-900">
@@ -740,7 +740,7 @@ export default function ProfilePage() {
             )}
 
             {/* Billing History */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="bg-surface rounded-3xl border border-gray-900/[0.06] overflow-hidden shadow-soft">
               <div className="p-6 border-b border-gray-100 flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">
@@ -818,7 +818,7 @@ export default function ProfilePage() {
         {activeTab === "privacy" && (
           <div className="space-y-6">
             {/* Profile Visibility */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="bg-surface rounded-3xl border border-gray-900/[0.06] overflow-hidden shadow-soft">
               <div className="p-6 border-b border-gray-100">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Profile Visibility
@@ -892,7 +892,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Activity Sharing */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="bg-surface rounded-3xl border border-gray-900/[0.06] overflow-hidden shadow-soft">
               <div className="p-6 border-b border-gray-100">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Activity Sharing
@@ -968,7 +968,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Data & Privacy */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="bg-surface rounded-3xl border border-gray-900/[0.06] overflow-hidden shadow-soft">
               <div className="p-6 border-b border-gray-100">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Data & Privacy

@@ -20,10 +20,10 @@ export default function PromotionsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">
+        <h1 className="text-3xl font-semibold text-ink tracking-tight">
           Promotions & Marketing
         </h1>
         <p className="mt-2 text-gray-600">
@@ -33,27 +33,27 @@ export default function PromotionsPage() {
 
       {/* Quick Stats */}
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Active Campaigns</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">5</p>
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">5</p>
           <p className="mt-1 text-xs text-emerald-600">↑ 2 new this week</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Referrals</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">48</p>
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">48</p>
           <p className="mt-1 text-xs text-gray-600">12 converted this month</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Campaign Revenue</p>
-          <p className="mt-2 text-3xl font-bold text-emerald-600">Rs. 245K</p>
+          <p className="mt-2 text-3xl font-semibold text-emerald-600 tracking-tight">Rs. 245K</p>
           <p className="mt-1 text-xs text-emerald-600">↑ 18% vs last month</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Engagement Rate</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">24.5%</p>
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">24.5%</p>
           <p className="mt-1 text-xs text-emerald-600">↑ 3.2% increase</p>
         </div>
       </div>

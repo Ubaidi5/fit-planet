@@ -202,35 +202,35 @@ export default function TransactionHistory() {
     <div className="space-y-6">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Total Amount</p>
-          <p className="mt-2 text-2xl font-bold text-emerald-600">
+          <p className="mt-2 text-2xl font-semibold text-emerald-600 tracking-tight">
             Rs. {(stats.total / 1000).toFixed(1)}K
           </p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Completed</p>
-          <p className="mt-2 text-2xl font-bold text-gray-900">
+          <p className="mt-2 text-2xl font-semibold text-ink tracking-tight">
             {stats.completed}
           </p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Refunded</p>
-          <p className="mt-2 text-2xl font-bold text-orange-600">
+          <p className="mt-2 text-2xl font-semibold text-orange-600 tracking-tight">
             {stats.refunded}
           </p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Failed</p>
-          <p className="mt-2 text-2xl font-bold text-red-600">{stats.failed}</p>
+          <p className="mt-2 text-2xl font-semibold text-red-600 tracking-tight">{stats.failed}</p>
         </div>
       </div>
 
       {/* Payment Method Breakdown */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-4 text-lg font-semibold text-gray-900">
           Payment Method Breakdown
         </h3>
@@ -264,7 +264,7 @@ export default function TransactionHistory() {
       </div>
 
       {/* Filters */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           {/* Search */}
           <div>
@@ -325,13 +325,13 @@ export default function TransactionHistory() {
           transactions
         </p>
 
-        <button className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
+        <button className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
           Export CSV
         </button>
       </div>
 
       {/* Transactions Table */}
-      <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface shadow-soft">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="border-b border-gray-200 bg-gray-50">

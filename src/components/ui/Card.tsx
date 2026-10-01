@@ -17,11 +17,11 @@ const Card: React.FC<CardProps> = ({
   return (
     <div
       className={cn(
-        "rounded-xl bg-white",
+        "rounded-3xl bg-surface",
         // Variants
-        variant === "default" && "border border-gray-200",
-        variant === "bordered" && "border-2 border-gray-200",
-        variant === "elevated" && "border border-gray-100 shadow-lg",
+        variant === "default" && "border border-gray-200/80 shadow-soft",
+        variant === "bordered" && "border border-gray-300",
+        variant === "elevated" && "border border-gray-200/60 shadow-lift",
         // Padding
         padding === "none" && "p-0",
         padding === "sm" && "p-4",
@@ -65,7 +65,7 @@ const CardTitle: React.FC<CardTitleProps> = ({
 }) => {
   return (
     <Component
-      className={cn("text-xl font-semibold text-gray-900", className)}
+      className={cn("text-lg font-semibold tracking-tight text-gray-900", className)}
       {...props}
     >
       {children}
@@ -83,7 +83,7 @@ const CardDescription: React.FC<CardDescriptionProps> = ({
   ...props
 }) => {
   return (
-    <p className={cn("mt-1 text-sm text-gray-600", className)} {...props}>
+    <p className={cn("mt-1 text-sm text-gray-500", className)} {...props}>
       {children}
     </p>
   );

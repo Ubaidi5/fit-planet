@@ -12,11 +12,11 @@ export default function ReviewsPage() {
   >("monitoring");
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
       <div className="mx-auto max-w-7xl space-y-6">
         {/* Header */}
-        <div className="rounded-lg bg-white p-6 shadow-sm">
-          <h1 className="text-3xl font-bold text-gray-900">
+        <div className="rounded-3xl bg-surface p-6 shadow-soft">
+          <h1 className="text-3xl font-semibold text-ink tracking-tight">
             Reviews & Reputation
           </h1>
           <p className="mt-2 text-gray-600">
@@ -27,50 +27,50 @@ export default function ReviewsPage() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
                   Overall Rating
                 </p>
-                <p className="mt-2 text-3xl font-bold text-gray-900">4.7</p>
+                <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">4.7</p>
               </div>
               <div className="text-4xl">⭐</div>
             </div>
             <p className="mt-2 text-xs text-gray-600">From 248 reviews</p>
           </div>
 
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">New Reviews</p>
-                <p className="mt-2 text-3xl font-bold text-gray-900">12</p>
+                <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">12</p>
               </div>
               <div className="text-4xl">📝</div>
             </div>
             <p className="mt-2 text-xs text-emerald-600">↑ 8 this week</p>
           </div>
 
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
                   Response Rate
                 </p>
-                <p className="mt-2 text-3xl font-bold text-gray-900">92%</p>
+                <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">92%</p>
               </div>
               <div className="text-4xl">💬</div>
             </div>
             <p className="mt-2 text-xs text-gray-600">227 of 248 responded</p>
           </div>
 
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
                   Pending Replies
                 </p>
-                <p className="mt-2 text-3xl font-bold text-orange-600">5</p>
+                <p className="mt-2 text-3xl font-semibold text-orange-600 tracking-tight">5</p>
               </div>
               <div className="text-4xl">⏰</div>
             </div>
@@ -79,7 +79,7 @@ export default function ReviewsPage() {
         </div>
 
         {/* Tabs */}
-        <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-3xl border border-gray-900/[0.06] bg-surface shadow-soft">
           <nav
             className="flex space-x-8 border-b border-gray-200 px-6"
             aria-label="Tabs"

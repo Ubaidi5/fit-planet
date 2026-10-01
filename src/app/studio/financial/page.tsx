@@ -12,11 +12,11 @@ export default function FinancialPage() {
   >("revenue");
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
       <div className="mx-auto max-w-7xl space-y-6">
         {/* Header */}
-        <div className="rounded-lg bg-white p-6 shadow-sm">
-          <h1 className="text-3xl font-bold text-gray-900">
+        <div className="rounded-3xl bg-surface p-6 shadow-soft">
+          <h1 className="text-3xl font-semibold text-ink tracking-tight">
             Financial Reports & Revenue
           </h1>
           <p className="mt-2 text-gray-600">
@@ -26,13 +26,13 @@ export default function FinancialPage() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
                   Total Revenue
                 </p>
-                <p className="mt-2 text-3xl font-bold text-gray-900">
+                <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">
                   Rs. 485K
                 </p>
               </div>
@@ -41,13 +41,13 @@ export default function FinancialPage() {
             <p className="mt-2 text-xs text-emerald-600">↑ 15% this month</p>
           </div>
 
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
                   Pending Payout
                 </p>
-                <p className="mt-2 text-3xl font-bold text-orange-600">
+                <p className="mt-2 text-3xl font-semibold text-orange-600 tracking-tight">
                   Rs. 125K
                 </p>
               </div>
@@ -56,26 +56,26 @@ export default function FinancialPage() {
             <p className="mt-2 text-xs text-gray-600">Processing in 3 days</p>
           </div>
 
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
                   Transactions
                 </p>
-                <p className="mt-2 text-3xl font-bold text-gray-900">324</p>
+                <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">324</p>
               </div>
               <div className="text-4xl">📊</div>
             </div>
             <p className="mt-2 text-xs text-emerald-600">↑ 28 this week</p>
           </div>
 
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
                   Avg. Transaction
                 </p>
-                <p className="mt-2 text-3xl font-bold text-blue-600">
+                <p className="mt-2 text-3xl font-semibold text-blue-600 tracking-tight">
                   Rs. 1.5K
                 </p>
               </div>
@@ -86,7 +86,7 @@ export default function FinancialPage() {
         </div>
 
         {/* Tabs */}
-        <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-3xl border border-gray-900/[0.06] bg-surface shadow-soft">
           <nav
             className="flex space-x-8 border-b border-gray-200 px-6"
             aria-label="Tabs"

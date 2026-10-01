@@ -20,11 +20,11 @@ export default function StudioCapacityPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-semibold text-ink tracking-tight">
             Capacity Management
           </h1>
           <p className="mt-2 text-gray-600">
@@ -38,7 +38,7 @@ export default function StudioCapacityPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <p className="text-4xl font-bold text-emerald-600">42</p>
+                <p className="text-4xl font-semibold text-emerald-600 tracking-tight">42</p>
                 <p className="mt-1 text-sm text-gray-600">Current Occupancy</p>
                 <p className="text-xs text-gray-500">out of 100</p>
               </div>
@@ -47,7 +47,7 @@ export default function StudioCapacityPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <p className="text-4xl font-bold text-blue-600">100</p>
+                <p className="text-4xl font-semibold text-blue-600 tracking-tight">100</p>
                 <p className="mt-1 text-sm text-gray-600">Max Capacity</p>
                 <p className="text-xs text-gray-500">total slots</p>
               </div>
@@ -56,7 +56,7 @@ export default function StudioCapacityPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <p className="text-4xl font-bold text-orange-600">85%</p>
+                <p className="text-4xl font-semibold text-orange-600 tracking-tight">85%</p>
                 <p className="mt-1 text-sm text-gray-600">Peak Utilization</p>
                 <p className="text-xs text-gray-500">6-8 PM</p>
               </div>
@@ -65,7 +65,7 @@ export default function StudioCapacityPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <p className="text-4xl font-bold text-purple-600">58</p>
+                <p className="text-4xl font-semibold text-purple-600 tracking-tight">58</p>
                 <p className="mt-1 text-sm text-gray-600">Avg. Daily</p>
                 <p className="text-xs text-gray-500">this month</p>
               </div>
@@ -92,7 +92,7 @@ export default function StudioCapacityPage() {
         </div>
 
         {/* Tab Content */}
-        <div className="rounded-lg bg-white shadow-sm">
+        <div className="rounded-3xl bg-surface shadow-soft">
           {activeTab === "monitor" && <RealTimeMonitor />}
           {activeTab === "settings" && <CapacitySettings />}
           {activeTab === "slots" && <SlotAllocation />}

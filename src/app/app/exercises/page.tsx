@@ -244,7 +244,7 @@ function ExerciseCard({ exercise, isExpanded, onToggle }: ExerciseCardProps) {
   const difficulty = formatDifficulty(exercise.difficulty);
 
   return (
-    <div className="bg-white rounded-lg sm:rounded-xl border border-gray-200 overflow-hidden">
+    <div className="bg-surface rounded-3xl sm:rounded-xl border border-gray-900/[0.06] overflow-hidden shadow-soft">
       {/* Header - Always Visible */}
       <button
         onClick={onToggle}

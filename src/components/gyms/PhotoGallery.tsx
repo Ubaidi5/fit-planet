@@ -114,7 +114,7 @@ export function PhotoGallery({ images, className }: PhotoGalleryProps) {
             className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
-          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-linear-to-t from-black/60 to-transparent">
             <p className="text-white text-sm font-medium">
               {filteredImages[0]?.caption}
             </p>
@@ -227,7 +227,7 @@ export function PhotoGallery({ images, className }: PhotoGalleryProps) {
                   setSelectedIndex(index);
                 }}
                 className={cn(
-                  "relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all",
+                  "relative w-16 h-16 rounded-lg overflow-hidden shrink-0 border-2 transition-all",
                   selectedIndex === index
                     ? "border-emerald-500 opacity-100"
                     : "border-transparent opacity-60 hover:opacity-100",

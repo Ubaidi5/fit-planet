@@ -67,7 +67,7 @@ export default function SecuritySettingsPage() {
     <div className="mx-auto max-w-4xl space-y-6 p-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Security & Privacy</h1>
+        <h1 className="text-2xl font-semibold text-ink tracking-tight">Security & Privacy</h1>
         <p className="mt-1 text-sm text-gray-600">
           Manage your security settings and privacy preferences
         </p>
@@ -115,7 +115,7 @@ export default function SecuritySettingsPage() {
       {/* Password Tab */}
       {activeTab === "password" && (
         <div className="space-y-6">
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
             <h2 className="text-lg font-semibold text-gray-900">
               Change Password
             </h2>
@@ -187,7 +187,7 @@ export default function SecuritySettingsPage() {
           </div>
 
           {/* Two-Factor Authentication */}
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
             <div className="flex items-start justify-between">
               <div>
                 <h3 className="font-semibold text-gray-900">
@@ -208,7 +208,7 @@ export default function SecuritySettingsPage() {
       {/* Privacy Tab */}
       {activeTab === "privacy" && (
         <div className="space-y-6">
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
             <h2 className="text-lg font-semibold text-gray-900">
               Privacy Settings
             </h2>
@@ -389,7 +389,7 @@ export default function SecuritySettingsPage() {
       {activeTab === "account" && (
         <div className="space-y-6">
           {/* Export Data */}
-          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-900">

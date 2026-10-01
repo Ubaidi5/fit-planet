@@ -456,7 +456,7 @@ export default function AddOnsManager() {
 
             <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-3">
               <div>
-                <p className="text-2xl font-bold text-emerald-600">
+                <p className="text-2xl font-semibold text-emerald-600 tracking-tight">
                   Rs. {addOn.price}
                 </p>
                 {addOn.maxQuantity && (
@@ -525,7 +525,7 @@ export default function AddOnsManager() {
 
       {/* Category Summary */}
       {addOns.length > 0 && (
-        <div className="rounded-lg border border-gray-200 bg-white p-4">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <h3 className="mb-3 text-sm font-semibold text-gray-900">
             Summary by Category
           </h3>

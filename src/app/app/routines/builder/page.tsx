@@ -284,7 +284,7 @@ export default function RoutineBuilderPage() {
 
       {/* Exercise Picker Modal */}
       {showExercisePicker && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center">
+        <div className="fixed inset-0 bg-ink/30 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center">
           <div className="bg-white w-full max-w-lg sm:rounded-xl rounded-t-xl max-h-[80vh] overflow-hidden flex flex-col">
             {/* Modal Header */}
             <div className="p-4 border-b border-gray-200">

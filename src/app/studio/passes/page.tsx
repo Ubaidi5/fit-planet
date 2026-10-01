@@ -18,11 +18,11 @@ export default function StudioPassesPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-semibold text-ink tracking-tight">
             Pass & Pricing Configuration
           </h1>
           <p className="mt-2 text-gray-600">
@@ -49,7 +49,7 @@ export default function StudioPassesPage() {
         </div>
 
         {/* Tab Content */}
-        <div className="rounded-lg bg-white shadow-sm">
+        <div className="rounded-3xl bg-surface shadow-soft">
           {activeTab === "passes" && <PassTypeManager />}
           {activeTab === "discounts" && <DiscountsManager />}
           {activeTab === "addons" && <AddOnsManager />}
@@ -60,7 +60,7 @@ export default function StudioPassesPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <p className="text-3xl font-bold text-emerald-600">3</p>
+                <p className="text-3xl font-semibold text-emerald-600 tracking-tight">3</p>
                 <p className="mt-1 text-sm text-gray-600">Active Pass Types</p>
               </div>
             </CardContent>
@@ -68,7 +68,7 @@ export default function StudioPassesPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <p className="text-3xl font-bold text-blue-600">5</p>
+                <p className="text-3xl font-semibold text-blue-600 tracking-tight">5</p>
                 <p className="mt-1 text-sm text-gray-600">Active Discounts</p>
               </div>
             </CardContent>
@@ -76,7 +76,7 @@ export default function StudioPassesPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <p className="text-3xl font-bold text-purple-600">Rs. 1,500</p>
+                <p className="text-3xl font-semibold text-purple-600 tracking-tight">Rs. 1,500</p>
                 <p className="mt-1 text-sm text-gray-600">Avg. Pass Price</p>
               </div>
             </CardContent>
@@ -84,7 +84,7 @@ export default function StudioPassesPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <p className="text-3xl font-bold text-orange-600">4</p>
+                <p className="text-3xl font-semibold text-orange-600 tracking-tight">4</p>
                 <p className="mt-1 text-sm text-gray-600">Add-On Services</p>
               </div>
             </CardContent>

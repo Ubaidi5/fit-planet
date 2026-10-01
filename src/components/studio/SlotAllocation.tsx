@@ -344,7 +344,7 @@ export default function SlotAllocation() {
                   </span>
                 </div>
                 <div className="text-right">
-                  <p className="text-3xl font-bold text-gray-900">
+                  <p className="text-3xl font-semibold text-ink tracking-tight">
                     {availableSlots}
                   </p>
                   <p className="text-sm text-gray-600">Available</p>
@@ -425,7 +425,7 @@ export default function SlotAllocation() {
 
       {/* Blocked Periods */}
       {blockedPeriods.length > 0 && (
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <h3 className="mb-4 text-lg font-semibold text-gray-900">
             Blocked Periods
           </h3>
@@ -464,7 +464,7 @@ export default function SlotAllocation() {
       )}
 
       {/* Legend */}
-      <div className="rounded-lg border border-gray-200 bg-white p-4">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
         <h4 className="mb-3 text-sm font-semibold text-gray-900">Legend</h4>
         <div className="flex flex-wrap gap-4">
           <div className="flex items-center space-x-2">

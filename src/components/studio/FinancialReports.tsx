@@ -105,7 +105,7 @@ export default function FinancialReports() {
   return (
     <div className="space-y-6">
       {/* Report Generator */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-6 text-lg font-semibold text-gray-900">
           Generate Financial Report
         </h3>
@@ -263,10 +263,10 @@ export default function FinancialReports() {
               <button className="rounded-lg border-2 border-emerald-500 bg-emerald-50 px-6 py-3 text-sm font-semibold text-emerald-700 transition-all hover:bg-emerald-100">
                 📄 PDF
               </button>
-              <button className="rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition-all hover:border-gray-400">
+              <button className="rounded-full border border-gray-200 bg-surface px-6 py-3 text-sm font-semibold text-gray-700 transition-all hover:border-gray-400">
                 📊 CSV
               </button>
-              <button className="rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition-all hover:border-gray-400">
+              <button className="rounded-full border border-gray-200 bg-surface px-6 py-3 text-sm font-semibold text-gray-700 transition-all hover:border-gray-400">
                 📈 Excel
               </button>
             </div>
@@ -275,7 +275,7 @@ export default function FinancialReports() {
           {/* Generate Button */}
           <button
             onClick={handleGenerateReport}
-            className="w-full rounded-lg bg-emerald-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-emerald-700"
+            className="w-full rounded-full bg-emerald-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-emerald-700"
           >
             Generate Report
           </button>
@@ -283,7 +283,7 @@ export default function FinancialReports() {
       </div>
 
       {/* Report Templates */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-6 text-lg font-semibold text-gray-900">
           Quick Report Templates
         </h3>
@@ -317,7 +317,7 @@ export default function FinancialReports() {
       </div>
 
       {/* Recent Reports */}
-      <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface shadow-soft">
         <div className="border-b border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-900">
             Recently Generated Reports
@@ -353,10 +353,10 @@ export default function FinancialReports() {
               </div>
 
               <div className="flex items-center space-x-2">
-                <button className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50">
+                <button className="rounded-full border border-gray-200 bg-surface px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50">
                   Preview
                 </button>
-                <button className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
+                <button className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
                   Download
                 </button>
               </div>

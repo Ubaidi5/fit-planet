@@ -147,17 +147,17 @@ export default function NotificationCenter() {
     <div className="space-y-6">
       {/* Stats Overview */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Total Sent</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">
             {notifications.filter((n) => n.status === "sent").length}
           </p>
           <p className="mt-1 text-xs text-gray-600">This month</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Avg. Open Rate</p>
-          <p className="mt-2 text-3xl font-bold text-emerald-600">
+          <p className="mt-2 text-3xl font-semibold text-emerald-600 tracking-tight">
             {(
               notifications
                 .filter((n) => n.status === "sent")
@@ -169,9 +169,9 @@ export default function NotificationCenter() {
           <p className="mt-1 text-xs text-emerald-600">↑ 5% vs last month</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Avg. Click Rate</p>
-          <p className="mt-2 text-3xl font-bold text-blue-600">
+          <p className="mt-2 text-3xl font-semibold text-blue-600 tracking-tight">
             {(
               notifications
                 .filter((n) => n.status === "sent")
@@ -183,9 +183,9 @@ export default function NotificationCenter() {
           <p className="mt-1 text-xs text-gray-600">Campaign engagement</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Scheduled</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">
             {notifications.filter((n) => n.status === "scheduled").length}
           </p>
           <p className="mt-1 text-xs text-gray-600">Upcoming campaigns</p>
@@ -201,7 +201,7 @@ export default function NotificationCenter() {
 
       {/* Create Form */}
       {showCreateForm && (
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <h3 className="mb-4 text-lg font-semibold text-gray-900">
             Create Notification
           </h3>
@@ -366,7 +366,7 @@ export default function NotificationCenter() {
         {notifications.map((notification) => (
           <div
             key={notification.id}
-            className="rounded-lg border-2 border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+            className="rounded-3xl border-2 border-gray-900/[0.06] bg-surface p-6 shadow-soft transition-shadow hover:shadow-lift"
           >
             <div className="flex items-start justify-between">
               <div className="flex items-start space-x-4">
@@ -442,14 +442,14 @@ export default function NotificationCenter() {
               <div className="mt-6 grid grid-cols-3 gap-4 border-t border-gray-200 pt-4">
                 <div>
                   <p className="text-xs text-gray-600">Delivered</p>
-                  <p className="mt-1 text-2xl font-bold text-gray-900">
+                  <p className="mt-1 text-2xl font-semibold text-ink tracking-tight">
                     {notification.recipients}
                   </p>
                   <p className="text-xs text-gray-500">100%</p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-600">Opened</p>
-                  <p className="mt-1 text-2xl font-bold text-blue-600">
+                  <p className="mt-1 text-2xl font-semibold text-blue-600 tracking-tight">
                     {notification.opened}
                   </p>
                   <p className="text-xs text-gray-500">
@@ -462,7 +462,7 @@ export default function NotificationCenter() {
                 </div>
                 <div>
                   <p className="text-xs text-gray-600">Clicked</p>
-                  <p className="mt-1 text-2xl font-bold text-emerald-600">
+                  <p className="mt-1 text-2xl font-semibold text-emerald-600 tracking-tight">
                     {notification.clicked}
                   </p>
                   <p className="text-xs text-gray-500">

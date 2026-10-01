@@ -145,7 +145,7 @@ export default function UserDashboardPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-gray-600">{getGreeting()},</p>
-          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+          <h1 className="text-2xl font-semibold text-ink sm:text-3xl tracking-tight">
             {mockUser.fullName} 👋
           </h1>
         </div>
@@ -204,7 +204,7 @@ export default function UserDashboardPage() {
                     <HiOutlineTicket className="h-5 w-5 text-emerald-600" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-2xl font-semibold text-ink tracking-tight">
                       {activeBookings.length}
                     </p>
                     <p className="text-xs text-gray-500">Active Passes</p>
@@ -218,7 +218,7 @@ export default function UserDashboardPage() {
                     <HiOutlineClipboardCheck className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-2xl font-semibold text-ink tracking-tight">
                       {mockProgress.totalWorkouts}
                     </p>
                     <p className="text-xs text-gray-500">Total Workouts</p>
@@ -232,7 +232,7 @@ export default function UserDashboardPage() {
                     <span className="text-lg">🔥</span>
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-gray-900">{streak}</p>
+                    <p className="text-2xl font-semibold text-ink tracking-tight">{streak}</p>
                     <p className="text-xs text-gray-500">Day Streak</p>
                   </div>
                 </div>
@@ -244,7 +244,7 @@ export default function UserDashboardPage() {
                     <HiOutlineClock className="h-5 w-5 text-purple-600" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-2xl font-semibold text-ink tracking-tight">
                       {formatDuration(totalWorkoutTime)}
                     </p>
                     <p className="text-xs text-gray-500">Total Time</p>
@@ -545,7 +545,7 @@ export default function UserDashboardPage() {
                   💪
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-semibold text-ink tracking-tight">
                     {mockProgress.totalWorkouts}
                   </p>
                   <p className="text-sm text-gray-500">Total Workouts</p>
@@ -571,7 +571,7 @@ export default function UserDashboardPage() {
                   💰
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-semibold text-ink tracking-tight">
                     Rs. {mockProgress.totalSpent.toLocaleString()}
                   </p>
                   <p className="text-sm text-gray-500">Total Spent</p>
@@ -584,7 +584,7 @@ export default function UserDashboardPage() {
                   🔥
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900">{streak}</p>
+                  <p className="text-2xl font-semibold text-ink tracking-tight">{streak}</p>
                   <p className="text-sm text-gray-500">Current Streak</p>
                 </div>
               </div>
@@ -693,7 +693,7 @@ export default function UserDashboardPage() {
                       {pr.improvement}
                     </Badge>
                   </div>
-                  <p className="mt-2 text-3xl font-bold text-emerald-600">
+                  <p className="mt-2 text-3xl font-semibold text-emerald-600 tracking-tight">
                     {pr.weight} kg
                   </p>
                   <p className="mt-1 text-xs text-gray-500">
@@ -716,17 +716,17 @@ export default function UserDashboardPage() {
             </h3>
             <div className="grid gap-6 sm:grid-cols-3">
               <div className="text-center">
-                <p className="text-4xl font-bold text-emerald-600">87%</p>
+                <p className="text-4xl font-semibold text-emerald-600 tracking-tight">87%</p>
                 <p className="mt-1 text-sm text-gray-500">
                   Monthly Consistency
                 </p>
               </div>
               <div className="text-center">
-                <p className="text-4xl font-bold text-blue-600">4.2</p>
+                <p className="text-4xl font-semibold text-blue-600 tracking-tight">4.2</p>
                 <p className="mt-1 text-sm text-gray-500">Avg. Workouts/Week</p>
               </div>
               <div className="text-center">
-                <p className="text-4xl font-bold text-purple-600">62 min</p>
+                <p className="text-4xl font-semibold text-purple-600 tracking-tight">62 min</p>
                 <p className="mt-1 text-sm text-gray-500">
                   Avg. Workout Duration
                 </p>
