@@ -75,7 +75,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen">
       {/* Top bar */}
       <header className="sticky top-0 z-50 px-3 pt-3 sm:px-4">
-        <div className="glass mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 rounded-full border border-gray-900/[0.06] pr-2 pl-4 shadow-soft sm:pl-5">
+        <div className="glass mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 rounded-full border border-gray-900/[0.06] pe-2 ps-4 shadow-soft sm:ps-5">
           <Logo href="/app/dashboard" />
 
           <nav

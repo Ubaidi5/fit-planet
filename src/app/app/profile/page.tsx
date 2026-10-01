@@ -795,7 +795,7 @@ export default function ProfilePage() {
                         </p>
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="text-end">
                       <p className="font-semibold text-gray-900">
                         Rs. {invoice.amount.toLocaleString()}
                       </p>

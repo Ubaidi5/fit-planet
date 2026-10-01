@@ -158,7 +158,7 @@ export default function StudioLoginPage() {
                 >
                   {isLoading ? (
                     <>
-                      <CgSpinner className="mr-2 h-5 w-5 animate-spin text-white" />
+                      <CgSpinner className="me-2 h-5 w-5 animate-spin text-white" />
                       Signing in...
                     </>
                   ) : (

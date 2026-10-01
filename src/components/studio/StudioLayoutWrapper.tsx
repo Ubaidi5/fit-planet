@@ -37,7 +37,7 @@ export function StudioLayoutWrapper({
 
       {/* Mobile top bar */}
       <header className="sticky top-0 z-30 px-3 pt-3 lg:hidden">
-        <div className="glass flex h-14 items-center justify-between rounded-full border border-gray-900/[0.06] pr-1.5 pl-2 shadow-soft">
+        <div className="glass flex h-14 items-center justify-between rounded-full border border-gray-900/[0.06] pe-1.5 ps-2 shadow-soft">
           <button
             type="button"
             onClick={() => setMobileOpen(true)}
@@ -61,7 +61,7 @@ export function StudioLayoutWrapper({
       <main
         className={cn(
           "transition-[padding] duration-500 ease-out-expo",
-          isCollapsed ? "lg:pl-24" : "lg:pl-72",
+          isCollapsed ? "lg:ps-24" : "lg:ps-72",
         )}
       >
         {children}

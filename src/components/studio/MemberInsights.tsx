@@ -274,7 +274,7 @@ export default function MemberInsights() {
                 </div>
               </div>
 
-              <div className="text-right">
+              <div className="text-end">
                 <p className="text-2xl font-semibold text-emerald-600 tracking-tight">
                   {member.visits}
                 </p>
@@ -314,7 +314,7 @@ export default function MemberInsights() {
                 </p>
               </div>
 
-              <div className="text-right">
+              <div className="text-end">
                 <p className="text-sm font-semibold text-orange-600">
                   Last visit: {member.lastVisit}
                 </p>
@@ -359,7 +359,7 @@ export default function MemberInsights() {
                 </div>
               </div>
 
-              <div className="text-right">
+              <div className="text-end">
                 <p className="text-sm font-semibold text-blue-600">
                   {member.visits} visits
                 </p>

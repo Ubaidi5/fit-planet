@@ -89,7 +89,7 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
               key={star}
               className={cn(
                 "h-5 w-5",
-                star <= review.rating ? "text-amber-400" : "text-gray-200",
+                star <= review.rating ? "text-stamp-ochre" : "text-gray-200",
               )}
             />
           ))}
@@ -118,7 +118,7 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
               {category}
             </div>
             <div className="flex items-center justify-center gap-1">
-              <HiStar className="h-4 w-4 text-amber-400" />
+              <HiStar className="h-4 w-4 text-stamp-ochre" />
               <span className="text-sm font-medium text-gray-700">
                 {rating.toFixed(1)}
               </span>
@@ -148,7 +148,7 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
 
       {/* Gym Response */}
       {review.gymResponse && (
-        <div className="mt-4 bg-gray-50 rounded-lg p-4 border-l-4 border-emerald-500">
+        <div className="mt-4 bg-gray-50 rounded-lg p-4 border-s-4 border-emerald-500">
           <div className="flex items-center gap-2 mb-2">
             <HiOutlineReply className="h-5 w-5 text-emerald-600" />
             <span className="font-semibold text-gray-900 text-sm">
@@ -228,7 +228,7 @@ export function ReviewsSummary({
       <div className="flex flex-col md:flex-row gap-8">
         {/* Overall Rating */}
         <div className="text-center">
-          <div className="text-5xl font-bold text-gray-900">{rating}</div>
+          <div className="text-5xl font-semibold tracking-tight text-ink">{rating}</div>
           <div className="flex items-center justify-center gap-1 mt-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <HiStar
@@ -236,7 +236,7 @@ export function ReviewsSummary({
                 className={cn(
                   "h-5 w-5",
                   star <= Math.round(rating)
-                    ? "text-amber-400"
+                    ? "text-stamp-ochre"
                     : "text-gray-200",
                 )}
               />
@@ -256,7 +256,7 @@ export function ReviewsSummary({
               </span>
               <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-amber-400 rounded-full"
+                  className="h-full bg-stamp-ochre rounded-full"
                   style={{ width: `${percentage}%` }}
                 />
               </div>

@@ -8,7 +8,6 @@ import {
   HiOutlineCheck,
   HiOutlineUser,
   HiOutlineMail,
-  HiOutlinePhone,
   HiOutlineLockClosed,
   HiOutlineEyeOff,
   HiOutlineEye,
@@ -20,6 +19,7 @@ import {
   HiOutlineArrowLeft,
 } from "react-icons/hi";
 import { Input } from "@/components/ui/Input";
+import { PhoneInput, isValidPhone } from "@/components/ui/PhoneInput";
 import {
   Card,
   CardHeader,
@@ -85,10 +85,8 @@ export default function StudioRegisterPage() {
 
     if (!formData.phone) {
       newErrors.phone = "Phone number is required";
-    } else if (
-      !/^(\+92|0)?[0-9]{10}$/.test(formData.phone.replace(/\s/g, ""))
-    ) {
-      newErrors.phone = "Please enter a valid Pakistani phone number";
+    } else if (!isValidPhone(formData.phone)) {
+      newErrors.phone = "Enter a valid phone number with country code";
     }
 
     if (!formData.password) {
@@ -177,7 +175,7 @@ export default function StudioRegisterPage() {
                 </div>
                 <span
                   className={cn(
-                    "ml-2 text-sm font-medium",
+                    "ms-2 text-sm font-medium",
                     step >= 1 ? "text-emerald-600" : "text-gray-500",
                   )}
                 >
@@ -203,7 +201,7 @@ export default function StudioRegisterPage() {
                 </div>
                 <span
                   className={cn(
-                    "ml-2 text-sm font-medium",
+                    "ms-2 text-sm font-medium",
                     step >= 2 ? "text-emerald-600" : "text-gray-500",
                   )}
                 >
@@ -255,17 +253,21 @@ export default function StudioRegisterPage() {
                       leftIcon={<HiOutlineMail className="h-5 w-5" />}
                     />
 
-                    <Input
+                    <PhoneInput
                       label="Phone number"
-                      type="tel"
                       name="phone"
-                      placeholder="+92 300 1234567"
+                      placeholder="Mobile number"
                       value={formData.phone}
-                      onChange={handleChange}
+                      onChange={(phone) => {
+                        setFormData((prev) => ({ ...prev, phone }));
+                        if (errors.phone) {
+                          setErrors((prev) => ({ ...prev, phone: "" }));
+                        }
+                      }}
                       error={errors.phone}
                       disabled={isLoading}
                       hint="We'll use this for account verification"
-                      leftIcon={<HiOutlinePhone className="h-5 w-5" />}
+                      required
                     />
 
                     <Input

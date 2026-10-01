@@ -187,7 +187,7 @@ export default function CheckInHistoryPage() {
                     : "text-gray-600 hover:text-gray-900",
                 )}
               >
-                <HiOutlineViewList className="w-4 h-4 inline mr-2" />
+                <HiOutlineViewList className="w-4 h-4 inline me-2" />
                 List
               </button>
               <button
@@ -199,7 +199,7 @@ export default function CheckInHistoryPage() {
                     : "text-gray-600 hover:text-gray-900",
                 )}
               >
-                <HiOutlineCalendar className="w-4 h-4 inline mr-2" />
+                <HiOutlineCalendar className="w-4 h-4 inline me-2" />
                 Calendar
               </button>
             </div>

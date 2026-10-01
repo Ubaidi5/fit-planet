@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { Gym } from "@/lib/data/mock-gyms";
+import { cityCode } from "@/lib/data/cities";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import {
   HiArrowUpRight,
   HiCheckBadge,
@@ -19,13 +23,14 @@ interface GymCardProps {
 
 function getCrowd(gym: Gym) {
   const pct = Math.round((gym.capacity.current / gym.capacity.max) * 100);
-  if (pct >= 80) return { pct, label: "Busy", dot: "bg-red-500", text: "text-red-700" };
-  if (pct >= 50) return { pct, label: "Moderate", dot: "bg-amber-500", text: "text-amber-700" };
-  return { pct, label: "Quiet", dot: "bg-emerald-500", text: "text-emerald-700" };
+  if (pct >= 80) return { pct, label: "Busy", dot: "bg-stamp-magenta" };
+  if (pct >= 50) return { pct, label: "Moderate", dot: "bg-stamp-ochre" };
+  return { pct, label: "Quiet", dot: "bg-emerald-500" };
 }
 
 const GymCard: React.FC<GymCardProps> = ({ gym, layout = "grid", className }) => {
   const crowd = getCrowd(gym);
+  const { money, distance, clock } = useLocale();
   const isList = layout === "list";
 
   return (
@@ -54,23 +59,26 @@ const GymCard: React.FC<GymCardProps> = ({ gym, layout = "grid", className }) =>
         />
         <div className="absolute inset-0 bg-linear-to-t from-ink/50 via-transparent to-ink/10" />
 
-        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+        <div className="absolute top-3 start-3 flex flex-wrap gap-1.5">
+          <span className="inline-flex items-center rounded-full bg-ink/85 px-2.5 py-1 font-mono text-[10px] tracking-[0.12em] text-volt backdrop-blur">
+            {cityCode(gym.address.city)} · {gym.country}
+          </span>
           {gym.isFeatured && (
             <span className="glass inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold text-ink">
-              <HiSparkles className="size-3.5 text-amber-500" />
+              <HiSparkles className="size-3.5 text-stamp-ochre" />
               Featured
             </span>
           )}
         </div>
 
-        <span className="glass absolute top-3 right-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold text-ink">
+        <span className="glass absolute top-3 end-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold text-ink">
           <span className={cn("size-1.5 rounded-full", crowd.dot)} />
-          {crowd.label}
+          {crowd.label} · {crowd.pct}%
         </span>
 
-        <span className="absolute bottom-3 left-3 rounded-full bg-surface px-3 py-1.5 text-sm font-semibold text-ink shadow-soft tabular-nums">
-          Rs. {gym.pricing.dayPass.toLocaleString()}
-          <span className="font-normal text-gray-500"> /day</span>
+        <span className="absolute bottom-3 start-3 rounded-full bg-surface px-3 py-1.5 text-sm font-semibold whitespace-nowrap text-ink shadow-soft tabular-nums">
+          {money(gym.pricing.dayPass, gym.currency)}
+          <span className="font-normal text-gray-500"> / day</span>
         </span>
       </div>
 
@@ -84,7 +92,7 @@ const GymCard: React.FC<GymCardProps> = ({ gym, layout = "grid", className }) =>
             )}
           </h3>
           <span className="flex shrink-0 items-center gap-1 text-sm font-semibold text-ink">
-            <HiStar className="size-4 text-amber-400" />
+            <HiStar className="size-4 text-stamp-ochre" />
             {gym.rating}
             <span className="font-normal text-gray-400">({gym.totalReviews})</span>
           </span>
@@ -96,7 +104,7 @@ const GymCard: React.FC<GymCardProps> = ({ gym, layout = "grid", className }) =>
             {gym.address.area}, {gym.address.city}
           </span>
           {gym.distance && (
-            <span className="shrink-0 font-medium text-gray-700">· {gym.distance} km</span>
+            <span className="shrink-0 font-medium text-gray-700">· {distance(gym.distance)}</span>
           )}
         </p>
 
@@ -125,9 +133,9 @@ const GymCard: React.FC<GymCardProps> = ({ gym, layout = "grid", className }) =>
         <div className="mt-auto flex items-center justify-between border-t border-gray-900/[0.06] pt-3.5">
           <span className="flex items-center gap-1.5 text-xs text-gray-500">
             <HiOutlineClock className="size-4" />
-            {gym.hours.is24Hours ? "Open 24/7" : `${gym.hours.open} to ${gym.hours.close}`}
+            {gym.hours.is24Hours ? "Open 24/7" : `${clock(gym.hours.open)} to ${clock(gym.hours.close)}`}
           </span>
-          <span className="flex size-8 items-center justify-center rounded-full bg-canvas text-gray-700 transition-all duration-500 ease-out-expo group-hover:rotate-45 group-hover:bg-ink group-hover:text-white">
+          <span className="flex size-8 items-center justify-center rounded-full bg-canvas text-gray-700 transition-all duration-500 ease-out-expo group-hover:rotate-45 group-hover:bg-ink rtl:-scale-x-100 group-hover:text-white">
             <HiArrowUpRight className="size-4" />
           </span>
         </div>

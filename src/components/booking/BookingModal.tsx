@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, Fragment } from "react";
+import { useState } from "react";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import type { Gym } from "@/lib/data/mock-gyms";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { cityCode } from "@/lib/data/cities";
 import {
   HiOutlineX,
   HiOutlineCheck,
@@ -28,9 +30,10 @@ interface BookingModalProps {
 }
 
 type BookingStep = "pass-selection" | "details" | "payment" | "confirmation";
+type PassType = "day" | "week" | "month" | "annual";
 
 interface BookingFormData {
-  passType: "day" | "week" | "month" | "annual" | null;
+  passType: PassType | null;
   startDate: string;
   addOns: {
     guestPass: boolean;
@@ -45,7 +48,24 @@ interface BookingFormData {
   cardCVV?: string;
 }
 
+/** Rounds a derived price to a tidy figure in any currency */
+function roundPrice(value: number) {
+  if (value < 100) return Math.max(1, Math.round(value));
+  if (value < 1000) return Math.round(value / 10) * 10;
+  return Math.round(value / 50) * 50;
+}
+
+const monoLabel =
+  "font-mono text-[11px] tracking-[0.14em] uppercase text-gray-400";
+
+const STEPS: { id: Exclude<BookingStep, "confirmation">; label: string }[] = [
+  { id: "pass-selection", label: "Pass" },
+  { id: "details", label: "Details" },
+  { id: "payment", label: "Payment" },
+];
+
 export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
+  const { money } = useLocale();
   const [step, setStep] = useState<BookingStep>("pass-selection");
   const [formData, setFormData] = useState<BookingFormData>({
     passType: null,
@@ -64,9 +84,14 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
 
   if (!isOpen) return null;
 
-  const handlePassTypeSelect = (
-    passType: "day" | "week" | "month" | "annual",
-  ) => {
+  const price = (value: number) => money(value, gym.currency);
+
+  // Add-on prices follow the gym's own day pass so they fit every currency
+  const GUEST_PASS_PRICE = roundPrice(gym.pricing.dayPass * 0.8);
+  const LOCKER_PRICE = roundPrice(gym.pricing.dayPass * 0.3);
+  const PT_SESSION_PRICE = roundPrice(gym.pricing.dayPass * 4);
+
+  const handlePassTypeSelect = (passType: PassType) => {
     setFormData({ ...formData, passType });
     setStep("details");
   };
@@ -100,9 +125,9 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
 
   const getAddOnsTotal = () => {
     let total = 0;
-    if (formData.addOns.guestPass) total += 400;
-    if (formData.addOns.locker) total += 200;
-    if (formData.addOns.personalTraining) total += 2500;
+    if (formData.addOns.guestPass) total += GUEST_PASS_PRICE;
+    if (formData.addOns.locker) total += LOCKER_PRICE;
+    if (formData.addOns.personalTraining) total += PT_SESSION_PRICE;
     return total;
   };
 
@@ -134,381 +159,354 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
     onClose();
   };
 
+  const passOptions: {
+    type: PassType;
+    title: string;
+    description: string;
+    amount: number;
+    validity: string;
+    popular?: boolean;
+    saving?: number;
+  }[] = [
+    {
+      type: "day",
+      title: "Day Pass",
+      description: "Perfect for a single workout session",
+      amount: gym.pricing.dayPass,
+      validity: "Valid for 1 day",
+    },
+    {
+      type: "week",
+      title: "Week Pass",
+      description: "Great for trying out the gym",
+      amount: gym.pricing.weekPass,
+      validity: "Valid for 7 days",
+    },
+    {
+      type: "month",
+      title: "Monthly Pass",
+      description: "Best value for regular members",
+      amount: gym.pricing.monthPass,
+      validity: "Valid for 30 days",
+      popular: true,
+    },
+    {
+      type: "annual",
+      title: "Annual Pass",
+      description: "Save 2 months with annual commitment",
+      amount: gym.pricing.monthPass * 10,
+      validity: "Valid for 365 days",
+      saving: gym.pricing.monthPass * 2,
+    },
+  ];
+
+  const addOnOptions: {
+    key: keyof BookingFormData["addOns"];
+    title: string;
+    description: string;
+    amount: number;
+  }[] = [
+    {
+      key: "guestPass",
+      title: "Guest pass",
+      description: "Bring a friend for one session",
+      amount: GUEST_PASS_PRICE,
+    },
+    {
+      key: "locker",
+      title: "Dedicated locker",
+      description: "Personal locker for the duration",
+      amount: LOCKER_PRICE,
+    },
+    {
+      key: "personalTraining",
+      title: "PT session (1 hour)",
+      description: "One-on-one training with a certified trainer",
+      amount: PT_SESSION_PRICE,
+    },
+  ];
+
+  const paymentOptions: {
+    id: BookingFormData["paymentMethod"];
+    label: string;
+    subtitle: string;
+    icon: ReactNode;
+  }[] = [
+    {
+      id: "card",
+      label: "Card",
+      subtitle: "Visa, Mastercard, Amex",
+      icon: <HiOutlineCreditCard className="size-5" />,
+    },
+    {
+      id: "mobile_wallet",
+      label: "Mobile wallet",
+      subtitle: "Apple Pay, Google Pay and local wallets",
+      icon: <HiOutlineDeviceMobile className="size-5" />,
+    },
+    {
+      id: "bank_transfer",
+      label: "Bank transfer",
+      subtitle: "Confirmed once received",
+      icon: <HiOutlineLibrary className="size-5" />,
+    },
+  ];
+
+  const stepIndex = STEPS.findIndex((s) => s.id === step);
+
+  const ticketRow = (label: ReactNode, value: ReactNode, accent = false) => (
+    <div className="flex items-baseline justify-between gap-4 text-sm">
+      <span className={accent ? "text-stamp-teal" : "text-gray-500"}>
+        {label}
+      </span>
+      <span
+        className={cn(
+          "whitespace-nowrap tabular-nums",
+          accent ? "text-stamp-teal" : "text-gray-900",
+        )}
+      >
+        {value}
+      </span>
+    </div>
+  );
+
+  const passLabel = formData.passType
+    ? `${formData.passType.charAt(0).toUpperCase()}${formData.passType.slice(1)} pass`
+    : "Pass";
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/30 backdrop-blur-sm"
-      aria-labelledby="modal-title"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40 backdrop-blur-sm sm:items-center sm:p-4"
+      aria-labelledby="booking-modal-title"
       role="dialog"
       aria-modal="true"
       onClick={resetAndClose}
     >
-      {/* Modal Content */}
       <div
-        className="relative bg-surface rounded-4xl shadow-lift ring-1 ring-gray-900/[0.06] w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col"
+        className="relative flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-[2rem] border border-gray-900/[0.06] bg-surface shadow-lift sm:max-h-[90dvh] sm:max-w-2xl sm:rounded-[2rem]"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Grab handle (mobile sheet) */}
+        <div className="flex justify-center pt-2.5 sm:hidden" aria-hidden="true">
+          <span className="h-1 w-10 rounded-full bg-gray-900/10" />
+        </div>
+
         {/* Header */}
-        <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-linear-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-xl font-bold">
+        <div className="shrink-0 border-b border-dashed border-gray-900/10 px-5 pt-3 pb-4 sm:px-7 sm:pt-6">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex min-w-0 items-center gap-3">
+              <div className="relative flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-volt-soft text-lg font-semibold text-ink">
                 {gym.coverImage ? (
                   <Image
                     src={gym.coverImage}
-                    alt={gym.name}
+                    alt=""
                     fill
+                    sizes="48px"
                     className="object-cover"
                   />
                 ) : (
                   gym.name.charAt(0)
                 )}
               </div>
-              <div>
+              <div className="min-w-0">
+                <p className={monoLabel}>
+                  {cityCode(gym.address.city)} · {gym.country}
+                </p>
                 <h3
-                  className="text-lg font-bold text-gray-900"
-                  id="modal-title"
+                  id="booking-modal-title"
+                  className="mt-0.5 text-lg leading-tight font-semibold tracking-tight text-ink"
                 >
-                  {step === "confirmation"
-                    ? "Booking Confirmed! 🎉"
-                    : "Book Your Pass"}
+                  {step === "confirmation" ? "Booking confirmed" : gym.name}
                 </h3>
-                <p className="text-sm text-gray-600">{gym.name}</p>
+                {step === "confirmation" && (
+                  <p className="text-sm text-gray-500">{gym.name}</p>
+                )}
               </div>
             </div>
             <button
+              type="button"
               onClick={resetAndClose}
-              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+              aria-label="Close booking"
+              className="flex size-10 shrink-0 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-gray-900/[0.05] hover:text-ink"
             >
-              <HiOutlineX className="h-6 w-6" />
+              <HiOutlineX className="size-5" />
             </button>
           </div>
 
-          {/* Progress Steps */}
+          {/* Step indicator */}
           {step !== "confirmation" && (
-            <div className="mt-4 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div
-                  className={cn(
-                    "flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold transition-colors",
-                    step === "pass-selection"
-                      ? "bg-emerald-600 text-white"
-                      : "bg-emerald-100 text-emerald-600",
-                  )}
-                >
-                  1
-                </div>
-                <span className="text-sm font-medium text-gray-600">Pass</span>
-              </div>
-              <div className="flex-1 h-1 bg-gray-200 mx-2 rounded-full overflow-hidden">
-                <div
-                  className={cn(
-                    "h-full bg-emerald-600 transition-all duration-300",
-                    step === "pass-selection" ? "w-0" : "w-full",
-                  )}
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                <div
-                  className={cn(
-                    "flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold transition-colors",
-                    step === "details"
-                      ? "bg-emerald-600 text-white"
-                      : step === "pass-selection"
-                        ? "bg-gray-200 text-gray-500"
-                        : "bg-emerald-100 text-emerald-600",
-                  )}
-                >
-                  2
-                </div>
-                <span className="text-sm font-medium text-gray-600">
-                  Details
-                </span>
-              </div>
-              <div className="flex-1 h-1 bg-gray-200 mx-2 rounded-full overflow-hidden">
-                <div
-                  className={cn(
-                    "h-full bg-emerald-600 transition-all duration-300",
-                    step === "payment" ? "w-full" : "w-0",
-                  )}
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                <div
-                  className={cn(
-                    "flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold transition-colors",
-                    step === "payment"
-                      ? "bg-emerald-600 text-white"
-                      : "bg-gray-200 text-gray-500",
-                  )}
-                >
-                  3
-                </div>
-                <span className="text-sm font-medium text-gray-600">
-                  Payment
-                </span>
-              </div>
-            </div>
+            <ol
+              className="mt-4 flex items-center gap-1 rounded-full bg-gray-900/[0.04] p-1"
+              aria-label="Booking progress"
+            >
+              {STEPS.map((s, i) => {
+                const done = i < stepIndex;
+                const current = i === stepIndex;
+                return (
+                  <li
+                    key={s.id}
+                    aria-current={current ? "step" : undefined}
+                    className={cn(
+                      "flex flex-1 items-center justify-center gap-1.5 rounded-full px-2 py-1.5 text-xs font-medium whitespace-nowrap transition-colors duration-300 ease-out-expo sm:text-sm",
+                      current && "bg-ink text-white shadow-soft",
+                      done && "bg-volt-soft text-ink",
+                      !current && !done && "text-gray-400",
+                    )}
+                  >
+                    {done ? (
+                      <HiOutlineCheck className="size-3.5 shrink-0" />
+                    ) : (
+                      <span className="font-mono text-[11px]">{i + 1}</span>
+                    )}
+                    {s.label}
+                  </li>
+                );
+              })}
+            </ol>
           )}
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto px-6 py-6">
-          {/* Step 1: Pass Selection */}
+        <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-6 sm:px-7">
+          {/* Step 1: Pass selection */}
           {step === "pass-selection" && (
-            <div className="space-y-4">
-              <div className="text-center mb-6">
-                <h4 className="text-xl font-bold text-gray-900 mb-2">
-                  Choose Your Perfect Pass
+            <div className="space-y-5">
+              <div>
+                <p className={monoLabel}>Choose a pass</p>
+                <h4 className="mt-1 text-xl font-semibold tracking-tight text-ink">
+                  Pick the plan that fits your training
                 </h4>
-                <p className="text-gray-600">
-                  Select the plan that fits your fitness journey
-                </p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Day Pass */}
-                <button
-                  onClick={() => handlePassTypeSelect("day")}
-                  className="text-left p-5 border-2 border-gray-200 rounded-xl hover:border-emerald-500 hover:shadow-lg transition-all group relative overflow-hidden"
-                >
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-linear-to-br from-emerald-500/10 to-teal-500/10 rounded-bl-full -mr-10 -mt-10 group-hover:scale-150 transition-transform" />
-                  <div className="relative">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h5 className="font-bold text-gray-900 group-hover:text-emerald-600 transition-colors text-lg">
-                          Day Pass
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {passOptions.map((option) => {
+                  const selected = formData.passType === option.type;
+                  return (
+                    <button
+                      key={option.type}
+                      type="button"
+                      onClick={() => handlePassTypeSelect(option.type)}
+                      aria-pressed={selected}
+                      className={cn(
+                        "group relative flex flex-col rounded-3xl border border-gray-900/[0.06] p-5 text-start shadow-soft transition-all duration-300 ease-out-expo hover:-translate-y-0.5 hover:shadow-lift focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50",
+                        option.popular ? "bg-volt-soft" : "bg-surface",
+                        selected && "ring-2 ring-ink",
+                      )}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <h5 className="text-base font-semibold text-ink">
+                          {option.title}
                         </h5>
-                        <p className="text-sm text-gray-500 mt-1">
-                          Perfect for a single workout session
-                        </p>
+                        {option.popular && (
+                          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-ink px-2.5 py-1 text-[11px] font-semibold whitespace-nowrap text-white">
+                            <HiStar className="size-3" />
+                            Popular
+                          </span>
+                        )}
                       </div>
-                    </div>
-                    <div className="flex items-baseline gap-1 mb-3">
-                      <span className="text-2xl font-semibold text-ink tracking-tight">
-                        Rs. {gym.pricing.dayPass.toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="flex items-center text-sm text-emerald-600 font-medium">
-                      <HiOutlineCheck className="h-4 w-4 mr-1.5" />
-                      Valid for 1 day
-                    </div>
-                  </div>
-                </button>
-
-                {/* Week Pass */}
-                <button
-                  onClick={() => handlePassTypeSelect("week")}
-                  className="text-left p-5 border-2 border-gray-200 rounded-xl hover:border-emerald-500 hover:shadow-lg transition-all group relative overflow-hidden"
-                >
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-linear-to-br from-emerald-500/10 to-teal-500/10 rounded-bl-full -mr-10 -mt-10 group-hover:scale-150 transition-transform" />
-                  <div className="relative">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h5 className="font-bold text-gray-900 group-hover:text-emerald-600 transition-colors text-lg">
-                          Week Pass
-                        </h5>
-                        <p className="text-sm text-gray-500 mt-1">
-                          Great for trying out the gym
-                        </p>
+                      <p className="mt-1 text-sm text-gray-500">
+                        {option.description}
+                      </p>
+                      <p className="mt-4 text-2xl font-semibold tracking-tight whitespace-nowrap text-ink tabular-nums">
+                        {price(option.amount)}
+                      </p>
+                      <div className="mt-3 flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center gap-1.5 text-sm font-medium text-stamp-teal">
+                          <HiOutlineCheck className="size-4 shrink-0" />
+                          {option.validity}
+                        </span>
+                        {option.saving !== undefined && (
+                          <span className="inline-flex items-center gap-1 rounded-full border border-dashed border-stamp-ochre/60 px-2 py-0.5 text-xs font-semibold whitespace-nowrap text-stamp-ochre">
+                            <HiSparkles className="size-3" />
+                            Save {price(option.saving)}
+                          </span>
+                        )}
                       </div>
-                    </div>
-                    <div className="flex items-baseline gap-1 mb-3">
-                      <span className="text-2xl font-semibold text-ink tracking-tight">
-                        Rs. {gym.pricing.weekPass.toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="flex items-center text-sm text-emerald-600 font-medium">
-                      <HiOutlineCheck className="h-4 w-4 mr-1.5" />
-                      Valid for 7 days
-                    </div>
-                  </div>
-                </button>
-
-                {/* Month Pass */}
-                <button
-                  onClick={() => handlePassTypeSelect("month")}
-                  className="relative text-left p-5 border-2 border-emerald-500 bg-linear-to-br from-emerald-50 to-teal-50 rounded-xl hover:shadow-lg transition-all group overflow-hidden"
-                >
-                  <div className="absolute -top-3 -right-3">
-                    <span className="inline-flex items-center gap-1 bg-emerald-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
-                      <HiStar className="h-3 w-3" />
-                      Popular
-                    </span>
-                  </div>
-                  <div className="relative">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h5 className="font-bold text-gray-900 group-hover:text-emerald-700 transition-colors text-lg">
-                          Monthly Pass
-                        </h5>
-                        <p className="text-sm text-gray-600 mt-1">
-                          Best value for regular members
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-baseline gap-1 mb-3">
-                      <span className="text-2xl font-semibold text-emerald-700 tracking-tight">
-                        Rs. {gym.pricing.monthPass.toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="flex items-center text-sm text-emerald-700 font-medium">
-                      <HiOutlineCheck className="h-4 w-4 mr-1.5" />
-                      Valid for 30 days
-                    </div>
-                  </div>
-                </button>
-
-                {/* Annual Pass */}
-                <button
-                  onClick={() => handlePassTypeSelect("annual")}
-                  className="text-left p-5 border-2 border-gray-200 rounded-xl hover:border-emerald-500 hover:shadow-lg transition-all group relative overflow-hidden"
-                >
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-linear-to-br from-amber-500/10 to-orange-500/10 rounded-bl-full -mr-10 -mt-10 group-hover:scale-150 transition-transform" />
-                  <div className="relative">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h5 className="font-bold text-gray-900 group-hover:text-emerald-600 transition-colors text-lg">
-                          Annual Pass
-                        </h5>
-                        <p className="text-sm text-gray-500 mt-1">
-                          Save 2 months with annual commitment
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-baseline gap-1 mb-2">
-                      <span className="text-2xl font-semibold text-ink tracking-tight">
-                        Rs. {(gym.pricing.monthPass * 10).toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="inline-flex items-center gap-1 px-2 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full">
-                      <HiSparkles className="h-3 w-3" />
-                      Save Rs. {(gym.pricing.monthPass * 2).toLocaleString()}
-                    </div>
-                  </div>
-                </button>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
 
           {/* Step 2: Details */}
           {step === "details" && (
-            <div className="space-y-6">
-              {/* Start Date */}
+            <div className="space-y-7">
+              {/* Start date */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Start Date
-                </label>
                 <Input
+                  label="Start date"
                   type="date"
                   value={formData.startDate}
                   onChange={(e) =>
                     setFormData({ ...formData, startDate: e.target.value })
                   }
                   min={new Date().toISOString().split("T")[0]}
+                  hint="Your pass is valid from this date"
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  Pass will be valid from this date
-                </p>
               </div>
 
               {/* Add-ons */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Add-ons (Optional)
-                </label>
-                <div className="space-y-3">
-                  <label className="flex items-start gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
-                    <input
-                      type="checkbox"
-                      checked={formData.addOns.guestPass}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          addOns: {
-                            ...formData.addOns,
-                            guestPass: e.target.checked,
-                          },
-                        })
-                      }
-                      className="mt-1"
-                    />
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium text-gray-900">
-                          Guest Pass
-                        </span>
-                        <span className="text-gray-700">+ Rs. 400</span>
-                      </div>
-                      <p className="text-sm text-gray-500">
-                        Bring a friend for one session
-                      </p>
-                    </div>
-                  </label>
-
-                  <label className="flex items-start gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
-                    <input
-                      type="checkbox"
-                      checked={formData.addOns.locker}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          addOns: {
-                            ...formData.addOns,
-                            locker: e.target.checked,
-                          },
-                        })
-                      }
-                      className="mt-1"
-                    />
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium text-gray-900">
-                          Dedicated Locker
-                        </span>
-                        <span className="text-gray-700">+ Rs. 200</span>
-                      </div>
-                      <p className="text-sm text-gray-500">
-                        Personal locker for the duration
-                      </p>
-                    </div>
-                  </label>
-
-                  <label className="flex items-start gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
-                    <input
-                      type="checkbox"
-                      checked={formData.addOns.personalTraining}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          addOns: {
-                            ...formData.addOns,
-                            personalTraining: e.target.checked,
-                          },
-                        })
-                      }
-                      className="mt-1"
-                    />
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium text-gray-900">
-                          PT Session (1 hour)
-                        </span>
-                        <span className="text-gray-700">+ Rs. 2,500</span>
-                      </div>
-                      <p className="text-sm text-gray-500">
-                        One-on-one training with certified trainer
-                      </p>
-                    </div>
-                  </label>
+              <fieldset>
+                <legend className={cn(monoLabel, "mb-3")}>
+                  Add-ons · optional
+                </legend>
+                <div className="space-y-2.5">
+                  {addOnOptions.map((addOn) => {
+                    const checked = formData.addOns[addOn.key];
+                    return (
+                      <label
+                        key={addOn.key}
+                        className={cn(
+                          "flex cursor-pointer items-start gap-3 rounded-2xl border border-gray-900/[0.06] p-4 transition-colors",
+                          checked
+                            ? "bg-volt-soft ring-2 ring-ink"
+                            : "bg-surface hover:bg-gray-900/[0.02]",
+                        )}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              addOns: {
+                                ...formData.addOns,
+                                [addOn.key]: e.target.checked,
+                              },
+                            })
+                          }
+                          className="mt-0.5 size-4 shrink-0 accent-ink"
+                        />
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-baseline justify-between gap-3">
+                            <span className="font-medium text-ink">
+                              {addOn.title}
+                            </span>
+                            <span className="text-sm whitespace-nowrap text-gray-700 tabular-nums">
+                              + {price(addOn.amount)}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-500">
+                            {addOn.description}
+                          </p>
+                        </div>
+                      </label>
+                    );
+                  })}
                 </div>
-              </div>
+              </fieldset>
 
-              {/* Promo Code */}
+              {/* Promo code */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Promo Code
+                <label
+                  htmlFor="booking-promo"
+                  className="mb-1.5 block text-sm font-medium text-gray-700"
+                >
+                  Promo code
                 </label>
                 <div className="flex gap-2">
                   <Input
+                    id="booking-promo"
                     placeholder="Enter code"
                     value={formData.promoCode}
                     onChange={(e) =>
@@ -516,56 +514,40 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
                     }
                     disabled={promoApplied}
                   />
-                  <Button
-                    variant="outline"
+                  <button
+                    type="button"
                     onClick={handleApplyPromo}
                     disabled={promoApplied || !formData.promoCode}
+                    className="h-12 shrink-0 rounded-full border border-gray-900/10 bg-surface px-5 text-sm font-medium whitespace-nowrap text-ink transition-colors hover:bg-gray-900/[0.04] disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {promoApplied ? "Applied" : "Apply"}
-                  </Button>
+                  </button>
                 </div>
-                {promoApplied && (
-                  <p className="text-sm text-emerald-600 mt-1 flex items-center gap-1">
-                    <HiCheckCircle className="h-4 w-4" />
-                    10% discount applied!
+                {promoApplied ? (
+                  <p className="mt-1.5 flex items-center gap-1 text-sm text-stamp-teal">
+                    <HiCheckCircle className="size-4 shrink-0" />
+                    10% discount applied
+                  </p>
+                ) : (
+                  <p className="mt-1.5 text-xs text-gray-500">
+                    Try FIRST10 for 10% off
                   </p>
                 )}
-                <p className="text-xs text-gray-500 mt-1">
-                  Try: FIRST10 for 10% off
-                </p>
               </div>
 
-              {/* Price Summary */}
-              <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">Pass Price</span>
-                  <span className="text-gray-900">
-                    Rs. {getPassPrice().toLocaleString()}
+              {/* Price summary ticket */}
+              <div className="space-y-2 rounded-3xl border-2 border-dashed border-gray-900/15 p-5">
+                <p className={cn(monoLabel, "mb-1")}>Summary</p>
+                {ticketRow("Pass price", price(getPassPrice()))}
+                {getAddOnsTotal() > 0 &&
+                  ticketRow("Add-ons", price(getAddOnsTotal()))}
+                {getDiscount() > 0 &&
+                  ticketRow("Discount", `− ${price(getDiscount())}`, true)}
+                <div className="mt-2 flex items-baseline justify-between gap-4 border-t border-dashed border-gray-900/15 pt-3">
+                  <span className="font-semibold text-ink">Total</span>
+                  <span className="text-lg font-semibold whitespace-nowrap text-ink tabular-nums">
+                    {price(getTotal())}
                   </span>
-                </div>
-                {getAddOnsTotal() > 0 && (
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">Add-ons</span>
-                    <span className="text-gray-900">
-                      Rs. {getAddOnsTotal().toLocaleString()}
-                    </span>
-                  </div>
-                )}
-                {getDiscount() > 0 && (
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-emerald-600">Discount</span>
-                    <span className="text-emerald-600">
-                      - Rs. {getDiscount().toLocaleString()}
-                    </span>
-                  </div>
-                )}
-                <div className="pt-2 border-t border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-gray-900">Total</span>
-                    <span className="text-lg font-bold text-gray-900">
-                      Rs. {getTotal().toLocaleString()}
-                    </span>
-                  </div>
                 </div>
               </div>
             </div>
@@ -574,79 +556,80 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
           {/* Step 3: Payment */}
           {step === "payment" && (
             <div className="space-y-6">
-              {/* Payment Method Selection */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Payment Method
-                </label>
-                <div className="grid grid-cols-3 gap-3">
-                  <button
-                    onClick={() =>
-                      setFormData({ ...formData, paymentMethod: "card" })
-                    }
-                    className={cn(
-                      "p-4 border-2 rounded-lg text-center transition-all",
-                      formData.paymentMethod === "card"
-                        ? "border-emerald-600 bg-emerald-50"
-                        : "border-gray-200 hover:border-gray-300",
-                    )}
-                  >
-                    <HiOutlineCreditCard className="h-8 w-8 mx-auto mb-2 text-gray-700" />
-                    <span className="text-sm font-medium">Card</span>
-                  </button>
-
-                  <button
-                    onClick={() =>
-                      setFormData({
-                        ...formData,
-                        paymentMethod: "mobile_wallet",
-                      })
-                    }
-                    className={cn(
-                      "p-4 border-2 rounded-lg text-center transition-all",
-                      formData.paymentMethod === "mobile_wallet"
-                        ? "border-emerald-600 bg-emerald-50"
-                        : "border-gray-200 hover:border-gray-300",
-                    )}
-                  >
-                    <HiOutlineDeviceMobile className="h-8 w-8 mx-auto mb-2 text-gray-700" />
-                    <span className="text-sm font-medium">Wallet</span>
-                  </button>
-
-                  <button
-                    onClick={() =>
-                      setFormData({
-                        ...formData,
-                        paymentMethod: "bank_transfer",
-                      })
-                    }
-                    className={cn(
-                      "p-4 border-2 rounded-lg text-center transition-all",
-                      formData.paymentMethod === "bank_transfer"
-                        ? "border-emerald-600 bg-emerald-50"
-                        : "border-gray-200 hover:border-gray-300",
-                    )}
-                  >
-                    <HiOutlineLibrary className="h-8 w-8 mx-auto mb-2 text-gray-700" />
-                    <span className="text-sm font-medium">Bank</span>
-                  </button>
+              {/* Payment method */}
+              <fieldset>
+                <legend className={cn(monoLabel, "mb-3")}>Payment method</legend>
+                <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+                  {paymentOptions.map((option) => {
+                    const selected = formData.paymentMethod === option.id;
+                    return (
+                      <button
+                        key={option.id}
+                        type="button"
+                        onClick={() =>
+                          setFormData({ ...formData, paymentMethod: option.id })
+                        }
+                        aria-pressed={selected}
+                        className={cn(
+                          "flex items-center gap-3 rounded-2xl border border-gray-900/[0.06] p-4 text-start shadow-soft transition-all duration-300 ease-out-expo focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 sm:flex-col sm:items-start",
+                          selected
+                            ? "bg-volt-soft ring-2 ring-ink"
+                            : "bg-surface hover:bg-gray-900/[0.02]",
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            "flex size-10 shrink-0 items-center justify-center rounded-full",
+                            selected
+                              ? "bg-ink text-white"
+                              : "bg-gray-900/[0.05] text-gray-700",
+                          )}
+                        >
+                          {option.icon}
+                        </span>
+                        <span className="min-w-0">
+                          <span className="block text-sm font-semibold text-ink">
+                            {option.label}
+                          </span>
+                          <span className="block text-xs text-gray-500">
+                            {option.subtitle}
+                          </span>
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
-              </div>
+              </fieldset>
 
-              {/* Card Payment Form */}
+              {/* Card form */}
               {formData.paymentMethod === "card" && (
                 <div className="space-y-4">
                   <Input
-                    label="Card Number"
+                    label="Card number"
                     placeholder="1234 5678 9012 3456"
+                    inputMode="numeric"
+                    autoComplete="cc-number"
                   />
-                  <Input label="Cardholder Name" placeholder="Muhammad Ali" />
+                  <Input
+                    label="Name on card"
+                    placeholder="Full name"
+                    autoComplete="cc-name"
+                  />
                   <div className="grid grid-cols-2 gap-4">
-                    <Input label="Expiry Date" placeholder="MM/YY" />
-                    <Input label="CVV" placeholder="123" />
+                    <Input
+                      label="Expiry date"
+                      placeholder="MM/YY"
+                      autoComplete="cc-exp"
+                    />
+                    <Input
+                      label="CVC"
+                      placeholder="123"
+                      inputMode="numeric"
+                      autoComplete="cc-csc"
+                    />
                   </div>
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded" />
+                    <input type="checkbox" className="size-4 accent-ink" />
                     <span className="text-sm text-gray-600">
                       Save card for future bookings
                     </span>
@@ -654,86 +637,62 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
                 </div>
               )}
 
-              {/* Mobile Wallet */}
+              {/* Mobile wallet */}
               {formData.paymentMethod === "mobile_wallet" && (
-                <div className="text-center py-8">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 mb-4">
-                    <HiOutlineDeviceMobile className="h-8 w-8 text-emerald-600" />
+                <div className="rounded-3xl bg-volt-soft p-6 text-center">
+                  <div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-full bg-surface text-ink shadow-soft">
+                    <HiOutlineDeviceMobile className="size-6" />
                   </div>
-                  <p className="text-gray-600 mb-4">
-                    You will be redirected to complete payment via:
+                  <p className="text-sm text-gray-700">
+                    You&apos;ll confirm the payment in your wallet app.
                   </p>
-                  <div className="flex items-center justify-center gap-4">
-                    <div className="px-4 py-2 bg-gray-100 rounded-lg text-sm font-medium">
-                      JazzCash
-                    </div>
-                    <div className="px-4 py-2 bg-gray-100 rounded-lg text-sm font-medium">
-                      Easypaisa
-                    </div>
+                  <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                    {["Apple Pay", "Google Pay", "Local wallets"].map((w) => (
+                      <span
+                        key={w}
+                        className="rounded-full bg-surface px-3.5 py-1.5 text-sm font-medium whitespace-nowrap text-ink shadow-soft"
+                      >
+                        {w}
+                      </span>
+                    ))}
                   </div>
                 </div>
               )}
 
-              {/* Bank Transfer */}
+              {/* Bank transfer */}
               {formData.paymentMethod === "bank_transfer" && (
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                  <div className="flex items-start gap-3">
-                    <HiOutlineExclamation className="h-5 w-5 text-amber-600 mt-0.5" />
-                    <div className="flex-1 text-sm">
-                      <p className="font-medium text-amber-900 mb-1">
-                        Manual Verification Required
-                      </p>
-                      <p className="text-amber-700">
-                        Bank transfer details will be sent via email. Your
-                        booking will be confirmed once payment is verified
-                        (usually within 24 hours).
-                      </p>
-                    </div>
+                <div className="flex items-start gap-3 rounded-3xl border border-dashed border-stamp-ochre/50 p-4">
+                  <HiOutlineExclamation className="mt-0.5 size-5 shrink-0 text-stamp-ochre" />
+                  <div className="text-sm">
+                    <p className="mb-1 font-medium text-ink">
+                      Manual verification required
+                    </p>
+                    <p className="text-gray-600">
+                      Bank transfer details will be sent by email. Your booking
+                      is confirmed once the payment is verified (usually within
+                      24 hours).
+                    </p>
                   </div>
                 </div>
               )}
 
-              {/* Order Summary */}
-              <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                <h5 className="font-semibold text-gray-900">Order Summary</h5>
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600">
-                      {formData.passType?.charAt(0).toUpperCase()}
-                      {formData.passType?.slice(1)} Pass
-                    </span>
-                    <span className="text-gray-900">
-                      Rs. {getPassPrice().toLocaleString()}
-                    </span>
-                  </div>
-                  {getAddOnsTotal() > 0 && (
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600">Add-ons</span>
-                      <span className="text-gray-900">
-                        Rs. {getAddOnsTotal().toLocaleString()}
-                      </span>
-                    </div>
+              {/* Order summary ticket */}
+              <div className="space-y-2 rounded-3xl border-2 border-dashed border-gray-900/15 p-5">
+                <p className={cn(monoLabel, "mb-1")}>Order summary</p>
+                {ticketRow(passLabel, price(getPassPrice()))}
+                {getAddOnsTotal() > 0 &&
+                  ticketRow("Add-ons", price(getAddOnsTotal()))}
+                {getDiscount() > 0 &&
+                  ticketRow(
+                    "Discount (FIRST10)",
+                    `− ${price(getDiscount())}`,
+                    true,
                   )}
-                  {getDiscount() > 0 && (
-                    <div className="flex items-center justify-between">
-                      <span className="text-emerald-600">
-                        Discount (FIRST10)
-                      </span>
-                      <span className="text-emerald-600">
-                        - Rs. {getDiscount().toLocaleString()}
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <div className="pt-3 border-t border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-gray-900">
-                      Total Amount
-                    </span>
-                    <span className="text-xl font-bold text-gray-900">
-                      Rs. {getTotal().toLocaleString()}
-                    </span>
-                  </div>
+                <div className="mt-2 flex items-baseline justify-between gap-4 border-t border-dashed border-gray-900/15 pt-3">
+                  <span className="font-semibold text-ink">Total amount</span>
+                  <span className="text-xl font-semibold whitespace-nowrap text-ink tabular-nums">
+                    {price(getTotal())}
+                  </span>
                 </div>
               </div>
             </div>
@@ -741,126 +700,125 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
 
           {/* Step 4: Confirmation */}
           {step === "confirmation" && (
-            <div className="text-center py-8">
-              {/* Success Icon */}
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-100 mb-6">
-                <HiOutlineCheck className="h-10 w-10 text-emerald-600" />
+            <div className="py-4 text-center">
+              <div className="mx-auto mb-5 flex size-16 items-center justify-center rounded-full bg-volt text-ink">
+                <HiOutlineCheck className="size-8" />
               </div>
 
-              <h3 className="text-2xl font-semibold text-ink mb-2 tracking-tight">
-                Booking Confirmed!
+              <h3 className="mb-1 text-2xl font-semibold tracking-tight text-ink">
+                You&apos;re all set
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="mb-6 text-gray-600">
                 Your {formData.passType} pass for {gym.name} is ready
               </p>
 
-              {/* QR Code Placeholder */}
-              <div className="inline-block bg-white border-4 border-gray-200 rounded-xl p-6 mb-6">
-                <div className="w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center">
+              {/* QR code placeholder */}
+              <div className="mx-auto mb-6 inline-block rounded-3xl border border-gray-900/[0.06] bg-surface p-5 shadow-soft">
+                <div className="flex size-44 items-center justify-center rounded-2xl bg-gray-900/[0.04]">
                   <div className="text-center">
-                    <HiOutlineQrcode className="h-16 w-16 mx-auto text-gray-400 mb-2" />
-                    <p className="text-sm text-gray-500">QR Code</p>
+                    <HiOutlineQrcode className="mx-auto mb-2 size-14 text-gray-400" />
+                    <p className="text-sm text-gray-500">QR code</p>
                   </div>
                 </div>
-                <p className="text-sm text-gray-600 mt-4">
-                  Booking ID: BKG{Math.floor(Math.random() * 10000)}
+                <p className={cn(monoLabel, "mt-4 text-gray-500")}>
+                  Booking BKG{Math.floor(Math.random() * 10000)}
                 </p>
               </div>
 
-              {/* Pass Details */}
-              <div className="bg-gray-50 rounded-lg p-4 text-left mb-6 space-y-2 text-sm">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Valid From</span>
-                  <span className="font-medium text-gray-900">
-                    {formData.startDate}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Valid Until</span>
-                  <span className="font-medium text-gray-900">
-                    {
-                      new Date(
-                        new Date(formData.startDate).getTime() +
-                          (formData.passType === "day"
-                            ? 1
-                            : formData.passType === "week"
-                              ? 7
-                              : formData.passType === "month"
-                                ? 30
-                                : 365) *
-                            24 *
-                            60 *
-                            60 *
-                            1000,
-                      )
-                        .toISOString()
-                        .split("T")[0]
-                    }
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Amount Paid</span>
-                  <span className="font-medium text-gray-900">
-                    Rs. {getTotal().toLocaleString()}
-                  </span>
-                </div>
+              {/* Pass details ticket */}
+              <div className="mb-6 space-y-2 rounded-3xl border-2 border-dashed border-gray-900/15 p-5 text-start">
+                {ticketRow("Valid from", formData.startDate)}
+                {ticketRow(
+                  "Valid until",
+                  new Date(
+                    new Date(formData.startDate).getTime() +
+                      (formData.passType === "day"
+                        ? 1
+                        : formData.passType === "week"
+                          ? 7
+                          : formData.passType === "month"
+                            ? 30
+                            : 365) *
+                        24 *
+                        60 *
+                        60 *
+                        1000,
+                  )
+                    .toISOString()
+                    .split("T")[0],
+                )}
+                {ticketRow("Amount paid", price(getTotal()))}
               </div>
 
-              <p className="text-sm text-gray-500 mb-6">
+              <p className="mb-6 text-sm text-gray-500">
                 A confirmation email has been sent to your registered email
                 address.
               </p>
 
-              <div className="flex gap-3">
-                <Button
-                  variant="outline"
-                  className="flex-1"
+              <div className="flex flex-col-reverse gap-3 sm:flex-row">
+                <button
+                  type="button"
                   onClick={resetAndClose}
+                  className="h-12 flex-1 rounded-full border border-gray-900/10 bg-surface px-6 text-sm font-medium whitespace-nowrap text-ink transition-colors hover:bg-gray-900/[0.04]"
                 >
                   Close
-                </Button>
-                <Button className="flex-1">View My Passes</Button>
+                </button>
+                <button
+                  type="button"
+                  className="h-12 flex-1 rounded-full bg-ink px-6 text-sm font-medium whitespace-nowrap text-white transition-colors hover:bg-gray-800"
+                >
+                  View my passes
+                </button>
               </div>
             </div>
           )}
         </div>
 
-        {/* Footer Actions */}
-        {step !== "confirmation" && (
-          <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-between gap-3">
-            {step !== "pass-selection" && (
-              <Button
-                variant="outline"
-                onClick={() => {
-                  if (step === "payment") setStep("details");
-                  else if (step === "details") setStep("pass-selection");
-                }}
-                beforeIcon={<HiOutlineChevronLeft className="h-4 w-4" />}
-              >
-                Back
-              </Button>
-            )}
-            <div className="flex-1" />
+        {/* Footer actions */}
+        {step !== "confirmation" && step !== "pass-selection" && (
+          <div className="flex shrink-0 items-center justify-between gap-3 border-t border-gray-900/[0.06] bg-surface px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-7">
+            <button
+              type="button"
+              onClick={() => {
+                if (step === "payment") setStep("details");
+                else if (step === "details") setStep("pass-selection");
+              }}
+              className="inline-flex h-12 shrink-0 items-center gap-1 rounded-full border border-gray-900/10 bg-surface ps-4 pe-5 text-sm font-medium whitespace-nowrap text-ink transition-colors hover:bg-gray-900/[0.04]"
+            >
+              <HiOutlineChevronLeft className="size-4 rtl:rotate-180" />
+              Back
+            </button>
             {step === "details" && (
-              <Button
+              <button
+                type="button"
                 onClick={() => setStep("payment")}
                 disabled={!formData.passType}
-                size="lg"
-                afterIcon={<HiOutlineChevronRight className="h-4 w-4" />}
+                className="inline-flex h-12 items-center justify-center gap-1.5 rounded-full bg-ink ps-6 pe-5 text-sm font-medium whitespace-nowrap text-white transition-colors hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50 max-sm:flex-1"
               >
-                Continue to Payment
-              </Button>
+                Continue to payment
+                <HiOutlineChevronRight className="size-4 rtl:rotate-180" />
+              </button>
             )}
             {step === "payment" && (
-              <Button
+              <button
+                type="button"
                 onClick={handlePayment}
                 disabled={isProcessing}
-                size="lg"
-                loading={isProcessing}
-                loadingText="Processing..."
+                aria-busy={isProcessing}
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-ink px-6 text-sm font-medium whitespace-nowrap text-white transition-colors hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-70 max-sm:flex-1"
               >
-                {!isProcessing && `Pay Rs. ${getTotal().toLocaleString()}`}
-              </Button>
+                {isProcessing ? (
+                  <>
+                    <span
+                      aria-hidden="true"
+                      className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white"
+                    />
+                    Processing…
+                  </>
+                ) : (
+                  `Pay ${price(getTotal())}`
+                )}
+              </button>
             )}
           </div>
         )}

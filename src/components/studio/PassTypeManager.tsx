@@ -586,7 +586,7 @@ export default function PassTypeManager() {
                           key={index}
                           className="flex items-center text-sm text-gray-600"
                         >
-                          <HiOutlineCheck className="mr-2 h-4 w-4 text-emerald-500" />
+                          <HiOutlineCheck className="me-2 h-4 w-4 text-emerald-500" />
                           {feature}
                         </li>
                       ))}
@@ -596,7 +596,7 @@ export default function PassTypeManager() {
               </div>
 
               {/* Actions */}
-              <div className="ml-4 flex flex-col space-y-2">
+              <div className="ms-4 flex flex-col space-y-2">
                 <Button
                   variant="outline"
                   size="sm"

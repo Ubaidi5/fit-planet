@@ -333,7 +333,7 @@ export default function ReviewMonitoring() {
 
               {/* Response */}
               {review.hasResponse && review.responseText && (
-                <div className="mt-4 rounded-lg border-l-4 border-emerald-500 bg-emerald-50 p-4">
+                <div className="mt-4 rounded-lg border-s-4 border-emerald-500 bg-emerald-50 p-4">
                   <p className="text-sm font-semibold text-emerald-900">
                     Your Response:
                   </p>

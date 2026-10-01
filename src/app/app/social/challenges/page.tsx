@@ -98,7 +98,7 @@ export default function ChallengesPage() {
           </p>
         </div>
         <Button>
-          <HiOutlinePlus className="mr-2 h-4 w-4" />
+          <HiOutlinePlus className="me-2 h-4 w-4" />
           Create Challenge
         </Button>
       </div>
@@ -317,7 +317,7 @@ function ChallengeCard({
                   style={{ width: `${Math.min(challenge.progress, 100)}%` }}
                 />
               </div>
-              <p className="mt-1 text-right text-xs text-gray-500">
+              <p className="mt-1 text-end text-xs text-gray-500">
                 {challenge.progress}% complete
               </p>
             </div>
@@ -443,7 +443,7 @@ function LeaderboardRow({ entry }: { entry: LeaderboardEntry }) {
             >
               {entry.name}
               {entry.isCurrentUser && (
-                <span className="ml-1 text-xs">(You)</span>
+                <span className="ms-1 text-xs">(You)</span>
               )}
             </p>
             <p className="text-xs text-gray-500">@{entry.username}</p>

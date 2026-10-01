@@ -14,16 +14,16 @@ const steps = [
   {
     title: "Search for gyms",
     description:
-      "Type an area or use your location. Filter by price, amenities, rating and how busy it is right now.",
+      "Pick a city or use your location. Filter by price, amenities, rating and how busy it is right now.",
     icon: HiOutlineMagnifyingGlass,
-    meta: `${platformStats.launchCity} · ${platformStats.partnerGyms} gyms nearby`,
+    meta: `${platformStats.cities.length} cities · ${platformStats.partnerGyms} gyms`,
   },
   {
     title: "Choose your pass",
     description:
       "Day, week or monthly. Compare what each gym offers and pick what fits your week, not a year-long contract.",
     icon: HiOutlineTicket,
-    meta: `From Rs. ${platformStats.lowestDayPass} a day`,
+    meta: "Priced in local currency",
   },
   {
     title: "Book and pay online",
@@ -55,12 +55,12 @@ const HowItWorks: React.FC = () => {
               </>
             }
             description="We removed every step that made joining a gym painful. What is left takes about a minute."
-            className="mx-auto text-center lg:mx-0 lg:text-left"
+            className="mx-auto text-center lg:mx-0 lg:text-start"
           />
           <Reveal delay={120} className="mt-8 flex justify-center lg:justify-start">
             <Link
               href="/gyms"
-              className="group inline-flex h-12 items-center gap-2 rounded-full bg-ink pr-1.5 pl-6 text-[15px] font-medium text-white transition-colors hover:bg-gray-800"
+              className="group inline-flex h-12 items-center gap-2 rounded-full bg-ink pe-1.5 ps-6 text-[15px] font-medium text-white transition-colors hover:bg-gray-800"
             >
               Find a gym now
               <span className="flex size-9 items-center justify-center rounded-full bg-volt text-ink transition-transform duration-500 ease-out-expo group-hover:-rotate-45">
@@ -92,7 +92,7 @@ const HowItWorks: React.FC = () => {
                     <h3 className="text-lg font-semibold tracking-tight text-ink sm:text-xl">
                       {step.title}
                     </h3>
-                    <span className="font-serif text-2xl text-gray-300 italic tabular-nums sm:text-3xl">
+                    <span className="font-mono text-sm tracking-[0.14em] text-gray-400 tabular-nums">
                       0{index + 1}
                     </span>
                   </div>

@@ -6,6 +6,7 @@ import {
   HiOutlineSparkles,
 } from "react-icons/hi2";
 import { Reveal } from "@/components/motion/Reveal";
+import { Accent } from "@/components/sections/SectionHeading";
 
 const assurances = [
   { icon: HiOutlineShieldCheck, label: "Secure payments" },
@@ -26,21 +27,21 @@ const CTA: React.FC = () => {
 
         <div className="relative mx-auto max-w-3xl">
           <h2 className="text-[2.25rem] leading-[1.04] font-semibold tracking-[-0.04em] text-ink text-balance-safe sm:text-6xl">
-            Your next workout is{" "}
-            <span className="font-serif font-normal italic">one search</span> away
+            Your passport is{" "}
+            <Accent>one tap</Accent> away
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-gray-600">
-            Join the members already training across Karachi, or bring your gym
+            Get your passport and train in any partner city, or bring your gym
             onto the network and start taking bookings this week.
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/gyms"
-              className="group inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-ink pr-2 pl-7 text-base font-medium text-white transition-colors hover:bg-gray-800 sm:w-auto"
+              className="group inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-ink ps-7 pe-2 text-base font-medium text-white transition-colors hover:bg-gray-800 sm:w-auto"
             >
               Find gyms near you
-              <span className="flex size-10 items-center justify-center rounded-full bg-volt text-ink transition-transform duration-500 ease-out-expo group-hover:-rotate-45">
+              <span className="flex size-10 items-center justify-center rounded-full bg-volt text-ink transition-transform duration-500 ease-out-expo group-hover:-rotate-45 rtl:rotate-180">
                 <HiArrowRight className="size-4.5" />
               </span>
             </Link>

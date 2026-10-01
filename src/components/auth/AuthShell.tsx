@@ -12,6 +12,7 @@ import {
 import { Logo } from "@/components/brand/Logo";
 import { FauxQR } from "@/components/brand/FauxQR";
 import { cn } from "@/lib/utils";
+import { Accent } from "@/components/sections/SectionHeading";
 
 type Variant = "member" | "studio";
 
@@ -36,7 +37,7 @@ const panelCopy: Record<
     eyebrow: "Fit Planet for members",
     title: (
       <>
-        One account. <span className="font-serif font-normal italic">Every gym</span> in the city.
+        One account. <Accent>Every gym</Accent> in the city.
       </>
     ),
     points: [
@@ -61,7 +62,7 @@ const panelCopy: Record<
     eyebrow: "Fit Planet Studio",
     title: (
       <>
-        Run your gym like a <span className="font-serif font-normal italic">modern business</span>.
+        Run your gym like a <Accent>modern business</Accent>.
       </>
     ),
     points: [
@@ -108,7 +109,7 @@ function MemberVisual() {
           </div>
         </div>
       </div>
-      <div className="absolute -right-4 -bottom-6 flex animate-float items-center gap-2.5 rounded-2xl border border-gray-900/[0.06] bg-surface py-2.5 pr-4 pl-2.5 shadow-lift">
+      <div className="absolute -right-4 -bottom-6 flex animate-float items-center gap-2.5 rounded-2xl border border-gray-900/[0.06] bg-surface py-2.5 pe-4 ps-2.5 shadow-lift">
         <span className="flex size-8 items-center justify-center rounded-full bg-volt text-ink">
           <HiCheck className="size-4" />
         </span>
@@ -153,7 +154,7 @@ function StudioVisual() {
           </div>
         </div>
       </div>
-      <div className="absolute -top-5 -left-5 flex animate-float items-center gap-2.5 rounded-2xl border border-gray-900/[0.06] bg-surface py-2.5 pr-4 pl-2.5 shadow-lift">
+      <div className="absolute -top-5 -left-5 flex animate-float items-center gap-2.5 rounded-2xl border border-gray-900/[0.06] bg-surface py-2.5 pe-4 ps-2.5 shadow-lift">
         <span className="flex size-8 items-center justify-center rounded-full bg-volt text-ink">
           <HiOutlineCurrencyDollar className="size-4" />
         </span>
@@ -195,7 +196,7 @@ export function AuthShell({ variant, children, aside, width = "sm" }: AuthShellP
           </div>
         </div>
 
-        <p className="pb-3 text-center text-xs text-gray-400 lg:text-left">
+        <p className="pb-3 text-center text-xs text-gray-400 lg:text-start">
           &copy; {new Date().getFullYear()} Fit Planet ·{" "}
           <Link href="/" className="hover:text-gray-600">
             Back to website

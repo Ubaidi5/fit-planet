@@ -341,7 +341,7 @@ export default function PromotionalCampaigns() {
                 </div>
               </div>
 
-              <div className="text-right">
+              <div className="text-end">
                 <Button variant="outline" size="sm">
                   Edit
                 </Button>

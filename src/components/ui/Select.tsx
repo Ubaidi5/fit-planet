@@ -36,14 +36,14 @@ export function Select({
   return (
     <div
       className={cn(
-        "relative inline-block text-left w-full sm:w-auto",
+        "relative inline-block text-start w-full sm:w-auto",
         wrapperClassName,
       )}
     >
       <select
         {...props}
         className={cn(
-          "w-full appearance-none rounded-xl border border-gray-200 bg-surface pr-10 text-gray-900 shadow-soft transition-[border-color,box-shadow] hover:border-gray-300 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15",
+          "w-full appearance-none rounded-xl border border-gray-200 bg-surface pe-10 text-gray-900 shadow-soft transition-[border-color,box-shadow] hover:border-gray-300 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15",
           sizeClasses,
           className,
         )}

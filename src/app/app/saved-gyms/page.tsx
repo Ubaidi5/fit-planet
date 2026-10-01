@@ -126,7 +126,7 @@ export default function SavedGymsPage() {
         </div>
         <Link href="/gyms">
           <Button>
-            <HiOutlineSearch className="mr-2 h-4 w-4" />
+            <HiOutlineSearch className="me-2 h-4 w-4" />
             Discover More
           </Button>
         </Link>
@@ -141,7 +141,7 @@ export default function SavedGymsPage() {
             placeholder="Search saved gyms..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
+            className="ps-10"
           />
         </div>
         <div className="w-48">

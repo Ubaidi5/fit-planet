@@ -20,8 +20,11 @@ const liveCapacity = mockGyms.reduce(
   { current: 0, max: 0 },
 );
 
+const countries = Array.from(new Set(mockGyms.map((gym) => gym.country)));
+
 export const platformStats = {
   partnerGyms: mockGyms.length,
+  countries,
   launchCity: cities[0] ?? "Karachi",
   cities,
   averageRating: Math.round(averageRating * 10) / 10,
@@ -33,19 +36,10 @@ export const platformStats = {
 };
 
 export const heroStats = [
-  {
-    value: String(platformStats.partnerGyms),
-    label: `Partner gyms in ${platformStats.launchCity}`,
-  },
-  {
-    value: platformStats.averageRating.toFixed(1),
-    label: "Average gym rating",
-  },
-  {
-    value: `${platformStats.bookingTimeSeconds}s`,
-    label: "From search to pass",
-  },
-  { value: "0", label: "Membership cards needed" },
+  { value: String(platformStats.partnerGyms), label: "Partner gyms" },
+  { value: String(platformStats.cities.length), label: "Cities on one pass" },
+  { value: String(countries.length), label: "Local currencies" },
+  { value: `${platformStats.bookingTimeSeconds}s`, label: "From search to pass" },
 ];
 
 export const launchAreas = Array.from(
@@ -55,24 +49,24 @@ export const launchAreas = Array.from(
 export const testimonials = [
   {
     quote:
-      "I travel between Clifton and DHA for work. Being able to grab a day pass wherever I am changed how often I actually train.",
+      "I split my month between Karachi and Dubai. One pass, prices in dirhams or rupees, and the QR just works at the door. I train more because of it.",
     name: "Hira S.",
-    role: "Product designer, pilot member",
+    role: "Product designer, Karachi and Dubai",
     initials: "HS",
   },
   {
     quote:
       "We never had a website. Now people find us, book, and walk in with a QR code. The capacity view alone saves my front desk an hour a day.",
     name: "Kamran A.",
-    role: "Owner, pilot partner gym",
+    role: "Owner, partner gym in Karachi",
     initials: "KA",
   },
   {
     quote:
-      "My friends and I plan sessions in the app and share routines. It feels like the gym finally has a social layer.",
-    name: "Usman R.",
-    role: "Student, pilot member",
-    initials: "UR",
+      "Landed in Tokyo for a conference, opened the app, saw Iron Shrine was quiet and booked in yen. Got a new stamp in my passport by 7am.",
+    name: "Lena M.",
+    role: "Consultant, Berlin",
+    initials: "LM",
   },
 ];
 

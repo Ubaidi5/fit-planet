@@ -1,7 +1,9 @@
 import Hero from "@/components/sections/Hero";
-import PartnerMarquee from "@/components/sections/PartnerMarquee";
+import Departures from "@/components/sections/Departures";
+import OrbitSection from "@/components/sections/OrbitSection";
+import PassportSection from "@/components/sections/PassportSection";
+import PulseSection from "@/components/sections/PulseSection";
 import TwoSides from "@/components/sections/TwoSides";
-import Features from "@/components/sections/Features";
 import HowItWorks from "@/components/sections/HowItWorks";
 import ForGymOwners from "@/components/sections/ForGymOwners";
 import Testimonials from "@/components/sections/Testimonials";
@@ -11,9 +13,11 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <PartnerMarquee />
+      <Departures />
+      <OrbitSection />
+      <PassportSection />
+      <PulseSection />
       <TwoSides />
-      <Features />
       <HowItWorks />
       <ForGymOwners />
       <Testimonials />

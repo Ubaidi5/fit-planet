@@ -159,7 +159,7 @@ export default function PayoutManagement() {
               </p>
             </div>
 
-            <div className="text-right">
+            <div className="text-end">
               <p className="text-2xl font-semibold text-blue-900 tracking-tight">3 Days</p>
               <p className="text-xs text-blue-700">Until payout</p>
             </div>
@@ -226,7 +226,7 @@ export default function PayoutManagement() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="border-b border-gray-200 bg-gray-50">
-              <tr className="text-left text-xs font-medium text-gray-600">
+              <tr className="text-start text-xs font-medium text-gray-600">
                 <th className="p-4">Payout ID</th>
                 <th className="p-4">Date</th>
                 <th className="p-4">Amount</th>
