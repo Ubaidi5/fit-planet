@@ -172,8 +172,8 @@ export default function RatingAnalytics() {
           </div>
 
           {/* Chart area */}
-          <div className="ml-12 h-full">
-            <div className="relative h-full border-b border-l border-gray-300">
+          <div className="ms-12 h-full">
+            <div className="relative h-full border-b border-s border-gray-300">
               {/* Grid lines */}
               {[0, 1, 2, 3, 4].map((i) => (
                 <div
@@ -261,7 +261,7 @@ export default function RatingAnalytics() {
                   </p>
                 </div>
 
-                <div className="text-right">
+                <div className="text-end">
                   <p className="text-2xl font-semibold text-emerald-600 tracking-tight">
                     {category.rating}
                   </p>
@@ -350,7 +350,7 @@ export default function RatingAnalytics() {
                     >
                       {gym.name}
                       {gym.highlight && (
-                        <span className="ml-2 text-xs">(You)</span>
+                        <span className="ms-2 text-xs">(You)</span>
                       )}
                     </p>
                     <p className="text-xs text-gray-600">
@@ -378,7 +378,7 @@ export default function RatingAnalytics() {
         </h3>
 
         <div className="space-y-3">
-          <div className="rounded-lg border-l-4 border-emerald-500 bg-emerald-50 p-4">
+          <div className="rounded-lg border-s-4 border-emerald-500 bg-emerald-50 p-4">
             <p className="text-sm font-semibold text-emerald-900">
               🎉 Excellent Staff Rating
             </p>
@@ -388,7 +388,7 @@ export default function RatingAnalytics() {
             </p>
           </div>
 
-          <div className="rounded-lg border-l-4 border-blue-500 bg-blue-50 p-4">
+          <div className="rounded-lg border-s-4 border-blue-500 bg-blue-50 p-4">
             <p className="text-sm font-semibold text-blue-900">
               📈 Rating Trending Up
             </p>
@@ -398,7 +398,7 @@ export default function RatingAnalytics() {
             </p>
           </div>
 
-          <div className="rounded-lg border-l-4 border-orange-500 bg-orange-50 p-4">
+          <div className="rounded-lg border-s-4 border-orange-500 bg-orange-50 p-4">
             <p className="text-sm font-semibold text-orange-900">
               ⚠️ Equipment Maintenance
             </p>

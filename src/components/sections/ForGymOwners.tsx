@@ -95,7 +95,7 @@ const ForGymOwners: React.FC = () => {
             <Reveal delay={200} className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/studio/register"
-                className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-ink pr-1.5 pl-6 text-[15px] font-medium text-white transition-colors hover:bg-gray-800"
+                className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-ink pe-1.5 ps-6 text-[15px] font-medium text-white transition-colors hover:bg-gray-800"
               >
                 List your gym free
                 <span className="flex size-9 items-center justify-center rounded-full bg-volt text-ink transition-transform duration-500 ease-out-expo group-hover:-rotate-45">
@@ -135,7 +135,12 @@ const ForGymOwners: React.FC = () => {
                   { label: "Check-ins today", value: ownerPreview.checkInsToday },
                   {
                     label: "Revenue today",
-                    value: `Rs. ${Math.round(ownerPreview.revenueToday / 1000)}K`,
+                    value: new Intl.NumberFormat("en", {
+                      style: "currency",
+                      currency: "PKR",
+                      currencyDisplay: "narrowSymbol",
+                      notation: "compact",
+                    }).format(ownerPreview.revenueToday),
                   },
                   { label: "In the gym", value: `${capacityPct}%` },
                 ].map((stat) => (
@@ -201,7 +206,7 @@ const ForGymOwners: React.FC = () => {
             </div>
 
             {/* Floating payout chip */}
-            <div className="absolute -top-5 -right-2 hidden animate-float items-center gap-2.5 rounded-2xl border border-gray-900/[0.06] bg-surface py-2.5 pr-4 pl-2.5 shadow-lift sm:flex lg:-right-6">
+            <div className="absolute -top-5 -right-2 hidden animate-float items-center gap-2.5 rounded-2xl border border-gray-900/[0.06] bg-surface py-2.5 pe-4 ps-2.5 shadow-lift sm:flex lg:-right-6">
               <span className="flex size-8 items-center justify-center rounded-xl bg-volt text-ink">
                 <HiOutlineCurrencyDollar className="size-4" />
               </span>

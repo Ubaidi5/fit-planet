@@ -87,8 +87,8 @@ export function Textarea({
           rows={rows}
           className={cn(
             textareaVariants({ variant: computedVariant as any, size }),
-            leftIcon ? "pl-10" : "",
-            rightIcon ? "pr-10" : "",
+            leftIcon ? "ps-10" : "",
+            rightIcon ? "pe-10" : "",
           )}
           disabled={disabled}
           {...props}

@@ -1,31 +1,26 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
 import "@/styles/globals.css";
+import { LocaleProvider } from "@/lib/i18n/LocaleProvider";
 
-const geist = Geist({
-  variable: "--font-geist",
-  subsets: ["latin"],
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
+  subsets: ["latin", "latin-ext", "vietnamese"],
+  axes: ["opsz"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument-serif",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
+const jetbrains = JetBrains_Mono({
+  variable: "--font-jetbrains",
+  subsets: ["latin", "latin-ext", "cyrillic"],
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "Fit Planet · Find your gym, book in seconds",
+    default: "Fit Planet · One pass for every gym on the planet",
     template: "%s · Fit Planet",
   },
   description:
-    "Fit Planet connects people with the gyms around them. Discover gyms, compare passes, book instantly and check in with a QR code. Gym owners get bookings, capacity and payouts in one studio.",
+    "Fit Planet is your fitness passport. Find gyms in any city, see how busy they are, book day passes in local currency and walk in with a QR code. Gym owners get bookings, capacity and payouts in one studio.",
   keywords: [
     "gym",
     "fitness",
@@ -38,7 +33,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f3f1ec",
+  themeColor: "#eef0ec",
   colorScheme: "light",
 };
 
@@ -48,11 +43,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-pt-24">
+    <html lang="en" dir="ltr" className="scroll-pt-24" suppressHydrationWarning>
       <body
-        className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable} font-sans antialiased`}
+        className={`${bricolage.variable} ${jetbrains.variable} font-sans antialiased`}
       >
-        {children}
+        <LocaleProvider>{children}</LocaleProvider>
       </body>
     </html>
   );

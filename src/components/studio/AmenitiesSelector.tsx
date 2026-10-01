@@ -188,7 +188,7 @@ export default function AmenitiesSelector() {
                 type="button"
                 onClick={() => toggleAmenity(amenity.id)}
                 className={cn(
-                  "flex items-center space-x-2 rounded-lg border-2 p-3 text-left transition-all",
+                  "flex items-center space-x-2 rounded-lg border-2 p-3 text-start transition-all",
                   selectedAmenities.includes(amenity.id)
                     ? "border-emerald-500 bg-emerald-50 text-emerald-900"
                     : "border-gray-200 bg-white text-gray-700 hover:border-gray-300",
@@ -213,7 +213,7 @@ export default function AmenitiesSelector() {
                 type="button"
                 onClick={() => toggleAmenity(amenity.id)}
                 className={cn(
-                  "flex items-center space-x-2 rounded-lg border-2 p-3 text-left transition-all",
+                  "flex items-center space-x-2 rounded-lg border-2 p-3 text-start transition-all",
                   selectedAmenities.includes(amenity.id)
                     ? "border-emerald-500 bg-emerald-50 text-emerald-900"
                     : "border-gray-200 bg-white text-gray-700 hover:border-gray-300",
@@ -238,7 +238,7 @@ export default function AmenitiesSelector() {
                 type="button"
                 onClick={() => toggleAmenity(amenity.id)}
                 className={cn(
-                  "flex items-center space-x-2 rounded-lg border-2 p-3 text-left transition-all",
+                  "flex items-center space-x-2 rounded-lg border-2 p-3 text-start transition-all",
                   selectedAmenities.includes(amenity.id)
                     ? "border-emerald-500 bg-emerald-50 text-emerald-900"
                     : "border-gray-200 bg-white text-gray-700 hover:border-gray-300",

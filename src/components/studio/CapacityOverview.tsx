@@ -80,7 +80,7 @@ export default function CapacityOverview() {
             </p>
             <p className="text-sm text-gray-600">People currently inside</p>
           </div>
-          <div className={cn("text-right", status.color)}>
+          <div className={cn("text-end", status.color)}>
             <p className="text-lg font-bold">
               {Math.round(utilizationPercentage)}%
             </p>

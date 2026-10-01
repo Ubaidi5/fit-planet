@@ -14,7 +14,7 @@ export default function PartnerMarquee() {
   return (
     <section aria-label="Partner gyms" className="border-y border-gray-900/[0.06] bg-surface/60 py-7">
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-4 sm:px-6 lg:flex-row lg:gap-10 lg:px-8">
-        <p className="shrink-0 text-center text-[13px] font-medium text-gray-500 lg:max-w-40 lg:text-left">
+        <p className="shrink-0 text-center text-[13px] font-medium text-gray-500 lg:max-w-40 lg:text-start">
           Pilot partner gyms across Karachi
         </p>
         <div className="relative w-full overflow-hidden mask-fade-x">

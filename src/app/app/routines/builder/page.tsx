@@ -314,7 +314,7 @@ export default function RoutineBuilderPage() {
                   <button
                     key={exercise.id}
                     onClick={() => addExercise(exercise)}
-                    className="w-full p-3 flex items-center gap-3 hover:bg-gray-50 rounded-lg text-left"
+                    className="w-full p-3 flex items-center gap-3 hover:bg-gray-50 rounded-lg text-start"
                   >
                     <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center text-xl shrink-0">
                       {muscleGroupIcons[exercise.muscleGroup]}

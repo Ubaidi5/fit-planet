@@ -18,13 +18,13 @@ const buttonVariants = cva(
       variant: {
         primary: [
           "bg-emerald-600 text-white",
-          "shadow-[inset_0_1px_0_oklch(1_0_0/0.18),0_1px_2px_oklch(0.2_0.01_60/0.12)]",
+          "shadow-[inset_0_1px_0_oklch(1_0_0/0.18),0_1px_2px_oklch(0.25_0.06_265/0.12)]",
           "hover:bg-emerald-700 hover:shadow-glow",
           "focus-visible:ring-emerald-500/25",
         ],
         secondary: [
           "bg-ink text-white",
-          "shadow-[inset_0_1px_0_oklch(1_0_0/0.12),0_1px_2px_oklch(0.2_0.01_60/0.2)]",
+          "shadow-[inset_0_1px_0_oklch(1_0_0/0.12),0_1px_2px_oklch(0.25_0.06_265/0.2)]",
           "hover:bg-gray-800",
           "focus-visible:ring-gray-900/20",
         ],
@@ -55,7 +55,7 @@ const buttonVariants = cva(
         ],
         volt: [
           "bg-volt text-ink",
-          "shadow-[inset_0_1px_0_oklch(1_0_0/0.4),0_1px_2px_oklch(0.2_0.01_60/0.12)]",
+          "shadow-[inset_0_1px_0_oklch(1_0_0/0.4),0_1px_2px_oklch(0.25_0.06_265/0.12)]",
           "hover:brightness-95",
           "focus-visible:ring-lime-400/40",
         ],
@@ -196,13 +196,13 @@ export function Button({
       ) : (
         <>
           {beforeIcon && (
-            <span className={cn("shrink-0", children && "-ml-0.5")}>
+            <span className={cn("shrink-0", children && "-ms-0.5")}>
               {beforeIcon}
             </span>
           )}
           {children && <span className="inline-flex flex-1 items-center truncate">{children}</span>}
           {afterIcon && (
-            <span className={cn("shrink-0", children && "-mr-0.5")}>
+            <span className={cn("shrink-0", children && "-me-0.5")}>
               {afterIcon}
             </span>
           )}

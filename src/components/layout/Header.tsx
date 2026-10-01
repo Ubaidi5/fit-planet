@@ -6,11 +6,12 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/brand/Logo";
 import { HiArrowRight, HiOutlineArrowUpRight } from "react-icons/hi2";
+import { RegionSwitcher } from "@/components/i18n/RegionSwitcher";
 
 const navLinks = [
   { href: "/gyms", label: "Find gyms" },
-  { href: "/#how-it-works", label: "How it works" },
-  { href: "/#members", label: "For members" },
+  { href: "/#orbit", label: "Explore" },
+  { href: "/#passport", label: "Passport" },
   { href: "/#for-owners", label: "For gym owners" },
 ];
 
@@ -42,9 +43,9 @@ const Header: React.FC = () => {
     <header className="sticky top-0 z-50 w-full px-3 pt-3 sm:px-4">
       <div
         className={cn(
-          "mx-auto flex h-16 max-w-7xl items-center justify-between rounded-full pr-2 pl-4 transition-all duration-500 ease-out-expo sm:pl-5",
+          "mx-auto flex h-16 max-w-7xl items-center justify-between rounded-full ps-4 pe-2 transition-all duration-500 ease-out-expo sm:ps-5",
           scrolled || isMobileMenuOpen
-            ? "glass border border-gray-900/[0.06] shadow-soft"
+            ? "border border-gray-900/[0.06] bg-surface/92 shadow-soft backdrop-blur-xl backdrop-saturate-150"
             : "border border-transparent",
         )}
       >
@@ -72,7 +73,8 @@ const Header: React.FC = () => {
         </nav>
 
         {/* Desktop actions */}
-        <div className="hidden items-center gap-1.5 lg:flex">
+        <div className="hidden items-center gap-1 lg:flex">
+          <RegionSwitcher />
           <Link
             href="/studio/login"
             className="rounded-full px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:text-ink"
@@ -87,39 +89,42 @@ const Header: React.FC = () => {
           </Link>
           <Link
             href="/app/register"
-            className="group inline-flex h-11 items-center gap-2 rounded-full bg-ink pr-1.5 pl-5 text-sm font-medium text-white shadow-[inset_0_1px_0_oklch(1_0_0/0.12)] transition-colors hover:bg-gray-800"
+            className="group inline-flex h-11 items-center gap-2 rounded-full bg-ink ps-5 pe-1.5 text-sm font-medium text-white shadow-[inset_0_1px_0_oklch(1_0_0/0.12)] transition-colors hover:bg-gray-800"
           >
             Get started
-            <span className="flex size-8 items-center justify-center rounded-full bg-volt text-ink transition-transform duration-500 ease-out-expo group-hover:-rotate-45">
+            <span className="flex size-8 items-center justify-center rounded-full bg-volt text-ink transition-transform duration-500 ease-out-expo group-hover:-rotate-45 rtl:rotate-180">
               <HiArrowRight className="size-4" />
             </span>
           </Link>
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          type="button"
-          className="relative inline-flex size-11 items-center justify-center rounded-full text-gray-800 transition-colors hover:bg-gray-900/5 active:scale-95 lg:hidden"
-          onClick={() => setIsMobileMenuOpen((open) => !open)}
-          aria-expanded={isMobileMenuOpen}
-          aria-controls="mobile-menu"
-          aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-        >
-          <span className="relative block h-3.5 w-5">
-            <span
-              className={cn(
-                "absolute left-0 top-0 h-0.5 w-5 rounded-full bg-current transition-all duration-300 ease-out-expo",
-                isMobileMenuOpen && "top-1.5 rotate-45",
-              )}
-            />
-            <span
-              className={cn(
-                "absolute bottom-0 left-0 h-0.5 w-5 rounded-full bg-current transition-all duration-300 ease-out-expo",
-                isMobileMenuOpen && "bottom-1.5 -rotate-45",
-              )}
-            />
-          </span>
-        </button>
+        {/* Mobile actions */}
+        <div className="flex items-center gap-0.5 lg:hidden">
+          <RegionSwitcher />
+          <button
+            type="button"
+            className="relative inline-flex size-11 items-center justify-center rounded-full text-gray-800 transition-colors hover:bg-gray-900/5 active:scale-95 lg:hidden"
+            onClick={() => setIsMobileMenuOpen((open) => !open)}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-menu"
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+          >
+            <span className="relative block h-3.5 w-5">
+              <span
+                className={cn(
+                  "absolute start-0 top-0 h-0.5 w-5 rounded-full bg-current transition-all duration-300 ease-out-expo",
+                  isMobileMenuOpen && "top-1.5 rotate-45",
+                )}
+              />
+              <span
+                className={cn(
+                  "absolute bottom-0 start-0 h-0.5 w-5 rounded-full bg-current transition-all duration-300 ease-out-expo",
+                  isMobileMenuOpen && "bottom-1.5 -rotate-45",
+                )}
+              />
+            </span>
+          </button>
+        </div>
       </div>
 
       {/* Mobile sheet */}
@@ -144,10 +149,12 @@ const Header: React.FC = () => {
                   ? "translate-y-0 opacity-100"
                   : "-translate-y-2 opacity-0",
               )}
-              style={{ transitionDelay: `${isMobileMenuOpen ? 60 + index * 40 : 0}ms` }}
+              style={{
+                transitionDelay: `${isMobileMenuOpen ? 60 + index * 40 : 0}ms`,
+              }}
             >
               {link.label}
-              <HiOutlineArrowUpRight className="size-4 text-gray-400" />
+              <HiOutlineArrowUpRight className="size-4 text-gray-400 rtl:-scale-x-100" />
             </Link>
           ))}
         </nav>

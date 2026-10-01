@@ -335,7 +335,7 @@ export default function TransactionHistory() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="border-b border-gray-200 bg-gray-50">
-              <tr className="text-left text-xs font-medium text-gray-600">
+              <tr className="text-start text-xs font-medium text-gray-600">
                 <th className="p-4">Transaction ID</th>
                 <th className="p-4">Date</th>
                 <th className="p-4">Customer</th>

@@ -243,7 +243,7 @@ export default function FeedbackCollection() {
               <button
                 onClick={() => setSelectedPromptType("post-visit")}
                 className={cn(
-                  "w-full rounded-lg border p-4 text-left transition-all",
+                  "w-full rounded-lg border p-4 text-start transition-all",
                   selectedPromptType === "post-visit"
                     ? "border-emerald-500 bg-emerald-50"
                     : "border-gray-200 bg-white hover:border-gray-300",
@@ -260,7 +260,7 @@ export default function FeedbackCollection() {
               <button
                 onClick={() => setSelectedPromptType("ongoing")}
                 className={cn(
-                  "w-full rounded-lg border p-4 text-left transition-all",
+                  "w-full rounded-lg border p-4 text-start transition-all",
                   selectedPromptType === "ongoing"
                     ? "border-emerald-500 bg-emerald-50"
                     : "border-gray-200 bg-white hover:border-gray-300",
@@ -275,7 +275,7 @@ export default function FeedbackCollection() {
               <button
                 onClick={() => setSelectedPromptType("campaign")}
                 className={cn(
-                  "w-full rounded-lg border p-4 text-left transition-all",
+                  "w-full rounded-lg border p-4 text-start transition-all",
                   selectedPromptType === "campaign"
                     ? "border-emerald-500 bg-emerald-50"
                     : "border-gray-200 bg-white hover:border-gray-300",
@@ -385,7 +385,7 @@ export default function FeedbackCollection() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="border-b border-gray-200 bg-gray-50">
-              <tr className="text-left text-xs font-medium text-gray-600">
+              <tr className="text-start text-xs font-medium text-gray-600">
                 <th className="p-4">Member</th>
                 <th className="p-4">Last Visit</th>
                 <th className="p-4">Sent Date</th>
