@@ -16,7 +16,7 @@ export function extractFloatingIconsBlock(settingsData: string): boolean {
 
     if (!settings.current.blocks) return false;
 
-    for (let key in settings.current.blocks) {
+    for (const key in settings.current.blocks) {
       if (settings.current?.blocks[key]?.type?.includes("floating-icons")) {
         return settings.current?.blocks[key]?.disabled;
       }

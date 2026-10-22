@@ -403,7 +403,6 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
           const cover = (values.coverImage || values.images[0]) === url;
           return (
             <div key={url} className="group relative aspect-[4/3] overflow-hidden rounded-2xl bg-canvas ring-1 ring-gray-900/[0.06]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={url} alt="" className="size-full object-cover" />
               <div className="absolute inset-x-2 top-2 flex justify-between">
                 <button

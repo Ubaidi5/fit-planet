@@ -86,7 +86,7 @@ export function Textarea({
         <textarea
           rows={rows}
           className={cn(
-            textareaVariants({ variant: computedVariant as any, size }),
+            textareaVariants({ variant: computedVariant as VariantProps<typeof textareaVariants>["variant"], size }),
             leftIcon ? "ps-10" : "",
             rightIcon ? "pe-10" : "",
           )}

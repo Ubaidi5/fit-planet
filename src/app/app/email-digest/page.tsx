@@ -336,7 +336,7 @@ export default function EmailDigestPage() {
             <h4 className="font-medium text-blue-900">About Email Digests</h4>
             <p className="mt-1 text-sm text-blue-800">
               Email digests combine multiple notifications into a single email
-              to reduce inbox clutter. You'll still receive important real-time
+              to reduce inbox clutter. You&apos;ll still receive important real-time
               notifications via push and SMS if enabled.
             </p>
           </div>

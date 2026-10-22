@@ -48,7 +48,6 @@ export function ProfileForm({ initial, cities }: Props) {
           aria-label="Change photo"
         >
           {image ? (
-            // eslint-disable-next-line @next/next/no-img-element
             <img src={image} alt="" className="size-full object-cover" referrerPolicy="no-referrer" />
           ) : (
             <span className="flex size-full items-center justify-center">{initial.initials}</span>

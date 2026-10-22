@@ -86,7 +86,7 @@ export default function SessionManagementPage() {
       <div>
         <h1 className="text-2xl font-semibold text-ink tracking-tight">Active Sessions</h1>
         <p className="mt-1 text-sm text-gray-600">
-          Manage devices where you're currently logged in
+          Manage devices where you&apos;re currently logged in
         </p>
       </div>
 
@@ -204,7 +204,7 @@ export default function SessionManagementPage() {
           <div className="flex-1">
             <h4 className="font-medium text-blue-900">Security Tip</h4>
             <p className="mt-1 text-sm text-blue-700">
-              If you see a device or location you don't recognize, revoke that
+              If you see a device or location you don&apos;t recognize, revoke that
               session immediately and change your password.
             </p>
           </div>

@@ -3,7 +3,6 @@ import { MongoClient, ServerApiVersion, type Db } from "mongodb";
 import { env } from "@/server/env";
 
 declare global {
-  // eslint-disable-next-line no-var
   var _fitPlanetMongo: Promise<MongoClient> | undefined;
 }
 

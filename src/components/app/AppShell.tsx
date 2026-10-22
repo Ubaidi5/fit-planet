@@ -256,7 +256,6 @@ export function AppShell({ user, unread, children }: { user: ShellUser; unread: 
 function Avatar({ user }: { user: ShellUser }) {
   if (user.image) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
       <img src={user.image} alt="" className="size-9 rounded-full object-cover ring-2 ring-surface" referrerPolicy="no-referrer" />
     );
   }
