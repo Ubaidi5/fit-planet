@@ -48,8 +48,8 @@ const panelCopy: Record<
       },
       {
         icon: HiOutlineShieldCheck,
-        title: "Secure by default",
-        text: "One-time codes, no passwords to remember.",
+        title: "Sign in your way",
+        text: "Google, Facebook, an email link or a password.",
       },
       {
         icon: HiOutlineUserGroup,
@@ -78,8 +78,8 @@ const panelCopy: Record<
       },
       {
         icon: HiOutlineCurrencyDollar,
-        title: "Weekly payouts",
-        text: "Bookings settle straight to your bank account.",
+        title: "Instant booking alerts",
+        text: "A push on your phone the moment a pass is booked.",
       },
     ],
   },
@@ -158,7 +158,7 @@ function StudioVisual() {
         <span className="flex size-8 items-center justify-center rounded-full bg-volt text-ink">
           <HiOutlineCurrencyDollar className="size-4" />
         </span>
-        <span className="text-sm font-semibold text-ink">Payout sent</span>
+        <span className="text-sm font-semibold text-ink">New day pass booked</span>
       </div>
     </div>
   );

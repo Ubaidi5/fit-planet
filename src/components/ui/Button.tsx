@@ -200,7 +200,7 @@ export function Button({
               {beforeIcon}
             </span>
           )}
-          {children && <span className="inline-flex flex-1 items-center truncate">{children}</span>}
+          {children && <span className="inline-flex min-w-0 items-center justify-center gap-[inherit]">{children}</span>}
           {afterIcon && (
             <span className={cn("shrink-0", children && "-me-0.5")}>
               {afterIcon}

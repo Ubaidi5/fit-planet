@@ -18,15 +18,30 @@ import {
   type FilterState,
 } from "@/components/gyms/SearchFilters";
 import { Reveal } from "@/components/motion/Reveal";
-import { cityAverageDayPass, gymCities, mockGyms } from "@/lib/data/mock-gyms";
-import { platformStats } from "@/lib/data/mock-platform";
+import type { Gym } from "@/lib/data/mock-gyms";
 import { cn } from "@/lib/utils";
 import { Accent } from "@/components/sections/SectionHeading";
 
 type ViewMode = "orbit" | "grid" | "list";
 
-function applyFilters(filters: FilterState, city: string) {
-  let result = city ? mockGyms.filter((gym) => gym.address.city === city) : [...mockGyms];
+function averageDayPass(gyms: Gym[]) {
+  const byCity = new Map<string, { sum: number; count: number }>();
+  for (const gym of gyms) {
+    const entry = byCity.get(gym.address.city) ?? { sum: 0, count: 0 };
+    entry.sum += gym.pricing.dayPass;
+    entry.count += 1;
+    byCity.set(gym.address.city, entry);
+  }
+  return (city: string) => {
+    const entry = byCity.get(city);
+    return entry ? entry.sum / entry.count : 1;
+  };
+}
+
+function applyFilters(gyms: Gym[], filters: FilterState, city: string) {
+  const cityAverageDayPass = averageDayPass(gyms);
+  const relativePrice = (gym: Gym) => gym.pricing.dayPass / cityAverageDayPass(gym.address.city);
+  let result = city ? gyms.filter((gym) => gym.address.city === city) : [...gyms];
 
   if (filters.search) {
     const searchLower = filters.search.toLowerCase();
@@ -91,9 +106,6 @@ function applyFilters(filters: FilterState, city: string) {
   return result;
 }
 
-const relativePrice = (gym: (typeof mockGyms)[number]) =>
-  gym.pricing.dayPass / cityAverageDayPass(gym.address.city);
-
 const viewModes = [
   { mode: "orbit", icon: HiOutlineViewfinderCircle, label: "Orbit" },
   { mode: "grid", icon: HiOutlineSquares2X2, label: "Grid" },
@@ -101,11 +113,13 @@ const viewModes = [
 ] as const;
 
 interface GymsExplorerProps {
+  gyms: Gym[];
   initialQuery?: string;
   initialCity?: string;
 }
 
-export function GymsExplorer({ initialQuery = "", initialCity = "" }: GymsExplorerProps) {
+export function GymsExplorer({ gyms, initialQuery = "", initialCity = "" }: GymsExplorerProps) {
+  const gymCities = useMemo(() => Array.from(new Set(gyms.map((gym) => gym.address.city))), [gyms]);
   const [filters, setFilters] = useState<FilterState>({
     ...initialFilters,
     search: initialQuery,
@@ -114,7 +128,7 @@ export function GymsExplorer({ initialQuery = "", initialCity = "" }: GymsExplor
   const [city, setCity] = useState(gymCities.includes(initialCity) ? initialCity : "");
   const [viewMode, setViewMode] = useState<ViewMode>(initialCity ? "orbit" : "grid");
 
-  const filteredGyms = useMemo(() => applyFilters(filters, city), [filters, city]);
+  const filteredGyms = useMemo(() => applyFilters(gyms, filters, city), [gyms, filters, city]);
   // Orbit needs one city; with "All" selected it shows its own city tabs
   const orbitCities = useMemo(() => new Set(filteredGyms.map((gym) => gym.address.city)), [filteredGyms]);
 
@@ -141,7 +155,7 @@ export function GymsExplorer({ initialQuery = "", initialCity = "" }: GymsExplor
             <Accent>your day</Accent>
           </h1>
           <p className="mt-4 max-w-2xl animate-fade-up text-lg text-gray-600 [animation-delay:160ms]">
-            {platformStats.partnerGyms} verified partner gyms in {gymCities.length} cities.
+            {gyms.length} partner gyms in {gymCities.length} {gymCities.length === 1 ? "city" : "cities"}.
             Compare passes in local currency, see how busy they are right now and
             book in seconds.
           </p>

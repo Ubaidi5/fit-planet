@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
 import "@/styles/globals.css";
 import { LocaleProvider } from "@/lib/i18n/LocaleProvider";
+import { ToastProvider } from "@/components/notifications/ToastProvider";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
@@ -47,7 +48,9 @@ export default function RootLayout({
       <body
         className={`${bricolage.variable} ${jetbrains.variable} font-sans antialiased`}
       >
-        <LocaleProvider>{children}</LocaleProvider>
+        <LocaleProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </LocaleProvider>
       </body>
     </html>
   );

@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { GymsExplorer } from "@/components/gyms/GymsExplorer";
+import { listPublishedGyms } from "@/server/modules/gyms";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Find gyms",
@@ -16,10 +19,12 @@ export default async function GymsPage({
   const first = (value?: string | string[]) => (Array.isArray(value) ? (value[0] ?? "") : (value ?? ""));
   const initialQuery = first(q);
   const initialCity = first(city);
+  const gyms = await listPublishedGyms();
 
   return (
     <GymsExplorer
       key={`${initialCity}|${initialQuery}`}
+      gyms={gyms}
       initialQuery={initialQuery}
       initialCity={initialCity}
     />
