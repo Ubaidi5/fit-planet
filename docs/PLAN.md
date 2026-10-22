@@ -47,34 +47,34 @@ the brief asks for without the operational cost of many deployables.
 ## Feature list (from the brainstorm, the product spec and research)
 
 ### Members (mobile first)
-- [ ] Sign up / sign in: email + password, magic link, Google, Facebook
-- [ ] Explore gyms from the database (orbit + list), search by city, filters
-- [ ] Gym page from the database with live occupancy from real check-ins
-- [ ] Checkout: pick pass (day, week, month), start date, pay with Stripe or at the desk
-- [ ] Pass wallet: active passes with a real QR code, history, receipts
-- [ ] Passport stamps earned from real check-ins
-- [ ] Save gyms, leave reviews after a visit
-- [ ] Notification feed + web push (booking confirmed, pass expiring)
-- [ ] Profile: name, phone, home city, avatar upload, notification settings
+- [x] Sign up / sign in: email + password, magic link, Google, Facebook
+- [x] Explore gyms from the database (orbit + list), search by city, filters
+- [x] Gym page from the database with live occupancy from real check-ins
+- [x] Checkout: pick pass (day, week, month), start date, pay with Stripe or at the desk
+- [x] Pass wallet: active passes with a real QR code, history, receipts
+- [x] Passport stamps earned from real check-ins
+- [x] Save gyms, leave reviews after a visit
+- [~] Notification feed + web push (booking confirmed done; pass-expiring reminder needs a scheduled job, not yet added)
+- [x] Profile: name, phone, home city, avatar upload, notification settings
 
 ### Gym owners (desktop rich, mobile shows the essentials)
-- [ ] Become an owner: onboarding wizard that creates the gym listing
-- [ ] Dashboard: today's bookings, revenue, check-ins, live occupancy, recent activity
-- [ ] Push notification to the owner the moment a day pass is booked
-- [ ] Bookings table with filters and CSV export (cards on mobile)
-- [ ] Check-in desk: scan a member's QR with the camera or type the code
-- [ ] Gym profile editor: details, hours, amenities, photos (upload to storage)
-- [ ] Pricing editor: day, week, month passes; publish / unpublish listing
-- [ ] Reviews: read and reply
-- [ ] Revenue: totals by period and pass type
+- [x] Become an owner: onboarding wizard that creates the gym listing
+- [x] Dashboard: today's bookings, revenue, check-ins, live occupancy, recent activity
+- [x] Push notification to the owner the moment a day pass is booked
+- [x] Bookings table with filters and CSV export (cards on mobile)
+- [x] Check-in desk: scan a member's QR with the camera or type the code
+- [x] Gym profile editor: details, hours, amenities, photos (upload to storage)
+- [x] Pricing editor: day, week, month passes; publish / unpublish listing
+- [x] Reviews: read and reply
+- [x] Revenue: totals by period and pass type
 
 ### Platform
-- [ ] Service layer: payments, storage, push, email behind interfaces
-- [ ] Stripe webhook that confirms payment and issues the pass
-- [ ] Seed script that loads the demo gyms into MongoDB
-- [ ] `.env.example` with a description of every key
-- [ ] `NEEDS_FROM_USER.md` with every credential and setup step
-- [ ] GitHub Actions CI/CD to Lightsail, nginx + pm2 config, server bootstrap script
+- [x] Service layer: payments, storage, push, email behind interfaces
+- [x] Stripe webhook that confirms payment and issues the pass
+- [x] Seed script that loads the demo gyms into MongoDB
+- [x] `.env.example` with a description of every key
+- [x] `NEEDS_FROM_USER.md` with every credential and setup step
+- [x] GitHub Actions CI/CD to Lightsail, nginx + pm2 config, server bootstrap script
 
 ### Later (not in this pass)
 - Routines, social feed and challenges stay on demo data for now.
