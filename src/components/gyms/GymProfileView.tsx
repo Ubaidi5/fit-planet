@@ -70,12 +70,15 @@ export function GymProfileView({
   details,
   initialTab = "overview",
   reviewSlot,
+  headerActions,
 }: {
   gym: Gym;
   details: GymDetail;
   initialTab?: TabType;
   /** Write-a-review form, rendered by the server when the member is allowed to review */
   reviewSlot?: React.ReactNode;
+  /** Save button etc., rendered next to the back link */
+  headerActions?: React.ReactNode;
 }) {
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const router = useRouter();
@@ -118,9 +121,12 @@ export function GymProfileView({
             <HiArrowLeft className="size-4 transition-transform duration-300 group-hover:-translate-x-0.5 rtl:rotate-180" />
             Gyms in {gym.address.city}
           </Link>
-          <p className="hidden font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase sm:block">
-            Explore / {code} / {gym.address.area}
-          </p>
+          <div className="flex items-center gap-3">
+            <p className="hidden font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase md:block">
+              Explore / {code} / {gym.address.area}
+            </p>
+            {headerActions}
+          </div>
         </div>
 
         <div className="mt-4 grid h-72 gap-2 sm:h-96 lg:h-[30rem] lg:grid-cols-[1.65fr_1fr]">

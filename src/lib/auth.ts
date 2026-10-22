@@ -92,8 +92,10 @@ const config: NextAuthConfig = {
   callbacks: {
     async jwt({ token, user, trigger, session }) {
       if (user?.id) token.sub = user.id;
-      if (trigger === "update" && session?.name) token.name = session.name;
-      if (trigger === "update" && session?.image !== undefined) token.picture = session.image;
+      if (trigger === "update" && session?.user) {
+        if (session.user.name) token.name = session.user.name;
+        if (session.user.image !== undefined) token.picture = session.user.image;
+      }
       return token;
     },
     async session({ session, token }) {

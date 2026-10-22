@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GymProfileView, type TabType } from "@/components/gyms/GymProfileView";
 import { ReviewForm } from "@/components/gyms/ReviewForm";
+import { SaveGymButton } from "@/components/gyms/SaveGymButton";
 import { getPublicGymProfile } from "@/server/modules/gyms";
 import { getSessionUser } from "@/server/session";
 import { collections, toObjectId } from "@/server/db/collections";
@@ -59,6 +60,9 @@ export default async function GymPage({ params, searchParams }: Props) {
       details={profile.details}
       initialTab={TABS.includes(tab as TabType) ? (tab as TabType) : "overview"}
       reviewSlot={reviewSlot}
+      headerActions={
+        <SaveGymButton gymId={profile.gym.id} signedIn={Boolean(user)} saved={Boolean(user?.savedGymIds?.some((g) => g.toHexString() === profile.gym.id))} />
+      }
     />
   );
 }
