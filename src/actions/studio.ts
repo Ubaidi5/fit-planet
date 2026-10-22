@@ -247,3 +247,36 @@ export async function exportBookingsCsvAction(): Promise<ActionResult<{ csv: str
   );
   return { ok: true, data: { csv: [header.join(","), ...lines].join("\n"), filename: `fit-planet-bookings-${new Date().toISOString().slice(0, 10)}.csv` } };
 }
+
+const pricingSchema = z.object({
+  dayPass: money.refine((v) => v > 0, "Set a day pass price"),
+  weekPass: money,
+  monthPass: money,
+  dailyDayPassLimit: z.coerce.number().int().min(0).max(5000).optional(),
+});
+
+/** Quick pricing edit from the Passes page */
+export async function updatePricingAction(gymId: string, input: z.input<typeof pricingSchema>): Promise<ActionResult> {
+  const ctx = await ownerOrError();
+  const id = toObjectId(gymId);
+  const gym = ctx?.gyms.find((g) => id && g._id.equals(id) && g.ownerId.equals(ctx.user._id));
+  if (!ctx || !gym) return { ok: false, error: "Only the owner can change prices." };
+  const parsed = pricingSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: "Check the prices.", fieldErrors: fieldErrors(parsed.error) };
+  const { dayPass, weekPass, monthPass, dailyDayPassLimit } = parsed.data;
+  await (await collections.gyms()).updateOne(
+    { _id: gym._id },
+    {
+      $set: {
+        "pricing.dayPass": dayPass,
+        "pricing.weekPass": weekPass,
+        "pricing.monthPass": monthPass,
+        "capacity.dailyDayPassLimit": dailyDayPassLimit || undefined,
+        updatedAt: new Date(),
+      },
+    },
+  );
+  revalidatePath("/studio", "layout");
+  revalidatePath(`/gyms/${gym.slug}`);
+  return { ok: true, message: "Prices updated. New bookings use them right away." };
+}
