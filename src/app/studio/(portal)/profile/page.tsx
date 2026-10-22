@@ -1,98 +1,39 @@
-"use client";
+import type { Metadata } from "next";
+import { requireOwner } from "@/server/session";
+import { gymToFormValues } from "@/server/modules/gym-form";
+import { PageHeader } from "@/components/studio/PageHeader";
+import { GymEditor } from "@/components/studio/GymEditor";
+import { PublishCard } from "@/components/studio/PublishCard";
+import { FormAlert } from "@/components/auth/FormBits";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/Button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import ServicesManager from "@/components/studio/ServicesManager";
-import BasicInfoForm from "@/components/studio/BasicInfoForm";
-import AmenitiesSelector from "@/components/studio/AmenitiesSelector";
-import PhotoGalleryManager from "@/components/studio/PhotoGalleryManager";
+export const metadata: Metadata = { title: "Gym profile" };
 
-type TabType = "basic" | "photos" | "amenities" | "services";
-
-export default function StudioProfilePage() {
-  const [activeTab, setActiveTab] = useState<TabType>("basic");
-  const [isSaving, setIsSaving] = useState(false);
-
-  const tabs = [
-    { id: "basic" as TabType, label: "Basic Information", icon: "🏢" },
-    { id: "photos" as TabType, label: "Photos & Gallery", icon: "📸" },
-    { id: "amenities" as TabType, label: "Amenities", icon: "✨" },
-    { id: "services" as TabType, label: "Services", icon: "💪" },
+export default async function StudioProfilePage({ searchParams }: { searchParams: Promise<{ welcome?: string }> }) {
+  const { gym, user } = await requireOwner("/studio/profile");
+  const { welcome } = await searchParams;
+  const isOwner = gym.ownerId.equals(user._id);
+  const checklist = [
+    { label: "Name and description", done: gym.name.length > 1 && gym.description.length >= 20 },
+    { label: "At least one photo", done: gym.images.length > 0 },
+    { label: "Day pass price", done: gym.pricing.dayPass > 0 },
+    { label: "Address", done: Boolean(gym.address.street && gym.address.city) },
   ];
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-      <div className="mx-auto max-w-7xl">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-semibold text-ink tracking-tight">Gym Profile</h1>
-          <p className="mt-2 text-gray-600">
-            Manage your gym information, photos, amenities, and services
-          </p>
-        </div>
-
-        {/* Tabs */}
-        <div className="mb-6 flex space-x-2 overflow-x-auto border-b border-gray-200 pb-2">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center space-x-2 whitespace-nowrap rounded-t-lg px-4 py-2 text-sm font-medium transition-colors ${
-                activeTab === tab.id
-                  ? "border-b-2 border-emerald-500 bg-emerald-50 text-emerald-600"
-                  : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-              }`}
-            >
-              <span>{tab.icon}</span>
-              <span>{tab.label}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Tab Content */}
-        <div className="rounded-3xl bg-surface shadow-soft">
-          {activeTab === "basic" && <BasicInfoForm />}
-          {activeTab === "photos" && <PhotoGalleryManager />}
-          {activeTab === "amenities" && <AmenitiesSelector />}
-          {activeTab === "services" && <ServicesManager />}
-        </div>
-
-        {/* Quick Stats */}
-        <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-4">
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <p className="text-3xl font-semibold text-emerald-600 tracking-tight">85%</p>
-                <p className="mt-1 text-sm text-gray-600">Profile Complete</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <p className="text-3xl font-semibold text-blue-600 tracking-tight">12</p>
-                <p className="mt-1 text-sm text-gray-600">Photos Uploaded</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <p className="text-3xl font-semibold text-purple-600 tracking-tight">8</p>
-                <p className="mt-1 text-sm text-gray-600">Amenities Added</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <p className="text-3xl font-semibold text-orange-600 tracking-tight">5</p>
-                <p className="mt-1 text-sm text-gray-600">Services Listed</p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+    <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+      <PageHeader eyebrow="Your listing" title="Gym profile" description="Everything members see on your page." />
+      {welcome && (
+        <FormAlert tone="success" className="mb-5">
+          Welcome to Fit Planet Studio. Add a few photos, then publish to start taking bookings.
+        </FormAlert>
+      )}
+      <div className="space-y-5">
+        <PublishCard gymId={gym._id.toHexString()} slug={gym.slug} status={gym.status} checklist={checklist} />
+        {isOwner ? (
+          <GymEditor mode="edit" gymId={gym._id.toHexString()} initial={gymToFormValues(gym)} />
+        ) : (
+          <p className="rounded-3xl bg-surface p-6 text-sm text-gray-600 shadow-soft">Only the gym owner can edit the listing.</p>
+        )}
       </div>
     </div>
   );
