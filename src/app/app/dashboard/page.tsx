@@ -153,7 +153,7 @@ export default function UserDashboardPage() {
           <Link href="/app/notifications">
             <Button beforeIcon={<HiOutlineBell className="h-4 w-4" />}>
               Notifications
-              <Badge variant="danger" size="sm" className="ml-2">
+              <Badge variant="danger" size="sm" className="ms-2">
                 2
               </Badge>
             </Button>

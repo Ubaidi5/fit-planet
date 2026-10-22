@@ -2,55 +2,61 @@
 
 /*
  * Fit Planet design system
- * Light-only theme on a warm, softly tinted canvas (never pure white),
- * white surfaces, ink text, emerald brand and a lime "volt" highlight.
+ * Passport theme: light only, cool paper canvas, white surfaces, navy ink,
+ * teal brand, mint "volt" highlight and stamp inks for accents.
  */
 
 @theme {
   /* Typography */
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 
-  /* Warm neutral scale (replaces Tailwind's cool gray everywhere) */
-  --color-gray-50: oklch(0.978 0.004 85);
-  --color-gray-100: oklch(0.954 0.006 85);
-  --color-gray-200: oklch(0.912 0.008 85);
-  --color-gray-300: oklch(0.858 0.01 82);
-  --color-gray-400: oklch(0.708 0.012 78);
-  --color-gray-500: oklch(0.556 0.013 74);
-  --color-gray-600: oklch(0.452 0.013 70);
-  --color-gray-700: oklch(0.366 0.012 66);
-  --color-gray-800: oklch(0.268 0.01 62);
-  --color-gray-900: oklch(0.2 0.008 60);
-  --color-gray-950: oklch(0.145 0.006 60);
+  /* Neutral scale: paper-tinted lights, navy-tinted darks */
+  --color-gray-50: oklch(0.975 0.004 130);
+  --color-gray-100: oklch(0.95 0.006 130);
+  --color-gray-200: oklch(0.905 0.008 130);
+  --color-gray-300: oklch(0.85 0.01 140);
+  --color-gray-400: oklch(0.7 0.018 250);
+  --color-gray-500: oklch(0.56 0.024 260);
+  --color-gray-600: oklch(0.46 0.03 262);
+  --color-gray-700: oklch(0.38 0.035 264);
+  --color-gray-800: oklch(0.29 0.04 265);
+  --color-gray-900: oklch(0.235 0.045 266);
+  --color-gray-950: oklch(0.18 0.045 266);
 
-  /* Brand emerald, tuned slightly deeper for a calmer light UI */
-  --color-emerald-50: oklch(0.975 0.022 166);
-  --color-emerald-100: oklch(0.945 0.05 164);
-  --color-emerald-200: oklch(0.895 0.09 164);
-  --color-emerald-300: oklch(0.83 0.13 163);
-  --color-emerald-400: oklch(0.75 0.15 162);
-  --color-emerald-500: oklch(0.66 0.15 161);
-  --color-emerald-600: oklch(0.565 0.13 161);
-  --color-emerald-700: oklch(0.48 0.11 162);
-  --color-emerald-800: oklch(0.4 0.09 163);
-  --color-emerald-900: oklch(0.34 0.07 164);
-  --color-emerald-950: oklch(0.24 0.05 166);
+  /* Brand teal (the "emerald" name is kept so existing classes follow) */
+  --color-emerald-50: oklch(0.97 0.02 185);
+  --color-emerald-100: oklch(0.94 0.04 185);
+  --color-emerald-200: oklch(0.89 0.07 185);
+  --color-emerald-300: oklch(0.82 0.1 186);
+  --color-emerald-400: oklch(0.72 0.11 188);
+  --color-emerald-500: oklch(0.6 0.1 190);
+  --color-emerald-600: oklch(0.52 0.09 193);
+  --color-emerald-700: oklch(0.46 0.08 195);
+  --color-emerald-800: oklch(0.39 0.065 197);
+  --color-emerald-900: oklch(0.33 0.05 200);
+  --color-emerald-950: oklch(0.24 0.04 205);
 
-  /* Semantic surface tokens */
-  --color-canvas: oklch(0.966 0.007 85);
-  --color-canvas-deep: oklch(0.94 0.009 85);
-  --color-surface: oklch(0.995 0.002 85);
-  --color-ink: oklch(0.18 0.01 160);
-  --color-volt: oklch(0.91 0.2 124);
-  --color-volt-soft: oklch(0.96 0.09 124);
+  /* Passport surfaces */
+  --color-canvas: oklch(0.951 0.006 130);
+  --color-canvas-deep: oklch(0.925 0.009 130);
+  --color-surface: oklch(0.995 0.002 130);
+  --color-ink: oklch(0.25 0.06 265);
+  --color-volt: oklch(0.86 0.09 180);
+  --color-volt-soft: oklch(0.95 0.035 180);
+
+  /* Stamp inks */
+  --color-stamp-teal: oklch(0.46 0.08 195);
+  --color-stamp-magenta: oklch(0.56 0.18 5);
+  --color-stamp-ochre: oklch(0.64 0.14 78);
+  --color-stamp-violet: oklch(0.52 0.15 290);
 
   /* Radius + shadows */
   --radius-4xl: 2rem;
-  --shadow-soft: 0 1px 2px oklch(0.2 0.01 60 / 0.04), 0 4px 16px -4px oklch(0.2 0.01 60 / 0.06);
-  --shadow-lift: 0 2px 4px oklch(0.2 0.01 60 / 0.04), 0 16px 40px -12px oklch(0.2 0.01 60 / 0.14);
-  --shadow-glow: 0 10px 40px -10px oklch(0.66 0.15 161 / 0.45);
+  --shadow-soft: 0 1px 2px oklch(0.25 0.06 265 / 0.05), 0 4px 16px -4px oklch(0.25 0.06 265 / 0.08);
+  --shadow-lift: 0 2px 4px oklch(0.25 0.06 265 / 0.05), 0 18px 44px -14px oklch(0.25 0.06 265 / 0.22);
+  --shadow-glow: 0 10px 40px -10px oklch(0.6 0.1 190 / 0.5);
+  --shadow-pass: 0 1px 0 oklch(1 0 0 / 0.6) inset, 0 30px 60px -28px oklch(0.25 0.06 265 / 0.45);
 
   /* Motion */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -141,7 +147,7 @@
 
   body {
     @apply bg-canvas text-gray-900 antialiased;
-    font-feature-settings: "ss01", "cv11";
+    font-optical-sizing: auto;
     text-rendering: optimizeLegibility;
   }
 
@@ -177,15 +183,15 @@
 
 /* Soft dotted grid used behind hero/sections */
 @utility bg-dot-grid {
-  background-image: radial-gradient(oklch(0.2 0.01 60 / 0.09) 1px, transparent 1px);
+  background-image: radial-gradient(oklch(0.25 0.06 265 / 0.09) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 
 /* Fine line grid */
 @utility bg-line-grid {
   background-image:
-    linear-gradient(oklch(0.2 0.01 60 / 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, oklch(0.2 0.01 60 / 0.05) 1px, transparent 1px);
+    linear-gradient(oklch(0.25 0.06 265 / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0.25 0.06 265 / 0.05) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 
@@ -208,6 +214,19 @@
 }
 
 /* Shimmering text for small highlights */
+/* Holographic foil used on the active pass */
+@utility bg-holo {
+  background-image: linear-gradient(
+    100deg,
+    oklch(0.86 0.09 180),
+    oklch(0.82 0.09 290),
+    oklch(0.88 0.08 50),
+    oklch(0.86 0.09 180)
+  );
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+}
+
 @utility text-shimmer {
   background-image: linear-gradient(
     90deg,
@@ -226,7 +245,7 @@
 
 /* Glass surface for floating nav, chips and overlays */
 @utility glass {
-  background-color: oklch(0.995 0.002 85 / 0.72);
+  background-color: oklch(0.995 0.002 130 / 0.82);
   backdrop-filter: blur(16px) saturate(160%);
   -webkit-backdrop-filter: blur(16px) saturate(160%);
 }

@@ -6,6 +6,7 @@ import { AuthShell } from "@/components/auth/AuthShell";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { PhoneInput, isValidPhone } from "@/components/ui/PhoneInput";
 import {
   HiOutlineArrowLeft,
   HiOutlineLockClosed,
@@ -22,10 +23,9 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
 
-    // Validate phone number (Pakistan format)
-    const phoneRegex = /^(\+92|0)?3[0-9]{9}$/;
-    if (!phoneRegex.test(phone.replace(/\s/g, ""))) {
-      setError("Please enter a valid Pakistani phone number");
+    // Validate phone number (international E.164)
+    if (!isValidPhone(phone)) {
+      setError("Enter a valid phone number with country code");
       return;
     }
 
@@ -33,12 +33,7 @@ export default function LoginPage() {
 
     try {
       // Format phone number
-      let formattedPhone = phone.replace(/\s/g, "");
-      if (formattedPhone.startsWith("0")) {
-        formattedPhone = "+92" + formattedPhone.substring(1);
-      } else if (!formattedPhone.startsWith("+92")) {
-        formattedPhone = "+92" + formattedPhone;
-      }
+      const formattedPhone = phone.replace(/[\s-]/g, "");
 
       const response = await fetch("/api/auth/send-otp", {
         method: "POST",
@@ -99,12 +94,7 @@ export default function LoginPage() {
 
     try {
       // Format phone number
-      let formattedPhone = phone.replace(/\s/g, "");
-      if (formattedPhone.startsWith("0")) {
-        formattedPhone = "+92" + formattedPhone.substring(1);
-      } else if (!formattedPhone.startsWith("+92")) {
-        formattedPhone = "+92" + formattedPhone;
-      }
+      const formattedPhone = phone.replace(/[\s-]/g, "");
 
       // Import signIn dynamically
       const { signIn } = await import("next-auth/react");
@@ -151,29 +141,16 @@ export default function LoginPage() {
               </p>
 
               <form onSubmit={handleSendOTP} className="space-y-6">
-                <div>
-                  <label
-                    htmlFor="phone"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    Phone Number
-                  </label>
-                  <div className="relative">
-                    <Input
-                      leftIcon={"+92"}
-                      id="phone"
-                      type="tel"
-                      placeholder="3XX XXXXXXX"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="pl-14"
-                      required
-                    />
-                  </div>
-                  {error && (
-                    <p className="mt-2 text-sm text-red-600">{error}</p>
-                  )}
-                </div>
+                <PhoneInput
+                  id="phone"
+                  name="phone"
+                  label="Phone number"
+                  placeholder="Mobile number"
+                  value={phone}
+                  onChange={setPhone}
+                  error={error || undefined}
+                  required
+                />
 
                 <Button
                   type="submit"
@@ -201,7 +178,7 @@ export default function LoginPage() {
                 onClick={() => setStep("phone")}
                 className="flex items-center text-gray-600 hover:text-gray-900 mb-6"
               >
-                <HiOutlineArrowLeft className="h-5 w-5 mr-1" />
+                <HiOutlineArrowLeft className="h-5 w-5 me-1" />
                 Back
               </button>
 
@@ -210,7 +187,7 @@ export default function LoginPage() {
               </h2>
               <p className="text-gray-600 mb-8">
                 We sent a 6-digit code to{" "}
-                <span className="font-medium text-gray-900">+92 {phone}</span>
+                <span className="font-medium whitespace-nowrap text-gray-900">{phone}</span>
               </p>
 
               <form onSubmit={handleVerifyOTP} className="space-y-6">

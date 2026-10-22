@@ -97,7 +97,7 @@ export default function RoutinesPage() {
           >
             {tab.label}
             <span
-              className={`ml-1.5 sm:ml-2 px-1.5 py-0.5 rounded-full text-xs ${
+              className={`ms-1.5 sm:ms-2 px-1.5 py-0.5 rounded-full text-xs ${
                 activeTab === tab.id
                   ? "bg-emerald-100 text-emerald-700"
                   : "bg-gray-100 text-gray-600"

@@ -163,7 +163,7 @@ export default function CampaignAnalytics() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="border-b border-gray-200 bg-gray-50">
-              <tr className="text-left text-xs font-medium text-gray-600">
+              <tr className="text-start text-xs font-medium text-gray-600">
                 <th className="p-4">Campaign</th>
                 <th className="p-4">Type</th>
                 <th className="p-4">Impressions</th>
@@ -274,7 +274,7 @@ export default function CampaignAnalytics() {
                     </div>
                   </div>
 
-                  <div className="text-right">
+                  <div className="text-end">
                     <p className="text-lg font-bold text-emerald-600">
                       Rs. {(channel.revenue / 1000).toFixed(1)}K
                     </p>
@@ -329,7 +329,7 @@ export default function CampaignAnalytics() {
                     </div>
                   </div>
 
-                  <div className="text-right">
+                  <div className="text-end">
                     <p className="font-bold text-emerald-600">
                       Rs. {(campaign.revenue / 1000).toFixed(1)}K
                     </p>
@@ -346,7 +346,7 @@ export default function CampaignAnalytics() {
           </h3>
 
           <div className="space-y-3">
-            <div className="rounded-lg border-l-4 border-emerald-500 bg-emerald-50 p-4">
+            <div className="rounded-lg border-s-4 border-emerald-500 bg-emerald-50 p-4">
               <p className="text-sm font-semibold text-emerald-900">
                 Increase Email Campaigns
               </p>
@@ -356,7 +356,7 @@ export default function CampaignAnalytics() {
               </p>
             </div>
 
-            <div className="rounded-lg border-l-4 border-blue-500 bg-blue-50 p-4">
+            <div className="rounded-lg border-s-4 border-blue-500 bg-blue-50 p-4">
               <p className="text-sm font-semibold text-blue-900">
                 Optimize Push Notifications
               </p>
@@ -366,7 +366,7 @@ export default function CampaignAnalytics() {
               </p>
             </div>
 
-            <div className="rounded-lg border-l-4 border-orange-500 bg-orange-50 p-4">
+            <div className="rounded-lg border-s-4 border-orange-500 bg-orange-50 p-4">
               <p className="text-sm font-semibold text-orange-900">
                 Expand Social Media
               </p>

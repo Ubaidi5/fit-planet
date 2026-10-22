@@ -120,7 +120,7 @@ export default function FinancialReports() {
               <button
                 onClick={() => setReportType("revenue")}
                 className={cn(
-                  "rounded-lg border-2 p-4 text-left transition-all",
+                  "rounded-lg border-2 p-4 text-start transition-all",
                   reportType === "revenue"
                     ? "border-emerald-500 bg-emerald-50"
                     : "border-gray-200 bg-white hover:border-gray-300",
@@ -135,7 +135,7 @@ export default function FinancialReports() {
               <button
                 onClick={() => setReportType("tax")}
                 className={cn(
-                  "rounded-lg border-2 p-4 text-left transition-all",
+                  "rounded-lg border-2 p-4 text-start transition-all",
                   reportType === "tax"
                     ? "border-emerald-500 bg-emerald-50"
                     : "border-gray-200 bg-white hover:border-gray-300",
@@ -150,7 +150,7 @@ export default function FinancialReports() {
               <button
                 onClick={() => setReportType("custom")}
                 className={cn(
-                  "rounded-lg border-2 p-4 text-left transition-all",
+                  "rounded-lg border-2 p-4 text-start transition-all",
                   reportType === "custom"
                     ? "border-emerald-500 bg-emerald-50"
                     : "border-gray-200 bg-white hover:border-gray-300",

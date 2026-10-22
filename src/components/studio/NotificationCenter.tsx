@@ -429,7 +429,7 @@ export default function NotificationCenter() {
               </div>
 
               {notification.status === "sent" && (
-                <div className="text-right">
+                <div className="text-end">
                   <Button variant="outline" size="sm">
                     View Report
                   </Button>

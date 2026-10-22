@@ -86,7 +86,7 @@ export default function CheckInSystem() {
             )}
           >
             <span className="text-3xl">📱</span>
-            <div className="text-left">
+            <div className="text-start">
               <p
                 className={cn(
                   "font-semibold",
@@ -109,7 +109,7 @@ export default function CheckInSystem() {
             )}
           >
             <span className="text-3xl">🔍</span>
-            <div className="text-left">
+            <div className="text-start">
               <p
                 className={cn(
                   "font-semibold",
@@ -325,7 +325,7 @@ export default function CheckInSystem() {
                   </p>
                 </div>
               </div>
-              <div className="text-right">
+              <div className="text-end">
                 <p className="text-sm font-semibold text-emerald-600">Active</p>
                 <p className="text-xs text-gray-600">{checkin.duration}</p>
               </div>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FaFacebookF, FaInstagram, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { Logo } from "@/components/brand/Logo";
+import { platformStats } from "@/lib/data/mock-platform";
 
 const footerLinks = [
   {
@@ -23,10 +24,10 @@ const footerLinks = [
   {
     title: "Explore",
     links: [
-      { href: "/#members", label: "Routines & social" },
+      { href: "/#orbit", label: "Explore nearby" },
       { href: "/#stories", label: "Pilot stories" },
-      { href: "/gyms?q=Clifton", label: "Gyms in Clifton" },
-      { href: "/gyms?q=DHA", label: "Gyms in DHA" },
+      { href: "/gyms?city=Tokyo", label: "Gyms in Tokyo" },
+      { href: "/gyms?city=Berlin", label: "Gyms in Berlin" },
     ],
   },
 ];
@@ -46,8 +47,8 @@ const Footer: React.FC = () => {
           <div>
             <Logo />
             <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-gray-500">
-              The gym network for your city. Members find and book any gym in
-              seconds. Owners fill capacity without building their own tech.
+              One fitness passport for every city. Members book any partner gym
+              in local currency. Owners fill quiet hours without building their own tech.
             </p>
             <div className="mt-6 flex gap-2">
               {socialLinks.map(({ name, href, icon: Icon }) => (
@@ -68,7 +69,7 @@ const Footer: React.FC = () => {
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
             {footerLinks.map((group) => (
               <div key={group.title}>
-                <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-400">
+                <h3 className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-gray-400">
                   {group.title}
                 </h3>
                 <ul className="mt-4 space-y-3">
@@ -91,9 +92,9 @@ const Footer: React.FC = () => {
         {/* Oversized wordmark */}
         <div
           aria-hidden="true"
-          className="pointer-events-none select-none px-4 text-center font-serif text-[21vw] leading-[0.8] tracking-tight text-gray-900/[0.05] italic lg:text-[15.5rem]"
+          className="pointer-events-none select-none overflow-hidden px-4 text-center text-[19vw] leading-[0.8] font-extrabold tracking-[-0.06em] text-gray-900/[0.05] lg:text-[14rem]"
         >
-          Fit Planet
+          fit planet
         </div>
 
         <div className="flex flex-col items-center justify-between gap-3 border-t border-gray-900/[0.06] px-6 py-6 text-sm text-gray-500 sm:flex-row sm:px-10 lg:px-14">
@@ -103,7 +104,7 @@ const Footer: React.FC = () => {
               <span className="absolute inset-0 animate-pulse-ring rounded-full bg-emerald-500" />
               <span className="relative size-2 rounded-full bg-emerald-500" />
             </span>
-            Now live in Karachi
+            Now live in {platformStats.cities.length} cities
           </p>
         </div>
       </div>

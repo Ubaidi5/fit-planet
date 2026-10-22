@@ -66,7 +66,7 @@ export default function BuddiesPage() {
           </p>
         </div>
         <Button>
-          <HiOutlineUserAdd className="mr-2 h-4 w-4" />
+          <HiOutlineUserAdd className="me-2 h-4 w-4" />
           Find Friends
         </Button>
       </div>
@@ -79,7 +79,7 @@ export default function BuddiesPage() {
           placeholder="Search friends by name or username..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-10"
+          className="ps-10"
         />
       </div>
 

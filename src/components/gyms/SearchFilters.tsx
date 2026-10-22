@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { filterOptions } from "@/lib/data/mock-gyms";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import {
   HiCheck,
   HiChevronDown,
@@ -86,11 +87,11 @@ function PillSelect({
         aria-label={label}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-9 appearance-none rounded-full bg-surface pr-9 pl-3.5 text-sm font-medium text-gray-700 ring-1 ring-gray-900/[0.08] transition-shadow hover:ring-gray-900/15 focus:ring-2 focus:ring-emerald-500/40 focus:outline-none"
+        className="h-9 appearance-none rounded-full bg-surface pe-9 ps-3.5 text-sm font-medium text-gray-700 ring-1 ring-gray-900/[0.08] transition-shadow hover:ring-gray-900/15 focus:ring-2 focus:ring-emerald-500/40 focus:outline-none"
       >
         {children}
       </select>
-      <HiChevronDown className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-gray-400" />
+      <HiChevronDown className="pointer-events-none absolute top-1/2 end-3 size-4 -translate-y-1/2 text-gray-400" />
     </div>
   );
 }
@@ -105,6 +106,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
     search: initialSearch,
   });
   const [showPanel, setShowPanel] = useState(false);
+  const { distance } = useLocale();
 
   const updateFilters = (newFilters: Partial<FilterState>) => {
     const updated = { ...filters, ...newFilters };
@@ -144,7 +146,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
     <div className={cn("space-y-4", className)}>
       {/* Search */}
       <div className="flex items-center gap-1.5 rounded-full border border-gray-900/[0.07] bg-surface p-1.5 shadow-soft transition-shadow focus-within:shadow-lift focus-within:ring-4 focus-within:ring-emerald-500/10">
-        <HiMagnifyingGlass className="ml-3.5 size-5 shrink-0 text-gray-400" />
+        <HiMagnifyingGlass className="ms-3.5 size-5 shrink-0 text-gray-400" />
         <input
           type="text"
           placeholder="Search gyms by name or area"
@@ -209,7 +211,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
         >
           {filterOptions.distanceRanges.map((option) => (
             <option key={option.label} value={option.value}>
-              {option.label}
+              {Number.isFinite(option.value) ? `Within ${distance(option.value)}` : option.label}
             </option>
           ))}
         </PillSelect>

@@ -190,7 +190,7 @@ export default function ResponseSystem() {
                   selectedReview === review.id
                     ? "border-emerald-500 bg-emerald-50"
                     : "border-gray-200 bg-white hover:border-gray-300",
-                  review.urgency === "high" && "border-l-4 border-l-red-500",
+                  review.urgency === "high" && "border-s-4 border-s-red-500",
                 )}
               >
                 {/* Review Header */}
@@ -264,7 +264,7 @@ export default function ResponseSystem() {
                 key={template.id}
                 onClick={() => handleTemplateSelect(template.id)}
                 className={cn(
-                  "w-full rounded-lg border p-3 text-left text-sm transition-all",
+                  "w-full rounded-lg border p-3 text-start text-sm transition-all",
                   selectedTemplate === template.id
                     ? "border-emerald-500 bg-emerald-50"
                     : "border-gray-200 bg-white hover:border-gray-300",

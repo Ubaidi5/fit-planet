@@ -4,16 +4,24 @@ import { GymsExplorer } from "@/components/gyms/GymsExplorer";
 export const metadata: Metadata = {
   title: "Find gyms",
   description:
-    "Compare gyms near you by price, amenities and live capacity, then book a day pass or membership in seconds.",
+    "Find partner gyms in any city. Compare passes in local currency and live capacity, then book in seconds.",
 };
 
 export default async function GymsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string | string[] }>;
+  searchParams: Promise<{ q?: string | string[]; city?: string | string[] }>;
 }) {
-  const { q } = await searchParams;
-  const initialQuery = Array.isArray(q) ? (q[0] ?? "") : (q ?? "");
+  const { q, city } = await searchParams;
+  const first = (value?: string | string[]) => (Array.isArray(value) ? (value[0] ?? "") : (value ?? ""));
+  const initialQuery = first(q);
+  const initialCity = first(city);
 
-  return <GymsExplorer key={initialQuery} initialQuery={initialQuery} />;
+  return (
+    <GymsExplorer
+      key={`${initialCity}|${initialQuery}`}
+      initialQuery={initialQuery}
+      initialCity={initialCity}
+    />
+  );
 }

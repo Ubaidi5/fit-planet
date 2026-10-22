@@ -626,7 +626,7 @@ export default function DiscountsManager() {
               </div>
 
               {/* Actions */}
-              <div className="ml-4 flex flex-col space-y-2">
+              <div className="ms-4 flex flex-col space-y-2">
                 <Button
                   variant="outline"
                   size="sm"

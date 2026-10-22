@@ -138,8 +138,8 @@ export default function RevenueDashboard() {
           </div>
 
           {/* Chart area */}
-          <div className="ml-16 h-full">
-            <div className="flex h-full items-end justify-between space-x-2 border-b border-l border-gray-300 pb-8 pl-4 pr-4">
+          <div className="ms-16 h-full">
+            <div className="flex h-full items-end justify-between space-x-2 border-b border-s border-gray-300 pb-8 ps-4 pe-4">
               {monthlyTrends.map((trend, index) => {
                 const height = (trend.revenue / maxRevenue) * 100;
                 return (
@@ -194,7 +194,7 @@ export default function RevenueDashboard() {
                   </div>
                 </div>
 
-                <div className="text-right">
+                <div className="text-end">
                   <p className="text-lg font-bold text-gray-900">
                     Rs. {(pass.amount / 1000).toFixed(0)}K
                   </p>

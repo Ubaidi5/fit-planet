@@ -272,19 +272,19 @@ export default function RealTimeMonitor() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-200 bg-gray-50">
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-700">
+                <th className="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-700">
                   Name
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-700">
+                <th className="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-700">
                   Pass Type
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-700">
+                <th className="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-700">
                   Check-In Time
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-700">
+                <th className="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-700">
                   Duration
                 </th>
-                <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-700">
+                <th className="px-4 py-3 text-end text-xs font-semibold uppercase tracking-wider text-gray-700">
                   Actions
                 </th>
               </tr>
@@ -300,7 +300,7 @@ export default function RealTimeMonitor() {
                           .map((n) => n[0])
                           .join("")}
                       </div>
-                      <div className="ml-3">
+                      <div className="ms-3">
                         <p className="font-medium text-gray-900">{user.name}</p>
                       </div>
                     </div>
@@ -325,7 +325,7 @@ export default function RealTimeMonitor() {
                       {formatDuration(user.duration)}
                     </span>
                   </td>
-                  <td className="whitespace-nowrap px-4 py-4 text-right text-sm">
+                  <td className="whitespace-nowrap px-4 py-4 text-end text-sm">
                     <Button variant="outline" size="sm">
                       Check Out
                     </Button>

@@ -47,7 +47,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <div className="relative">
           {/* Left Icon */}
           {leftIcon && (
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center ps-4 text-gray-400">
               {leftIcon}
             </div>
           )}
@@ -60,7 +60,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             disabled={disabled}
             className={cn(
               // Base styles
-              "block h-12 w-full rounded-xl border bg-surface px-4 text-[15px] text-gray-900 placeholder:text-gray-400 shadow-[inset_0_1px_2px_oklch(0.2_0.01_60/0.04)]",
+              "block h-12 w-full rounded-xl border bg-surface px-4 text-[15px] text-gray-900 placeholder:text-gray-400 shadow-[inset_0_1px_2px_oklch(0.25_0.06_265/0.04)]",
               "transition-[border-color,box-shadow] duration-200",
               "focus:outline-none focus:ring-4 focus:ring-offset-0",
               // Default border
@@ -75,8 +75,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               // Disabled state
               disabled && "cursor-not-allowed bg-gray-50 opacity-60",
               // Icon padding
-              leftIcon && "pl-11",
-              rightIcon && "pr-11",
+              leftIcon && "ps-11",
+              rightIcon && "pe-11",
               className,
             )}
             aria-invalid={error ? "true" : "false"}
@@ -88,7 +88,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
           {/* Right Icon */}
           {rightIcon && (
-            <div className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400">
+            <div className="absolute inset-y-0 right-0 flex items-center pe-4 text-gray-400">
               {rightIcon}
             </div>
           )}

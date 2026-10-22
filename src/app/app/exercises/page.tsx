@@ -248,7 +248,7 @@ function ExerciseCard({ exercise, isExpanded, onToggle }: ExerciseCardProps) {
       {/* Header - Always Visible */}
       <button
         onClick={onToggle}
-        className="w-full p-3 sm:p-4 flex items-center gap-3 sm:gap-4 hover:bg-gray-50 transition-colors text-left"
+        className="w-full p-3 sm:p-4 flex items-center gap-3 sm:gap-4 hover:bg-gray-50 transition-colors text-start"
       >
         {/* Icon/Image */}
         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-emerald-100 flex items-center justify-center text-xl sm:text-2xl shrink-0">

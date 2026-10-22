@@ -141,7 +141,7 @@ export default function RevenueChart() {
         </div>
 
         {/* Chart area */}
-        <div className="ml-12 flex h-64 items-end space-x-2">
+        <div className="ms-12 flex h-64 items-end space-x-2">
           {data.map((item, index) => {
             const heightPercentage = (item.revenue / maxRevenue) * 100;
 
@@ -173,7 +173,7 @@ export default function RevenueChart() {
       </div>
 
       {/* Grid lines */}
-      <div className="ml-12 mt-4 space-y-2">
+      <div className="ms-12 mt-4 space-y-2">
         {[...Array(5)].map((_, i) => (
           <div key={i} className="h-px bg-gray-200" />
         ))}

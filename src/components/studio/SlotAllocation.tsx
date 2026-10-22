@@ -343,7 +343,7 @@ export default function SlotAllocation() {
                     {getStatusLabel(status)}
                   </span>
                 </div>
-                <div className="text-right">
+                <div className="text-end">
                   <p className="text-3xl font-semibold text-ink tracking-tight">
                     {availableSlots}
                   </p>

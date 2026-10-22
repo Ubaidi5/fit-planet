@@ -618,22 +618,26 @@ export function getGymDetails(gymId: string): GymDetail | null {
   return gymDetails[gymId] || null;
 }
 
-// Generate default details for gyms without specific data
-export function generateDefaultDetails(gymId: string): GymDetail {
+interface DefaultDetailsSource {
+  id: string;
+  pricing: { dayPass: number };
+  hours: { open: string; close: string; is24Hours: boolean };
+}
+
+// Generate default details for gyms without specific data. Prices follow the
+// gym's own day pass so they make sense in its currency.
+export function generateDefaultDetails(gym: DefaultDetailsSource): GymDetail {
+  const day = gym.pricing.dayPass;
+  const round = (value: number) => (value >= 100 ? Math.round(value / 10) * 10 : Math.max(1, Math.round(value)));
+  const open = gym.hours.is24Hours ? "00:00" : gym.hours.open;
+  const close = gym.hours.is24Hours ? "24:00" : gym.hours.close;
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   return {
-    id: gymId,
+    id: gym.id,
     longDescription:
       "Welcome to our fitness center! We offer a wide range of equipment and services to help you achieve your fitness goals. Our friendly staff is always ready to assist you.",
     gallery: [],
-    operatingHours: [
-      { day: "Monday", open: "06:00", close: "22:00", isClosed: false },
-      { day: "Tuesday", open: "06:00", close: "22:00", isClosed: false },
-      { day: "Wednesday", open: "06:00", close: "22:00", isClosed: false },
-      { day: "Thursday", open: "06:00", close: "22:00", isClosed: false },
-      { day: "Friday", open: "06:00", close: "22:00", isClosed: false },
-      { day: "Saturday", open: "08:00", close: "20:00", isClosed: false },
-      { day: "Sunday", open: "08:00", close: "18:00", isClosed: false },
-    ],
+    operatingHours: days.map((day) => ({ day, open, close, isClosed: false })),
     equipment: [],
     trainers: [],
     classes: [],
@@ -649,7 +653,7 @@ export function generateDefaultDetails(gymId: string): GymDetail {
         id: "addon-default-1",
         name: "Guest Pass",
         description: "Bring a friend to workout with you",
-        price: 500,
+        price: round(day * 0.8),
         category: "Access",
         isAvailable: true,
       },
@@ -657,7 +661,7 @@ export function generateDefaultDetails(gymId: string): GymDetail {
         id: "addon-default-2",
         name: "Locker Rental",
         description: "Secure locker for your belongings",
-        price: 150,
+        price: round(day * 0.3),
         category: "Service",
         isAvailable: true,
       },

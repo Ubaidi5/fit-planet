@@ -135,7 +135,7 @@ export default function RecentBookings() {
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-gray-200 text-left text-xs font-medium text-gray-600">
+            <tr className="border-b border-gray-200 text-start text-xs font-medium text-gray-600">
               <th className="pb-3">Booking ID</th>
               <th className="pb-3">Customer</th>
               <th className="pb-3">Pass Type</th>

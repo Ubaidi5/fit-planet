@@ -199,7 +199,7 @@ export default function ActiveMembers() {
             </button>
           </div>
 
-          <div className="flex-1 sm:ml-4 sm:max-w-xs">
+          <div className="flex-1 sm:ms-4 sm:max-w-xs">
             <Input
               type="text"
               placeholder="Search by name or phone..."
@@ -216,7 +216,7 @@ export default function ActiveMembers() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="border-b border-gray-200 bg-gray-50">
-              <tr className="text-left text-xs font-medium text-gray-600">
+              <tr className="text-start text-xs font-medium text-gray-600">
                 <th className="p-4">Member</th>
                 <th className="p-4">Pass Type</th>
                 <th className="p-4">Check-In Time</th>
