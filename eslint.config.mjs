@@ -8,6 +8,7 @@ const config = [
     ignores: [".next/**", "node_modules/**", "storage/**", "next-env.d.ts"],
   },
   {
+    files: ["**/*.{js,jsx,mjs,ts,tsx,mts,cts}"],
     rules: {
       // Inline <img> is used on purpose for user uploads and OAuth avatars
       "@next/next/no-img-element": "off",
