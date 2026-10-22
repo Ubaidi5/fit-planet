@@ -290,7 +290,7 @@ export default function WorkoutPage() {
         </div>
 
         {/* Exercise Breakdown */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <div className="bg-surface rounded-3xl border border-gray-900/[0.06] p-4 shadow-soft">
           <h3 className="font-semibold text-gray-900 mb-3">
             Exercise Breakdown
           </h3>
@@ -387,7 +387,7 @@ export default function WorkoutPage() {
 
       {/* Rest Timer Overlay */}
       {workout.isResting && (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center px-4">
+        <div className="fixed inset-0 bg-ink/70 backdrop-blur-md z-50 flex items-center justify-center px-4">
           <div className="text-center text-white">
             <p className="text-base sm:text-lg mb-2">Rest Time</p>
             <p className="text-6xl sm:text-7xl font-bold mb-4">
@@ -428,7 +428,7 @@ export default function WorkoutPage() {
         {/* Target */}
         <div className="bg-emerald-50 rounded-xl p-4 sm:p-6 text-center">
           <p className="text-xs sm:text-sm text-emerald-700 mb-1">Target</p>
-          <p className="text-3xl sm:text-4xl font-bold text-emerald-800">
+          <p className="text-3xl sm:text-4xl font-semibold text-emerald-800 tracking-tight">
             {currentExerciseData.reps || `${currentExerciseData.duration}s`}
           </p>
           {currentExerciseData.weight && (

@@ -136,7 +136,7 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/30 backdrop-blur-sm"
       aria-labelledby="modal-title"
       role="dialog"
       aria-modal="true"
@@ -144,14 +144,14 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
     >
       {/* Modal Content */}
       <div
-        className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col"
+        className="relative bg-surface rounded-4xl shadow-lift ring-1 ring-gray-900/[0.06] w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-xl font-bold">
+              <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-linear-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-xl font-bold">
                 {gym.coverImage ? (
                   <Image
                     src={gym.coverImage}
@@ -270,7 +270,7 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
                   onClick={() => handlePassTypeSelect("day")}
                   className="text-left p-5 border-2 border-gray-200 rounded-xl hover:border-emerald-500 hover:shadow-lg transition-all group relative overflow-hidden"
                 >
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-bl-full -mr-10 -mt-10 group-hover:scale-150 transition-transform" />
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-linear-to-br from-emerald-500/10 to-teal-500/10 rounded-bl-full -mr-10 -mt-10 group-hover:scale-150 transition-transform" />
                   <div className="relative">
                     <div className="flex items-start justify-between mb-3">
                       <div>
@@ -283,7 +283,7 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
                       </div>
                     </div>
                     <div className="flex items-baseline gap-1 mb-3">
-                      <span className="text-2xl font-bold text-gray-900">
+                      <span className="text-2xl font-semibold text-ink tracking-tight">
                         Rs. {gym.pricing.dayPass.toLocaleString()}
                       </span>
                     </div>
@@ -299,7 +299,7 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
                   onClick={() => handlePassTypeSelect("week")}
                   className="text-left p-5 border-2 border-gray-200 rounded-xl hover:border-emerald-500 hover:shadow-lg transition-all group relative overflow-hidden"
                 >
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-bl-full -mr-10 -mt-10 group-hover:scale-150 transition-transform" />
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-linear-to-br from-emerald-500/10 to-teal-500/10 rounded-bl-full -mr-10 -mt-10 group-hover:scale-150 transition-transform" />
                   <div className="relative">
                     <div className="flex items-start justify-between mb-3">
                       <div>
@@ -312,7 +312,7 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
                       </div>
                     </div>
                     <div className="flex items-baseline gap-1 mb-3">
-                      <span className="text-2xl font-bold text-gray-900">
+                      <span className="text-2xl font-semibold text-ink tracking-tight">
                         Rs. {gym.pricing.weekPass.toLocaleString()}
                       </span>
                     </div>
@@ -326,7 +326,7 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
                 {/* Month Pass */}
                 <button
                   onClick={() => handlePassTypeSelect("month")}
-                  className="relative text-left p-5 border-2 border-emerald-500 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl hover:shadow-lg transition-all group overflow-hidden"
+                  className="relative text-left p-5 border-2 border-emerald-500 bg-linear-to-br from-emerald-50 to-teal-50 rounded-xl hover:shadow-lg transition-all group overflow-hidden"
                 >
                   <div className="absolute -top-3 -right-3">
                     <span className="inline-flex items-center gap-1 bg-emerald-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
@@ -346,7 +346,7 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
                       </div>
                     </div>
                     <div className="flex items-baseline gap-1 mb-3">
-                      <span className="text-2xl font-bold text-emerald-700">
+                      <span className="text-2xl font-semibold text-emerald-700 tracking-tight">
                         Rs. {gym.pricing.monthPass.toLocaleString()}
                       </span>
                     </div>
@@ -362,7 +362,7 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
                   onClick={() => handlePassTypeSelect("annual")}
                   className="text-left p-5 border-2 border-gray-200 rounded-xl hover:border-emerald-500 hover:shadow-lg transition-all group relative overflow-hidden"
                 >
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-bl-full -mr-10 -mt-10 group-hover:scale-150 transition-transform" />
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-linear-to-br from-amber-500/10 to-orange-500/10 rounded-bl-full -mr-10 -mt-10 group-hover:scale-150 transition-transform" />
                   <div className="relative">
                     <div className="flex items-start justify-between mb-3">
                       <div>
@@ -375,7 +375,7 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
                       </div>
                     </div>
                     <div className="flex items-baseline gap-1 mb-2">
-                      <span className="text-2xl font-bold text-gray-900">
+                      <span className="text-2xl font-semibold text-ink tracking-tight">
                         Rs. {(gym.pricing.monthPass * 10).toLocaleString()}
                       </span>
                     </div>
@@ -747,7 +747,7 @@ export function BookingModal({ gym, isOpen, onClose }: BookingModalProps) {
                 <HiOutlineCheck className="h-10 w-10 text-emerald-600" />
               </div>
 
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              <h3 className="text-2xl font-semibold text-ink mb-2 tracking-tight">
                 Booking Confirmed!
               </h3>
               <p className="text-gray-600 mb-6">

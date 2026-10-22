@@ -59,7 +59,7 @@ export default function SocialFeedPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+          <h1 className="text-2xl font-semibold text-ink sm:text-3xl tracking-tight">
             Social Feed
           </h1>
           <p className="mt-1 text-gray-500">

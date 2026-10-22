@@ -63,7 +63,7 @@ export default function RevenueChart() {
   const totalBookings = data.reduce((sum, d) => sum + d.bookings, 0);
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+    <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div>
@@ -117,13 +117,13 @@ export default function RevenueChart() {
       <div className="mb-6 grid grid-cols-2 gap-4">
         <div className="rounded-lg bg-emerald-50 p-4">
           <p className="text-sm font-medium text-emerald-700">Total Revenue</p>
-          <p className="mt-1 text-2xl font-bold text-emerald-900">
+          <p className="mt-1 text-2xl font-semibold text-emerald-900 tracking-tight">
             Rs. {totalRevenue.toLocaleString()}
           </p>
         </div>
         <div className="rounded-lg bg-blue-50 p-4">
           <p className="text-sm font-medium text-blue-700">Total Bookings</p>
-          <p className="mt-1 text-2xl font-bold text-blue-900">
+          <p className="mt-1 text-2xl font-semibold text-blue-900 tracking-tight">
             {totalBookings}
           </p>
         </div>
@@ -148,7 +148,7 @@ export default function RevenueChart() {
             return (
               <div key={index} className="group relative flex-1">
                 {/* Tooltip */}
-                <div className="invisible absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-gray-900 px-3 py-2 text-xs text-white opacity-0 transition-all group-hover:visible group-hover:opacity-100">
+                <div className="invisible absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-ink px-3 py-2 text-xs text-white opacity-0 transition-all group-hover:visible group-hover:opacity-100">
                   <p className="font-semibold">
                     Rs. {item.revenue.toLocaleString()}
                   </p>

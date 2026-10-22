@@ -1,15 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { AuthShell } from "@/components/auth/AuthShell";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
-  HiOutlineCheckCircle,
-  HiOutlineCurrencyDollar,
-  HiOutlinePresentationChartLine,
-  HiOutlineUserGroup,
-  HiOutlineShieldCheck,
-  HiOutlineLightningBolt,
   HiOutlineCheck,
   HiOutlineUser,
   HiOutlineMail,
@@ -164,103 +159,7 @@ export default function StudioRegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Left Side - Branding (hidden on mobile) */}
-      <div className="hidden bg-gradient-to-br from-emerald-600 to-teal-700 lg:flex lg:w-1/2 lg:flex-col lg:justify-center lg:px-12 xl:px-16">
-        <div className="mx-auto max-w-md">
-          {/* Main Heading */}
-          <h1 className="text-4xl font-bold text-white">
-            Grow Your Gym Business with Fit Planet
-          </h1>
-          <p className="mt-4 text-lg text-emerald-100">
-            Join 500+ gyms already on our platform and reach thousands of
-            fitness enthusiasts looking for their perfect gym.
-          </p>
-
-          {/* Features List */}
-          <div className="mt-10 space-y-6">
-            <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-white/20">
-                <HiOutlineCheckCircle className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-white">
-                  Online Presence Made Easy
-                </h3>
-                <p className="mt-1 text-sm text-emerald-200">
-                  Get a professional gym profile without building your own
-                  website
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-white/20">
-                <HiOutlineCurrencyDollar className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-white">
-                  Instant Booking & Payments
-                </h3>
-                <p className="mt-1 text-sm text-emerald-200">
-                  Accept bookings 24/7 and receive payments directly to your
-                  account
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-white/20">
-                <HiOutlinePresentationChartLine className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-white">
-                  Analytics & Insights
-                </h3>
-                <p className="mt-1 text-sm text-emerald-200">
-                  Track bookings, revenue, and member activity in real-time
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-white/20">
-                <HiOutlineUserGroup className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-white">
-                  Reach New Customers
-                </h3>
-                <p className="mt-1 text-sm text-emerald-200">
-                  Get discovered by thousands of fitness seekers in your area
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Trust Badge */}
-          <div className="mt-12 flex items-center gap-2 rounded-lg bg-white/10 p-4">
-            <HiOutlineShieldCheck className="h-6 w-6 text-emerald-300" />
-            <span className="text-sm text-emerald-100">
-              Free to join · No hidden fees · Cancel anytime
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Right Side - Form */}
-      <div className="flex w-full flex-col justify-center px-4 py-12 sm:px-6 lg:w-1/2 lg:px-8 xl:px-12">
-        <div className="mx-auto w-full max-w-md">
-          {/* Logo */}
-          <Link href="/" className="mb-8 flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600">
-              <HiOutlineLightningBolt className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-xl font-bold text-gray-100">Fit Planet</span>
-            <span className="ml-1 rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">
-              Studio
-            </span>
-          </Link>
+    <AuthShell variant="studio" width="md" aside={{ text: "Already listed?", href: "/studio/login", label: "Studio login" }}>
 
           {/* Progress Steps */}
           <div className="mb-8">
@@ -490,7 +389,7 @@ export default function StudioRegisterPage() {
                       </label>
                       {errors.terms && (
                         <p className="mt-1.5 flex items-center gap-1 text-sm text-red-600">
-                          <HiOutlineExclamationCircle className="h-4 w-4 flex-shrink-0" />
+                          <HiOutlineExclamationCircle className="h-4 w-4 shrink-0" />
                           {errors.terms}
                         </p>
                       )}
@@ -531,19 +430,6 @@ export default function StudioRegisterPage() {
               </p>
             </CardFooter>
           </Card>
-
-          {/* Back to Website */}
-          <p className="mt-8 text-center text-sm text-gray-500">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-1 hover:text-gray-700"
-            >
-              <HiOutlineArrowLeft className="h-4 w-4" />
-              Back to main website
-            </Link>
-          </p>
-        </div>
-      </div>
-    </div>
+    </AuthShell>
   );
 }

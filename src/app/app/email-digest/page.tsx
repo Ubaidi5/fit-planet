@@ -116,14 +116,14 @@ export default function EmailDigestPage() {
     <div className="mx-auto max-w-4xl space-y-6 p-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Email Digest</h1>
+        <h1 className="text-2xl font-semibold text-ink tracking-tight">Email Digest</h1>
         <p className="mt-1 text-sm text-gray-600">
           Configure how often you receive email summaries and updates
         </p>
       </div>
 
       {/* Quick Settings */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="font-semibold text-gray-900">Quick Settings</h3>
         <div className="mt-4 flex flex-wrap gap-3">
           <Button
@@ -171,7 +171,7 @@ export default function EmailDigestPage() {
         {preferences.map((pref) => (
           <div
             key={pref.id}
-            className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
+            className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft"
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">

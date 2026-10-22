@@ -123,7 +123,7 @@ export function PasswordStrength({
         <ul className="space-y-1 text-xs text-gray-600">
           {strength.suggestions.map((suggestion, index) => (
             <li key={index} className="flex items-start gap-1.5">
-              <HiOutlineCheckCircle className="mt-0.5 h-3 w-3 flex-shrink-0 text-gray-400" />
+              <HiOutlineCheckCircle className="mt-0.5 h-3 w-3 shrink-0 text-gray-400" />
               {suggestion}
             </li>
           ))}

@@ -43,7 +43,7 @@ export function Select({
       <select
         {...props}
         className={cn(
-          "appearance-none rounded-xl border border-gray-300 bg-white pr-10 text-black focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-colors",
+          "w-full appearance-none rounded-xl border border-gray-200 bg-surface pr-10 text-gray-900 shadow-soft transition-[border-color,box-shadow] hover:border-gray-300 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/15",
           sizeClasses,
           className,
         )}

@@ -99,7 +99,7 @@ export default function RatingAnalytics() {
       </div>
 
       {/* Overall Rating Summary */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-6 text-lg font-semibold text-gray-900">
           Overall Rating Overview
         </h3>
@@ -156,7 +156,7 @@ export default function RatingAnalytics() {
       </div>
 
       {/* Rating Trends Chart */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-6 text-lg font-semibold text-gray-900">
           Rating Trends
         </h3>
@@ -242,7 +242,7 @@ export default function RatingAnalytics() {
       </div>
 
       {/* Category Breakdown */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-6 text-lg font-semibold text-gray-900">
           Rating by Category
         </h3>
@@ -262,7 +262,7 @@ export default function RatingAnalytics() {
                 </div>
 
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-emerald-600">
+                  <p className="text-2xl font-semibold text-emerald-600 tracking-tight">
                     {category.rating}
                   </p>
                   <p
@@ -309,7 +309,7 @@ export default function RatingAnalytics() {
       </div>
 
       {/* Competitor Comparison (Optional) */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <div className="mb-6 flex items-center justify-between">
           <h3 className="text-lg font-semibold text-gray-900">
             Competitor Comparison
@@ -360,7 +360,7 @@ export default function RatingAnalytics() {
                 </div>
 
                 <div className="flex items-center space-x-2">
-                  <span className="text-2xl font-bold text-gray-900">
+                  <span className="text-2xl font-semibold text-ink tracking-tight">
                     {gym.rating}
                   </span>
                   <span className="text-yellow-400">⭐</span>
@@ -372,7 +372,7 @@ export default function RatingAnalytics() {
       </div>
 
       {/* Insights & Recommendations */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-4 text-lg font-semibold text-gray-900">
           💡 Insights & Recommendations
         </h3>

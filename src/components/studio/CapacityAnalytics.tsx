@@ -208,33 +208,33 @@ export default function CapacityAnalytics() {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm text-gray-600">Avg Occupancy</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">68%</p>
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">68%</p>
           <p className="mt-1 text-xs text-emerald-600">↑ 5% vs last week</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm text-gray-600">Peak Hours</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">6-8 PM</p>
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">6-8 PM</p>
           <p className="mt-1 text-xs text-gray-600">95% avg capacity</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm text-gray-600">Total Visits</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">1,896</p>
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">1,896</p>
           <p className="mt-1 text-xs text-emerald-600">↑ 12% vs last week</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm text-gray-600">Busiest Day</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">Sat</p>
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">Sat</p>
           <p className="mt-1 text-xs text-gray-600">312 visits</p>
         </div>
       </div>
 
       {/* Hourly Utilization Chart */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-6 text-lg font-semibold text-gray-900">
           Average Hourly Utilization
         </h3>
@@ -293,7 +293,7 @@ export default function CapacityAnalytics() {
       </div>
 
       {/* Daily Trends */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-6 text-lg font-semibold text-gray-900">
           Weekly Trends
         </h3>
@@ -305,7 +305,7 @@ export default function CapacityAnalytics() {
             >
               <p className="text-sm font-semibold text-gray-900">{day.date}</p>
               <div className="mt-4">
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-2xl font-semibold text-ink tracking-tight">
                   {day.avgOccupancy}%
                 </p>
                 <p className="text-xs text-gray-600">Avg</p>
@@ -327,7 +327,7 @@ export default function CapacityAnalytics() {
       </div>
 
       {/* Recommendations */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-4 text-lg font-semibold text-gray-900">
           Optimization Recommendations
         </h3>

@@ -47,7 +47,7 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
   return (
     <div
       className={cn(
-        "bg-white rounded-xl border border-gray-200 p-5",
+        "bg-surface rounded-3xl border border-gray-900/[0.06] p-5 shadow-soft",
         className,
       )}
     >
@@ -221,7 +221,7 @@ export function ReviewsSummary({
   return (
     <div
       className={cn(
-        "bg-white rounded-xl border border-gray-200 p-6",
+        "bg-surface rounded-3xl border border-gray-900/[0.06] p-6 shadow-soft",
         className,
       )}
     >

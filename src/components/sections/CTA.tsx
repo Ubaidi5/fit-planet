@@ -1,95 +1,67 @@
 import Link from "next/link";
 import {
-  HiOutlineArrowRight,
+  HiArrowRight,
+  HiOutlineBuildingStorefront,
   HiOutlineShieldCheck,
-  HiOutlineStar,
-  HiOutlineUserGroup,
-} from "react-icons/hi";
+  HiOutlineSparkles,
+} from "react-icons/hi2";
+import { Reveal } from "@/components/motion/Reveal";
+
+const assurances = [
+  { icon: HiOutlineShieldCheck, label: "Secure payments" },
+  { icon: HiOutlineSparkles, label: "Free for members" },
+  { icon: HiOutlineBuildingStorefront, label: "Verified gyms only" },
+];
 
 const CTA: React.FC = () => {
   return (
-    <section className="bg-white py-20 lg:py-28">
-      <div className="container mx-auto px-4">
-        <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-emerald-600 to-teal-700 px-6 py-16 sm:px-12 sm:py-20 lg:px-20">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 -z-10 opacity-30">
-            <svg
-              className="absolute left-0 top-0 h-full w-full"
-              viewBox="0 0 1024 1024"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle cx="512" cy="512" r="512" fill="url(#cta-gradient)" />
-              <defs>
-                <radialGradient
-                  id="cta-gradient"
-                  cx="0"
-                  cy="0"
-                  r="1"
-                  gradientUnits="userSpaceOnUse"
-                  gradientTransform="translate(512 512) rotate(90) scale(512)"
-                >
-                  <stop stopColor="white" />
-                  <stop offset="1" stopColor="white" stopOpacity="0" />
-                </radialGradient>
-              </defs>
-            </svg>
-          </div>
-
-          {/* Content */}
-          <div className="relative mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
-              Ready to Transform Your Fitness Journey?
-            </h2>
-            <p className="mx-auto mt-6 max-w-xl text-lg text-emerald-100">
-              Join thousands of fitness enthusiasts who've discovered a smarter
-              way to find and book gyms. No cards, no hassle — just show up and
-              work out.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link
-                href="/gyms"
-                className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-white px-8 text-base font-semibold text-emerald-700 shadow-lg transition-all hover:bg-gray-50 hover:shadow-xl sm:w-auto"
-              >
-                Find Gyms Near You
-                <HiOutlineArrowRight className="h-5 w-5" />
-              </Link>
-              <Link
-                href="/app/dashboard"
-                className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-xl border-2 border-white/30 px-8 text-base font-semibold text-white transition-all hover:bg-white/10 sm:w-auto"
-              >
-                Create Free Account
-              </Link>
-            </div>
-
-            {/* Trust Badges */}
-            <div className="mt-12 flex flex-col items-center justify-center gap-6 sm:flex-row sm:gap-12">
-              <div className="flex items-center gap-2">
-                <HiOutlineShieldCheck className="h-5 w-5 text-emerald-200" />
-                <span className="text-sm text-emerald-100">
-                  Secure Payments
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <HiOutlineStar className="h-5 w-5 text-emerald-200" />
-                <span className="text-sm text-emerald-100">
-                  4.8 Star Rating
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <HiOutlineUserGroup className="h-5 w-5 text-emerald-200" />
-                <span className="text-sm text-emerald-100">50K+ Users</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Decorative Elements */}
-          <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
-          <div className="absolute -bottom-20 -right-20 h-64 w-64 rounded-full bg-teal-500/30 blur-3xl"></div>
+    <section className="px-3 py-24 sm:px-4 lg:py-32">
+      <Reveal className="relative mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] border border-gray-900/[0.06] bg-surface px-6 py-16 text-center shadow-soft sm:px-12 sm:py-24">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-40 left-1/2 size-[36rem] -translate-x-1/2 rounded-full bg-volt/35 blur-3xl" />
+          <div className="absolute -bottom-40 -left-20 size-96 animate-blob rounded-full bg-emerald-300/30 blur-3xl" />
+          <div className="absolute -right-20 -bottom-32 size-80 animate-blob rounded-full bg-emerald-200/40 blur-3xl [animation-delay:-8s]" />
+          <div className="absolute inset-0 bg-grain opacity-[0.12] mix-blend-multiply" />
         </div>
-      </div>
+
+        <div className="relative mx-auto max-w-3xl">
+          <h2 className="text-[2.25rem] leading-[1.04] font-semibold tracking-[-0.04em] text-ink text-balance-safe sm:text-6xl">
+            Your next workout is{" "}
+            <span className="font-serif font-normal italic">one search</span> away
+          </h2>
+          <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-gray-600">
+            Join the members already training across Karachi, or bring your gym
+            onto the network and start taking bookings this week.
+          </p>
+
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link
+              href="/gyms"
+              className="group inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-ink pr-2 pl-7 text-base font-medium text-white transition-colors hover:bg-gray-800 sm:w-auto"
+            >
+              Find gyms near you
+              <span className="flex size-10 items-center justify-center rounded-full bg-volt text-ink transition-transform duration-500 ease-out-expo group-hover:-rotate-45">
+                <HiArrowRight className="size-4.5" />
+              </span>
+            </Link>
+            <Link
+              href="/studio/register"
+              className="inline-flex h-14 w-full items-center justify-center rounded-full border border-gray-900/10 bg-surface/80 px-7 text-base font-medium text-gray-800 backdrop-blur transition-colors hover:border-gray-300 sm:w-auto"
+            >
+              List your gym
+            </Link>
+          </div>
+
+          <ul className="mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+            {assurances.map(({ icon: Icon, label }) => (
+              <li key={label} className="flex items-center gap-2 text-sm text-gray-600">
+                <Icon className="size-4.5 text-emerald-600" />
+                {label}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Reveal>
     </section>
   );
 };

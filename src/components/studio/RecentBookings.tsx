@@ -112,7 +112,7 @@ export default function RecentBookings() {
   };
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+    <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div>

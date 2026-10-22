@@ -3,221 +3,217 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { Logo, LogoMark } from "@/components/brand/Logo";
 import {
-  HiOutlineChartBar,
-  HiOutlineOfficeBuilding,
-  HiOutlineReceiptTax,
-  HiOutlineUserGroup,
-  HiOutlineCalendar,
-  HiOutlineSpeakerphone,
-  HiOutlineStar,
-  HiOutlineCurrencyDollar,
-  HiOutlineLightningBolt,
+  HiOutlineArrowTopRightOnSquare,
+  HiOutlineBuildingOffice2,
+  HiOutlineCalendarDays,
+  HiOutlineChartBarSquare,
   HiOutlineChevronDoubleLeft,
-  HiOutlineLightBulb,
-} from "react-icons/hi";
+  HiOutlineCurrencyDollar,
+  HiOutlineMegaphone,
+  HiOutlineReceiptPercent,
+  HiOutlineStar,
+  HiOutlineUserGroup,
+  HiXMark,
+} from "react-icons/hi2";
+
+type IconType = React.ComponentType<{ className?: string }>;
 
 interface ModuleLink {
-  id: number;
   title: string;
   href: string;
-  icon: React.ReactNode;
+  icon: IconType;
   badge?: string;
 }
 
-const modules: ModuleLink[] = [
+const moduleGroups: { label: string; items: ModuleLink[] }[] = [
   {
-    id: 9,
-    title: "Dashboard",
-    href: "/studio/dashboard",
-    icon: <HiOutlineChartBar className="h-5 w-5" />,
+    label: "Overview",
+    items: [
+      { title: "Dashboard", href: "/studio/dashboard", icon: HiOutlineChartBarSquare },
+      { title: "Capacity", href: "/studio/capacity", icon: HiOutlineUserGroup, badge: "Live" },
+      { title: "Bookings", href: "/studio/bookings", icon: HiOutlineCalendarDays },
+    ],
   },
   {
-    id: 10,
-    title: "Gym Profile",
-    href: "/studio/profile",
-    icon: <HiOutlineOfficeBuilding className="h-5 w-5" />,
+    label: "Grow",
+    items: [
+      { title: "Passes & pricing", href: "/studio/passes", icon: HiOutlineReceiptPercent },
+      { title: "Promotions", href: "/studio/promotions", icon: HiOutlineMegaphone },
+      { title: "Reviews", href: "/studio/reviews", icon: HiOutlineStar },
+    ],
   },
   {
-    id: 11,
-    title: "Pass & Pricing",
-    href: "/studio/passes",
-    icon: <HiOutlineReceiptTax className="h-5 w-5" />,
-  },
-  {
-    id: 12,
-    title: "Capacity",
-    href: "/studio/capacity",
-    icon: <HiOutlineUserGroup className="h-5 w-5" />,
-    badge: "Live",
-  },
-  {
-    id: 13,
-    title: "Bookings",
-    href: "/studio/bookings",
-    icon: <HiOutlineCalendar className="h-5 w-5" />,
-  },
-  {
-    id: 14,
-    title: "Promotions",
-    href: "/studio/promotions",
-    icon: <HiOutlineSpeakerphone className="h-5 w-5" />,
-  },
-  {
-    id: 15,
-    title: "Reviews",
-    href: "/studio/reviews",
-    icon: <HiOutlineStar className="h-5 w-5" />,
-  },
-  {
-    id: 16,
-    title: "Financial",
-    href: "/studio/financial",
-    icon: <HiOutlineCurrencyDollar className="h-5 w-5" />,
+    label: "Business",
+    items: [
+      { title: "Financial", href: "/studio/financial", icon: HiOutlineCurrencyDollar },
+      { title: "Gym profile", href: "/studio/profile", icon: HiOutlineBuildingOffice2 },
+    ],
   },
 ];
 
-export function StudioSidebar() {
+interface StudioSidebarProps {
+  isCollapsed: boolean;
+  onToggleCollapse: () => void;
+  mobileOpen: boolean;
+  onCloseMobile: () => void;
+}
+
+export function StudioSidebar({
+  isCollapsed,
+  onToggleCollapse,
+  mobileOpen,
+  onCloseMobile,
+}: StudioSidebarProps) {
   const pathname = usePathname();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  // The mobile drawer always shows the full sidebar
+  const collapsed = isCollapsed && !mobileOpen;
 
   return (
     <>
-      {/* Sidebar */}
+      {/* Mobile backdrop */}
+      <button
+        type="button"
+        aria-hidden="true"
+        tabIndex={-1}
+        onClick={onCloseMobile}
+        className={cn(
+          "fixed inset-0 z-40 bg-ink/20 backdrop-blur-sm transition-opacity duration-500 lg:hidden",
+          mobileOpen ? "opacity-100" : "pointer-events-none opacity-0",
+        )}
+      />
+
       <aside
         className={cn(
-          "fixed left-0 top-0 z-40 flex h-screen flex-col border-r border-gray-200 bg-white transition-all duration-300",
-          isCollapsed ? "w-20" : "w-64",
+          "fixed top-3 bottom-3 left-3 z-50 flex flex-col rounded-4xl border border-gray-900/[0.06] bg-surface shadow-soft transition-all duration-500 ease-out-expo",
+          "w-[17rem] lg:translate-x-0",
+          mobileOpen ? "translate-x-0 shadow-lift" : "-translate-x-[calc(100%_+_1rem)]",
+          collapsed ? "lg:w-[4.5rem]" : "lg:w-[16.5rem]",
         )}
+        aria-label="Studio navigation"
       >
         {/* Header */}
-        <div className="flex h-16 items-center justify-between border-b border-gray-200 px-4">
-          {!isCollapsed && (
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-linear-to-br from-emerald-500 to-teal-600">
-                <HiOutlineLightningBolt className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <span className="text-sm font-bold text-gray-900">
-                  Fit Planet
-                </span>
-                <span className="ml-1.5 rounded bg-emerald-100 px-1.5 py-0.5 text-xs font-medium text-emerald-700">
-                  Studio
-                </span>
-              </div>
+        <div className={cn("flex h-18 items-center px-4", collapsed ? "justify-center" : "justify-between")}>
+          {collapsed ? (
+            <Link href="/studio/dashboard" aria-label="Studio dashboard">
+              <LogoMark />
             </Link>
+          ) : (
+            <Logo href="/studio/dashboard" tag="Studio" />
           )}
           <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="rounded-lg p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
-            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            type="button"
+            onClick={onCloseMobile}
+            className="flex size-9 items-center justify-center rounded-full text-gray-500 hover:bg-gray-900/5 lg:hidden"
+            aria-label="Close navigation"
           >
-            <HiOutlineChevronDoubleLeft
-              className={cn(
-                "h-5 w-5 transition-transform duration-300",
-                isCollapsed && "rotate-180",
-              )}
-            />
+            <HiXMark className="size-5" />
           </button>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 space-y-1 overflow-y-auto p-3">
-          {/* Section Header */}
-          {!isCollapsed && (
-            <div className="mb-3 px-3">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                Studio Modules
-              </h3>
+        {/* Gym switcher */}
+        {!collapsed && (
+          <div className="mx-3 mb-2 flex items-center gap-3 rounded-2xl bg-canvas p-2.5 ring-1 ring-gray-900/[0.04]">
+            <span className="flex size-9 items-center justify-center rounded-xl bg-ink text-xs font-bold text-volt">
+              FZ
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-semibold text-ink">FitZone Karachi</p>
+              <p className="flex items-center gap-1.5 text-xs text-gray-500">
+                <span className="size-1.5 rounded-full bg-emerald-500" />
+                Open · Clifton
+              </p>
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Module Links */}
-          {modules.map((module) => {
-            const isActive = pathname === module.href;
-            return (
-              <Link
-                key={module.id}
-                href={module.href}
-                className={cn(
-                  "group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
-                  isActive
-                    ? "bg-emerald-50 text-emerald-700 shadow-sm"
-                    : "text-gray-700 hover:bg-gray-100 hover:text-gray-900",
-                  isCollapsed && "justify-center",
-                )}
-                title={isCollapsed ? module.title : undefined}
-              >
-                {/* Active Indicator */}
-                {isActive && (
-                  <div className="absolute left-0 top-0 h-full w-1 rounded-r-full bg-emerald-600" />
-                )}
-
-                {/* Icon */}
-                <div
-                  className={cn(
-                    "flex-shrink-0 transition-colors",
-                    isActive
-                      ? "text-emerald-600"
-                      : "text-gray-400 group-hover:text-gray-600",
-                  )}
-                >
-                  {module.icon}
-                </div>
-
-                {/* Title */}
-                {!isCollapsed && (
-                  <span className="flex-1 truncate">{module.title}</span>
-                )}
-
-                {/* Badge */}
-                {!isCollapsed && module.badge && (
-                  <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">
-                    {module.badge}
-                  </span>
-                )}
-
-                {/* Module Number (Collapsed) */}
-                {isCollapsed && (
-                  <div className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">
-                    {module.id}
-                  </div>
-                )}
-              </Link>
-            );
-          })}
+        {/* Navigation */}
+        <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-3 no-scrollbar">
+          {moduleGroups.map((group) => (
+            <div key={group.label}>
+              {!collapsed ? (
+                <p className="mb-1.5 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-400">
+                  {group.label}
+                </p>
+              ) : (
+                <div className="mx-auto mb-2 h-px w-6 bg-gray-900/[0.08]" />
+              )}
+              <div className="space-y-0.5">
+                {group.items.map((module) => {
+                  const isActive = pathname === module.href;
+                  const Icon = module.icon;
+                  return (
+                    <Link
+                      key={module.href}
+                      href={module.href}
+                      aria-current={isActive ? "page" : undefined}
+                      title={collapsed ? module.title : undefined}
+                      className={cn(
+                        "group relative flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition-all duration-300 ease-out-expo",
+                        isActive
+                          ? "bg-ink text-white shadow-soft"
+                          : "text-gray-600 hover:bg-gray-900/[0.04] hover:text-ink",
+                        collapsed && "justify-center px-0",
+                      )}
+                    >
+                      <Icon
+                        className={cn(
+                          "size-5 shrink-0 transition-colors",
+                          isActive ? "text-volt" : "text-gray-400 group-hover:text-gray-700",
+                        )}
+                      />
+                      {!collapsed && <span className="flex-1 truncate">{module.title}</span>}
+                      {!collapsed && module.badge && (
+                        <span
+                          className={cn(
+                            "flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide",
+                            isActive ? "bg-white/10 text-volt" : "bg-emerald-50 text-emerald-700",
+                          )}
+                        >
+                          <span className="size-1.5 animate-pulse rounded-full bg-current" />
+                          {module.badge}
+                        </span>
+                      )}
+                      {collapsed && module.badge && (
+                        <span className="absolute top-2 right-3 size-1.5 rounded-full bg-emerald-500" />
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
         {/* Footer */}
-        <div className="border-t border-gray-200 p-3">
-          {!isCollapsed ? (
-            <div className="rounded-lg bg-gradient-to-br from-emerald-50 to-teal-50 p-3">
-              <div className="flex items-start gap-2">
-                <div className="flex-shrink-0">
-                  <HiOutlineLightBulb className="h-5 w-5 text-emerald-600" />
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-gray-900">
-                    Need Help?
-                  </p>
-                  <p className="mt-0.5 text-xs text-gray-600">
-                    Check our guide
-                  </p>
-                  <button className="mt-1.5 text-xs font-medium text-emerald-600 hover:text-emerald-700">
-                    View Tutorial →
-                  </button>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <button
-              className="flex w-full items-center justify-center rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-emerald-600"
-              title="Need Help?"
+        <div className="space-y-2 p-3">
+          {!collapsed && (
+            <Link
+              href="/gyms/fitzone-karachi"
+              className="group flex items-center justify-between rounded-2xl bg-volt-soft/80 px-3.5 py-3 text-sm transition-colors hover:bg-volt-soft"
             >
-              <HiOutlineLightBulb className="h-5 w-5" />
-            </button>
+              <span>
+                <span className="block font-semibold text-ink">View public listing</span>
+                <span className="text-xs text-gray-600">See what members see</span>
+              </span>
+              <HiOutlineArrowTopRightOnSquare className="size-4 text-gray-600 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </Link>
           )}
+          <button
+            type="button"
+            onClick={onToggleCollapse}
+            className={cn(
+              "hidden w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-900/[0.04] hover:text-ink lg:flex",
+              collapsed && "justify-center px-0",
+            )}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            <HiOutlineChevronDoubleLeft
+              className={cn("size-5 transition-transform duration-500", collapsed && "rotate-180")}
+            />
+            {!collapsed && "Collapse"}
+          </button>
         </div>
       </aside>
     </>

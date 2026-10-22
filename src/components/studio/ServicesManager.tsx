@@ -322,7 +322,7 @@ export default function ServicesManager() {
               {services.map((service) => (
                 <div
                   key={service.id}
-                  className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4"
+                  className="flex items-center justify-between rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft"
                 >
                   <div className="flex-1">
                     <div className="flex items-center space-x-2">
@@ -492,10 +492,10 @@ export default function ServicesManager() {
               {trainers.map((trainer) => (
                 <div
                   key={trainer.id}
-                  className="rounded-lg border border-gray-200 bg-white p-4"
+                  className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft"
                 >
                   <div className="flex items-start space-x-3">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-2xl font-bold text-emerald-600">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-2xl font-semibold text-emerald-600 tracking-tight">
                       {trainer.name.charAt(0).toUpperCase()}
                     </div>
                     <div className="flex-1">
@@ -688,7 +688,7 @@ export default function ServicesManager() {
               {events.map((event) => (
                 <div
                   key={event.id}
-                  className="rounded-lg border border-gray-200 bg-white p-4"
+                  className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">

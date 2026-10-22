@@ -113,7 +113,7 @@ export function PricingCard({
                 {plan.name}
               </h3>
               <div className="mt-3">
-                <span className="text-3xl font-bold text-gray-900">
+                <span className="text-3xl font-semibold text-ink tracking-tight">
                   Rs. {plan.price.toLocaleString()}
                 </span>
                 <span className="text-gray-500 text-sm ml-1">
@@ -126,7 +126,7 @@ export function PricingCard({
               <ul className="mt-5 space-y-2.5">
                 {plan.features.map((feature, index) => (
                   <li key={index} className="flex items-start gap-2">
-                    <HiOutlineCheck className="h-5 w-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                    <HiOutlineCheck className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
                     <span className="text-sm text-gray-600">{feature}</span>
                   </li>
                 ))}

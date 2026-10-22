@@ -146,7 +146,7 @@ export default function PromotionalCampaigns() {
 
       {/* Create Campaign Form */}
       {showCreateForm && (
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <h3 className="mb-4 text-lg font-semibold text-gray-900">
             Create New Campaign
           </h3>
@@ -291,7 +291,7 @@ export default function PromotionalCampaigns() {
         {campaigns.map((campaign) => (
           <div
             key={campaign.id}
-            className="rounded-lg border-2 border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+            className="rounded-3xl border-2 border-gray-900/[0.06] bg-surface p-6 shadow-soft transition-shadow hover:shadow-lift"
           >
             <div className="flex items-start justify-between">
               <div className="flex items-start space-x-4">
@@ -352,19 +352,19 @@ export default function PromotionalCampaigns() {
             <div className="mt-6 grid grid-cols-3 gap-4 border-t border-gray-200 pt-4">
               <div>
                 <p className="text-xs text-gray-600">Redemptions</p>
-                <p className="mt-1 text-2xl font-bold text-gray-900">
+                <p className="mt-1 text-2xl font-semibold text-ink tracking-tight">
                   {campaign.redemptions}
                 </p>
               </div>
               <div>
                 <p className="text-xs text-gray-600">Revenue Generated</p>
-                <p className="mt-1 text-2xl font-bold text-emerald-600">
+                <p className="mt-1 text-2xl font-semibold text-emerald-600 tracking-tight">
                   Rs. {(campaign.revenue / 1000).toFixed(1)}K
                 </p>
               </div>
               <div>
                 <p className="text-xs text-gray-600">Avg. Discount</p>
-                <p className="mt-1 text-2xl font-bold text-gray-900">
+                <p className="mt-1 text-2xl font-semibold text-ink tracking-tight">
                   {campaign.discountType === "percentage"
                     ? `${campaign.discount}%`
                     : `Rs. ${campaign.discount}`}
@@ -391,7 +391,7 @@ export default function PromotionalCampaigns() {
       </div>
 
       {/* Campaign Templates */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-4 text-lg font-semibold text-gray-900">
           Quick Templates
         </h3>

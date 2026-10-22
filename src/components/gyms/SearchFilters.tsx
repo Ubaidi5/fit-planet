@@ -4,14 +4,18 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { filterOptions } from "@/lib/data/mock-gyms";
 import {
-  HiOutlineSearch,
-  HiOutlineAdjustments,
-  HiOutlineChevronDown,
-  HiOutlineCheckCircle,
-} from "react-icons/hi";
+  HiCheck,
+  HiChevronDown,
+  HiMagnifyingGlass,
+  HiOutlineAdjustmentsHorizontal,
+  HiOutlineCheckBadge,
+  HiOutlineClock,
+  HiXMark,
+} from "react-icons/hi2";
 
 interface SearchFiltersProps {
   onFilterChange?: (filters: FilterState) => void;
+  initialSearch?: string;
   className?: string;
 }
 
@@ -26,7 +30,7 @@ export interface FilterState {
   isVerified: boolean;
 }
 
-const initialFilters: FilterState = {
+export const initialFilters: FilterState = {
   search: "",
   sortBy: "distance",
   distance: Infinity,
@@ -37,15 +41,70 @@ const initialFilters: FilterState = {
   isVerified: false,
 };
 
+function Chip({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={cn(
+        "inline-flex h-9 items-center gap-1.5 rounded-full px-3.5 text-sm font-medium transition-all duration-300 ease-out-expo active:scale-95",
+        active
+          ? "bg-ink text-white shadow-soft"
+          : "bg-surface text-gray-600 ring-1 ring-gray-900/[0.08] hover:text-ink hover:ring-gray-900/15",
+      )}
+    >
+      {active && <HiCheck className="size-3.5" />}
+      {children}
+    </button>
+  );
+}
+
+function PillSelect({
+  value,
+  onChange,
+  label,
+  children,
+}: {
+  value: string | number;
+  onChange: (value: string) => void;
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="relative">
+      <label className="sr-only">{label}</label>
+      <select
+        aria-label={label}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="h-9 appearance-none rounded-full bg-surface pr-9 pl-3.5 text-sm font-medium text-gray-700 ring-1 ring-gray-900/[0.08] transition-shadow hover:ring-gray-900/15 focus:ring-2 focus:ring-emerald-500/40 focus:outline-none"
+      >
+        {children}
+      </select>
+      <HiChevronDown className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-gray-400" />
+    </div>
+  );
+}
+
 const SearchFilters: React.FC<SearchFiltersProps> = ({
   onFilterChange,
+  initialSearch = "",
   className,
 }) => {
-  const [filters, setFilters] = useState<FilterState>(initialFilters);
-  const [showFilters, setShowFilters] = useState(false);
-  const [expandedSections, setExpandedSections] = useState<string[]>([
-    "amenities",
-  ]);
+  const [filters, setFilters] = useState<FilterState>({
+    ...initialFilters,
+    search: initialSearch,
+  });
+  const [showPanel, setShowPanel] = useState(false);
 
   const updateFilters = (newFilters: Partial<FilterState>) => {
     const updated = { ...filters, ...newFilters };
@@ -64,270 +123,198 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
     updateFilters({ [key]: updated });
   };
 
-  const toggleSection = (section: string) => {
-    setExpandedSections((prev) =>
-      prev.includes(section)
-        ? prev.filter((s) => s !== section)
-        : [...prev, section],
-    );
-  };
-
   const clearFilters = () => {
-    setFilters(initialFilters);
-    onFilterChange?.(initialFilters);
+    const cleared = { ...initialFilters, search: filters.search };
+    setFilters(cleared);
+    onFilterChange?.(cleared);
   };
 
-  const activeFiltersCount =
+  const panelFiltersCount =
     filters.amenities.length +
     filters.equipmentTypes.length +
-    (filters.priceRange ? 1 : 0) +
+    (filters.priceRange ? 1 : 0);
+
+  const activeFiltersCount =
+    panelFiltersCount +
     (filters.distance !== Infinity ? 1 : 0) +
     (filters.is24Hours ? 1 : 0) +
     (filters.isVerified ? 1 : 0);
 
   return (
     <div className={cn("space-y-4", className)}>
-      {/* Search Bar */}
-      <div className="flex gap-3">
-        <div className="relative flex-1">
-          <HiOutlineSearch className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search gyms by name or area..."
-            value={filters.search}
-            onChange={(e) => updateFilters({ search: e.target.value })}
-            className="h-12 w-full rounded-xl border border-gray-300 bg-white pl-12 pr-4 text-sm text-gray-900 placeholder-gray-500 transition-colors focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-          />
-        </div>
-
-        {/* Filter Toggle Button (Mobile) */}
+      {/* Search */}
+      <div className="flex items-center gap-1.5 rounded-full border border-gray-900/[0.07] bg-surface p-1.5 shadow-soft transition-shadow focus-within:shadow-lift focus-within:ring-4 focus-within:ring-emerald-500/10">
+        <HiMagnifyingGlass className="ml-3.5 size-5 shrink-0 text-gray-400" />
+        <input
+          type="text"
+          placeholder="Search gyms by name or area"
+          aria-label="Search gyms by name or area"
+          value={filters.search}
+          onChange={(e) => updateFilters({ search: e.target.value })}
+          className="h-11 min-w-0 flex-1 bg-transparent px-1 text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none"
+        />
+        {filters.search && (
+          <button
+            type="button"
+            onClick={() => updateFilters({ search: "" })}
+            className="flex size-8 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-900/5 hover:text-gray-700"
+            aria-label="Clear search"
+          >
+            <HiXMark className="size-4" />
+          </button>
+        )}
         <button
           type="button"
-          onClick={() => setShowFilters(!showFilters)}
+          onClick={() => setShowPanel((open) => !open)}
+          aria-expanded={showPanel}
+          aria-controls="filters-panel"
           className={cn(
-            "flex h-12 items-center gap-2 rounded-xl border px-4 text-sm font-medium transition-colors lg:hidden",
-            showFilters
-              ? "border-emerald-500 bg-emerald-50 text-emerald-700"
-              : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50",
+            "inline-flex h-11 shrink-0 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors",
+            showPanel ? "bg-ink text-white" : "bg-canvas text-gray-800 hover:bg-canvas-deep",
           )}
         >
-          <HiOutlineAdjustments className="h-5 w-5" />
-          Filters
-          {activeFiltersCount > 0 && (
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-600 text-xs text-white">
-              {activeFiltersCount}
+          <HiOutlineAdjustmentsHorizontal className="size-4.5" />
+          <span className="hidden sm:inline">Filters</span>
+          {panelFiltersCount > 0 && (
+            <span
+              className={cn(
+                "flex size-5 items-center justify-center rounded-full text-[11px] font-semibold",
+                showPanel ? "bg-volt text-ink" : "bg-ink text-white",
+              )}
+            >
+              {panelFiltersCount}
             </span>
           )}
         </button>
       </div>
 
-      {/* Sort & Quick Filters Row */}
-      <div className="flex flex-wrap items-center gap-3">
-        {/* Sort Dropdown */}
-        <div className="relative">
-          <select
-            value={filters.sortBy}
-            onChange={(e) => updateFilters({ sortBy: e.target.value })}
-            className="h-10 appearance-none rounded-lg border border-gray-300 bg-white pl-3 pr-10 text-sm text-gray-700 transition-colors focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-          >
-            {filterOptions.sortOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          <HiOutlineChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
-        </div>
+      {/* Quick row */}
+      <div className="-mx-4 flex items-center gap-2 overflow-x-auto px-4 pb-1 no-scrollbar sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
+        <PillSelect
+          label="Sort by"
+          value={filters.sortBy}
+          onChange={(value) => updateFilters({ sortBy: value })}
+        >
+          {filterOptions.sortOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </PillSelect>
 
-        {/* Distance Dropdown */}
-        <div className="relative">
-          <select
-            value={filters.distance}
-            onChange={(e) =>
-              updateFilters({ distance: Number(e.target.value) })
-            }
-            className="h-10 appearance-none rounded-lg border border-gray-300 bg-white pl-3 pr-10 text-sm text-gray-700 transition-colors focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-          >
-            {filterOptions.distanceRanges.map((option) => (
-              <option key={option.label} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          <HiOutlineChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
-        </div>
+        <PillSelect
+          label="Distance"
+          value={filters.distance}
+          onChange={(value) => updateFilters({ distance: Number(value) })}
+        >
+          {filterOptions.distanceRanges.map((option) => (
+            <option key={option.label} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </PillSelect>
 
-        {/* Quick Toggle Filters */}
-        <button
-          type="button"
+        <span className="mx-1 hidden h-5 w-px bg-gray-900/10 sm:block" />
+
+        <Chip
+          active={filters.is24Hours}
           onClick={() => updateFilters({ is24Hours: !filters.is24Hours })}
-          className={cn(
-            "h-10 rounded-lg border px-3 text-sm font-medium transition-colors",
-            filters.is24Hours
-              ? "border-emerald-500 bg-emerald-50 text-emerald-700"
-              : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50",
-          )}
         >
-          24/7 Open
-        </button>
-
-        <button
-          type="button"
+          {!filters.is24Hours && <HiOutlineClock className="size-4" />}
+          Open 24/7
+        </Chip>
+        <Chip
+          active={filters.isVerified}
           onClick={() => updateFilters({ isVerified: !filters.isVerified })}
-          className={cn(
-            "h-10 rounded-lg border px-3 text-sm font-medium transition-colors",
-            filters.isVerified
-              ? "border-emerald-500 bg-emerald-50 text-emerald-700"
-              : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50",
-          )}
         >
-          <HiOutlineCheckCircle className="mr-1 inline h-4 w-4" />
-          Verified Only
-        </button>
+          {!filters.isVerified && <HiOutlineCheckBadge className="size-4" />}
+          Verified
+        </Chip>
 
-        {/* Clear Filters */}
         {activeFiltersCount > 0 && (
           <button
             type="button"
             onClick={clearFilters}
-            className="h-10 rounded-lg px-3 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+            className="h-9 shrink-0 rounded-full px-3 text-sm font-medium text-gray-500 underline-offset-4 transition-colors hover:text-ink hover:underline"
           >
-            Clear All
+            Clear all
           </button>
         )}
       </div>
 
-      {/* Expanded Filters Panel */}
+      {/* Panel */}
       <div
+        id="filters-panel"
         className={cn(
-          "overflow-hidden transition-all duration-300 lg:block",
-          showFilters
-            ? "max-h-[1000px] opacity-100"
-            : "max-h-0 opacity-0 lg:max-h-none lg:opacity-100",
+          "grid transition-all duration-500 ease-out-expo",
+          showPanel ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
         )}
       >
-        <div className="rounded-xl border border-gray-200 bg-white p-4 lg:p-6">
-          <div className="grid gap-6 lg:grid-cols-3">
-            {/* Price Range */}
-            <div>
-              <h4 className="mb-3 text-sm font-medium text-gray-900">
-                Day Pass Price
-              </h4>
-              <div className="space-y-2">
+        <div className="overflow-hidden">
+          <div className="grid gap-8 rounded-4xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft sm:p-8 lg:grid-cols-[1fr_2fr_2fr]">
+            <fieldset>
+              <legend className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-gray-400">
+                Day pass price
+              </legend>
+              <div className="flex flex-wrap gap-2">
+                <Chip
+                  active={filters.priceRange === null}
+                  onClick={() => updateFilters({ priceRange: null })}
+                >
+                  Any
+                </Chip>
                 {filterOptions.priceRanges.map((range) => (
-                  <label
+                  <Chip
                     key={range.label}
-                    className="flex cursor-pointer items-center gap-2"
+                    active={
+                      filters.priceRange?.min === range.min &&
+                      filters.priceRange?.max === range.max
+                    }
+                    onClick={() =>
+                      updateFilters({
+                        priceRange: { min: range.min, max: range.max },
+                      })
+                    }
                   >
-                    <input
-                      type="radio"
-                      name="priceRange"
-                      checked={
-                        filters.priceRange?.min === range.min &&
-                        filters.priceRange?.max === range.max
-                      }
-                      onChange={() =>
-                        updateFilters({
-                          priceRange: { min: range.min, max: range.max },
-                        })
-                      }
-                      className="h-4 w-4 border-gray-300 text-emerald-600 focus:ring-emerald-500"
-                    />
-                    <span className="text-sm text-gray-600">{range.label}</span>
-                  </label>
+                    {range.label}
+                  </Chip>
                 ))}
-                <label className="flex cursor-pointer items-center gap-2">
-                  <input
-                    type="radio"
-                    name="priceRange"
-                    checked={filters.priceRange === null}
-                    onChange={() => updateFilters({ priceRange: null })}
-                    className="h-4 w-4 border-gray-300 text-emerald-600 focus:ring-emerald-500"
-                  />
-                  <span className="text-sm text-gray-600">Any price</span>
-                </label>
               </div>
-            </div>
+            </fieldset>
 
-            {/* Amenities */}
-            <div>
-              <button
-                type="button"
-                onClick={() => toggleSection("amenities")}
-                className="mb-3 flex w-full items-center justify-between text-sm font-medium text-gray-900"
-              >
+            <fieldset>
+              <legend className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-gray-400">
                 Amenities
-                <HiOutlineChevronDown
-                  className={cn(
-                    "h-4 w-4 transition-transform",
-                    expandedSections.includes("amenities") && "rotate-180",
-                  )}
-                />
-              </button>
-              <div
-                className={cn(
-                  "grid grid-cols-2 gap-2 overflow-hidden transition-all",
-                  expandedSections.includes("amenities")
-                    ? "max-h-96"
-                    : "max-h-0",
-                )}
-              >
+              </legend>
+              <div className="flex flex-wrap gap-2">
                 {filterOptions.amenities.map((amenity) => (
-                  <label
+                  <Chip
                     key={amenity}
-                    className="flex cursor-pointer items-center gap-2"
+                    active={filters.amenities.includes(amenity)}
+                    onClick={() => toggleArrayFilter("amenities", amenity)}
                   >
-                    <input
-                      type="checkbox"
-                      checked={filters.amenities.includes(amenity)}
-                      onChange={() => toggleArrayFilter("amenities", amenity)}
-                      className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
-                    />
-                    <span className="text-sm text-gray-600">{amenity}</span>
-                  </label>
+                    {amenity}
+                  </Chip>
                 ))}
               </div>
-            </div>
+            </fieldset>
 
-            {/* Equipment Types */}
-            <div>
-              <button
-                type="button"
-                onClick={() => toggleSection("equipment")}
-                className="mb-3 flex w-full items-center justify-between text-sm font-medium text-gray-900"
-              >
-                Equipment Types
-                <HiOutlineChevronDown
-                  className={cn(
-                    "h-4 w-4 transition-transform",
-                    expandedSections.includes("equipment") && "rotate-180",
-                  )}
-                />
-              </button>
-              <div
-                className={cn(
-                  "grid grid-cols-2 gap-2 overflow-hidden transition-all",
-                  expandedSections.includes("equipment")
-                    ? "max-h-96"
-                    : "max-h-0",
-                )}
-              >
+            <fieldset>
+              <legend className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-gray-400">
+                Training style
+              </legend>
+              <div className="flex flex-wrap gap-2">
                 {filterOptions.equipmentTypes.map((type) => (
-                  <label
+                  <Chip
                     key={type}
-                    className="flex cursor-pointer items-center gap-2"
+                    active={filters.equipmentTypes.includes(type)}
+                    onClick={() => toggleArrayFilter("equipmentTypes", type)}
                   >
-                    <input
-                      type="checkbox"
-                      checked={filters.equipmentTypes.includes(type)}
-                      onChange={() => toggleArrayFilter("equipmentTypes", type)}
-                      className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
-                    />
-                    <span className="text-sm text-gray-600">{type}</span>
-                  </label>
+                    {type}
+                  </Chip>
                 ))}
               </div>
-            </div>
+            </fieldset>
           </div>
         </div>
       </div>

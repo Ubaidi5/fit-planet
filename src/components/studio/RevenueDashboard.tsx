@@ -94,9 +94,9 @@ export default function RevenueDashboard() {
 
       {/* Revenue Overview Cards */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">This Month</p>
-          <p className="mt-2 text-3xl font-bold text-emerald-600">
+          <p className="mt-2 text-3xl font-semibold text-emerald-600 tracking-tight">
             Rs. {(485000 / 1000).toFixed(0)}K
           </p>
           <p className="mt-1 text-xs text-emerald-600">
@@ -104,17 +104,17 @@ export default function RevenueDashboard() {
           </p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Average Daily</p>
-          <p className="mt-2 text-3xl font-bold text-blue-600">
+          <p className="mt-2 text-3xl font-semibold text-blue-600 tracking-tight">
             Rs. {(485000 / 27).toFixed(0)}K
           </p>
           <p className="mt-1 text-xs text-gray-600">Based on 27 days</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Projected (Year)</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">
             Rs. {((485000 * 12) / 1000000).toFixed(1)}M
           </p>
           <p className="mt-1 text-xs text-gray-600">At current rate</p>
@@ -122,7 +122,7 @@ export default function RevenueDashboard() {
       </div>
 
       {/* Revenue Trends Chart */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-6 text-lg font-semibold text-gray-900">
           Revenue Trends
         </h3>
@@ -171,7 +171,7 @@ export default function RevenueDashboard() {
       </div>
 
       {/* Revenue by Pass Type */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-6 text-lg font-semibold text-gray-900">
           Revenue by Pass Type
         </h3>
@@ -221,7 +221,7 @@ export default function RevenueDashboard() {
         <div className="mt-6 border-t border-gray-200 pt-4">
           <div className="flex items-center justify-between">
             <p className="text-lg font-bold text-gray-900">Total Revenue</p>
-            <p className="text-2xl font-bold text-emerald-600">
+            <p className="text-2xl font-semibold text-emerald-600 tracking-tight">
               Rs. {(totalRevenue / 1000).toFixed(0)}K
             </p>
           </div>
@@ -229,7 +229,7 @@ export default function RevenueDashboard() {
       </div>
 
       {/* Daily Breakdown (Last 7 Days) */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-6 text-lg font-semibold text-gray-900">
           Daily Breakdown (Last 7 Days)
         </h3>

@@ -119,13 +119,13 @@ export default function ActiveMembers() {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">
                 Currently Inside
               </p>
-              <p className="mt-2 text-3xl font-bold text-gray-900">42</p>
+              <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">42</p>
             </div>
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
               <span className="text-2xl">👥</span>
@@ -133,11 +133,11 @@ export default function ActiveMembers() {
           </div>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Members</p>
-              <p className="mt-2 text-3xl font-bold text-emerald-600">28</p>
+              <p className="mt-2 text-3xl font-semibold text-emerald-600 tracking-tight">28</p>
             </div>
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
               <span className="text-2xl">🏋️</span>
@@ -145,11 +145,11 @@ export default function ActiveMembers() {
           </div>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Day Passes</p>
-              <p className="mt-2 text-3xl font-bold text-purple-600">14</p>
+              <p className="mt-2 text-3xl font-semibold text-purple-600 tracking-tight">14</p>
             </div>
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-100">
               <span className="text-2xl">🎫</span>
@@ -159,7 +159,7 @@ export default function ActiveMembers() {
       </div>
 
       {/* Filters & Search */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
           <div className="flex space-x-2">
             <button
@@ -212,7 +212,7 @@ export default function ActiveMembers() {
       </div>
 
       {/* Active Members List */}
-      <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface shadow-soft">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="border-b border-gray-200 bg-gray-50">

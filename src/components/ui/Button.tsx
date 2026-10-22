@@ -6,85 +6,78 @@ import { cn } from "@/lib/utils";
 const buttonVariants = cva(
   // Base styles
   [
-    "inline-flex items-center justify-center cursor-pointer",
-    "rounded-xl font-semibold",
-    "transition-all duration-200 ease-in-out",
-    "focus:outline-none focus:ring-2 focus:ring-offset-2",
+    "group/button relative inline-flex cursor-pointer items-center justify-center overflow-hidden",
+    "rounded-full font-medium tracking-tight whitespace-nowrap",
+    "transition-[background-color,border-color,color,box-shadow,transform] duration-300 ease-out-expo",
+    "focus-visible:outline-none focus-visible:ring-4",
     "disabled:pointer-events-none disabled:opacity-50",
-    "relative overflow-hidden",
-    "active:scale-[0.98]",
+    "active:scale-[0.97]",
   ],
   {
     variants: {
       variant: {
         primary: [
-          "bg-emerald-600 text-white border border-emerald-600",
-          "hover:bg-emerald-700 hover:border-emerald-700",
-          "focus:ring-emerald-500/20",
-          "shadow-sm hover:shadow-md",
+          "bg-emerald-600 text-white",
+          "shadow-[inset_0_1px_0_oklch(1_0_0/0.18),0_1px_2px_oklch(0.2_0.01_60/0.12)]",
+          "hover:bg-emerald-700 hover:shadow-glow",
+          "focus-visible:ring-emerald-500/25",
         ],
         secondary: [
-          "bg-teal-600 text-white border border-teal-600",
-          "hover:bg-teal-700 hover:border-teal-700",
-          "focus:ring-teal-500/20",
-          "shadow-sm hover:shadow-md",
+          "bg-ink text-white",
+          "shadow-[inset_0_1px_0_oklch(1_0_0/0.12),0_1px_2px_oklch(0.2_0.01_60/0.2)]",
+          "hover:bg-gray-800",
+          "focus-visible:ring-gray-900/20",
         ],
         success: [
-          "bg-green-600 text-white border border-green-600",
-          "hover:bg-green-700 hover:border-green-700",
-          "focus:ring-green-500/20",
-          "shadow-sm hover:shadow-md",
+          "bg-emerald-600 text-white",
+          "hover:bg-emerald-700",
+          "focus-visible:ring-emerald-500/25",
         ],
         warning: [
-          "bg-amber-500 text-white border border-amber-500",
-          "hover:bg-amber-600 hover:border-amber-600",
-          "focus:ring-amber-400/20",
-          "shadow-sm hover:shadow-md",
+          "bg-amber-500 text-white",
+          "hover:bg-amber-600",
+          "focus-visible:ring-amber-400/25",
         ],
         danger: [
-          "bg-red-600 text-white border border-red-600",
-          "hover:bg-red-700 hover:border-red-700",
-          "focus:ring-red-500/20",
-          "shadow-sm hover:shadow-md",
+          "bg-red-600 text-white",
+          "hover:bg-red-700",
+          "focus-visible:ring-red-500/25",
         ],
         outline: [
-          "bg-transparent text-gray-700 border border-gray-300",
-          "hover:bg-gray-50 hover:border-gray-400",
-          "focus:ring-gray-400/20",
-          "shadow-sm",
+          "border border-gray-200 bg-surface text-gray-800 shadow-soft",
+          "hover:border-gray-300 hover:bg-white hover:text-ink",
+          "focus-visible:ring-gray-400/20",
         ],
         ghost: [
-          "bg-transparent text-gray-700 border border-transparent",
-          "hover:bg-gray-100 hover:text-gray-900",
-          "focus:ring-gray-400/20",
+          "bg-transparent text-gray-700",
+          "hover:bg-gray-900/5 hover:text-ink",
+          "focus-visible:ring-gray-400/20",
+        ],
+        volt: [
+          "bg-volt text-ink",
+          "shadow-[inset_0_1px_0_oklch(1_0_0/0.4),0_1px_2px_oklch(0.2_0.01_60/0.12)]",
+          "hover:brightness-95",
+          "focus-visible:ring-lime-400/40",
         ],
         link: [
-          "bg-transparent text-emerald-600 border border-transparent",
-          "hover:text-emerald-700 hover:underline",
-          "focus:ring-emerald-500/20",
-          "shadow-none",
+          "bg-transparent text-emerald-700",
+          "hover:text-emerald-800 hover:underline underline-offset-4",
+          "focus-visible:ring-emerald-500/20",
           "h-auto px-0",
         ],
       },
       size: {
-        sm: "h-9 px-3 text-sm gap-1.5",
-        md: "h-10 px-4 text-sm gap-2",
-        lg: "h-12 px-6 text-base gap-2.5",
+        sm: "h-9 px-3.5 text-sm gap-1.5",
+        md: "h-10 px-4.5 text-sm gap-2",
+        lg: "h-12 px-6 text-[15px] gap-2.5",
         xl: "h-14 px-8 text-base gap-3",
-        icon: "h-10 w-10 p-0",
+        icon: "size-10 p-0",
       },
       fullWidth: {
         true: "w-full",
         false: "",
       },
     },
-    compoundVariants: [
-      // Outline style variant (deprecated but kept for backward compatibility)
-      {
-        variant: "primary",
-        className: "",
-      },
-    ],
     defaultVariants: {
       variant: "primary",
       size: "md",
@@ -145,11 +138,10 @@ export interface ButtonProps
 }
 
 /**
- * Modern Button component matching Fit Planet theme (Emerald/Teal)
+ * Pill button in the Fit Planet style
  *
  * Features:
- * - Primary: Emerald green (brand color)
- * - Secondary: Teal (secondary brand color)
+ * - Primary: emerald brand, Secondary: ink, Volt: lime highlight
  * - Success, Warning, Danger variants for different actions
  * - Outline and Ghost for subtle CTAs
  * - Multiple sizes (sm, md, lg, xl, icon)
@@ -208,7 +200,7 @@ export function Button({
               {beforeIcon}
             </span>
           )}
-          {children && <span className="flex-1 truncate">{children}</span>}
+          {children && <span className="inline-flex flex-1 items-center truncate">{children}</span>}
           {afterIcon && (
             <span className={cn("shrink-0", children && "-mr-0.5")}>
               {afterIcon}

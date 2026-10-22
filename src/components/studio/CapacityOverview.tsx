@@ -54,7 +54,7 @@ export default function CapacityOverview() {
   };
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+    <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div>
@@ -75,7 +75,7 @@ export default function CapacityOverview() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <p className="text-3xl font-bold text-gray-900">
+            <p className="text-3xl font-semibold text-ink tracking-tight">
               {currentCapacity}/{maxCapacity}
             </p>
             <p className="text-sm text-gray-600">People currently inside</p>

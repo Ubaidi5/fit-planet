@@ -183,7 +183,7 @@ export default function ReviewMonitoring() {
   return (
     <div className="space-y-6">
       {/* Filters and Search */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           {/* Search */}
           <div>
@@ -251,7 +251,7 @@ export default function ReviewMonitoring() {
           Showing {filteredReviews.length} of {reviews.length} reviews
         </p>
 
-        <button className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
+        <button className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
           Export Reviews
         </button>
       </div>
@@ -259,7 +259,7 @@ export default function ReviewMonitoring() {
       {/* Reviews List */}
       <div className="space-y-4">
         {filteredReviews.length === 0 ? (
-          <div className="rounded-lg border border-gray-200 bg-white p-12 text-center shadow-sm">
+          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-12 text-center shadow-soft">
             <p className="text-gray-600">
               No reviews found matching your filters.
             </p>
@@ -269,7 +269,7 @@ export default function ReviewMonitoring() {
             <div
               key={review.id}
               className={cn(
-                "rounded-lg border bg-white p-6 shadow-sm transition-all",
+                "rounded-3xl border bg-surface p-6 shadow-soft transition-all",
                 !review.hasResponse
                   ? "border-orange-200 bg-orange-50"
                   : "border-gray-200",
@@ -346,21 +346,21 @@ export default function ReviewMonitoring() {
               {/* Action Buttons */}
               <div className="mt-4 flex items-center space-x-3">
                 {!review.hasResponse ? (
-                  <button className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
+                  <button className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
                     Reply to Review
                   </button>
                 ) : (
-                  <button className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50">
+                  <button className="rounded-full border border-gray-200 bg-surface px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50">
                     Edit Response
                   </button>
                 )}
 
-                <button className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50">
+                <button className="rounded-full border border-gray-200 bg-surface px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50">
                   Share Review
                 </button>
 
                 {review.rating >= 4 && (
-                  <button className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50">
+                  <button className="rounded-full border border-gray-200 bg-surface px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50">
                     Feature on Website
                   </button>
                 )}

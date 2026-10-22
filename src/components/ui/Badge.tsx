@@ -17,18 +17,18 @@ const Badge: React.FC<BadgeProps> = ({
   return (
     <span
       className={cn(
-        "inline-flex items-center font-medium rounded-full",
+        "inline-flex items-center gap-1 font-medium rounded-full",
         // Size variants
         size === "sm" && "px-2 py-0.5 text-xs",
         size === "md" && "px-2.5 py-1 text-sm",
         // Color variants
-        variant === "default" && "bg-gray-100 text-gray-700",
-        variant === "success" && "bg-emerald-100 text-emerald-700",
-        variant === "warning" && "bg-amber-100 text-amber-700",
-        variant === "danger" && "bg-red-100 text-red-700",
-        variant === "info" && "bg-blue-100 text-blue-700",
+        variant === "default" && "bg-gray-900/5 text-gray-700 ring-1 ring-gray-900/5",
+        variant === "success" && "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/15",
+        variant === "warning" && "bg-amber-50 text-amber-700 ring-1 ring-amber-600/15",
+        variant === "danger" && "bg-red-50 text-red-700 ring-1 ring-red-600/15",
+        variant === "info" && "bg-sky-50 text-sky-700 ring-1 ring-sky-600/15",
         variant === "outline" &&
-          "bg-transparent border border-gray-300 text-gray-600",
+          "bg-transparent text-gray-600 ring-1 ring-gray-300",
         className,
       )}
       {...props}

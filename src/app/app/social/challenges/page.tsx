@@ -90,7 +90,7 @@ export default function ChallengesPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+          <h1 className="text-2xl font-semibold text-ink sm:text-3xl tracking-tight">
             Challenges
           </h1>
           <p className="mt-1 text-gray-500">
@@ -111,7 +111,7 @@ export default function ChallengesPage() {
               🏆
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">12</p>
+              <p className="text-2xl font-semibold text-ink tracking-tight">12</p>
               <p className="text-sm text-gray-500">Challenges Won</p>
             </div>
           </div>
@@ -122,7 +122,7 @@ export default function ChallengesPage() {
               🎯
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-2xl font-semibold text-ink tracking-tight">
                 {
                   challenges.filter((c) => c.isJoined && c.status === "active")
                     .length
@@ -138,7 +138,7 @@ export default function ChallengesPage() {
               🎖️
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">8</p>
+              <p className="text-2xl font-semibold text-ink tracking-tight">8</p>
               <p className="text-sm text-gray-500">Badges Earned</p>
             </div>
           </div>
@@ -149,7 +149,7 @@ export default function ChallengesPage() {
               🔥
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">14</p>
+              <p className="text-2xl font-semibold text-ink tracking-tight">14</p>
               <p className="text-sm text-gray-500">Day Streak</p>
             </div>
           </div>
@@ -271,7 +271,7 @@ function ChallengeCard({
       <div className="border-b border-gray-100 bg-linear-to-r from-emerald-50 to-teal-50 p-4">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white text-2xl shadow-sm">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-3xl bg-surface text-2xl shadow-soft">
               {getChallengeIcon()}
             </div>
             <div>

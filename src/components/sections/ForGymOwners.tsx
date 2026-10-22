@@ -1,235 +1,216 @@
 import Link from "next/link";
 import {
-  HiOutlineDesktopComputer,
-  HiOutlinePresentationChartLine,
-  HiOutlineCurrencyDollar,
-  HiOutlineQrcode,
+  HiArrowRight,
+  HiArrowTrendingUp,
   HiOutlineChartBar,
+  HiOutlineComputerDesktop,
+  HiOutlineCurrencyDollar,
+  HiOutlinePresentationChartLine,
+  HiOutlineQrCode,
   HiOutlineTag,
-  HiOutlineArrowRight,
-} from "react-icons/hi";
+} from "react-icons/hi2";
+import { Reveal } from "@/components/motion/Reveal";
+import { ownerPreview } from "@/lib/data/mock-platform";
+import { Accent, SectionHeading } from "./SectionHeading";
 
 const benefits = [
   {
-    title: "No Software Hassle",
-    description:
-      "Get a professional online presence without building your own website or app. We handle all the tech.",
-    icon: <HiOutlineDesktopComputer className="h-6 w-6" />,
+    title: "No software hassle",
+    description: "A polished listing and booking flow without building a website or app.",
+    icon: HiOutlineComputerDesktop,
   },
   {
-    title: "Manage Capacity",
-    description:
-      "Set your gym's capacity limits and prevent overcrowding. Members see real-time availability before booking.",
-    icon: <HiOutlinePresentationChartLine className="h-6 w-6" />,
+    title: "Capacity control",
+    description: "Set limits per hour and stop overcrowding before it happens.",
+    icon: HiOutlinePresentationChartLine,
   },
   {
-    title: "Flexible Pricing",
-    description:
-      "Create day passes, week passes, monthly memberships, and custom packages with your own pricing.",
-    icon: <HiOutlineCurrencyDollar className="h-6 w-6" />,
+    title: "Flexible pricing",
+    description: "Day, week and monthly passes, add-ons and custom packages.",
+    icon: HiOutlineCurrencyDollar,
   },
   {
-    title: "Easy Check-Ins",
-    description:
-      "Scan member QR codes for instant verification. No more manual registers or identity checks at the door.",
-    icon: <HiOutlineQrcode className="h-6 w-6" />,
+    title: "QR check-ins",
+    description: "Scan and verify members instantly. No paper registers.",
+    icon: HiOutlineQrCode,
   },
   {
-    title: "Analytics Dashboard",
-    description:
-      "Track bookings, revenue, peak hours, and member insights with our comprehensive analytics tools.",
-    icon: <HiOutlineChartBar className="h-6 w-6" />,
+    title: "Analytics",
+    description: "Bookings, revenue, peak hours and member insights at a glance.",
+    icon: HiOutlineChartBar,
   },
   {
-    title: "Run Promotions",
-    description:
-      "Create discount codes, seasonal offers, and referral programs to attract and retain more members.",
-    icon: <HiOutlineTag className="h-6 w-6" />,
+    title: "Promotions",
+    description: "Discount codes, seasonal offers and referral programs.",
+    icon: HiOutlineTag,
   },
 ];
 
-const ForGymOwners: React.FC = () => {
-  return (
-    <section id="for-owners" className="bg-gray-900 py-20 lg:py-28">
-      <div className="container mx-auto px-4">
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
-          {/* Left Content */}
-          <div>
-            <span className="inline-block rounded-full bg-emerald-900/50 px-4 py-1.5 text-sm font-medium text-emerald-400">
-              For Gym Owners
-            </span>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Manage Your Gym Business{" "}
-              <span className="text-emerald-400">Without the Hassle</span>
-            </h2>
-            <p className="mt-4 text-lg text-gray-300">
-              Most gyms don't have websites or management software. Fit Planet
-              gives you a complete platform to manage operations, reach more
-              customers, and grow your business — all in one place.
-            </p>
+const days = ["M", "T", "W", "T", "F", "S", "S"];
 
-            {/* Benefits Grid */}
-            <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
-              {benefits.map((benefit, index) => (
-                <div key={index} className="flex gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-600/20 text-emerald-400">
-                    {benefit.icon}
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-white">
-                      {benefit.title}
-                    </h3>
-                    <p className="mt-1 text-sm text-gray-400">
-                      {benefit.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
+const ForGymOwners: React.FC = () => {
+  const maxBookings = Math.max(...ownerPreview.weeklyBookings);
+  const capacityPct = Math.round(
+    (ownerPreview.capacity.current / ownerPreview.capacity.max) * 100,
+  );
+
+  return (
+    <section id="for-owners" className="px-3 sm:px-4">
+      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] border border-gray-900/[0.06] bg-canvas-deep py-20 lg:py-28">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-dot-grid opacity-60 [mask-image:radial-gradient(ellipse_at_top_right,black,transparent_70%)]" />
+        <div aria-hidden="true" className="pointer-events-none absolute -right-24 -bottom-24 size-96 rounded-full bg-emerald-300/25 blur-3xl" />
+
+        <div className="relative grid items-center gap-14 px-5 sm:px-10 lg:grid-cols-2 lg:gap-16 lg:px-14">
+          <div>
+            <SectionHeading
+              align="left"
+              eyebrow="For gym owners"
+              title={
+                <>
+                  Run your gym like a <Accent>modern business</Accent>
+                </>
+              }
+              description="Most gyms still run on WhatsApp and paper registers. Fit Planet Studio brings bookings, capacity, pricing and payouts into one place, and sends you new members."
+            />
+
+            <div className="mt-10 grid gap-x-6 gap-y-6 sm:grid-cols-2">
+              {benefits.map((benefit, index) => {
+                const Icon = benefit.icon;
+                return (
+                  <Reveal key={benefit.title} delay={index * 60} className="flex gap-3.5">
+                    <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-surface text-emerald-700 shadow-soft ring-1 ring-gray-900/[0.05]">
+                      <Icon className="size-5" />
+                    </span>
+                    <div>
+                      <h3 className="text-[15px] font-semibold text-ink">{benefit.title}</h3>
+                      <p className="mt-1 text-sm leading-relaxed text-gray-600">
+                        {benefit.description}
+                      </p>
+                    </div>
+                  </Reveal>
+                );
+              })}
             </div>
 
-            {/* CTA */}
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+            <Reveal delay={200} className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/studio/register"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-emerald-600 px-6 text-base font-semibold text-white shadow-sm transition-all hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+                className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-ink pr-1.5 pl-6 text-[15px] font-medium text-white transition-colors hover:bg-gray-800"
               >
-                Register Your Gym
-                <HiOutlineArrowRight className="h-5 w-5" />
+                List your gym free
+                <span className="flex size-9 items-center justify-center rounded-full bg-volt text-ink transition-transform duration-500 ease-out-expo group-hover:-rotate-45">
+                  <HiArrowRight className="size-4" />
+                </span>
               </Link>
               <Link
-                href="/studio-features"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-gray-700 px-6 text-base font-semibold text-white transition-colors hover:bg-gray-800"
+                href="/studio/login"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-gray-900/10 bg-surface px-6 text-[15px] font-medium text-gray-800 transition-colors hover:border-gray-300"
               >
-                Learn More
+                Studio login
               </Link>
-            </div>
+            </Reveal>
           </div>
 
-          {/* Right Side - Dashboard Preview */}
-          <div className="relative">
-            <div className="rounded-2xl bg-gray-800 p-6 shadow-2xl ring-1 ring-gray-700">
-              {/* Mock Dashboard Header */}
-              <div className="flex items-center justify-between border-b border-gray-700 pb-4">
+          {/* Dashboard preview */}
+          <Reveal delay={120} className="relative">
+            <div className="rounded-4xl border border-gray-900/[0.06] bg-surface p-5 shadow-lift sm:p-6">
+              <div className="flex items-center justify-between border-b border-gray-900/[0.06] pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-lg bg-emerald-600 flex items-center justify-center">
-                    <span className="text-white font-bold">FP</span>
-                  </div>
+                  <span className="flex size-10 items-center justify-center rounded-xl bg-ink text-sm font-bold text-volt">
+                    FZ
+                  </span>
                   <div>
-                    <p className="font-semibold text-white">Fitness Hub</p>
-                    <p className="text-xs text-gray-400">Studio Dashboard</p>
+                    <p className="font-semibold text-ink">{ownerPreview.gymName}</p>
+                    <p className="text-xs text-gray-500">Studio dashboard</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="flex h-2 w-2 rounded-full bg-emerald-500"></span>
-                  <span className="text-xs text-emerald-400">Online</span>
-                </div>
+                <span className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 ring-1 ring-emerald-600/15">
+                  <span className="size-1.5 rounded-full bg-emerald-500" />
+                  Open now
+                </span>
               </div>
 
-              {/* Mock Stats */}
-              <div className="mt-6 grid grid-cols-3 gap-4">
-                <div className="rounded-lg bg-gray-900/50 p-4">
-                  <p className="text-2xl font-bold text-white">42</p>
-                  <p className="text-xs text-gray-400">Today's Check-ins</p>
-                </div>
-                <div className="rounded-lg bg-gray-900/50 p-4">
-                  <p className="text-2xl font-bold text-emerald-400">Rs. 45K</p>
-                  <p className="text-xs text-gray-400">Today's Revenue</p>
-                </div>
-                <div className="rounded-lg bg-gray-900/50 p-4">
-                  <p className="text-2xl font-bold text-white">32/50</p>
-                  <p className="text-xs text-gray-400">Current Capacity</p>
-                </div>
+              <div className="mt-5 grid grid-cols-3 gap-2.5 sm:gap-3">
+                {[
+                  { label: "Check-ins today", value: ownerPreview.checkInsToday },
+                  {
+                    label: "Revenue today",
+                    value: `Rs. ${Math.round(ownerPreview.revenueToday / 1000)}K`,
+                  },
+                  { label: "In the gym", value: `${capacityPct}%` },
+                ].map((stat) => (
+                  <div key={stat.label} className="rounded-2xl bg-canvas p-3 sm:p-4">
+                    <p className="text-lg font-semibold tracking-tight text-ink tabular-nums sm:text-2xl">
+                      {stat.value}
+                    </p>
+                    <p className="mt-0.5 text-[11px] leading-tight text-gray-500 sm:text-xs">
+                      {stat.label}
+                    </p>
+                  </div>
+                ))}
               </div>
 
-              {/* Mock Chart Area */}
-              <div className="mt-6 rounded-lg bg-gray-900/50 p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <p className="text-sm font-medium text-white">
-                    Weekly Bookings
-                  </p>
-                  <span className="text-xs text-emerald-400">+12%</span>
+              <div className="mt-3 rounded-2xl bg-canvas p-4">
+                <div className="mb-4 flex items-center justify-between">
+                  <p className="text-sm font-medium text-ink">Weekly bookings</p>
+                  <span className="flex items-center gap-1 text-xs font-semibold text-emerald-700">
+                    <HiArrowTrendingUp className="size-3.5" />+{ownerPreview.weeklyGrowth}%
+                  </span>
                 </div>
-                {/* Simple Bar Chart Mock */}
-                <div className="flex items-end gap-2 h-24">
-                  <div
-                    className="flex-1 bg-emerald-600/30 rounded-t"
-                    style={{ height: "40%" }}
-                  ></div>
-                  <div
-                    className="flex-1 bg-emerald-600/30 rounded-t"
-                    style={{ height: "60%" }}
-                  ></div>
-                  <div
-                    className="flex-1 bg-emerald-600/30 rounded-t"
-                    style={{ height: "45%" }}
-                  ></div>
-                  <div
-                    className="flex-1 bg-emerald-600/30 rounded-t"
-                    style={{ height: "80%" }}
-                  ></div>
-                  <div
-                    className="flex-1 bg-emerald-600/30 rounded-t"
-                    style={{ height: "70%" }}
-                  ></div>
-                  <div
-                    className="flex-1 bg-emerald-600/30 rounded-t"
-                    style={{ height: "90%" }}
-                  ></div>
-                  <div
-                    className="flex-1 bg-emerald-600 rounded-t"
-                    style={{ height: "100%" }}
-                  ></div>
-                </div>
-                <div className="flex justify-between mt-2 text-xs text-gray-500">
-                  <span>Mon</span>
-                  <span>Tue</span>
-                  <span>Wed</span>
-                  <span>Thu</span>
-                  <span>Fri</span>
-                  <span>Sat</span>
-                  <span>Sun</span>
-                </div>
-              </div>
-
-              {/* Mock Recent Activity */}
-              <div className="mt-6">
-                <p className="text-sm font-medium text-white mb-3">
-                  Recent Check-ins
-                </p>
-                <div className="space-y-2">
-                  {[
-                    { name: "Ahmed K.", time: "2 min ago", pass: "Day Pass" },
-                    { name: "Sara M.", time: "5 min ago", pass: "Monthly" },
-                    { name: "Ali R.", time: "12 min ago", pass: "Week Pass" },
-                  ].map((checkin, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between rounded-lg bg-gray-900/30 p-2"
-                    >
-                      <div className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded-full bg-gray-700 flex items-center justify-center text-xs text-white">
-                          {checkin.name.charAt(0)}
-                        </div>
-                        <div>
-                          <p className="text-sm text-white">{checkin.name}</p>
-                          <p className="text-xs text-gray-500">
-                            {checkin.time}
-                          </p>
-                        </div>
+                <div className="flex h-28 items-end gap-2">
+                  {ownerPreview.weeklyBookings.map((value, index) => {
+                    const isToday = index === ownerPreview.weeklyBookings.length - 1;
+                    return (
+                      <div key={index} className="flex h-full flex-1 flex-col items-center justify-end gap-2">
+                        <div
+                          className={
+                            isToday
+                              ? "w-full rounded-lg bg-emerald-600"
+                              : "w-full rounded-lg bg-emerald-200/70"
+                          }
+                          style={{ height: `${(value / maxBookings) * 100}%` }}
+                        />
+                        <span className="text-[10px] font-medium text-gray-400">{days[index]}</span>
                       </div>
-                      <span className="text-xs text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded">
-                        {checkin.pass}
-                      </span>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
+              </div>
+
+              <div className="mt-3 space-y-1.5">
+                {ownerPreview.recentCheckIns.map((checkin) => (
+                  <div
+                    key={checkin.name}
+                    className="flex items-center justify-between rounded-xl px-2 py-2 transition-colors hover:bg-canvas"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <span className="flex size-8 items-center justify-center rounded-full bg-gray-100 text-xs font-semibold text-gray-700">
+                        {checkin.name.charAt(0)}
+                      </span>
+                      <div>
+                        <p className="text-sm font-medium text-ink">{checkin.name}</p>
+                        <p className="text-[11px] text-gray-500">{checkin.time}</p>
+                      </div>
+                    </div>
+                    <span className="rounded-full bg-volt-soft px-2.5 py-1 text-[11px] font-semibold text-emerald-800">
+                      {checkin.pass}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Decorative Elements */}
-            <div className="absolute -bottom-6 -right-6 h-72 w-72 rounded-full bg-emerald-600/20 blur-3xl -z-10"></div>
-            <div className="absolute -top-6 -left-6 h-48 w-48 rounded-full bg-teal-600/20 blur-3xl -z-10"></div>
-          </div>
+            {/* Floating payout chip */}
+            <div className="absolute -top-5 -right-2 hidden animate-float items-center gap-2.5 rounded-2xl border border-gray-900/[0.06] bg-surface py-2.5 pr-4 pl-2.5 shadow-lift sm:flex lg:-right-6">
+              <span className="flex size-8 items-center justify-center rounded-xl bg-volt text-ink">
+                <HiOutlineCurrencyDollar className="size-4" />
+              </span>
+              <div>
+                <p className="text-xs font-semibold text-ink">Weekly payout sent</p>
+                <p className="text-[11px] text-gray-500">Every Monday</p>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>

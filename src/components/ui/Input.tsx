@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef } from "react";
+import React, { forwardRef, useId } from "react";
 import { cn } from "@/lib/utils";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
@@ -28,7 +28,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref,
   ) => {
-    const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
+    const generatedId = useId();
+    const inputId = id || generatedId;
 
     return (
       <div className="w-full">
@@ -46,7 +47,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <div className="relative">
           {/* Left Icon */}
           {leftIcon && (
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
               {leftIcon}
             </div>
           )}
@@ -59,23 +60,23 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             disabled={disabled}
             className={cn(
               // Base styles
-              "block w-full rounded-lg border bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-500",
-              "transition-colors duration-200",
-              "focus:outline-none focus:ring-2 focus:ring-offset-0",
+              "block h-12 w-full rounded-xl border bg-surface px-4 text-[15px] text-gray-900 placeholder:text-gray-400 shadow-[inset_0_1px_2px_oklch(0.2_0.01_60/0.04)]",
+              "transition-[border-color,box-shadow] duration-200",
+              "focus:outline-none focus:ring-4 focus:ring-offset-0",
               // Default border
-              "border-gray-300",
+              "border-gray-200 hover:border-gray-300",
               // Focus state
-              "focus:border-emerald-500 focus:ring-emerald-500/20",
+              "focus:border-emerald-500 focus:ring-emerald-500/15",
               // Error state
               error && [
                 "border-red-500",
-                "focus:border-red-500 focus:ring-red-500/20",
+                "focus:border-red-500 focus:ring-red-500/15",
               ],
               // Disabled state
               disabled && "cursor-not-allowed bg-gray-50 opacity-60",
               // Icon padding
-              leftIcon && "pl-10",
-              rightIcon && "pr-10",
+              leftIcon && "pl-11",
+              rightIcon && "pr-11",
               className,
             )}
             aria-invalid={error ? "true" : "false"}
@@ -87,7 +88,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
           {/* Right Icon */}
           {rightIcon && (
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400">
+            <div className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400">
               {rightIcon}
             </div>
           )}
@@ -99,7 +100,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             id={`${inputId}-error`}
             className="mt-1.5 flex items-center gap-1 text-sm text-red-600"
           >
-            <HiOutlineExclamationCircle className="h-4 w-4 flex-shrink-0" />
+            <HiOutlineExclamationCircle className="h-4 w-4 shrink-0" />
             {error}
           </p>
         )}

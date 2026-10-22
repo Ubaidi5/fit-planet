@@ -104,17 +104,17 @@ export default function ReferralProgram() {
     <div className="space-y-6">
       {/* Program Stats */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Total Referrals</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">
             {referrals.length}
           </p>
           <p className="mt-1 text-xs text-gray-600">All time</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Converted</p>
-          <p className="mt-2 text-3xl font-bold text-emerald-600">
+          <p className="mt-2 text-3xl font-semibold text-emerald-600 tracking-tight">
             {referrals.filter((r) => r.status === "converted").length}
           </p>
           <p className="mt-1 text-xs text-emerald-600">
@@ -122,9 +122,9 @@ export default function ReferralProgram() {
           </p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Rewards Paid</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">
             Rs.{" "}
             {(
               referrals
@@ -136,9 +136,9 @@ export default function ReferralProgram() {
           <p className="mt-1 text-xs text-gray-600">Total disbursed</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Pending</p>
-          <p className="mt-2 text-3xl font-bold text-blue-600">
+          <p className="mt-2 text-3xl font-semibold text-blue-600 tracking-tight">
             {referrals.filter((r) => r.status === "pending").length}
           </p>
           <p className="mt-1 text-xs text-gray-600">Awaiting conversion</p>
@@ -146,7 +146,7 @@ export default function ReferralProgram() {
       </div>
 
       {/* Program Settings */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-4 text-lg font-semibold text-gray-900">
           Referral Program Settings
         </h3>
@@ -261,7 +261,7 @@ export default function ReferralProgram() {
       </div>
 
       {/* Referral List */}
-      <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface shadow-soft">
         <div className="border-b border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-900">
             Referral History
@@ -356,7 +356,7 @@ export default function ReferralProgram() {
       </div>
 
       {/* Share Options */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-4 text-lg font-semibold text-gray-900">
           Share Referral Program
         </h3>

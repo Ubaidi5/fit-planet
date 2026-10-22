@@ -84,18 +84,18 @@ export default function SessionManagementPage() {
     <div className="mx-auto max-w-4xl space-y-6 p-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Active Sessions</h1>
+        <h1 className="text-2xl font-semibold text-ink tracking-tight">Active Sessions</h1>
         <p className="mt-1 text-sm text-gray-600">
           Manage devices where you're currently logged in
         </p>
       </div>
 
       {/* Stats Card */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-600">Active Devices</p>
-            <p className="mt-1 text-3xl font-bold text-gray-900">
+            <p className="mt-1 text-3xl font-semibold text-ink tracking-tight">
               {sessions.length}
             </p>
           </div>
@@ -138,7 +138,7 @@ export default function SessionManagementPage() {
                 {/* Device Icon */}
                 <div
                   className={cn(
-                    "flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg",
+                    "flex h-12 w-12 shrink-0 items-center justify-center rounded-lg",
                     session.isCurrent
                       ? "bg-emerald-100 text-emerald-600"
                       : "bg-gray-100 text-gray-600",
@@ -200,7 +200,7 @@ export default function SessionManagementPage() {
       {/* Info Card */}
       <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
         <div className="flex gap-3">
-          <HiOutlineInformationCircle className="h-5 w-5 flex-shrink-0 text-blue-600" />
+          <HiOutlineInformationCircle className="h-5 w-5 shrink-0 text-blue-600" />
           <div className="flex-1">
             <h4 className="font-medium text-blue-900">Security Tip</h4>
             <p className="mt-1 text-sm text-blue-700">

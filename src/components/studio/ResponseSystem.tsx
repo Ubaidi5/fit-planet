@@ -171,7 +171,7 @@ export default function ResponseSystem() {
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
       {/* Pending Reviews (Left Column - 2/3 width) */}
       <div className="space-y-4 lg:col-span-2">
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="text-lg font-semibold text-gray-900">
               Pending Responses ({pendingReviews.length})
@@ -235,12 +235,12 @@ export default function ResponseSystem() {
                 <div className="mt-3 flex items-center space-x-2">
                   <button
                     onClick={() => setSelectedReview(review.id)}
-                    className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+                    className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
                   >
                     {selectedReview === review.id ? "✓ Selected" : "Reply Now"}
                   </button>
 
-                  <button className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50">
+                  <button className="rounded-full border border-gray-200 bg-surface px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50">
                     Skip
                   </button>
                 </div>
@@ -253,7 +253,7 @@ export default function ResponseSystem() {
       {/* Response Composer (Right Column - 1/3 width) */}
       <div className="space-y-4">
         {/* Templates */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <h3 className="mb-4 text-lg font-semibold text-gray-900">
             Response Templates
           </h3>
@@ -282,7 +282,7 @@ export default function ResponseSystem() {
         </div>
 
         {/* Composer */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <h3 className="mb-4 text-lg font-semibold text-gray-900">
             Write Response
           </h3>
@@ -320,7 +320,7 @@ export default function ResponseSystem() {
                   disabled={
                     responseText.length < 50 || responseText.length > 500
                   }
-                  className="flex-1 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-gray-300"
+                  className="flex-1 rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-gray-300"
                 >
                   Submit Response
                 </button>
@@ -331,7 +331,7 @@ export default function ResponseSystem() {
                     setResponseText("");
                     setSelectedTemplate("");
                   }}
-                  className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+                  className="rounded-full border border-gray-200 bg-surface px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50"
                 >
                   Cancel
                 </button>

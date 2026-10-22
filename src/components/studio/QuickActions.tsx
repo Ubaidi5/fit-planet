@@ -72,7 +72,7 @@ export default function QuickActions() {
   ];
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+    <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
       {/* Header */}
       <div className="mb-4">
         <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>

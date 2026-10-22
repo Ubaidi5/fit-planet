@@ -77,66 +77,71 @@ export default function GymDetailPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Hero Section with Cover Image */}
-      <div className="relative h-64 md:h-80 lg:h-96 bg-gray-900">
-        <Image
-          src={gym.coverImage}
-          alt={gym.name}
-          fill
-          className="object-cover opacity-80"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/40 to-transparent" />
+      <div className="mx-auto max-w-7xl px-3 pt-4 sm:px-6 lg:px-8">
+        <div className="relative h-80 overflow-hidden rounded-[2.5rem] bg-ink md:h-96 lg:h-[30rem]">
+          <Image
+            src={gym.coverImage}
+            alt={gym.name}
+            fill
+            sizes="(max-width: 1280px) 100vw, 1280px"
+            className="animate-[fade-up_1.2s_var(--ease-out-expo)_both] object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-linear-to-t from-ink/85 via-ink/30 to-ink/10" />
 
-        {/* Back Button */}
-        <div className="absolute top-4 left-4 md:top-6 md:left-6">
-          <Link
-            href="/gyms"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-lg text-white hover:bg-white/20 transition-colors"
-          >
-            <HiOutlineArrowLeft className="h-5 w-5" />
-            Back to Gyms
-          </Link>
-        </div>
+          {/* Back Button */}
+          <div className="absolute top-4 left-4 md:top-6 md:left-6">
+            <Link
+              href="/gyms"
+              className="inline-flex h-10 items-center gap-2 rounded-full bg-white/15 px-4 text-sm font-medium text-white ring-1 ring-white/20 backdrop-blur-md transition-colors hover:bg-white/25"
+            >
+              <HiOutlineArrowLeft className="size-4" />
+              All gyms
+            </Link>
+          </div>
 
-        {/* Gym Info Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex flex-wrap items-center gap-2 mb-3">
-              {gym.isFeatured && <Badge variant="warning">Featured</Badge>}
-              {gym.isVerified && (
-                <Badge variant="success">
-                  <HiOutlineBadgeCheck className="h-3 w-3 mr-1" />
-                  Verified
-                </Badge>
+          {/* Gym Info Overlay */}
+          <div className="absolute inset-x-0 bottom-0 p-6 md:p-10">
+            <div className="flex flex-wrap items-center gap-2">
+              {gym.isFeatured && (
+                <span className="rounded-full bg-volt px-2.5 py-1 text-xs font-semibold text-ink">
+                  Featured
+                </span>
               )}
-              {gym.hours.is24Hours && <Badge variant="info">24/7 Open</Badge>}
+              {gym.isVerified && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2.5 py-1 text-xs font-semibold text-white ring-1 ring-white/20 backdrop-blur-md">
+                  <HiOutlineBadgeCheck className="size-3.5" />
+                  Verified
+                </span>
+              )}
+              {gym.hours.is24Hours && (
+                <span className="rounded-full bg-white/15 px-2.5 py-1 text-xs font-semibold text-white ring-1 ring-white/20 backdrop-blur-md">
+                  Open 24/7
+                </span>
+              )}
             </div>
 
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+            <h1 className="mt-4 text-4xl leading-[1.02] font-semibold tracking-[-0.04em] text-white md:text-6xl">
               {gym.name}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-4 text-white/90">
-              <div className="flex items-center gap-1">
-                <HiStar className="h-5 w-5 text-amber-400" />
-                <span className="font-semibold">{gym.rating}</span>
-                <span className="text-white/70">
-                  ({gym.totalReviews} reviews)
-                </span>
+            <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/85 md:text-base">
+              <div className="flex items-center gap-1.5">
+                <HiStar className="size-5 text-amber-400" />
+                <span className="font-semibold text-white">{gym.rating}</span>
+                <span className="text-white/70">({gym.totalReviews} reviews)</span>
               </div>
-
-              <div className="flex items-center gap-1">
-                <HiOutlineLocationMarker className="h-5 w-5" />
+              <div className="flex items-center gap-1.5">
+                <HiOutlineLocationMarker className="size-5" />
                 <span>
                   {gym.address.area}, {gym.address.city}
                 </span>
               </div>
-
               {gym.distance && (
-                <div className="flex items-center gap-1">
-                  <HiOutlineTrendingUp className="h-5 w-5" />
+                <div className="flex items-center gap-1.5">
+                  <HiOutlineTrendingUp className="size-5" />
                   <span>{gym.distance} km away</span>
                 </div>
               )}
@@ -149,19 +154,19 @@ export default function GymDetailPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left Column - Main Content */}
-          <div className="flex-1">
+          <div className="min-w-0 flex-1">
             {/* Tab Navigation */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
-              <div className="flex overflow-x-auto">
+            <div className="sticky top-22 z-20 mb-6 -mx-1 overflow-x-auto px-1 no-scrollbar">
+              <div className="glass inline-flex min-w-full gap-1 rounded-full border border-gray-900/[0.06] p-1 shadow-soft sm:min-w-0">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={cn(
-                      "flex-1 px-4 py-4 text-sm font-medium whitespace-nowrap transition-colors border-b-2",
+                      "flex-1 rounded-full px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all duration-300 ease-out-expo sm:flex-none",
                       activeTab === tab.id
-                        ? "border-emerald-600 text-emerald-600"
-                        : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
+                        ? "bg-ink text-white shadow-soft"
+                        : "text-gray-600 hover:text-ink",
                     )}
                   >
                     {tab.label}
@@ -176,7 +181,7 @@ export default function GymDetailPage() {
               {activeTab === "overview" && (
                 <>
                   {/* Photo Gallery */}
-                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                  <div className="bg-surface rounded-3xl shadow-soft border border-gray-900/[0.06] p-6">
                     <h2 className="text-lg font-semibold text-gray-900 mb-4">
                       Photo Gallery
                     </h2>
@@ -184,7 +189,7 @@ export default function GymDetailPage() {
                   </div>
 
                   {/* About */}
-                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                  <div className="bg-surface rounded-3xl shadow-soft border border-gray-900/[0.06] p-6">
                     <h2 className="text-lg font-semibold text-gray-900 mb-4">
                       About {gym.name}
                     </h2>
@@ -194,7 +199,7 @@ export default function GymDetailPage() {
                   </div>
 
                   {/* Amenities */}
-                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                  <div className="bg-surface rounded-3xl shadow-soft border border-gray-900/[0.06] p-6">
                     <h2 className="text-lg font-semibold text-gray-900 mb-4">
                       Amenities & Facilities
                     </h2>
@@ -213,7 +218,7 @@ export default function GymDetailPage() {
 
                   {/* Equipment */}
                   {details.equipment.length > 0 && (
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div className="bg-surface rounded-3xl shadow-soft border border-gray-900/[0.06] p-6">
                       <h2 className="text-lg font-semibold text-gray-900 mb-4">
                         Equipment
                       </h2>
@@ -257,7 +262,7 @@ export default function GymDetailPage() {
                   )}
 
                   {/* Operating Hours */}
-                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                  <div className="bg-surface rounded-3xl shadow-soft border border-gray-900/[0.06] p-6">
                     <h2 className="text-lg font-semibold text-gray-900 mb-4">
                       Operating Hours
                     </h2>
@@ -317,13 +322,13 @@ export default function GymDetailPage() {
 
                   {/* Popular Times */}
                   {details.crowdData.length > 0 && (
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div className="bg-surface rounded-3xl shadow-soft border border-gray-900/[0.06] p-6">
                       <CrowdChart data={details.crowdData} />
                     </div>
                   )}
 
                   {/* Policies */}
-                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                  <div className="bg-surface rounded-3xl shadow-soft border border-gray-900/[0.06] p-6">
                     <h2 className="text-lg font-semibold text-gray-900 mb-4">
                       Gym Policies
                     </h2>
@@ -343,7 +348,7 @@ export default function GymDetailPage() {
 
               {/* Pricing Tab */}
               {activeTab === "pricing" && (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div className="bg-surface rounded-3xl shadow-soft border border-gray-900/[0.06] p-6">
                   <h2 className="text-xl font-semibold text-gray-900 mb-6">
                     Membership Plans
                   </h2>
@@ -361,7 +366,7 @@ export default function GymDetailPage() {
               {/* Classes Tab */}
               {activeTab === "classes" && (
                 <div className="space-y-4">
-                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                  <div className="bg-surface rounded-3xl shadow-soft border border-gray-900/[0.06] p-6">
                     <h2 className="text-xl font-semibold text-gray-900 mb-6">
                       Group Classes
                     </h2>
@@ -457,7 +462,7 @@ export default function GymDetailPage() {
               {/* Trainers Tab */}
               {activeTab === "trainers" && (
                 <div className="space-y-4">
-                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                  <div className="bg-surface rounded-3xl shadow-soft border border-gray-900/[0.06] p-6">
                     <h2 className="text-xl font-semibold text-gray-900 mb-6">
                       Our Trainers
                     </h2>
@@ -475,7 +480,7 @@ export default function GymDetailPage() {
                             className="border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow"
                           >
                             <div className="flex items-start gap-4 mb-4">
-                              <div className="relative w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                              <div className="relative w-16 h-16 rounded-full overflow-hidden shrink-0">
                                 <Image
                                   src={trainer.avatar}
                                   alt={trainer.name}
@@ -548,7 +553,7 @@ export default function GymDetailPage() {
                   />
 
                   {/* Write Review Button */}
-                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                  <div className="bg-surface rounded-3xl shadow-soft border border-gray-900/[0.06] p-6">
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="font-semibold text-gray-900">
@@ -564,7 +569,7 @@ export default function GymDetailPage() {
 
                   {/* Reviews List */}
                   {details.reviews.length === 0 ? (
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center text-gray-500">
+                    <div className="bg-surface rounded-3xl shadow-soft border border-gray-900/[0.06] p-12 text-center text-gray-500">
                       <HiOutlineChat className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                       <p>No reviews yet. Be the first to review!</p>
                     </div>
@@ -582,9 +587,9 @@ export default function GymDetailPage() {
 
           {/* Right Column - Sticky Booking Card */}
           <div className="lg:w-96">
-            <div className="sticky top-4 space-y-4">
+            <div className="sticky top-24 space-y-4">
               {/* Quick Book Card */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <div className="bg-surface rounded-3xl shadow-soft border border-gray-900/[0.06] p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
                   Book a Pass
                 </h3>
@@ -641,7 +646,7 @@ export default function GymDetailPage() {
 
               {/* Contact Info */}
               {details.contact.phone && (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div className="bg-surface rounded-3xl shadow-soft border border-gray-900/[0.06] p-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
                     Contact
                   </h3>
@@ -706,7 +711,7 @@ export default function GymDetailPage() {
               )}
 
               {/* Location Map Placeholder */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <div className="bg-surface rounded-3xl shadow-soft border border-gray-900/[0.06] p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
                   Location
                 </h3>

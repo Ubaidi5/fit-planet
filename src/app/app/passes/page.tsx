@@ -38,13 +38,13 @@ export default function MyPassesPage() {
         : pastBookings;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">My Passes</h1>
+              <h1 className="text-3xl font-semibold text-ink tracking-tight">My Passes</h1>
               <p className="text-gray-600 mt-1">
                 Manage all your gym passes in one place
               </p>
@@ -138,11 +138,11 @@ function PassCard({ booking }: { booking: Booking }) {
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+    <div className="bg-surface rounded-3xl border border-gray-900/[0.06] overflow-hidden hover:shadow-lift transition-shadow shadow-soft">
       {/* Header */}
       <div className="p-6 border-b border-gray-100">
         <div className="flex items-start gap-4">
-          <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+          <div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0">
             {booking.gymLogo ? (
               <Image
                 src={booking.gymLogo}

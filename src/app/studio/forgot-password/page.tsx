@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Logo } from "@/components/brand/Logo";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import {
-  HiOutlineLightningBolt,
   HiOutlineMail,
   HiOutlineLockClosed,
   HiOutlineEye,
@@ -111,32 +111,24 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-50 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="relative isolate flex min-h-screen items-center justify-center overflow-hidden px-4 py-12 sm:px-6 lg:px-8">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-dot-grid [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+        <div className="absolute top-10 left-1/2 size-[30rem] -translate-x-1/2 rounded-full bg-volt/25 blur-3xl" />
+      </div>
       <div className="w-full max-w-md space-y-8">
         {/* Logo */}
         <div className="text-center">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg">
-              <HiOutlineLightningBolt className="h-7 w-7 text-white" />
-            </div>
-            <div>
-              <span className="text-2xl font-bold text-gray-900">
-                Fit Planet
-              </span>
-              <span className="ml-2 rounded-lg bg-emerald-100 px-2 py-1 text-xs font-semibold text-emerald-700">
-                Studio
-              </span>
-            </div>
-          </Link>
+          <Logo tag="Studio" />
         </div>
 
         {/* Card */}
-        <div className="rounded-2xl bg-white p-8 shadow-xl">
+        <div className="animate-fade-up rounded-4xl border border-gray-900/[0.06] bg-surface p-6 shadow-lift sm:p-8">
           {/* Step: Email */}
           {step === "email" && (
             <>
               <div className="mb-6 text-center">
-                <h2 className="text-2xl font-bold text-gray-900">
+                <h2 className="text-2xl font-semibold text-ink tracking-tight">
                   Reset Password
                 </h2>
                 <p className="mt-2 text-sm text-gray-600">
@@ -186,7 +178,7 @@ export default function ForgotPasswordPage() {
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
                   <HiOutlineMail className="h-8 w-8 text-emerald-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900">
+                <h2 className="text-2xl font-semibold text-ink tracking-tight">
                   Check your email
                 </h2>
                 <p className="mt-2 text-sm text-gray-600">
@@ -263,7 +255,7 @@ export default function ForgotPasswordPage() {
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
                   <HiOutlineLockClosed className="h-8 w-8 text-emerald-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900">
+                <h2 className="text-2xl font-semibold text-ink tracking-tight">
                   Create new password
                 </h2>
                 <p className="mt-2 text-sm text-gray-600">

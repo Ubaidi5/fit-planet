@@ -216,7 +216,7 @@ function RoutineCard({
   ).slice(0, 3);
 
   return (
-    <div className="bg-white rounded-lg sm:rounded-xl border border-gray-200 overflow-hidden">
+    <div className="bg-surface rounded-3xl sm:rounded-xl border border-gray-900/[0.06] overflow-hidden shadow-soft">
       {/* Main Card */}
       <div className="p-3 sm:p-4">
         <div className="flex items-start justify-between gap-3 sm:gap-4">

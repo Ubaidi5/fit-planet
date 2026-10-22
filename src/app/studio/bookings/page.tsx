@@ -20,10 +20,10 @@ export default function MembersBookingsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Members & Bookings</h1>
+        <h1 className="text-3xl font-semibold text-ink tracking-tight">Members & Bookings</h1>
         <p className="mt-2 text-gray-600">
           Manage check-ins, track bookings, and analyze member activity
         </p>
@@ -31,27 +31,27 @@ export default function MembersBookingsPage() {
 
       {/* Quick Stats */}
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Today's Check-ins</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">47</p>
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">47</p>
           <p className="mt-1 text-xs text-emerald-600">↑ 12% vs yesterday</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Currently Inside</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">42</p>
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">42</p>
           <p className="mt-1 text-xs text-gray-600">28 members • 14 day pass</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Total Bookings</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">1,248</p>
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">1,248</p>
           <p className="mt-1 text-xs text-gray-600">This month</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Active Passes</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">128</p>
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">128</p>
           <p className="mt-1 text-xs text-emerald-600">↑ 8% vs last month</p>
         </div>
       </div>

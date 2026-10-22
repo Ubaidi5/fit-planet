@@ -220,7 +220,7 @@ export default function PhotoGalleryManager() {
             {photos.map((photo, index) => (
               <div
                 key={photo.id}
-                className="group relative overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md"
+                className="group relative overflow-hidden rounded-3xl border border-gray-900/[0.06] bg-surface shadow-soft transition-shadow hover:shadow-lift"
               >
                 {/* Cover Badge */}
                 {photo.isCover && (

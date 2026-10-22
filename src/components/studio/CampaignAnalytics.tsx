@@ -117,35 +117,35 @@ export default function CampaignAnalytics() {
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-          <p className="mt-2 text-3xl font-bold text-emerald-600">
+          <p className="mt-2 text-3xl font-semibold text-emerald-600 tracking-tight">
             Rs. {(totalRevenue / 1000).toFixed(1)}K
           </p>
           <p className="mt-1 text-xs text-emerald-600">↑ 18% vs last month</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Conversions</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">
             {totalConversions}
           </p>
           <p className="mt-1 text-xs text-emerald-600">↑ 12% increase</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">
             Click-Through Rate
           </p>
-          <p className="mt-2 text-3xl font-bold text-blue-600">
+          <p className="mt-2 text-3xl font-semibold text-blue-600 tracking-tight">
             {((totalClicks / 42100) * 100).toFixed(1)}%
           </p>
           <p className="mt-1 text-xs text-gray-600">Campaign engagement</p>
         </div>
 
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <p className="text-sm font-medium text-gray-600">Conversion Rate</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">
+          <p className="mt-2 text-3xl font-semibold text-ink tracking-tight">
             {avgConversionRate.toFixed(1)}%
           </p>
           <p className="mt-1 text-xs text-gray-600">Avg. across campaigns</p>
@@ -153,7 +153,7 @@ export default function CampaignAnalytics() {
       </div>
 
       {/* Campaign Performance Table */}
-      <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface shadow-soft">
         <div className="border-b border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-900">
             Campaign Performance
@@ -240,7 +240,7 @@ export default function CampaignAnalytics() {
       </div>
 
       {/* Channel Performance */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
         <h3 className="mb-6 text-lg font-semibold text-gray-900">
           Performance by Channel
         </h3>
@@ -301,7 +301,7 @@ export default function CampaignAnalytics() {
       {/* ROI Analysis */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Top Performing Campaigns */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <h3 className="mb-4 text-lg font-semibold text-gray-900">
             Top Performing Campaigns
           </h3>
@@ -340,7 +340,7 @@ export default function CampaignAnalytics() {
         </div>
 
         {/* Recommendations */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
           <h3 className="mb-4 text-lg font-semibold text-gray-900">
             💡 Recommendations
           </h3>

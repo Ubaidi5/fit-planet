@@ -264,7 +264,7 @@ export default function CapacitySettings() {
             {config.peakHours.map((hour, index) => (
               <div
                 key={index}
-                className="flex items-center space-x-4 rounded-lg border border-gray-200 bg-white p-4"
+                className="flex items-center space-x-4 rounded-3xl border border-gray-900/[0.06] bg-surface p-4 shadow-soft"
               >
                 <div className="flex-1 grid grid-cols-3 gap-4">
                   <div>
