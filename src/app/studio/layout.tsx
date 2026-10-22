@@ -1,16 +1,10 @@
 import type { Metadata } from "next";
-import { StudioLayoutWrapper } from "@/components/studio/StudioLayoutWrapper";
 
 export const metadata: Metadata = {
-  title: "Studio | Fit Planet",
-  description:
-    "Manage your gym business with Fit Planet Studio. Handle bookings, capacity, pricing, and analytics all in one place.",
+  title: { default: "Studio", template: "%s · Fit Planet Studio" },
+  description: "Run your gym on Fit Planet: bookings, check-ins, pricing and revenue in one place.",
 };
 
-export default function StudioLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <StudioLayoutWrapper>{children}</StudioLayoutWrapper>;
+export default function StudioLayout({ children }: { children: React.ReactNode }) {
+  return children;
 }

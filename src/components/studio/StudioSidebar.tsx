@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import type { StudioGymSummary, StudioUser } from "./StudioLayoutWrapper";
 import { Logo, LogoMark } from "@/components/brand/Logo";
 import {
   HiOutlineArrowTopRightOnSquare,
@@ -16,7 +17,11 @@ import {
   HiOutlineStar,
   HiOutlineUserGroup,
   HiXMark,
+  HiOutlineQrCode,
+  HiOutlineBell,
+  HiOutlineArrowRightOnRectangle,
 } from "react-icons/hi2";
+import { signOutAction } from "@/actions/auth";
 
 type IconType = React.ComponentType<{ className?: string }>;
 
@@ -32,28 +37,32 @@ const moduleGroups: { label: string; items: ModuleLink[] }[] = [
     label: "Overview",
     items: [
       { title: "Dashboard", href: "/studio/dashboard", icon: HiOutlineChartBarSquare },
-      { title: "Capacity", href: "/studio/capacity", icon: HiOutlineUserGroup, badge: "Live" },
+      { title: "Check-in desk", href: "/studio/checkin", icon: HiOutlineQrCode, badge: "Scan" },
       { title: "Bookings", href: "/studio/bookings", icon: HiOutlineCalendarDays },
+      { title: "Notifications", href: "/studio/notifications", icon: HiOutlineBell },
     ],
   },
   {
     label: "Grow",
     items: [
       { title: "Passes & pricing", href: "/studio/passes", icon: HiOutlineReceiptPercent },
-      { title: "Promotions", href: "/studio/promotions", icon: HiOutlineMegaphone },
       { title: "Reviews", href: "/studio/reviews", icon: HiOutlineStar },
     ],
   },
   {
     label: "Business",
     items: [
-      { title: "Financial", href: "/studio/financial", icon: HiOutlineCurrencyDollar },
+      { title: "Revenue", href: "/studio/financial", icon: HiOutlineCurrencyDollar },
       { title: "Gym profile", href: "/studio/profile", icon: HiOutlineBuildingOffice2 },
     ],
   },
 ];
 
 interface StudioSidebarProps {
+  gym: StudioGymSummary;
+  user: StudioUser;
+  gymCount: number;
+  unread: number;
   isCollapsed: boolean;
   onToggleCollapse: () => void;
   mobileOpen: boolean;
@@ -61,6 +70,9 @@ interface StudioSidebarProps {
 }
 
 export function StudioSidebar({
+  gym,
+  user,
+  unread,
   isCollapsed,
   onToggleCollapse,
   mobileOpen,
@@ -115,14 +127,16 @@ export function StudioSidebar({
         {/* Gym switcher */}
         {!collapsed && (
           <div className="mx-3 mb-2 flex items-center gap-3 rounded-2xl bg-canvas p-2.5 ring-1 ring-gray-900/[0.04]">
-            <span className="flex size-9 items-center justify-center rounded-xl bg-ink text-xs font-bold text-volt">
-              FZ
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-ink text-xs font-bold text-volt">
+              {gym.initials}
             </span>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold text-ink">FitZone Karachi</p>
+              <p className="truncate text-sm font-semibold text-ink">{gym.name}</p>
               <p className="flex items-center gap-1.5 text-xs text-gray-500">
-                <span className="size-1.5 rounded-full bg-emerald-500" />
-                Open · Clifton
+                <span className={cn("size-1.5 rounded-full", gym.status === "published" ? "bg-emerald-500" : "bg-stamp-ochre")} />
+                <span className="truncate">
+                  {gym.status === "published" ? "Live" : "Draft"} · {gym.area}
+                </span>
               </p>
             </div>
           </div>
@@ -175,6 +189,11 @@ export function StudioSidebar({
                           {module.badge}
                         </span>
                       )}
+                      {!collapsed && module.href === "/studio/notifications" && unread > 0 && (
+                        <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-semibold tabular-nums", isActive ? "bg-white/15 text-white" : "bg-red-50 text-red-600")}>
+                          {unread}
+                        </span>
+                      )}
                       {collapsed && module.badge && (
                         <span className="absolute top-2 right-3 size-1.5 rounded-full bg-emerald-500" />
                       )}
@@ -190,7 +209,7 @@ export function StudioSidebar({
         <div className="space-y-2 p-3">
           {!collapsed && (
             <Link
-              href="/gyms/fitzone-karachi"
+              href={`/gyms/${gym.slug}`}
               className="group flex items-center justify-between rounded-2xl bg-volt-soft/80 px-3.5 py-3 text-sm transition-colors hover:bg-volt-soft"
             >
               <span>
@@ -199,6 +218,23 @@ export function StudioSidebar({
               </span>
               <HiOutlineArrowTopRightOnSquare className="size-4 text-gray-600 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </Link>
+          )}
+          {!collapsed && (
+            <div className="flex items-center gap-2.5 rounded-2xl px-2 py-1.5">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-volt text-xs font-semibold text-ink">{user.initials}</span>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium text-ink">{user.name}</p>
+                <Link href="/app/dashboard" className="text-xs text-gray-500 hover:text-ink">
+                  Member app
+                </Link>
+              </div>
+              <form action={signOutAction}>
+                <input type="hidden" name="next" value="/studio/login" />
+                <button type="submit" aria-label="Sign out" title="Sign out" className="flex size-8 cursor-pointer items-center justify-center rounded-full text-gray-400 hover:bg-gray-900/5 hover:text-ink">
+                  <HiOutlineArrowRightOnRectangle className="size-4.5" />
+                </button>
+              </form>
+            </div>
           )}
           <button
             type="button"
