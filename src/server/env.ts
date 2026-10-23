@@ -79,6 +79,19 @@ export const env = {
     },
   },
 
+  /** The business behind the service, shown on the imprint, privacy policy and terms */
+  legal: {
+    name: read("LEGAL_NAME") ?? "Fit Planet",
+    address: read("LEGAL_ADDRESS"),
+    email: read("LEGAL_EMAIL") ?? read("SUPPORT_EMAIL"),
+    phone: read("LEGAL_PHONE"),
+    representative: read("LEGAL_REPRESENTATIVE"),
+    register: read("LEGAL_REGISTER"),
+    vatId: read("LEGAL_VAT_ID"),
+    /** Country whose law governs the terms, e.g. "Delaware, United States" */
+    jurisdiction: read("LEGAL_JURISDICTION"),
+  },
+
   /** Bearer token the server's cron sends to /api/cron/* */
   cronSecret: read("CRON_SECRET"),
 

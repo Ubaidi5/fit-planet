@@ -50,7 +50,11 @@
     "gymsIn": "Gimnasios en {city}",
     "tagline": "Un pasaporte fitness para cada ciudad. Los miembros reservan cualquier gimnasio asociado en su moneda local. Los propietarios llenan las horas tranquilas sin crear su propia tecnología.",
     "copyright": "© {year} Fit Planet. Todos los derechos reservados.",
-    "liveIn": "Disponible en {count} ciudades"
+    "liveIn": "Disponible en {count} ciudades",
+    "legal": "Legal",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "imprint": "Aviso legal"
   },
   "hero": {
     "liveBadge": "EN VIVO",
@@ -343,7 +347,7 @@
       "newPasswordPlaceholder": "Al menos 8 caracteres",
       "create": "Crear cuenta",
       "creating": "Creando cuenta...",
-      "terms": "Al continuar, aceptas los términos de uso y la política de privacidad de Fit Planet.",
+      "terms": "Al continuar, aceptas los <terms>términos de uso</terms> y la <privacy>política de privacidad</privacy> de Fit Planet.",
       "sending": "Enviando...",
       "sendReset": "Enviar enlace de restablecimiento",
       "newPassword": "Nueva contraseña",
@@ -1816,7 +1820,10 @@
       "writeComment": "Escribe primero un comentario.",
       "wrongPassword": "Tu contraseña actual no es correcta.",
       "tooManyAttempts": "Demasiados intentos. Espera unos minutos y vuelve a intentarlo.",
-      "noOnlinePayment": "El pago en línea aún no está disponible. Elige pagar en recepción."
+      "noOnlinePayment": "El pago en línea aún no está disponible. Elige pagar en recepción.",
+      "deleteConfirm": "Escribe tu correo electrónico exactamente para confirmar.",
+      "deleteRunsGym": "Gestionas un gimnasio, así que esta cuenta aún no se puede eliminar.",
+      "deleteActivePass": "Tienes un pase activo o próximo. Cancélalo primero."
     },
     "fields": {
       "addExercise": "Añade al menos un ejercicio",
@@ -2084,5 +2091,31 @@
       "s3": "Luego tira del maneral hacia el pecho",
       "s4": "Invierte el movimiento para volver"
     }
+  },
+  "legal": {
+    "updated": "Última actualización: {date}",
+    "englishOnly": "Esta página está disponible en inglés. La versión en inglés es la vinculante.",
+    "contents": "Contenido",
+    "privacy": "Política de privacidad",
+    "terms": "Términos del servicio",
+    "imprint": "Aviso legal",
+    "privacyIntro": "Qué datos recogemos cuando usas Fit Planet, por qué, quién los ve y cómo mantienes el control.",
+    "termsIntro": "Las normas para reservar pases de gimnasio, entrenar y compartir en Fit Planet."
+  },
+  "privacy": {
+    "formerMember": "Antiguo miembro",
+    "dataTitle": "Tus datos",
+    "dataText": "Descarga una copia de todo lo que Fit Planet guarda sobre ti: perfil, reservas, visitas, registro de entrenamiento y actividad social.",
+    "download": "Descargar mis datos",
+    "deleteTitle": "Eliminar cuenta",
+    "deleteText": "Tu perfil, publicaciones, registro de entrenamiento y fotos se borran para siempre. Las reseñas se quedan en la página del gimnasio sin tu nombre.",
+    "blockedGym": "Gestionas un gimnasio en Fit Planet. Ciérralo o transfiérelo antes de eliminar esta cuenta.",
+    "blockedPass": "Tienes un pase activo o próximo. Cancélalo o espera a que termine y luego elimina tu cuenta.",
+    "seePasses": "Ver mis pases",
+    "deleteStart": "Eliminar mi cuenta",
+    "deleteConfirmLabel": "Escribe {email} para confirmar",
+    "deleting": "Eliminando…",
+    "deleteForever": "Eliminar para siempre",
+    "keepAccount": "Mantener mi cuenta"
   }
 }

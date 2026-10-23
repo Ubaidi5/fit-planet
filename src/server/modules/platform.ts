@@ -61,7 +61,8 @@ export async function memberStories(gyms: Gym[], limit = 3): Promise<Story[]> {
     const stories: Story[] = [];
     for (const doc of docs) {
       const gym = byId.get(doc.gymId.toHexString());
-      if (!gym || seen.has(gym.id)) continue;
+      // Skip reviews whose author deleted their account
+      if (!gym || !doc.authorName || seen.has(gym.id)) continue;
       seen.add(gym.id);
       stories.push({
         id: doc._id.toHexString(),

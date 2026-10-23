@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useState } from "react";
 import { useTranslations } from "next-intl";
 import { HiOutlineEnvelope, HiOutlineLockClosed, HiOutlineUser } from "react-icons/hi2";
@@ -60,7 +61,18 @@ export function RegisterForm({ methods, next, cta }: { methods: SignInMethods; n
         </div>
         <SubmitButton pendingLabel={t("creating")}>{cta ?? t("create")}</SubmitButton>
         <p className="text-center text-xs leading-relaxed text-gray-500">
-          {t("terms")}
+          {t.rich("terms", {
+            terms: (chunks) => (
+              <Link href="/terms" target="_blank" className="font-medium text-gray-700 underline underline-offset-2 hover:text-ink">
+                {chunks}
+              </Link>
+            ),
+            privacy: (chunks) => (
+              <Link href="/privacy" target="_blank" className="font-medium text-gray-700 underline underline-offset-2 hover:text-ink">
+                {chunks}
+              </Link>
+            ),
+          })}
         </p>
       </form>
     </div>

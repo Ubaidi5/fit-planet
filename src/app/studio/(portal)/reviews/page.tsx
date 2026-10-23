@@ -23,6 +23,7 @@ export default async function StudioReviewsPage({ searchParams }: { searchParams
   const distribution = [5, 4, 3, 2, 1].map((star) => ({ star, count: all.filter((r) => r.rating === star).length }));
   const breakdown = gym.ratingBreakdown;
   const [t, tr, region] = await Promise.all([getTranslations("studio.reviews"), getTranslations("reviews"), getRegion()]);
+  const tp = await getTranslations("privacy");
   const dateFmt = new Intl.DateTimeFormat(region.locale, { day: "numeric", month: "short", year: "numeric" });
 
   return (
@@ -92,10 +93,10 @@ export default async function StudioReviewsPage({ searchParams }: { searchParams
             <li key={r.id} className="rounded-[1.75rem] bg-surface p-5 shadow-soft ring-1 ring-gray-900/[0.06] sm:p-6">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-3">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-canvas font-semibold text-ink">{r.userName.charAt(0)}</span>
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-canvas font-semibold text-ink">{(r.userName || tp("formerMember")).charAt(0)}</span>
                   <div className="min-w-0">
                     <p className="flex items-center gap-1.5 truncate font-semibold text-ink">
-                      {r.userName}
+                      {r.userName || tp("formerMember")}
                       {r.isVerified && <HiCheckBadge className="size-4 shrink-0 text-emerald-600" aria-label={t("verified")} />}
                     </p>
                     <p className="text-xs text-gray-500">{dateFmt.format(new Date(r.date))}</p>

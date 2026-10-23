@@ -47,6 +47,20 @@ keep in mind when changing it.
 - Posting, comments, likes, follows, reports, reviews, bookings and uploads
   are rate limited per account.
 
+## Privacy (GDPR)
+
+- Members download everything stored about them as JSON from Settings,
+  Security (`/app/security/export`, five downloads an hour). Password hashes,
+  push tokens and OAuth tokens are left out.
+- Members delete their account from the same page by typing their email.
+  Profile, posts, comments, likes, follows, routines, workouts, notifications,
+  devices and uploaded files are erased. Reviews stay without the name;
+  bookings keep their amounts for the gym's books but lose contact details.
+- Accounts that manage a gym, or hold an active or upcoming pass, can't be
+  deleted until that is sorted out, so no paid pass or gym is left orphaned.
+- Only essential cookies are used (session, sign-in security, region), so no
+  consent banner is needed.
+
 ## Transport and headers
 
 - nginx: HTTPS via certbot, per-IP flood limit, `server_tokens off`.

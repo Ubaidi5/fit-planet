@@ -37,8 +37,14 @@ jobs:
           PORT=3100 HOSTNAME=127.0.0.1 AUTH_SECRET=ci-only-secret bun server.js > server.log 2>&1 &
           for i in $(seq 1 30); do
             code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3100/login || true)
-            if [ "$code" != "000" ]; then echo "Server answered $code"; exit 0; fi
+            if [ "$code" != "000" ]; then break; fi
             sleep 1
           done
-          cat server.log
-          exit 1
+          # Pages that import the database driver must render on Bun, even with no database
+          failed=0
+          for path in /login /privacy /terms /imprint; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:3100$path" || true)
+            echo "$path -> $code"
+            if [ "$code" != "200" ]; then failed=1; fi
+          done
+          if [ "$failed" = 1 ]; then cat server.log; exit 1; fi

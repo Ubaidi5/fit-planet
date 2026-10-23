@@ -8,6 +8,10 @@ import { getDb } from "@/server/db/client";
 import { PasswordForm } from "@/components/member/PasswordForm";
 import { signOutAction } from "@/actions/auth";
 import { signOutOtherDevicesAction } from "@/actions/member";
+import { DeleteAccountForm } from "@/components/member/DeleteAccountForm";
+import { deletionBlocker } from "@/server/modules/privacy";
+import Link from "next/link";
+import { HiOutlineArrowDownTray } from "react-icons/hi2";
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations("settings"))("security") };
@@ -23,7 +27,7 @@ export default async function SecurityPage({ searchParams }: { searchParams: Pro
   const { devices } = await searchParams;
   const accounts = await (await getDb()).collection("accounts").find({ userId: user._id }, { projection: { provider: 1 } }).toArray();
   const linked = new Set(accounts.map((a) => String(a.provider)));
-  const t = await getTranslations("settings");
+  const [t, tp, blocker] = await Promise.all([getTranslations("settings"), getTranslations("privacy"), deletionBlocker(user._id)]);
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
@@ -73,6 +77,37 @@ export default async function SecurityPage({ searchParams }: { searchParams: Pro
             </button>
           </form>
         )}
+      </section>
+
+      <section className="rounded-[1.75rem] bg-surface p-5 shadow-soft ring-1 ring-gray-900/[0.05] sm:p-8">
+        <h2 className="text-lg font-semibold text-ink">{tp("dataTitle")}</h2>
+        <p className="mt-1 text-sm text-gray-500">{tp("dataText")}</p>
+        {/* A plain link: the route answers with a file download */}
+        <a
+          href="/app/security/export"
+          download
+          className="mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-canvas px-5 text-sm font-semibold text-ink ring-1 ring-gray-900/[0.08] transition-colors hover:bg-gray-100 sm:w-auto"
+        >
+          <HiOutlineArrowDownTray className="size-4.5" />
+          {tp("download")}
+        </a>
+
+        <div className="mt-8 border-t border-gray-900/[0.06] pt-6">
+          <h3 className="text-base font-semibold text-ink">{tp("deleteTitle")}</h3>
+          <p className="mt-1 mb-5 text-sm text-gray-500">{tp("deleteText")}</p>
+          {blocker ? (
+            <p className="rounded-2xl bg-amber-50 px-4 py-3 text-sm text-amber-900 ring-1 ring-amber-600/15">
+              {tp(blocker === "runsGym" ? "blockedGym" : "blockedPass")}{" "}
+              {blocker === "activePass" && (
+                <Link href="/app/passes" className="font-semibold underline underline-offset-2">
+                  {tp("seePasses")}
+                </Link>
+              )}
+            </p>
+          ) : (
+            user.email && <DeleteAccountForm email={user.email} />
+          )}
+        </div>
       </section>
 
       <form action={signOutAction}>

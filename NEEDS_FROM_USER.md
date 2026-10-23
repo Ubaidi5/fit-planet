@@ -104,3 +104,23 @@ Uploads are stored on the server disk at `/var/www/fitplanet/shared/uploads`
 and served by nginx at `/media`. To move to Cloudflare R2 later, set
 `STORAGE_PROVIDER=s3`, the `S3_*` keys and `STORAGE_PUBLIC_URL` to the bucket's
 public URL, then copy the uploads folder into the bucket. No code changes.
+
+## 9. Legal details and review
+
+The site now has `/privacy`, `/terms` and `/imprint`, linked from the footer
+and the sign-up form. They read the business details from these keys:
+
+| Key | Example |
+| --- | --- |
+| `LEGAL_NAME` | Fit Planet LLC |
+| `LEGAL_ADDRESS` | 123 Main St \| Suite 4 \| Wilmington, DE 19801 \| United States |
+| `LEGAL_EMAIL` | privacy@yourdomain.com |
+| `LEGAL_PHONE` | Optional |
+| `LEGAL_REPRESENTATIVE` | Managing director's name (needed for Germany) |
+| `LEGAL_REGISTER` | Company register and number, once registered |
+| `LEGAL_VAT_ID` | EU VAT ID, if you have one |
+| `LEGAL_JURISDICTION` | Delaware, United States |
+
+Germany requires a real name, postal address and email on the imprint before
+launch. The texts are written in plain English as a solid starting point;
+have a lawyer check them for the EU, UAE and Türkiye before going live.

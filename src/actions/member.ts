@@ -9,11 +9,12 @@ import type { ActionResult } from "@/lib/types";
 import { collections, toObjectId } from "@/server/db/collections";
 import { ownedUploads } from "@/server/modules/media";
 import { endOtherSessions, getSessionUser } from "@/server/session";
-import { updateSession } from "@/lib/auth";
+import { signOut, updateSession } from "@/lib/auth";
 import { setPassword, toggleSavedGym, UserError } from "@/server/modules/users";
 import { ReviewError, upsertReview } from "@/server/modules/reviews";
 import { done, fail, invalid } from "./utils";
 import { allow } from "@/server/rate-limit";
+import { deleteAccount, PrivacyError } from "@/server/modules/privacy";
 
 export async function toggleSavedGymAction(gymId: string): Promise<ActionResult<{ saved: boolean }>> {
   const user = await getSessionUser();
@@ -110,6 +111,25 @@ export async function signOutOtherDevicesAction() {
   if (!user) redirect("/login?next=/app/security");
   await endOtherSessions(user._id);
   redirect("/app/security?devices=signed-out");
+}
+
+/** Erases the account after the person types their email address to confirm */
+export async function deleteAccountAction(_prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
+  const user = await getSessionUser();
+  if (!user) return fail("signInAgain");
+  const typed = String(formData.get("confirm") ?? "").trim().toLowerCase();
+  if (!user.email || typed !== user.email.toLowerCase()) {
+    const failed = await fail("deleteConfirm");
+    return { ...failed, fieldErrors: { confirm: failed.error } };
+  }
+  try {
+    await deleteAccount(user._id);
+  } catch (error) {
+    if (error instanceof PrivacyError) return fail(error.key, error.values);
+    throw error;
+  }
+  await signOut({ redirectTo: "/" });
+  return done("saved");
 }
 
 const score = z.coerce.number().int().min(1).max(5);

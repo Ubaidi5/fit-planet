@@ -22,6 +22,9 @@ interface ReviewCardProps {
 export function ReviewCard({ review, className }: ReviewCardProps) {
   const [showFullComment, setShowFullComment] = useState(false);
   const t = useTranslations("reviews");
+  const tp = useTranslations("privacy");
+  // Reviews by deleted accounts keep their text but lose the name
+  const name = review.userName || tp("formerMember");
   const { region } = useLocale();
   const [helpful, setHelpful] = useState(review.helpful);
   const [hasVoted, setHasVoted] = useState(false);
@@ -62,19 +65,19 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
             {review.userAvatar ? (
               <Image
                 src={review.userAvatar}
-                alt={review.userName}
+                alt={name}
                 fill
                 className="object-cover"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-500 text-lg font-semibold">
-                {review.userName.charAt(0)}
+                {name.charAt(0)}
               </div>
             )}
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h4 className="font-semibold text-gray-900">{review.userName}</h4>
+              <h4 className="font-semibold text-gray-900">{name}</h4>
               {review.isVerified && (
                 <span className="inline-flex items-center gap-1 text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
                   <HiCheckCircle className="h-3 w-3" />

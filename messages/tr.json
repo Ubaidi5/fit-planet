@@ -50,7 +50,11 @@
     "gymsIn": "{city} salonları",
     "tagline": "Her şehir için tek bir fitness pasaportu. Üyeler her partner salonu yerel para birimiyle rezerve eder. Salon sahipleri kendi teknolojisini kurmadan sakin saatleri doldurur.",
     "copyright": "© {year} Fit Planet. Tüm hakları saklıdır.",
-    "liveIn": "Şu anda {count} şehirde"
+    "liveIn": "Şu anda {count} şehirde",
+    "legal": "Yasal",
+    "privacy": "Gizlilik",
+    "terms": "Koşullar",
+    "imprint": "Künye"
   },
   "hero": {
     "liveBadge": "CANLI",
@@ -343,7 +347,7 @@
       "newPasswordPlaceholder": "En az 8 karakter",
       "create": "Hesap oluştur",
       "creating": "Hesap oluşturuluyor...",
-      "terms": "Devam ederek Fit Planet kullanım koşullarını ve gizlilik politikasını kabul etmiş olursun.",
+      "terms": "Devam ederek Fit Planet <terms>kullanım koşullarını</terms> ve <privacy>gizlilik politikasını</privacy> kabul etmiş olursun.",
       "sending": "Gönderiliyor...",
       "sendReset": "Sıfırlama bağlantısı gönder",
       "newPassword": "Yeni şifre",
@@ -1816,7 +1820,10 @@
       "writeComment": "Önce bir yorum yaz.",
       "wrongPassword": "Mevcut şifren doğru değil.",
       "tooManyAttempts": "Çok fazla deneme. Birkaç dakika bekleyip tekrar dene.",
-      "noOnlinePayment": "Online ödeme henüz kullanılamıyor. Resepsiyonda ödemeyi seç."
+      "noOnlinePayment": "Online ödeme henüz kullanılamıyor. Resepsiyonda ödemeyi seç.",
+      "deleteConfirm": "Onaylamak için e-posta adresini aynen yaz.",
+      "deleteRunsGym": "Bir salon yönettiğin için bu hesap henüz silinemez.",
+      "deleteActivePass": "Aktif ya da yaklaşan bir pasın var. Önce iptal et."
     },
     "fields": {
       "addExercise": "En az bir egzersiz ekle",
@@ -2084,5 +2091,31 @@
       "s3": "Sonra kolu göğsüne çek",
       "s4": "Hareketi tersine çevirerek geri dön"
     }
+  },
+  "legal": {
+    "updated": "Son güncelleme: {date}",
+    "englishOnly": "Bu sayfa İngilizce olarak sunulmaktadır. Bağlayıcı olan İngilizce metindir.",
+    "contents": "İçindekiler",
+    "privacy": "Gizlilik politikası",
+    "terms": "Kullanım koşulları",
+    "imprint": "Künye",
+    "privacyIntro": "Fit Planet'i kullanırken hangi verileri topladığımız, neden, kimlerin gördüğü ve kontrolü nasıl elinde tuttuğun.",
+    "termsIntro": "Fit Planet'te salon pası almak, antrenman yapmak ve paylaşmak için kurallar."
+  },
+  "privacy": {
+    "formerMember": "Eski üye",
+    "dataTitle": "Verilerin",
+    "dataText": "Fit Planet'in senin hakkında sakladığı her şeyin bir kopyasını indir: profil, rezervasyonlar, ziyaretler, antrenman kaydı ve sosyal etkinlik.",
+    "download": "Verilerimi indir",
+    "deleteTitle": "Hesabı sil",
+    "deleteText": "Profilin, gönderilerin, antrenman kaydın ve fotoğrafların kalıcı olarak silinir. Yorumların salonun sayfasında adın olmadan kalır.",
+    "blockedGym": "Fit Planet'te bir salon yönetiyorsun. Bu hesabı silmeden önce salonunu kapat ya da devret.",
+    "blockedPass": "Hâlâ aktif ya da yaklaşan bir pasın var. İptal et ya da bitmesini bekle, sonra hesabını sil.",
+    "seePasses": "Paslarımı gör",
+    "deleteStart": "Hesabımı sil",
+    "deleteConfirmLabel": "Onaylamak için {email} yaz",
+    "deleting": "Siliniyor…",
+    "deleteForever": "Kalıcı olarak sil",
+    "keepAccount": "Hesabımı koru"
   }
 }

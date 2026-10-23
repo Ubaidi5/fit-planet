@@ -26,6 +26,12 @@ const footerLinks: FooterGroup[] = [
   },
 ];
 
+const legalLinks = [
+  { href: "/privacy", label: "privacy" },
+  { href: "/terms", label: "terms" },
+  { href: "/imprint", label: "imprint" },
+];
+
 const socialLinks = [
   { name: "Instagram", href: "https://instagram.com", icon: FaInstagram },
   { name: "X", href: "https://x.com", icon: FaXTwitter },
@@ -100,7 +106,16 @@ const Footer = async () => {
         </div>
 
         <div className="flex flex-col items-center justify-between gap-3 border-t border-gray-900/[0.06] px-6 py-6 text-sm text-gray-500 sm:flex-row sm:px-10 lg:px-14">
-          <p>{t("copyright", { year: new Date().getFullYear() })}</p>
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-6">
+            <p>{t("copyright", { year: new Date().getFullYear() })}</p>
+            <nav aria-label={t("legal")} className="flex flex-wrap justify-center gap-x-5 gap-y-1">
+              {legalLinks.map((link) => (
+                <Link key={link.href} href={link.href} className="transition-colors hover:text-ink">
+                  {t(link.label)}
+                </Link>
+              ))}
+            </nav>
+          </div>
           {stats.cities.length > 0 && (
             <p className="flex items-center gap-2">
               <span className="relative flex size-2">

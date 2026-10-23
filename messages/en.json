@@ -50,7 +50,11 @@
     "gymsIn": "Gyms in {city}",
     "tagline": "One fitness passport for every city. Members book any partner gym in local currency. Owners fill quiet hours without building their own tech.",
     "copyright": "© {year} Fit Planet. All rights reserved.",
-    "liveIn": "Now live in {count} cities"
+    "liveIn": "Now live in {count} cities",
+    "legal": "Legal",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "imprint": "Imprint"
   },
   "hero": {
     "liveBadge": "LIVE",
@@ -343,7 +347,7 @@
       "newPasswordPlaceholder": "At least 8 characters",
       "create": "Create account",
       "creating": "Creating account...",
-      "terms": "By continuing you agree to the Fit Planet terms and privacy policy.",
+      "terms": "By continuing you agree to the Fit Planet <terms>terms</terms> and <privacy>privacy policy</privacy>.",
       "sending": "Sending...",
       "sendReset": "Send reset link",
       "newPassword": "New password",
@@ -1816,7 +1820,10 @@
       "writeComment": "Write a comment first.",
       "wrongPassword": "Your current password isn't right.",
       "tooManyAttempts": "Too many attempts. Wait a few minutes and try again.",
-      "noOnlinePayment": "Online payment isn't available yet. Choose pay at the desk."
+      "noOnlinePayment": "Online payment isn't available yet. Choose pay at the desk.",
+      "deleteConfirm": "Type your email address exactly to confirm.",
+      "deleteRunsGym": "You manage a gym, so this account can't be deleted yet.",
+      "deleteActivePass": "You have an active or upcoming pass. Cancel it first."
     },
     "fields": {
       "addExercise": "Add at least one exercise",
@@ -2084,5 +2091,31 @@
       "s3": "Then pull handle to chest",
       "s4": "Reverse motion to return"
     }
+  },
+  "legal": {
+    "updated": "Last updated {date}",
+    "englishOnly": "This page is available in English. The English version is the binding one.",
+    "contents": "Contents",
+    "privacy": "Privacy policy",
+    "terms": "Terms of service",
+    "imprint": "Imprint",
+    "privacyIntro": "What we collect when you use Fit Planet, why, who sees it, and how you stay in control.",
+    "termsIntro": "The rules for booking gym passes, training and sharing on Fit Planet."
+  },
+  "privacy": {
+    "formerMember": "Former member",
+    "dataTitle": "Your data",
+    "dataText": "Download a copy of everything Fit Planet stores about you: profile, bookings, visits, training log and social activity.",
+    "download": "Download my data",
+    "deleteTitle": "Delete account",
+    "deleteText": "Your profile, posts, training log and photos are erased for good. Reviews stay on the gym's page without your name.",
+    "blockedGym": "You manage a gym on Fit Planet. Close or hand over your gym before deleting this account.",
+    "blockedPass": "You have a pass that is still active or coming up. Cancel it, or wait until it ends, then delete your account.",
+    "seePasses": "See my passes",
+    "deleteStart": "Delete my account",
+    "deleteConfirmLabel": "Type {email} to confirm",
+    "deleting": "Deleting…",
+    "deleteForever": "Delete forever",
+    "keepAccount": "Keep my account"
   }
 }
