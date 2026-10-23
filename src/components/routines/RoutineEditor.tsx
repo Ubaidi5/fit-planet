@@ -164,9 +164,9 @@ export function RoutineEditor({ routine, unit }: Props) {
                 </div>
 
                 <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-[auto_1fr_1fr]">
-                  <div className="col-span-2 sm:col-span-1">
+                  <div className="col-span-2 sm:col-span-1 sm:w-fit">
                     <span className="text-xs font-medium text-gray-500">Sets</span>
-                    <div className="mt-1 flex h-11 items-center rounded-full bg-canvas p-1">
+                    <div className="mt-1 flex h-11 w-fit items-center rounded-full bg-canvas p-1">
                       <button
                         type="button"
                         aria-label="Fewer sets"

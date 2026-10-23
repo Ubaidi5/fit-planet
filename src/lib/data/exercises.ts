@@ -473,7 +473,7 @@ export const routineTemplates: RoutineTemplate[] = [
     id: "tpl-full",
     name: "Beginner full body",
     category: "full_body",
-    notes: "Every major muscle group in 45 minutes. Good for your first weeks.",
+    notes: "Every major muscle group in one short session. Good for your first weeks.",
     items: [
       { exerciseId: "ex011", sets: 3, reps: "10-12", weight: null, restSec: 60 },
       { exerciseId: "ex006", sets: 3, reps: "10-12", weight: null, restSec: 60 },

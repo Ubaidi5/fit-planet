@@ -307,7 +307,7 @@ export function WorkoutPlayer(props: Props) {
           <div className="relative overflow-hidden rounded-full bg-ink p-2 ps-5 text-white shadow-lift">
             <div
               className="absolute inset-y-0 start-0 bg-white/10 transition-[width] duration-1000 ease-linear"
-              style={{ width: `${(restLeft / rest.total) * 100}%` }}
+              style={{ width: `${(1 - restLeft / rest.total) * 100}%` }}
             />
             <div className="relative flex items-center gap-3">
               <span className="text-xs text-white/60">Rest</span>
