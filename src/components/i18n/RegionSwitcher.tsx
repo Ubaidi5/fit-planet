@@ -89,7 +89,9 @@ export function RegionSwitcher({ align = "end", placement = "bottom", className 
                       {option.name}
                     </span>
                     <span className="block truncate text-xs text-gray-500">
-                      <span dir={option.dir}>{option.language}</span> · {formatMoney(1234, option.currency, option.locale)}
+                      <span dir={option.dir}>{option.language}</span> ·{" "}
+                      {/* Server and browser ICU data can differ in separators (CHF 1'234 vs 1’234) */}
+                      <span suppressHydrationWarning>{formatMoney(1234, option.currency, option.locale)}</span>
                       {option.units === "imperial" ? " · mi" : " · km"}
                     </span>
                   </span>

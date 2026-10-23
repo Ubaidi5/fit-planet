@@ -14,6 +14,7 @@ export function RevenueBars({ series, format, locale }: { series: DailyPoint[]; 
 
   return (
     <div className="relative">
+      {/* Time runs left to right in every language, so the chart and its axis stay LTR */}
       <svg viewBox={`0 0 ${width} ${height + 24}`} className="h-56 w-full" preserveAspectRatio="none" role="img" aria-label={t("revenueAria")}>
         {ticks.map((t) => (
           <line key={t.y} x1="0" x2={width} y1={t.y} y2={t.y} stroke="currentColor" className="text-gray-900/[0.06]" strokeDasharray="3 4" vectorEffect="non-scaling-stroke" />
@@ -30,12 +31,12 @@ export function RevenueBars({ series, format, locale }: { series: DailyPoint[]; 
           );
         })}
       </svg>
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-between font-mono text-[10px] tracking-[0.08em] text-gray-400 uppercase">
+      <div dir="ltr" className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-between font-mono text-[10px] tracking-[0.08em] text-gray-400 uppercase">
         <span>{formatDate(series[0].date, locale)}</span>
         <span>{formatDate(series[Math.floor(series.length / 2)].date, locale)}</span>
         <span>{t("today")}</span>
       </div>
-      <div className="pointer-events-none absolute top-0 end-0 flex h-[180px] flex-col justify-between py-0 text-end font-mono text-[10px] text-gray-400">
+      <div dir="ltr" className="pointer-events-none absolute top-0 right-0 flex h-[180px] flex-col justify-between py-0 text-end font-mono text-[10px] text-gray-400">
         <span className="-translate-y-1/2 rounded bg-surface/80 px-1">{ticks[2].label}</span>
       </div>
     </div>
