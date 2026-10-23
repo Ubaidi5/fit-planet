@@ -2195,5 +2195,16 @@
   "seo": {
     "title": "Fit Planet · Dünyadaki her salon için tek pas",
     "description": "Her şehirde salon bul, ne kadar kalabalık olduğunu gör, yerel para biriminde günlük, haftalık ya da aylık pas al ve QR kodla gir. Salon sahipleri rezervasyonları ve girişleri tek bir stüdyoda yönetir."
+  },
+  "errorPage": {
+    "stampLabel": "Haritada yok",
+    "notFoundTitle": "Bu sayfa haritada yok",
+    "notFoundText": "Bağlantı eski olabilir ya da salon Fit Planet'ten ayrılmış olabilir. Bunun yerine yakınında başka bir salon bul.",
+    "findGyms": "Salon bul",
+    "home": "Ana sayfaya dön",
+    "errorTitle": "Bir şeyler ters gitti",
+    "errorText": "Bu sayfayı yükleyemedik. Tekrar dene; sorun devam ederse birkaç dakika sonra yeniden gel.",
+    "retry": "Tekrar dene",
+    "reference": "Referans {id}"
   }
 }

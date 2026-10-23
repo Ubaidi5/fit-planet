@@ -2195,5 +2195,16 @@
   "seo": {
     "title": "Fit Planet · Un pase para todos los gimnasios del planeta",
     "description": "Encuentra gimnasios en cualquier ciudad, mira cuánta gente hay, reserva pases de día, semana o mes en moneda local y entra con un código QR. Los dueños gestionan reservas y accesos en un solo estudio."
+  },
+  "errorPage": {
+    "stampLabel": "Fuera del mapa",
+    "notFoundTitle": "Esta página no está en el mapa",
+    "notFoundText": "Puede que el enlace sea antiguo o que el gimnasio ya no esté en Fit Planet. Busca otro gimnasio cerca.",
+    "findGyms": "Buscar gimnasios",
+    "home": "Volver al inicio",
+    "errorTitle": "Algo ha salido mal",
+    "errorText": "No hemos podido cargar esta página. Inténtalo de nuevo y, si sigue pasando, vuelve en unos minutos.",
+    "retry": "Reintentar",
+    "reference": "Referencia {id}"
   }
 }

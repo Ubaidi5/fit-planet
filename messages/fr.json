@@ -2195,5 +2195,16 @@
   "seo": {
     "title": "Fit Planet · Un pass pour toutes les salles de la planète",
     "description": "Trouvez des salles dans n'importe quelle ville, voyez leur affluence, réservez des pass jour, semaine ou mois en devise locale et entrez avec un QR code. Les gérants suivent réservations et entrées dans un seul espace."
+  },
+  "errorPage": {
+    "stampLabel": "Hors carte",
+    "notFoundTitle": "Cette page n'est pas sur la carte",
+    "notFoundText": "Le lien est peut-être ancien, ou la salle a quitté Fit Planet. Trouvez plutôt une autre salle à proximité.",
+    "findGyms": "Trouver une salle",
+    "home": "Retour à l'accueil",
+    "errorTitle": "Un problème est survenu",
+    "errorText": "Nous n'avons pas pu charger cette page. Réessayez, et si le problème persiste, revenez dans quelques minutes.",
+    "retry": "Réessayer",
+    "reference": "Référence {id}"
   }
 }

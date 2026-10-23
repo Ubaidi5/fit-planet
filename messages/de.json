@@ -2195,5 +2195,16 @@
   "seo": {
     "title": "Fit Planet · Ein Pass für jedes Gym der Welt",
     "description": "Finde Gyms in jeder Stadt, sieh, wie voll sie sind, buche Tages-, Wochen- oder Monatspässe in lokaler Währung und check per QR-Code ein. Gym-Inhaber verwalten Buchungen und Check-ins in einem Studio."
+  },
+  "errorPage": {
+    "stampLabel": "Nicht auf der Karte",
+    "notFoundTitle": "Diese Seite ist nicht auf der Karte",
+    "notFoundText": "Der Link ist vielleicht veraltet, oder das Gym ist nicht mehr bei Fit Planet. Finde stattdessen ein anderes Gym in der Nähe.",
+    "findGyms": "Gyms finden",
+    "home": "Zur Startseite",
+    "errorTitle": "Etwas ist schiefgelaufen",
+    "errorText": "Wir konnten diese Seite nicht laden. Versuch es noch einmal, und wenn es weiter passiert, komm in ein paar Minuten wieder.",
+    "retry": "Erneut versuchen",
+    "reference": "Referenz {id}"
   }
 }
