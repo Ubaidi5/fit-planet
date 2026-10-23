@@ -23,6 +23,10 @@ export interface UserDoc {
   handle?: string;
   bio?: string;
   social?: SocialPrefs;
+  /** Set at password sign-up until the email is proven (reset link, email link or Google) */
+  passwordUnverified?: boolean;
+  /** Sessions signed in before this moment are no longer accepted */
+  sessionsValidFrom?: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }

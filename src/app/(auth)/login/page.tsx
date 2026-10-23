@@ -4,7 +4,8 @@ import { redirect } from "next/navigation";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { AuthHeading } from "@/components/auth/AuthHeading";
 import { SignInForm } from "@/components/auth/SignInForm";
-import { auth, enabledSignInMethods } from "@/lib/auth";
+import { enabledSignInMethods } from "@/lib/auth";
+import { getSessionUser } from "@/server/session";
 import { safeRedirect } from "@/actions/utils";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -16,8 +17,8 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const t = await getTranslations("auth.login");
   const params = await searchParams;
   const next = safeRedirect(params.next ?? params.callbackUrl, "/app/dashboard");
-  const session = await auth();
-  if (session?.user) redirect(next);
+  const signedIn = await getSessionUser();
+  if (signedIn) redirect(next);
 
   return (
     <AuthShell variant="member" aside={{ text: t("asideText"), href: `/register?next=${encodeURIComponent(next)}`, label: t("asideLink") }}>

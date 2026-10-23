@@ -8,6 +8,7 @@ import { toObjectId } from "@/server/db/collections";
 import { getSessionUser } from "@/server/session";
 import { BookingError, cancelBookingByMember, createBooking } from "@/server/modules/bookings";
 import { done, fail, invalid } from "./utils";
+import { allow } from "@/server/rate-limit";
 
 const bookingSchema = z.object({
   gymId: z.string().min(1),
@@ -22,6 +23,7 @@ const bookingSchema = z.object({
 export async function bookPassAction(_prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
   const user = await getSessionUser();
   if (!user) return fail("signInToBook");
+  if (!(await allow("book", user._id.toHexString(), 20, 3600))) return fail("tooManyAttempts");
 
   const parsed = bookingSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return invalid(parsed.error);

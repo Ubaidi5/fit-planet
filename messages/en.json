@@ -950,7 +950,13 @@
     "homeCity": "Home city",
     "homeCityPlaceholder": "Where you usually train",
     "region": "Region and language",
-    "saveProfile": "Save profile"
+    "saveProfile": "Save profile",
+    "devices": {
+      "title": "Other devices",
+      "text": "Lost a phone or signed in on a shared computer? Sign out everywhere except here. Changing your password does this too.",
+      "action": "Sign out other devices",
+      "done": "Every other device is signed out."
+    }
   },
   "notifications": {
     "empty": {
@@ -1809,7 +1815,8 @@
       "workoutUnreadable": "Couldn't read this workout. Try again.",
       "writeComment": "Write a comment first.",
       "wrongPassword": "Your current password isn't right.",
-      "tooManyAttempts": "Too many attempts. Wait a few minutes and try again."
+      "tooManyAttempts": "Too many attempts. Wait a few minutes and try again.",
+      "noOnlinePayment": "Online payment isn't available yet. Choose pay at the desk."
     },
     "fields": {
       "addExercise": "Add at least one exercise",
@@ -1836,7 +1843,9 @@
       "time": "Use HH:MM",
       "tooLong": "That's too long",
       "tooShort": "That's too short",
-      "invalid": "Check this field"
+      "invalid": "Check this field",
+      "handle": "Use the handle only, without the link",
+      "timezone": "Pick a valid time zone"
     },
     "done": {
       "bookingCancelled": "Booking cancelled.",

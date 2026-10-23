@@ -1,16 +1,19 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { findRegion, REGION_COOKIE } from "@/lib/i18n/regions";
 import { z } from "zod";
 import type { ActionResult } from "@/lib/types";
 import { collections, toObjectId } from "@/server/db/collections";
-import { getSessionUser } from "@/server/session";
+import { ownedUploads } from "@/server/modules/media";
+import { endOtherSessions, getSessionUser } from "@/server/session";
 import { updateSession } from "@/lib/auth";
 import { setPassword, toggleSavedGym, UserError } from "@/server/modules/users";
 import { ReviewError, upsertReview } from "@/server/modules/reviews";
 import { done, fail, invalid } from "./utils";
+import { allow } from "@/server/rate-limit";
 
 export async function toggleSavedGymAction(gymId: string): Promise<ActionResult<{ saved: boolean }>> {
   const user = await getSessionUser();
@@ -36,7 +39,12 @@ export async function updateProfileAction(_prev: ActionResult | null, formData: 
   const parsed = profileSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return invalid(parsed.error);
   const users = await collections.users();
-  const { image, ...rest } = parsed.data;
+  const { image: requested, ...rest } = parsed.data;
+  // Only the current picture, an own upload, or none
+  const image =
+    requested === undefined || requested === "" || requested === user.image || (await ownedUploads(user._id, [requested])).has(requested)
+      ? requested
+      : undefined;
   await users.updateOne(
     { _id: user._id },
     { $set: { ...rest, ...(image !== undefined ? { image: image || null } : {}), updatedAt: new Date() } },
@@ -81,6 +89,8 @@ export async function changePasswordAction(_prev: ActionResult | null, formData:
   if (!user) return fail("signInAgain");
   const parsed = passwordSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return invalid(parsed.error);
+  // Stops someone at an unlocked laptop guessing the current password
+  if (!(await allow("password-change", user._id.toHexString(), 10, 3600))) return fail("tooManyAttempts");
   try {
     await setPassword(user._id, parsed.data.password, parsed.data.current);
   } catch (error) {
@@ -90,7 +100,16 @@ export async function changePasswordAction(_prev: ActionResult | null, formData:
     }
     throw error;
   }
+  await endOtherSessions(user._id);
   return done(user.passwordHash ? "passwordChanged" : "passwordAdded");
+}
+
+/** Signs out every other browser and phone; this one stays signed in */
+export async function signOutOtherDevicesAction() {
+  const user = await getSessionUser();
+  if (!user) redirect("/login?next=/app/security");
+  await endOtherSessions(user._id);
+  redirect("/app/security?devices=signed-out");
 }
 
 const score = z.coerce.number().int().min(1).max(5);
@@ -108,6 +127,7 @@ const reviewSchema = z.object({
 export async function submitReviewAction(_prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
   const user = await getSessionUser();
   if (!user) return fail("signInToReview");
+  if (!(await allow("review", user._id.toHexString(), 10, 3600))) return fail("tooManyAttempts");
   const parsed = reviewSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return invalid(parsed.error);
   const gymId = toObjectId(parsed.data.gymId);

@@ -3,7 +3,29 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
+const isProd = process.env.NODE_ENV === "production";
+
+/**
+ * Baseline browser protections for every page. Scripts aren't restricted by
+ * CSP here (Next's inline bootstrap would need nonces); these directives block
+ * framing, plugin content and <base> tricks without risking breakage.
+ */
+const securityHeaders = [
+  {
+    key: "Content-Security-Policy",
+    value: ["frame-ancestors 'none'", "base-uri 'self'", "object-src 'none'", ...(isProd ? ["upgrade-insecure-requests"] : [])].join("; "),
+  },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  // Camera for the front-desk QR scanner, location for "gyms near me"
+  { key: "Permissions-Policy", value: "camera=(self), geolocation=(self), microphone=(), payment=(), usb=(), interest-cohort=()" },
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+  ...(isProd ? [{ key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" }] : []),
+];
+
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   reactCompiler: true,
   // Self-contained server bundle for the Lightsail deploy (see deploy/)
   output: "standalone",
@@ -34,6 +56,10 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      {
+        source: "/:path*",
+        headers: securityHeaders,
+      },
       {
         source: "/firebase-messaging-sw.js",
         headers: [

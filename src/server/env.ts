@@ -38,6 +38,11 @@ export const env = {
     provider: oneOf("PAYMENT_PROVIDER", ["stripe", "mock"] as const, read("STRIPE_SECRET_KEY") ? "stripe" : "mock"),
     stripeSecretKey: read("STRIPE_SECRET_KEY"),
     stripeWebhookSecret: read("STRIPE_WEBHOOK_SECRET"),
+    /**
+     * The mock gateway confirms bookings without taking money, so production
+     * only uses it when ALLOW_MOCK_PAYMENTS=true (e.g. a staging server)
+     */
+    allowMockPayments: read("ALLOW_MOCK_PAYMENTS") === "true",
     /** Lets members choose "pay at the front desk" at checkout */
     allowPayAtDesk: read("ALLOW_PAY_AT_DESK") !== "false",
   },
@@ -87,5 +92,10 @@ export const features = {
   /** Magic link sign-in needs a real email provider in production */
   magicLink: env.email.provider === "smtp" || !env.isProd,
   stripe: env.payments.provider === "stripe" && Boolean(env.payments.stripeSecretKey),
+  /** Online checkout is offered only with a real gateway, or the mock one outside production */
+  onlinePayments:
+    env.payments.provider === "stripe"
+      ? Boolean(env.payments.stripeSecretKey)
+      : !env.isProd || env.payments.allowMockPayments,
   push: env.push.provider === "fcm",
 };

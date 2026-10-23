@@ -4,9 +4,10 @@ import { HiOutlineBeaker } from "react-icons/hi2";
 import { collections, toObjectId } from "@/server/db/collections";
 import { confirmOnlinePayment, formatMoney } from "@/server/modules/bookings";
 import { getSessionUser } from "@/server/session";
-import { env } from "@/server/env";
+import { env, features } from "@/server/env";
 import { passMeta } from "@/lib/passes";
 import { SubmitButton } from "@/components/auth/FormBits";
+import { safeRedirect } from "@/actions/utils";
 
 export const metadata: Metadata = { title: "Test payment", robots: { index: false } };
 export const dynamic = "force-dynamic";
@@ -15,7 +16,7 @@ type Search = { session?: string; ref?: string; success?: string; cancel?: strin
 
 /** Fake gateway page for PAYMENT_PROVIDER=mock. Lets you test the full flow without Stripe keys. */
 export default async function MockCheckout({ searchParams }: { searchParams: Promise<Search> }) {
-  if (env.payments.provider !== "mock") notFound();
+  if (env.payments.provider !== "mock" || !features.onlinePayments) notFound();
   const { session, ref, cancel } = await searchParams;
   const id = toObjectId(ref);
   const user = await getSessionUser();
@@ -27,7 +28,7 @@ export default async function MockCheckout({ searchParams }: { searchParams: Pro
   async function pay() {
     "use server";
     const current = await getSessionUser();
-    if (!current || !id) return;
+    if (!current || !id || !current._id.equals(user!._id)) return;
     await confirmOnlinePayment(id, session);
     redirect(`/app/passes/${id.toHexString()}?new=1`);
   }
@@ -47,7 +48,7 @@ export default async function MockCheckout({ searchParams }: { searchParams: Pro
           <SubmitButton variant="secondary" pendingLabel="Paying...">
             Pay {formatMoney(booking.amount, booking.currency)}
           </SubmitButton>
-          <a href={cancel ?? "/"} className="flex h-12 items-center justify-center rounded-full text-sm font-medium text-gray-600 hover:bg-gray-900/5">
+          <a href={safeRedirect(cancel?.startsWith(env.appUrl) ? cancel.slice(env.appUrl.length) : cancel, "/")} className="flex h-12 items-center justify-center rounded-full text-sm font-medium text-gray-600 hover:bg-gray-900/5">
             Cancel
           </a>
         </form>

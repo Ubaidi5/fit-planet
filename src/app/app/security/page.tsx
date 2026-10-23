@@ -7,6 +7,7 @@ import { requireUser } from "@/server/session";
 import { getDb } from "@/server/db/client";
 import { PasswordForm } from "@/components/member/PasswordForm";
 import { signOutAction } from "@/actions/auth";
+import { signOutOtherDevicesAction } from "@/actions/member";
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations("settings"))("security") };
@@ -17,8 +18,9 @@ const providers = {
   facebook: { name: "Facebook", icon: FaFacebook },
 } as const;
 
-export default async function SecurityPage() {
+export default async function SecurityPage({ searchParams }: { searchParams: Promise<{ devices?: string }> }) {
   const user = await requireUser("/app/security");
+  const { devices } = await searchParams;
   const accounts = await (await getDb()).collection("accounts").find({ userId: user._id }, { projection: { provider: 1 } }).toArray();
   const linked = new Set(accounts.map((a) => String(a.provider)));
   const t = await getTranslations("settings");
@@ -55,6 +57,22 @@ export default async function SecurityPage() {
           ))}
         </ul>
         <p className="mt-3 text-xs text-gray-500">{t("connectHint")}</p>
+      </section>
+
+      <section className="rounded-[1.75rem] bg-surface p-5 shadow-soft ring-1 ring-gray-900/[0.05] sm:p-8">
+        <h2 className="text-lg font-semibold text-ink">{t("devices.title")}</h2>
+        <p className="mt-1 text-sm text-gray-500">{t("devices.text")}</p>
+        {devices === "signed-out" ? (
+          <p role="status" className="mt-5 rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800 ring-1 ring-emerald-600/15">
+            {t("devices.done")}
+          </p>
+        ) : (
+          <form action={signOutOtherDevicesAction} className="mt-5">
+            <button type="submit" className="h-11 w-full cursor-pointer rounded-full bg-canvas px-5 text-sm font-semibold text-ink ring-1 ring-gray-900/[0.08] transition-colors hover:bg-gray-100 sm:w-auto">
+              {t("devices.action")}
+            </button>
+          </form>
+        )}
       </section>
 
       <form action={signOutAction}>

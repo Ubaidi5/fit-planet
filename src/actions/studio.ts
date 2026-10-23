@@ -12,11 +12,12 @@ import { uniqueSlug } from "@/server/modules/gyms";
 import { BookingError, cancelBookingByOwner, listGymBookings, markDeskPaid } from "@/server/modules/bookings";
 import { checkInByCode, type CheckinOutcome } from "@/server/modules/checkins";
 import { replyToReview, ReviewError } from "@/server/modules/reviews";
-import { deleteUpload } from "@/server/modules/media";
+import { deleteUpload, ownedUploads } from "@/server/modules/media";
 import { notify } from "@/server/modules/notifications";
 import { done, fail, invalid } from "./utils";
 import { getRegion } from "@/lib/i18n/server";
 import { formatDate } from "@/lib/dates";
+import { allow } from "@/server/rate-limit";
 
 const time = z.string().regex(/^([01]\d|2[0-4]):[0-5]\d$/, "time");
 const money = z.coerce.number().min(0).max(10_000_000);
@@ -34,7 +35,7 @@ const gymSchema = z.object({
   city: z.string().trim().min(2, "city").max(60),
   country: z.string().trim().length(2, "country").toUpperCase(),
   currency: z.string().trim().length(3, "currency").toUpperCase(),
-  timezone: z.string().trim().min(3).max(60),
+  timezone: z.string().trim().min(3).max(60).refine(isTimeZone, "timezone"),
   lat: z.coerce.number().min(-90).max(90),
   lng: z.coerce.number().min(-180).max(180),
   dayPass: money.refine((v) => v > 0, "dayPass"),
@@ -52,9 +53,10 @@ const gymSchema = z.object({
   coverImage: z.string().max(500).optional(),
   phone: z.string().trim().max(30).optional(),
   email: z.union([z.email(), z.literal("")]).optional(),
-  website: z.union([z.url(), z.literal("")]).optional(),
-  instagram: z.string().trim().max(60).optional(),
-  facebook: z.string().trim().max(80).optional(),
+  website: z.union([z.url({ protocol: /^https?$/ }), z.literal("")]).optional(),
+  // Handles only, never URLs: they are appended to the network's own domain
+  instagram: z.string().trim().max(60).regex(/^@?[\w.]*$/, "handle").optional(),
+  facebook: z.string().trim().max(80).regex(/^[\w.\-]*$/, "handle").optional(),
   cancellation: z.string().trim().max(400).optional(),
   guestPolicy: z.string().trim().max(400).optional(),
   dresscode: z.string().trim().max(400).optional(),
@@ -62,6 +64,15 @@ const gymSchema = z.object({
 });
 
 export type GymInput = z.input<typeof gymSchema>;
+
+function isTimeZone(value: string) {
+  try {
+    new Intl.DateTimeFormat("en", { timeZone: value });
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 const FALLBACK_COVER = "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1200&q=80";
 
@@ -100,6 +111,14 @@ function gymFields(data: z.output<typeof gymSchema>) {
   };
 }
 
+/** Keeps only photos this owner uploaded, or ones the gym already had */
+async function allowedImages(ownerId: ObjectId, data: z.output<typeof gymSchema>, existing: string[] = []) {
+  const wanted = data.images.filter(Boolean);
+  const owned = await ownedUploads(ownerId, wanted);
+  data.images = wanted.filter((url) => owned.has(url) || existing.includes(url));
+  return data;
+}
+
 async function ownerOrError(): Promise<{ user: UserDoc; gyms: GymDoc[] } | null> {
   const { user, gyms } = await getOwnerContext();
   return user ? { user, gyms } : null;
@@ -112,6 +131,7 @@ export async function createGymAction(input: GymInput): Promise<ActionResult<{ i
   const parsed = gymSchema.safeParse(input);
   if (!parsed.success) return invalid(parsed.error);
 
+  await allowedImages(ctx.user._id, parsed.data);
   const gyms = await collections.gyms();
   const now = new Date();
   const slug = await uniqueSlug(parsed.data.name, parsed.data.city);
@@ -149,7 +169,7 @@ export async function updateGymAction(gymId: string, input: GymInput): Promise<A
   const parsed = gymSchema.safeParse(input);
   if (!parsed.success) return invalid(parsed.error);
 
-  const fields = gymFields(parsed.data);
+  const fields = gymFields(await allowedImages(ctx.user._id, parsed.data, gym.images));
   const slug = parsed.data.name !== gym.name || parsed.data.city !== gym.address.city ? await uniqueSlug(parsed.data.name, parsed.data.city, gym._id) : gym.slug;
   await (await collections.gyms()).updateOne({ _id: gym._id }, { $set: { ...fields, slug, updatedAt: new Date() } });
 
@@ -183,7 +203,9 @@ export async function checkInAction(code: string, method: "qr" | "code" = "code"
   const ctx = await ownerOrError();
   const t = await getTranslations("feedback.errors");
   if (!ctx || ctx.gyms.length === 0) return { ok: false, reason: t("signInStudio") };
-  if (!code.trim()) return { ok: false, reason: t("enterCode") };
+  if (typeof code !== "string" || !code.trim()) return { ok: false, reason: t("enterCode") };
+  // Pass codes are long enough that guessing needs volume; cap it per owner
+  if (!(await allow("checkin", ctx.user._id.toHexString(), 120, 600))) return { ok: false, reason: t("tooManyAttempts") };
   const result = await checkInByCode({ code, gymIds: ctx.gyms.map((g) => g._id), staffUserId: ctx.user._id, method });
   if (result.ok) {
     revalidatePath("/studio/dashboard");
@@ -227,7 +249,7 @@ export async function replyReviewAction(reviewId: string, text: string): Promise
   const ctx = await ownerOrError();
   const id = toObjectId(reviewId);
   if (!ctx || !id) return fail("reviewNotFound");
-  if (text.trim().length < 2 || text.length > 1000) return fail("replyLength");
+  if (typeof text !== "string" || text.trim().length < 2 || text.length > 1000) return fail("replyLength");
   try {
     await replyToReview(ctx.gyms.map((g) => g._id), id, text);
   } catch (error) {
@@ -239,8 +261,10 @@ export async function replyReviewAction(reviewId: string, text: string): Promise
 }
 
 const csvCell = (value: unknown) => {
-  const text = String(value ?? "");
-  return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+  let text = String(value ?? "");
+  // A member-typed name like =HYPERLINK(...) would run as a formula in Excel or Sheets
+  if (typeof value === "string" && /^[=+\-@\t\r]/.test(text)) text = `'${text}`;
+  return /[",\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 };
 
 /** Bookings as CSV for spreadsheets */

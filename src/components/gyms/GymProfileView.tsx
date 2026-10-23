@@ -608,7 +608,7 @@ export function GymProfileView({
                 <div className="mt-3 flex gap-2 border-t border-gray-900/[0.06] pt-3">
                   {details.contact.instagram && (
                     <a
-                      href={`https://instagram.com/${details.contact.instagram.replace("@", "")}`}
+                      href={`https://instagram.com/${encodeURIComponent(details.contact.instagram.replace("@", ""))}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="Instagram"
@@ -619,7 +619,7 @@ export function GymProfileView({
                   )}
                   {details.contact.facebook && (
                     <a
-                      href={`https://facebook.com/${details.contact.facebook}`}
+                      href={`https://facebook.com/${encodeURIComponent(details.contact.facebook)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="Facebook"

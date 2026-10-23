@@ -1,5 +1,5 @@
-import { AppError } from "@/server/errors";
 import "server-only";
+import { AppError } from "@/server/errors";
 import { randomInt } from "node:crypto";
 import { MongoServerError, ObjectId, type Filter } from "mongodb";
 import { collections } from "@/server/db/collections";
@@ -7,7 +7,7 @@ import type { BookingDoc, GymDoc, UserDoc } from "@/server/db/models";
 import type { BookingView } from "@/lib/types";
 import { addDays, daysBetween, formatDate, isIsoDate, todayIn } from "@/lib/dates";
 import { passMeta, type PassType } from "@/lib/passes";
-import { env } from "@/server/env";
+import { env, features } from "@/server/env";
 import { payments, paymentProvider } from "@/server/services/payments";
 import { email } from "@/server/services/email";
 import { bookingConfirmedEmail } from "@/server/services/email/templates";
@@ -116,6 +116,9 @@ export async function createBooking(input: CreateBookingInput): Promise<CreateBo
 
   if (input.paymentMethod === "desk" && !env.payments.allowPayAtDesk) {
     throw new BookingError("noDeskPayment");
+  }
+  if (input.paymentMethod === "online" && !features.onlinePayments) {
+    throw new BookingError("noOnlinePayment");
   }
 
   const meta = passMeta[input.passType];

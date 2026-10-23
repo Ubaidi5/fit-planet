@@ -1,11 +1,12 @@
-import { AppError } from "@/server/errors";
 import "server-only";
+import { AppError } from "@/server/errors";
 import { ObjectId, type Filter } from "mongodb";
 import { collections } from "@/server/db/collections";
 import type { PostDoc, SocialPrefs, UserDoc } from "@/server/db/models";
 import type { CommentView, PersonView, PostView } from "@/lib/types";
 import { initials } from "@/lib/initials";
 import { notify } from "./notifications";
+import { ownedUploads } from "./media";
 
 export class SocialError extends AppError {}
 
@@ -160,7 +161,10 @@ export async function createTextPost(user: UserDoc, input: { text: string; image
   const text = input.text.trim();
   if (!text && !input.imageUrl) throw new SocialError("emptyPost");
   // Only images we stored ourselves can be attached
-  if (input.imageUrl && !input.imageUrl.includes(`/posts/${user._id.toHexString()}/`)) throw new SocialError("photoNotAllowed");
+  if (input.imageUrl) {
+    const own = input.imageUrl.includes(`/posts/${user._id.toHexString()}/`) && (await ownedUploads(user._id, [input.imageUrl])).has(input.imageUrl);
+    if (!own) throw new SocialError("photoNotAllowed");
+  }
   return insertPost(user, { kind: "text", text: text.slice(0, 1000), imageUrl: input.imageUrl });
 }
 

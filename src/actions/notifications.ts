@@ -6,11 +6,13 @@ import { toObjectId } from "@/server/db/collections";
 import { getSessionUser } from "@/server/session";
 import { listNotifications, markRead, registerPushToken, removePushToken, unreadCount } from "@/server/modules/notifications";
 import { fail } from "./utils";
+import { allow } from "@/server/rate-limit";
 
 export async function registerPushTokenAction(token: string, userAgent?: string): Promise<ActionResult> {
   const user = await getSessionUser();
   if (!user) return fail("signInAgain");
-  if (!token || token.length > 4096) return fail("badRequest");
+  if (typeof token !== "string" || !token || token.length > 4096) return fail("badRequest");
+  if (!(await allow("push-token", user._id.toHexString(), 30, 3600))) return fail("tooManyAttempts");
   await registerPushToken(user._id, token, userAgent?.slice(0, 300));
   return { ok: true };
 }

@@ -950,7 +950,13 @@
     "homeCity": "Yaşadığın şehir",
     "homeCityPlaceholder": "Genelde çalıştığın yer",
     "region": "Bölge ve dil",
-    "saveProfile": "Profili kaydet"
+    "saveProfile": "Profili kaydet",
+    "devices": {
+      "title": "Diğer cihazlar",
+      "text": "Telefonunu mu kaybettin ya da ortak bir bilgisayarda mı giriş yaptın? Burası dışında her yerden çıkış yap. Şifre değiştirmek de bunu yapar.",
+      "action": "Diğer cihazlardan çıkış yap",
+      "done": "Diğer tüm cihazlardan çıkış yapıldı."
+    }
   },
   "notifications": {
     "empty": {
@@ -1809,7 +1815,8 @@
       "workoutUnreadable": "Bu antrenman okunamadı. Tekrar dene.",
       "writeComment": "Önce bir yorum yaz.",
       "wrongPassword": "Mevcut şifren doğru değil.",
-      "tooManyAttempts": "Çok fazla deneme. Birkaç dakika bekleyip tekrar dene."
+      "tooManyAttempts": "Çok fazla deneme. Birkaç dakika bekleyip tekrar dene.",
+      "noOnlinePayment": "Online ödeme henüz kullanılamıyor. Resepsiyonda ödemeyi seç."
     },
     "fields": {
       "addExercise": "En az bir egzersiz ekle",
@@ -1836,7 +1843,9 @@
       "time": "SS:DD biçiminde yaz",
       "tooLong": "Bu çok uzun",
       "tooShort": "Bu çok kısa",
-      "invalid": "Bu alanı kontrol et"
+      "invalid": "Bu alanı kontrol et",
+      "handle": "Bağlantı olmadan yalnızca kullanıcı adını yaz",
+      "timezone": "Geçerli bir saat dilimi seç"
     },
     "done": {
       "bookingCancelled": "Rezervasyon iptal edildi.",

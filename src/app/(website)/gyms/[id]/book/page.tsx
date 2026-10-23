@@ -5,7 +5,7 @@ import { CheckoutForm } from "@/components/booking/CheckoutForm";
 import { getPublicGymProfile } from "@/server/modules/gyms";
 import { MAX_DAYS_AHEAD } from "@/server/modules/bookings";
 import { getSessionUser } from "@/server/session";
-import { env } from "@/server/env";
+import { env, features } from "@/server/env";
 import { addDays, daysBetween, isIsoDate, todayIn } from "@/lib/dates";
 import { isPassType } from "@/lib/passes";
 
@@ -43,7 +43,7 @@ export default async function BookPage({ params, searchParams }: Props) {
         initialPass={isPassType(query.pass) ? query.pass : "day"}
         initialDate={initialDate || addDays(today, 0)}
         holder={{ name: user.name ?? "", phone: user.phone ?? "" }}
-        onlineEnabled
+        onlineEnabled={features.onlinePayments}
         onlineProvider={env.payments.provider}
         deskEnabled={env.payments.allowPayAtDesk}
         cancelled={query.cancelled === "1"}

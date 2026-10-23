@@ -11,7 +11,8 @@ QR pass; owners get a push the moment someone books and run their desk from a ph
 
 Next.js 16 (App Router, server actions), React 19, Tailwind CSS v4, MongoDB,
 NextAuth v5, Stripe, Firebase Cloud Messaging. Architecture and the feature
-checklist are in [`docs/PLAN.md`](docs/PLAN.md).
+checklist are in [`docs/PLAN.md`](docs/PLAN.md); security measures in
+[`docs/SECURITY.md`](docs/SECURITY.md).
 
 Third-party providers sit behind small service interfaces in
 `src/server/services/` (payments, storage, push, email). Swapping a provider

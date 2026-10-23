@@ -1,10 +1,11 @@
 "use server";
 
-import { AuthError } from "next-auth";
+import { AuthError, type CredentialsSignin } from "next-auth";
 import { z } from "zod";
 import { signIn, signOut } from "@/lib/auth";
 import type { ActionResult } from "@/lib/types";
 import { registerWithPassword, requestPasswordReset, resetPassword, UserError } from "@/server/modules/users";
+import { allow, allowAll, clientIp } from "@/server/rate-limit";
 import { done, fail, invalid, safeRedirect } from "./utils";
 
 const passwordRule = z.string().min(8, "passwordLength").max(128);
@@ -21,6 +22,7 @@ const registerSchema = z.object({
 export async function registerAction(_prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
   const parsed = registerSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return invalid(parsed.error);
+  if (!(await allow("register", await clientIp(), 10, 3600))) return fail("tooManyAttempts");
 
   try {
     await registerWithPassword(parsed.data);
@@ -55,7 +57,8 @@ export async function loginAction(_prev: ActionResult | null, formData: FormData
     });
   } catch (error) {
     if (error instanceof AuthError) {
-      return fail(error.type === "CredentialsSignin" ? "badCredentials" : "signInFailed");
+      if (error.type === "CredentialsSignin") return fail((error as CredentialsSignin).code === "rate_limited" ? "tooManyAttempts" : "badCredentials");
+      return fail("signInFailed");
     }
     throw error; // the redirect after a successful sign-in
   }
@@ -67,6 +70,7 @@ const magicSchema = z.object({ email: z.email("email"), next: z.string().optiona
 export async function magicLinkAction(_prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
   const parsed = magicSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return invalid(parsed.error, "validEmail");
+  if (!(await allow("magic-ip", await clientIp(), 10, 3600))) return fail("tooManyAttempts");
   try {
     await signIn("email", { email: parsed.data.email, redirectTo: safeRedirect(parsed.data.next, "/app/dashboard") });
   } catch (error) {
@@ -91,8 +95,10 @@ const forgotSchema = z.object({ email: z.email("email"), portal: z.enum(["app", 
 export async function forgotPasswordAction(_prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
   const parsed = forgotSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return invalid(parsed.error, "validEmail");
+  // Same answer either way, so limits don't reveal whether an account exists
+  const allowed = await allowAll(["reset-ip", await clientIp(), 10, 3600], ["reset-email", parsed.data.email.toLowerCase(), 3, 900]);
   try {
-    await requestPasswordReset(parsed.data.email, parsed.data.portal);
+    if (allowed) await requestPasswordReset(parsed.data.email, parsed.data.portal);
   } catch (error) {
     console.error("[auth] reset request failed", error);
   }
@@ -106,6 +112,7 @@ const resetSchema = z
 export async function resetPasswordAction(_prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
   const parsed = resetSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return invalid(parsed.error);
+  if (!(await allow("reset-submit", await clientIp(), 20, 3600))) return fail("tooManyAttempts");
   let address: string | null;
   try {
     address = await resetPassword(parsed.data.token, parsed.data.password);

@@ -1,7 +1,8 @@
 import "server-only";
 import { cache } from "react";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { auth, updateSession } from "@/lib/auth";
+import type { ObjectId } from "mongodb";
 import { collections, toObjectId } from "@/server/db/collections";
 import type { GymDoc, UserDoc } from "@/server/db/models";
 import { gymsManagedBy } from "@/server/modules/gyms";
@@ -15,9 +16,20 @@ export const getSessionUser = cache(async (): Promise<UserDoc | null> => {
   if (!id) return null;
   const users = await collections.users();
   const user = await users.findOne({ _id: id });
-  if (user) await rememberRegion(user);
+  if (!user) return null;
+  // Signed out remotely (password change or "sign out other devices")
+  const authAt = (session as { authAt?: number } | null)?.authAt ?? 0;
+  if (user.sessionsValidFrom && authAt < user.sessionsValidFrom.getTime()) return null;
+  await rememberRegion(user);
   return user;
 });
+
+/** Ends every other signed-in device; this one stays signed in */
+export async function endOtherSessions(userId: ObjectId) {
+  const now = Date.now();
+  await updateSession({ authAt: now } as never);
+  await (await collections.users()).updateOne({ _id: userId }, { $set: { sessionsValidFrom: new Date(now) } });
+}
 
 /** Keeps the account's region in step with the switcher, so pushes and emails use the same language */
 async function rememberRegion(user: UserDoc) {

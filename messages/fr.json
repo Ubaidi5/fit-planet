@@ -950,7 +950,13 @@
     "homeCity": "Ville de résidence",
     "homeCityPlaceholder": "Là où vous vous entraînez le plus",
     "region": "Région et langue",
-    "saveProfile": "Enregistrer le profil"
+    "saveProfile": "Enregistrer le profil",
+    "devices": {
+      "title": "Autres appareils",
+      "text": "Téléphone perdu ou connexion sur un ordinateur partagé ? Déconnectez-vous partout sauf ici. Changer de mot de passe le fait aussi.",
+      "action": "Déconnecter les autres appareils",
+      "done": "Tous les autres appareils sont déconnectés."
+    }
   },
   "notifications": {
     "empty": {
@@ -1809,7 +1815,8 @@
       "workoutUnreadable": "Impossible de lire cette séance. Réessayez.",
       "writeComment": "Écrivez d’abord un commentaire.",
       "wrongPassword": "Votre mot de passe actuel n’est pas correct.",
-      "tooManyAttempts": "Trop de tentatives. Patientez quelques minutes et réessayez."
+      "tooManyAttempts": "Trop de tentatives. Patientez quelques minutes et réessayez.",
+      "noOnlinePayment": "Le paiement en ligne n’est pas encore disponible. Choisissez le paiement à l’accueil."
     },
     "fields": {
       "addExercise": "Ajoutez au moins un exercice",
@@ -1836,7 +1843,9 @@
       "time": "Format HH:MM",
       "tooLong": "C’est trop long",
       "tooShort": "C’est trop court",
-      "invalid": "Vérifiez ce champ"
+      "invalid": "Vérifiez ce champ",
+      "handle": "Indiquez seulement l’identifiant, sans le lien",
+      "timezone": "Choisissez un fuseau horaire valide"
     },
     "done": {
       "bookingCancelled": "Réservation annulée.",

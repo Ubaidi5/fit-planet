@@ -950,7 +950,13 @@
     "homeCity": "Ciudad de residencia",
     "homeCityPlaceholder": "Donde sueles entrenar",
     "region": "Región e idioma",
-    "saveProfile": "Guardar perfil"
+    "saveProfile": "Guardar perfil",
+    "devices": {
+      "title": "Otros dispositivos",
+      "text": "¿Perdiste el móvil o iniciaste sesión en un ordenador compartido? Cierra sesión en todas partes menos aquí. Cambiar la contraseña también lo hace.",
+      "action": "Cerrar sesión en otros dispositivos",
+      "done": "Se cerró la sesión en todos los demás dispositivos."
+    }
   },
   "notifications": {
     "empty": {
@@ -1809,7 +1815,8 @@
       "workoutUnreadable": "No se pudo leer este entrenamiento. Inténtalo de nuevo.",
       "writeComment": "Escribe primero un comentario.",
       "wrongPassword": "Tu contraseña actual no es correcta.",
-      "tooManyAttempts": "Demasiados intentos. Espera unos minutos y vuelve a intentarlo."
+      "tooManyAttempts": "Demasiados intentos. Espera unos minutos y vuelve a intentarlo.",
+      "noOnlinePayment": "El pago en línea aún no está disponible. Elige pagar en recepción."
     },
     "fields": {
       "addExercise": "Añade al menos un ejercicio",
@@ -1836,7 +1843,9 @@
       "time": "Usa HH:MM",
       "tooLong": "Es demasiado largo",
       "tooShort": "Es demasiado corto",
-      "invalid": "Revisa este campo"
+      "invalid": "Revisa este campo",
+      "handle": "Solo el usuario, sin el enlace",
+      "timezone": "Elige una zona horaria válida"
     },
     "done": {
       "bookingCancelled": "Reserva cancelada.",

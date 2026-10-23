@@ -24,6 +24,7 @@ import {
 } from "@/server/modules/social";
 import { done, fail } from "./utils";
 import { AppError } from "@/server/errors";
+import { allow } from "@/server/rate-limit";
 
 type Handler<T> = () => Promise<ActionResult<T>>;
 
@@ -35,6 +36,11 @@ async function run<T>(fn: Handler<T>): Promise<ActionResult<T>> {
     if (error instanceof AppError) return fail(error.key, error.values);
     throw error;
   }
+}
+
+/** Per-person posting limits, so one account can't flood feeds or inboxes */
+async function throttle(userId: { toHexString(): string }, bucket: string, limit: number, windowSeconds: number) {
+  if (!(await allow(`social-${bucket}`, userId.toHexString(), limit, windowSeconds))) throw new SocialError("tooManyAttempts");
 }
 
 async function requireMember() {
@@ -52,6 +58,7 @@ function idOrThrow(id: string, what: "postNotFound" | "workoutNotFound" | "routi
 export async function createPostAction(input: { text: string; imageUrl?: string }): Promise<ActionResult> {
   return run(async () => {
     const user = await requireMember();
+    await throttle(user._id, "post", 20, 600);
     await createTextPost(user, { text: String(input.text ?? ""), imageUrl: input.imageUrl || undefined });
     revalidatePath("/app/social");
     return { ok: true };
@@ -61,6 +68,7 @@ export async function createPostAction(input: { text: string; imageUrl?: string 
 export async function shareWorkoutAction(workoutId: string, text: string): Promise<ActionResult<{ postId: string }>> {
   return run(async () => {
     const user = await requireMember();
+    await throttle(user._id, "post", 20, 600);
     const postId = await shareWorkout(user, idOrThrow(workoutId, "workoutNotFound"), String(text ?? ""));
     revalidatePath("/app/social");
     return { ok: true, data: { postId: postId.toHexString() } };
@@ -70,6 +78,7 @@ export async function shareWorkoutAction(workoutId: string, text: string): Promi
 export async function shareRoutineAction(routineId: string, text: string): Promise<ActionResult<{ postId: string }>> {
   return run(async () => {
     const user = await requireMember();
+    await throttle(user._id, "post", 20, 600);
     const postId = await shareRoutine(user, idOrThrow(routineId, "routineNotFound"), String(text ?? ""));
     revalidatePath("/app/social");
     return { ok: true, data: { postId: postId.toHexString() } };
@@ -97,6 +106,7 @@ export async function deletePostAction(postId: string): Promise<ActionResult> {
 export async function reportPostAction(postId: string, reason: string): Promise<ActionResult> {
   return run(async () => {
     const user = await requireMember();
+    await throttle(user._id, "report", 10, 3600);
     await reportPost(user._id, idOrThrow(postId), String(reason ?? ""));
     return done("reportThanks");
   });
@@ -105,6 +115,7 @@ export async function reportPostAction(postId: string, reason: string): Promise<
 export async function toggleLikeAction(postId: string): Promise<ActionResult<{ liked: boolean; likeCount: number }>> {
   return run(async () => {
     const user = await requireMember();
+    await throttle(user._id, "like", 200, 600);
     return { ok: true, data: await toggleLike(user, idOrThrow(postId)) };
   });
 }
@@ -119,6 +130,7 @@ export async function commentsAction(postId: string): Promise<ActionResult<Comme
 export async function addCommentAction(postId: string, text: string): Promise<ActionResult<CommentView[]>> {
   return run(async () => {
     const user = await requireMember();
+    await throttle(user._id, "comment", 30, 600);
     const id = idOrThrow(postId);
     await addComment(user, id, String(text ?? ""));
     return { ok: true, data: await listComments(user._id, id) };
@@ -136,6 +148,7 @@ export async function deleteCommentAction(commentId: string): Promise<ActionResu
 export async function followAction(userId: string, on: boolean): Promise<ActionResult> {
   return run(async () => {
     const user = await requireMember();
+    await throttle(user._id, "follow", 60, 3600);
     const target = idOrThrow(userId, "personNotFound");
     if (on) await follow(user, target);
     else await unfollow(user._id, target);

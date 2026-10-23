@@ -1,5 +1,5 @@
-import { AppError } from "@/server/errors";
 import "server-only";
+import { AppError } from "@/server/errors";
 import { createHash, randomBytes } from "node:crypto";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcryptjs";
@@ -42,6 +42,7 @@ export async function registerWithPassword(input: { name: string; email: string;
     emailVerified: null,
     image: null,
     passwordHash,
+    passwordUnverified: true,
     phone: input.phone?.trim() || undefined,
     roles: ["member"],
     notificationPrefs: defaultNotificationPrefs,
@@ -95,7 +96,11 @@ export async function resetPassword(token: string, password: string) {
   const users = await collections.users();
   await users.updateOne(
     { _id: reset.userId },
-    { $set: { passwordHash: await bcrypt.hash(password, 12), emailVerified: new Date(), updatedAt: new Date() } },
+    // A reset also signs out every device that was using the old password
+    {
+      $set: { passwordHash: await bcrypt.hash(password, 12), emailVerified: new Date(), sessionsValidFrom: new Date(), updatedAt: new Date() },
+      $unset: { passwordUnverified: "" },
+    },
   );
   const user = await users.findOne({ _id: reset.userId }, { projection: { email: 1 } });
   return user?.email ?? null;

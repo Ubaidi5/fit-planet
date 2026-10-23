@@ -1,5 +1,5 @@
-import { AppError } from "@/server/errors";
 import "server-only";
+import { AppError } from "@/server/errors";
 import { ObjectId } from "mongodb";
 import { collections } from "@/server/db/collections";
 import type { RoutineDoc, RoutineItemDoc, WorkoutDoc } from "@/server/db/models";

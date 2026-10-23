@@ -51,7 +51,8 @@ Service accounts > Generate new private key, as `FIREBASE_SERVICE_ACCOUNT`
 - **Heads up:** Stripe does not onboard businesses in Pakistan. The practical route
   for an unregistered founder is a US LLC (Stripe Atlas) or a UK Ltd; see
   [docs/PAYMENTS.md](docs/PAYMENTS.md) for the comparison. Until then, pay-at-desk
-  and the mock checkout keep the booking flow working.
+  keeps the booking flow working. The mock checkout (no real charge) only runs
+  in development, or in production with `ALLOW_MOCK_PAYMENTS=true` on a staging server.
 
 ## 4. Sign-in providers
 
