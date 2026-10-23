@@ -4,6 +4,11 @@ import { getDb } from "./client";
 import type {
   BookingDoc,
   CheckinDoc,
+  CommentDoc,
+  FollowDoc,
+  LikeDoc,
+  PostDoc,
+  ReportDoc,
   GymDoc,
   MediaDoc,
   NotificationDoc,
@@ -26,6 +31,11 @@ export const collections = {
   media: async () => (await getDb()).collection<MediaDoc>("media"),
   routines: async () => (await getDb()).collection<RoutineDoc>("routines"),
   workouts: async () => (await getDb()).collection<WorkoutDoc>("workouts"),
+  follows: async () => (await getDb()).collection<FollowDoc>("follows"),
+  posts: async () => (await getDb()).collection<PostDoc>("posts"),
+  likes: async () => (await getDb()).collection<LikeDoc>("likes"),
+  comments: async () => (await getDb()).collection<CommentDoc>("comments"),
+  reports: async () => (await getDb()).collection<ReportDoc>("reports"),
 };
 
 /** Parses a string id, returning null instead of throwing on bad input */
@@ -65,6 +75,13 @@ export function ensureIndexes() {
         db.collection("push_tokens").createIndex({ userId: 1 }),
         db.collection("routines").createIndex({ userId: 1, updatedAt: -1 }),
         db.collection("workouts").createIndex({ userId: 1, completedAt: -1 }),
+        db.collection("users").createIndex({ handle: 1 }, { unique: true, sparse: true }),
+        db.collection("follows").createIndex({ followerId: 1, followeeId: 1 }, { unique: true }),
+        db.collection("follows").createIndex({ followeeId: 1, createdAt: -1 }),
+        db.collection("posts").createIndex({ userId: 1, createdAt: -1 }),
+        db.collection("posts").createIndex({ visibility: 1, createdAt: -1 }),
+        db.collection("likes").createIndex({ postId: 1, userId: 1 }, { unique: true }),
+        db.collection("comments").createIndex({ postId: 1, createdAt: 1 }),
       ]);
     })().catch((error) => {
       indexesReady = null;

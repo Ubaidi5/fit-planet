@@ -14,6 +14,7 @@ import { upsertReview } from "@/server/modules/reviews";
 import { listNotifications } from "@/server/modules/notifications";
 import { sendPassReminders, releaseAbandonedCheckouts } from "@/server/modules/reminders";
 import { copyTemplate, getRoutine, lastWeights, logWorkout } from "@/server/modules/routines";
+import { addComment, ensureHandle, feed, follow, shareWorkout, toggleLike, updateSocialProfile } from "@/server/modules/social";
 import { addDays, todayIn } from "@/lib/dates";
 
 async function main() {
@@ -94,6 +95,29 @@ async function main() {
   assert.equal(workoutDoc?.volumeKg, routine.items.length * (8 * 60 + 8 * 65), "volume is reps x weight");
   assert.equal((await getRoutine(member._id, routineId))?.timesCompleted, 1, "routine counter bumped");
   assert.equal((await lastWeights(member._id, [routine.items[0].exerciseId]))[routine.items[0].exerciseId], 65, "heaviest set prefilled");
+
+  // Social: share a workout, owner follows, likes and comments; followers-only hides from strangers
+  await ensureHandle(member);
+  const memberFresh = (await (await collections.users()).findOne({ _id: member._id }))!;
+  await updateSocialProfile(member._id, { handle: memberFresh.handle!, bio: "Smoke test", visibility: "public", shareCheckins: false });
+  const postId = await shareWorkout(memberFresh, workoutId, "Felt strong");
+  assert.equal((await shareWorkout(memberFresh, workoutId, "again")).toHexString(), postId.toHexString(), "sharing twice reuses the post");
+  await follow(owner, member._id);
+  const ownerFeed2 = await feed(owner._id, "following");
+  assert(ownerFeed2.some((p) => p.id === postId.toHexString()), "follower sees the post");
+  const liked = await toggleLike(owner, postId);
+  assert.equal(liked.liked, true, "like recorded");
+  await addComment(owner, postId, "Nice work");
+  const memberNotes = await listNotifications(member._id);
+  assert(memberNotes.some((n) => n.type === "social.follow") && memberNotes.some((n) => n.type === "social.comment"), "member notified of follow and comment");
+  const stranger = await (await collections.users()).findOne({ _id: { $nin: [member._id, owner._id] } });
+  await updateSocialProfile(member._id, { handle: memberFresh.handle!, bio: "", visibility: "followers", shareCheckins: false });
+  if (stranger) {
+    const strangerView = await feed(stranger._id, "discover");
+    assert(!strangerView.some((p) => p.id === postId.toHexString()), "followers-only post hidden from strangers");
+  }
+  assert((await feed(owner._id, "following")).some((p) => p.id === postId.toHexString()), "follower still sees followers-only post");
+  await updateSocialProfile(member._id, { handle: memberFresh.handle!, bio: "", visibility: "public", shareCheckins: false });
 
   console.log("✓ smoke test passed", { todayBookings: stats.todayBookings, occupancy: stats.occupancy, ownerNotifications: ownerFeed.length });
   await (await getMongoClient()).close();

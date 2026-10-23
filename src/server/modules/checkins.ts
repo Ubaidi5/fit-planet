@@ -7,6 +7,7 @@ import { todayIn } from "@/lib/dates";
 import { passMeta } from "@/lib/passes";
 import { normalizePassCode, toBookingView, withGyms } from "./bookings";
 import { notify } from "./notifications";
+import { maybeShareCheckin } from "./social";
 
 export type CheckinOutcome =
   | { ok: true; booking: BookingView; firstVisit: boolean; collectPayment: boolean }
@@ -78,6 +79,7 @@ export async function checkInByCode(params: {
     link: "/app/checkins",
     silent: true,
   });
+  await maybeShareCheckin(doc.userId, gym).catch((error) => console.error("[checkin] share failed", error));
 
   return {
     ok: true,

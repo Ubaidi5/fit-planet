@@ -19,8 +19,19 @@ export interface UserDoc {
   regionCode?: string;
   savedGymIds?: ObjectId[];
   notificationPrefs?: NotificationPrefs;
+  /** Public @handle for the social side, unique, lowercase */
+  handle?: string;
+  bio?: string;
+  social?: SocialPrefs;
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+export interface SocialPrefs {
+  /** "public": anyone signed in sees posts; "followers": only people you approve by following back */
+  visibility: "public" | "followers";
+  /** Post automatically when a gym checks you in */
+  shareCheckins: boolean;
 }
 
 export interface NotificationPrefs {
@@ -143,6 +154,9 @@ export type NotificationType =
   | "review.new"
   | "review.reply"
   | "pass.expiring"
+  | "social.follow"
+  | "social.like"
+  | "social.comment"
   | "system";
 
 export interface NotificationDoc {
@@ -212,5 +226,53 @@ export interface WorkoutDoc {
   /** Sum of reps x weight over completed sets */
   volumeKg: number;
   setsDone: number;
+  createdAt: Date;
+}
+
+export interface FollowDoc {
+  _id: ObjectId;
+  followerId: ObjectId;
+  followeeId: ObjectId;
+  createdAt: Date;
+}
+
+export type PostKind = "text" | "workout" | "checkin" | "routine";
+
+export interface PostDoc {
+  _id: ObjectId;
+  userId: ObjectId;
+  kind: PostKind;
+  text?: string;
+  imageUrl?: string;
+  /** Snapshot of what the post is about, so the feed renders without joins */
+  workout?: { id: ObjectId; routineName: string; durationMin: number; setsDone: number; volumeKg: number; exerciseIds: string[] };
+  checkin?: { gymId: ObjectId; gymName: string; gymSlug: string; city: string };
+  routine?: { id: ObjectId; name: string; category: string; items: RoutineItemDoc[] };
+  visibility: "public" | "followers";
+  likeCount: number;
+  commentCount: number;
+  createdAt: Date;
+}
+
+export interface LikeDoc {
+  _id: ObjectId;
+  postId: ObjectId;
+  userId: ObjectId;
+  createdAt: Date;
+}
+
+export interface CommentDoc {
+  _id: ObjectId;
+  postId: ObjectId;
+  userId: ObjectId;
+  text: string;
+  createdAt: Date;
+}
+
+export interface ReportDoc {
+  _id: ObjectId;
+  postId: ObjectId;
+  reporterId: ObjectId;
+  reason: string;
   createdAt: Date;
 }

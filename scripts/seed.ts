@@ -15,6 +15,8 @@ import { collections, ensureIndexes } from "@/server/db/collections";
 import type { BookingDoc, CheckinDoc, GymDoc, UserDoc } from "@/server/db/models";
 import { generatePassCode } from "@/server/modules/bookings";
 import { refreshRating } from "@/server/modules/gyms";
+import { ensureHandle } from "@/server/modules/social";
+import { routineTemplates } from "@/lib/data/exercises";
 
 const PASSWORD = process.env.SEED_PASSWORD || "fitplanet123";
 const withActivity = !process.argv.includes("--no-activity");
@@ -172,8 +174,73 @@ async function main() {
     }
   }
 
+  if (withActivity) await seedSocial(member);
+
   console.log(`\nDemo accounts (password: ${PASSWORD})\n  owner@fitplanet.dev  -> /studio\n  member@fitplanet.dev -> /app`);
   await (await getMongoClient()).close();
+}
+
+/** A handful of members from the target markets, with posts and follows, so the feed isn't empty */
+async function seedSocial(member: UserDoc) {
+  const posts = await collections.posts();
+  if (await posts.countDocuments({}, { limit: 1 })) {
+    console.log("• social posts already exist, skipping");
+    return;
+  }
+  const people = [
+    { email: "lena@fitplanet.dev", name: "Lena Fischer", bio: "Berlin · deadlifts and long runs", city: "Berlin" },
+    { email: "jack@fitplanet.dev", name: "Jack Turner", bio: "Sydney · surf mornings, gym evenings", city: "Sydney" },
+    { email: "elif@fitplanet.dev", name: "Elif Yılmaz", bio: "İstanbul · yoga and kettlebells", city: "Istanbul" },
+    { email: "omar@fitplanet.dev", name: "Omar Haddad", bio: "Dubai · hybrid training", city: "Dubai" },
+    { email: "maya@fitplanet.dev", name: "Maya Brooks", bio: "New York · coach, mum, PR chaser", city: "New York" },
+  ];
+  const users = await collections.users();
+  const gyms = await (await collections.gyms()).find({ status: "published" }).toArray();
+  const follows = await collections.follows();
+  const texts = [
+    "New squat PR today. 140 for a clean triple. Months of patience paying off.",
+    "Travel week. Found a great gym near the hotel with a day pass, no membership needed.",
+    "Rest days are training days too. Long walk, good food, early night.",
+    "Anyone else do their cardio first thing? Thinking of switching to evenings.",
+    "Five weeks of the push/pull/legs split done. Shoulders finally feel stable.",
+  ];
+  let minutesAgo = 25;
+  for (const [i, p] of people.entries()) {
+    const user = await upsertUser(p.email, p.name, ["member"]);
+    await users.updateOne({ _id: user._id }, { $set: { bio: p.bio } });
+    await ensureHandle(user);
+    const base = { userId: user._id, visibility: "public" as const, likeCount: (i * 7) % 12, commentCount: 0 };
+    await posts.insertOne({ _id: new ObjectId(), ...base, kind: "text", text: texts[i], createdAt: new Date(Date.now() - minutesAgo * 60_000) });
+    minutesAgo += 95;
+    const gym = gyms.find((g) => g.address.city === p.city) ?? gyms[(i * 5) % Math.max(1, gyms.length)];
+    if (gym) {
+      await posts.insertOne({
+        _id: new ObjectId(),
+        ...base,
+        kind: "checkin",
+        checkin: { gymId: gym._id, gymName: gym.name, gymSlug: gym.slug, city: gym.address.city },
+        createdAt: new Date(Date.now() - minutesAgo * 60_000),
+      });
+      minutesAgo += 140;
+    }
+    if (i % 2 === 0) {
+      const t = routineTemplates[i % routineTemplates.length];
+      await posts.insertOne({
+        _id: new ObjectId(),
+        ...base,
+        kind: "routine",
+        text: `My go-to ${t.name.toLowerCase()}. Steal it.`,
+        routine: { id: new ObjectId(), name: t.name, category: t.category, items: t.items },
+        createdAt: new Date(Date.now() - minutesAgo * 60_000),
+      });
+      minutesAgo += 200;
+    }
+    // The demo member follows the first three, and everyone follows the demo member back
+    if (i < 3) await follows.updateOne({ followerId: member._id, followeeId: user._id }, { $setOnInsert: { _id: new ObjectId(), createdAt: new Date() } }, { upsert: true });
+    await follows.updateOne({ followerId: user._id, followeeId: member._id }, { $setOnInsert: { _id: new ObjectId(), createdAt: new Date() } }, { upsert: true });
+  }
+  await ensureHandle(member);
+  console.log(`✓ ${people.length} social members with posts`);
 }
 
 main().catch(async (error) => {

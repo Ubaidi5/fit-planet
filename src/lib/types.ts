@@ -113,3 +113,40 @@ export interface WorkoutView {
   setsDone: number;
   exercises: { exerciseId: string; sets: WorkoutSetLog[] }[];
 }
+
+export interface PersonView {
+  id: string;
+  name: string;
+  handle: string;
+  image: string | null;
+  initials: string;
+  bio: string;
+  /** Whether the viewer follows this person */
+  following: boolean;
+  isSelf: boolean;
+}
+
+export interface CommentView {
+  id: string;
+  text: string;
+  createdAt: string;
+  author: Pick<PersonView, "id" | "name" | "handle" | "image" | "initials">;
+  mine: boolean;
+}
+
+export interface PostView {
+  id: string;
+  kind: "text" | "workout" | "checkin" | "routine";
+  text: string;
+  imageUrl: string | null;
+  createdAt: string;
+  author: Pick<PersonView, "id" | "name" | "handle" | "image" | "initials">;
+  workout: { id: string; routineName: string; durationMin: number; setsDone: number; volumeKg: number; exerciseIds: string[] } | null;
+  checkin: { gymName: string; gymSlug: string; city: string } | null;
+  routine: { id: string; name: string; category: string; items: RoutineItem[] } | null;
+  visibility: "public" | "followers";
+  likeCount: number;
+  commentCount: number;
+  liked: boolean;
+  mine: boolean;
+}

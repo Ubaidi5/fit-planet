@@ -7,7 +7,7 @@ import { extensionFor, IMAGE_TYPES, keyFromUrl, storage, VIDEO_TYPES } from "@/s
 
 export class MediaError extends Error {}
 
-export type MediaFolder = "gyms" | "avatars";
+export type MediaFolder = "gyms" | "avatars" | "posts";
 
 /** Validates and stores an uploaded file, returning its public URL */
 export async function saveUpload(ownerId: ObjectId, folder: MediaFolder, file: File, options: { allowVideo?: boolean } = {}) {

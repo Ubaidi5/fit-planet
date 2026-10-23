@@ -2,9 +2,10 @@
 
 import { useState, useTransition } from "react";
 import Link from "next/link";
-import { HiEllipsisHorizontal, HiOutlinePencilSquare, HiOutlineStar, HiOutlineTrash, HiStar } from "react-icons/hi2";
+import { HiEllipsisHorizontal, HiOutlinePencilSquare, HiOutlineShare, HiOutlineStar, HiOutlineTrash, HiStar } from "react-icons/hi2";
 import { deleteRoutineAction, favoriteRoutineAction } from "@/actions/routines";
 import { useToast } from "@/components/notifications/ToastProvider";
+import { ShareToFeed } from "@/components/social/ShareToFeed";
 import { cn } from "@/lib/utils";
 
 export function RoutineMenu({ id, name, favorite }: { id: string; name: string; favorite: boolean }) {
@@ -68,6 +69,10 @@ export function RoutineMenu({ id, name, favorite }: { id: string; name: string; 
               <HiOutlinePencilSquare className="size-4.5 text-gray-400" />
               Edit routine
             </Link>
+            <ShareToFeed kind="routine" id={id} title={name} className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-start text-sm font-medium text-gray-700 hover:bg-canvas">
+              <HiOutlineShare className="size-4.5 text-gray-400" />
+              Share to feed
+            </ShareToFeed>
             <button
               type="button"
               onClick={() => (confirming ? remove() : setConfirming(true))}

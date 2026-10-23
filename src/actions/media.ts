@@ -9,7 +9,8 @@ export async function uploadImageAction(formData: FormData): Promise<ActionResul
   const user = await getSessionUser();
   if (!user) return { ok: false, error: "Please sign in again." };
   const file = formData.get("file");
-  const folder = formData.get("folder") === "gyms" ? "gyms" : "avatars";
+  const requested = formData.get("folder");
+  const folder = requested === "gyms" || requested === "posts" ? requested : "avatars";
   if (!(file instanceof File) || file.size === 0) return { ok: false, error: "Choose a file to upload." };
   try {
     const url = await saveUpload(user._id, folder, file);

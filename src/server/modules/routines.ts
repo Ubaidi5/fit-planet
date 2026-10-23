@@ -174,3 +174,14 @@ export async function lastWeights(userId: ObjectId, exerciseIds: string[]) {
   }
   return out;
 }
+
+/** Copies a routine someone shared to the feed into the viewer's own routines */
+export async function copyRoutineFromPost(userId: ObjectId, postId: ObjectId) {
+  const post = await (await collections.posts()).findOne({ _id: postId, kind: "routine" });
+  if (!post?.routine) throw new RoutineError("That routine is no longer available.");
+  if (post.visibility !== "public" && !post.userId.equals(userId)) {
+    const follows = await (await collections.follows()).findOne({ followerId: userId, followeeId: post.userId });
+    if (!follows) throw new RoutineError("That routine is no longer available.");
+  }
+  return saveRoutine(userId, { name: post.routine.name, category: post.routine.category, items: post.routine.items });
+}

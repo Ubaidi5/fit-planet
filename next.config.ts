@@ -23,7 +23,8 @@ const nextConfig: NextConfig = {
     return [
       { source: "/app/sessions", destination: "/app/security", permanent: false },
       { source: "/app/email-digest", destination: "/app/notifications", permanent: false },
-      { source: "/app/social/:path*", destination: "/app/dashboard", permanent: false },
+      { source: "/app/social/buddies", destination: "/app/social/people", permanent: false },
+      { source: "/app/social/challenges", destination: "/app/social", permanent: false },
       { source: "/app/routines/builder", destination: "/app/routines/new", permanent: false },
       { source: "/app/routines/workout", destination: "/app/routines", permanent: false },
     ];

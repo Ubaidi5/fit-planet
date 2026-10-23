@@ -5,6 +5,7 @@ import { requireUser } from "@/server/session";
 import { toObjectId } from "@/server/db/collections";
 import { getWorkout } from "@/server/modules/routines";
 import { BackLink } from "@/components/routines/BackLink";
+import { ShareToFeed } from "@/components/social/ShareToFeed";
 import { exerciseById, isTimed } from "@/lib/data/exercises";
 import { findRegion } from "@/lib/i18n/regions";
 import { kgToUnit, weightUnitFor } from "@/lib/routines";
@@ -79,6 +80,7 @@ export default async function WorkoutSummaryPage({ params, searchParams }: { par
       </ol>
 
       <div className="mt-6 flex flex-col gap-2 sm:flex-row">
+        <ShareToFeed kind="workout" id={workout.id} title={workout.routineName} className="flex h-12 flex-1 items-center justify-center rounded-full bg-volt text-sm font-semibold text-ink" />
         {workout.routineId && (
           <Link href={`/app/routines/${workout.routineId}/start`} className="flex h-12 flex-1 items-center justify-center rounded-full bg-ink text-sm font-semibold text-white">
             Do it again

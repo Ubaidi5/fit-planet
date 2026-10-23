@@ -13,6 +13,7 @@ import {
   HiOutlineHome,
   HiOutlineMagnifyingGlass,
   HiOutlineQueueList,
+  HiOutlineUserGroup,
   HiOutlineShieldCheck,
   HiOutlineSquares2X2,
   HiOutlineTicket,
@@ -36,6 +37,7 @@ const primaryNav: NavItem[] = [
   { href: "/app/dashboard", label: "Home", icon: HiOutlineHome },
   { href: "/app/passes", label: "Passes", icon: HiOutlineTicket },
   { href: "/app/routines", label: "Routines", icon: HiOutlineClipboardDocumentList },
+  { href: "/app/social", label: "Social", icon: HiOutlineUserGroup },
   { href: "/app/checkins", label: "Passport", icon: HiOutlineClipboardDocumentCheck },
 ];
 
@@ -161,7 +163,7 @@ export function AppShell({ user, unread, children }: { user: ShellUser; unread: 
             </button>
           </div>
           <div className="border-t border-gray-900/[0.06] pt-1.5">
-            {secondaryNav.map((item) => {
+            {[primaryNav[4], ...secondaryNav].map((item) => {
               const Icon = item.icon;
               const active = isActivePath(pathname, item.href);
               return (
