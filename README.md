@@ -32,5 +32,5 @@ booking flow against the database in `.env.local`).
 ## Deployment
 
 GitHub Actions builds a standalone bundle and deploys it to an AWS Lightsail
-server running nginx + pm2 on every push to `main`. Server setup, secrets and
+server running nginx + Bun (systemd service) on every push to `main`. Server setup, secrets and
 everything else needed are listed in [`NEEDS_FROM_USER.md`](NEEDS_FROM_USER.md).

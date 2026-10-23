@@ -18,9 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          # Pinned through package.json's packageManager field
+          bun-version-file: package.json
 
       - run: bun install --frozen-lockfile
       - run: bun run typecheck
@@ -48,7 +48,7 @@ jobs:
           mkdir -p release/.next
           cp -r .next/static release/.next/static
           cp -r public release/public
-          cp deploy/ecosystem.config.cjs release/
+          cp deploy/fitplanet.service release/
           tar -czf release.tgz -C release .
 
       - name: Configure SSH
@@ -64,6 +64,7 @@ jobs:
           SCP_TARGET: ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }}
         run: |
           RELEASE="$(date -u +%Y%m%d%H%M%S)-${GITHUB_SHA::7}"
+          BUN_VERSION="$(bun --version)"
           scp -i ~/.ssh/id_deploy -P ${{ secrets.LIGHTSAIL_PORT || 22 }} release.tgz "$SCP_TARGET:/tmp/fitplanet-$RELEASE.tgz"
           scp -i ~/.ssh/id_deploy -P ${{ secrets.LIGHTSAIL_PORT || 22 }} deploy/activate.sh "$SCP_TARGET:/tmp/fitplanet-activate.sh"
-          $SSH "bash /tmp/fitplanet-activate.sh '$APP_DIR' '$RELEASE' && rm -f /tmp/fitplanet-activate.sh"
+          $SSH "bash /tmp/fitplanet-activate.sh '$APP_DIR' '$RELEASE' '$BUN_VERSION' && rm -f /tmp/fitplanet-activate.sh"

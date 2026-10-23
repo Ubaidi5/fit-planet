@@ -1,0 +1,19 @@
+# systemd user service for the app. setup-server.sh installs it into
+# ~/.config/systemd/user/ of the deploy user; activate.sh restarts it.
+# Secrets are read from /var/www/fitplanet/shared/.env by Bun's --env-file.
+[Unit]
+Description=Fit Planet (Next.js on Bun)
+After=network-online.target
+
+[Service]
+WorkingDirectory=/var/www/fitplanet/current
+ExecStart=%h/.bun/bin/bun --env-file=/var/www/fitplanet/shared/.env server.js
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Environment=HOSTNAME=127.0.0.1
+Restart=always
+RestartSec=3
+MemoryMax=700M
+
+[Install]
+WantedBy=default.target

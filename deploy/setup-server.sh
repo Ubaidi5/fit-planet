@@ -11,10 +11,11 @@ APP_DIR=/var/www/fitplanet
 apt-get update
 apt-get install -y curl nginx certbot python3-certbot-nginx
 
-# Node 22 LTS + pm2
-curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
-apt-get install -y nodejs
-npm install -g pm2
+# Bun for the deploy user (no Node.js needed). The deploy keeps it on the
+# version pinned in package.json's packageManager field.
+BUN_VERSION="${BUN_VERSION:-1.4.4}"
+apt-get install -y unzip
+sudo -u "$DEPLOY_USER" bash -c "curl -fsSL https://bun.sh/install | bash -s bun-v$BUN_VERSION"
 
 # Small instances need swap headroom
 if [ ! -f /swapfile ]; then
@@ -35,8 +36,10 @@ nginx -t && systemctl reload nginx
 
 certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m "$EMAIL" --redirect
 
-# Start pm2 on boot for the deploy user
-env PATH="$PATH:/usr/bin" pm2 startup systemd -u "$DEPLOY_USER" --hp "/home/$DEPLOY_USER"
+# Run the app as a systemd user service that starts on boot
+loginctl enable-linger "$DEPLOY_USER"
+install -Dm644 -o "$DEPLOY_USER" -g "$DEPLOY_USER" "$SCRIPT_DIR/fitplanet.service" "/home/$DEPLOY_USER/.config/systemd/user/fitplanet.service"
+chown -R "$DEPLOY_USER":"$DEPLOY_USER" "/home/$DEPLOY_USER/.config"
 
 # Hourly jobs: pass reminders and releasing abandoned checkouts (needs CRON_SECRET in .env)
 CRON_LINE='15 * * * * secret=$(grep -E "^CRON_SECRET=" /var/www/fitplanet/shared/.env | cut -d= -f2-) && curl -fsS -m 60 -X POST -H "Authorization: Bearer $secret" http://127.0.0.1:3000/api/cron/hourly >/dev/null'
