@@ -7,7 +7,7 @@ import { z } from "zod";
 import type { ActionResult, BookingView } from "@/lib/types";
 import { collections, toObjectId } from "@/server/db/collections";
 import type { GymDoc, UserDoc } from "@/server/db/models";
-import { getOwnerContext } from "@/server/session";
+import { getOwnerContext, ownedGyms } from "@/server/session";
 import { uniqueSlug } from "@/server/modules/gyms";
 import { BookingError, cancelBookingByOwner, listGymBookings, markDeskPaid } from "@/server/modules/bookings";
 import { checkInByCode, type CheckinOutcome } from "@/server/modules/checkins";
@@ -235,7 +235,8 @@ export async function ownerCancelBookingAction(bookingId: string): Promise<Actio
   const id = toObjectId(bookingId);
   if (!ctx || !id) return fail("bookingNotFound");
   try {
-    await cancelBookingByOwner(ctx.gyms.map((g) => g._id), id);
+    // Staff can't cancel; only gyms this user owns count
+    await cancelBookingByOwner(ownedGyms(ctx.user, ctx.gyms).map((g) => g._id), id);
   } catch (error) {
     if (error instanceof BookingError) return fail(error.key, error.values);
     console.error("[studio] cancel failed", error);
@@ -251,7 +252,7 @@ export async function replyReviewAction(reviewId: string, text: string): Promise
   if (!ctx || !id) return fail("reviewNotFound");
   if (typeof text !== "string" || text.trim().length < 2 || text.length > 1000) return fail("replyLength");
   try {
-    await replyToReview(ctx.gyms.map((g) => g._id), id, text);
+    await replyToReview(ownedGyms(ctx.user, ctx.gyms).map((g) => g._id), id, text);
   } catch (error) {
     if (error instanceof ReviewError) return fail(error.key, error.values);
     throw error;
@@ -270,8 +271,9 @@ const csvCell = (value: unknown) => {
 /** Bookings as CSV for spreadsheets */
 export async function exportBookingsCsvAction(): Promise<ActionResult<{ csv: string; filename: string }>> {
   const ctx = await ownerOrError();
-  if (!ctx || ctx.gyms.length === 0) return fail("signInAgain");
-  const rows: BookingView[] = await listGymBookings({ gymIds: ctx.gyms.map((g) => g._id), status: "all", limit: 5000 });
+  const owned = ctx ? ownedGyms(ctx.user, ctx.gyms) : [];
+  if (!ctx || owned.length === 0) return fail("ownerOnly");
+  const rows: BookingView[] = await listGymBookings({ gymIds: owned.map((g) => g._id), status: "all", limit: 5000 });
   const header = ["Code", "Member", "Email", "Phone", "Gym", "Pass", "Start", "End", "Amount", "Currency", "Status", "Payment", "Paid", "Check-ins", "Booked at"];
   const lines = rows.map((b) =>
     [b.code, b.guest.name, b.guest.email, b.guest.phone, b.gym.name, b.passType, b.startDate, b.endDate, b.amount, b.currency, b.status, b.paymentMethod, b.paymentStatus, b.checkinCount, b.createdAt]

@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 const categories = ["cleanliness", "equipment", "staff", "value"] as const;
 
 export default async function StudioReviewsPage({ searchParams }: { searchParams: Promise<{ filter?: string }> }) {
-  const { gym, gyms } = await requireOwner("/studio/reviews");
+  const { gym, gyms } = await requireOwner("/studio/reviews", { ownerOnly: true });
   const { filter } = await searchParams;
   const all = await listGymReviews(gyms.map((g) => g._id));
   const reviews = filter === "unanswered" ? all.filter((r) => !r.gymResponse) : filter === "low" ? all.filter((r) => r.rating <= 3) : all;

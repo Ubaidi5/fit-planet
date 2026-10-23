@@ -1367,7 +1367,8 @@
         "bookings": "Reservas",
         "scan": "Escanear",
         "alerts": "Avisos"
-      }
+      },
+      "team": "Equipo"
     },
     "pages": {
       "inbox": "Bandeja",
@@ -1726,6 +1727,46 @@
     },
     "meta": {
       "description": "Gestiona tu gimnasio con Fit Planet: reservas, entradas, precios e ingresos en un solo lugar."
+    },
+    "team": {
+      "title": "Equipo",
+      "subtitle": "Da a tu recepción su propio acceso para registrar a los miembros.",
+      "inviteTitle": "Invitar personal",
+      "inviteText": "Les enviamos un enlace por correo. Se unen con esa dirección, con una cuenta de Fit Planet nueva o existente.",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "nombre@tugimnasio.com",
+      "invite": "Enviar invitación",
+      "sending": "Enviando…",
+      "canCheckin": "Registrar pases por QR o código",
+      "canBookings": "Ver reservas y quién viene",
+      "canDesk": "Marcar pagos en recepción como pagados",
+      "noRevenue": "Sin acceso a ingresos ni pagos",
+      "noListing": "No puede editar la ficha ni los precios",
+      "noCancel": "No puede cancelar reservas ni exportar datos",
+      "staffTitle": "{count, plural, =0 {Personal} one {# miembro del personal} other {# miembros del personal}}",
+      "noStaff": "Aún no hay personal. Invita a quienes atienden tu recepción.",
+      "remove": "Quitar",
+      "pending": "Invitaciones pendientes",
+      "expires": "El enlace caduca el {date}",
+      "cancelInvite": "Cancelar",
+      "staffOf": "Formas parte de la recepción de {gym}.",
+      "leave": "Dejar este gimnasio"
+    },
+    "join": {
+      "meta": "Unirse al equipo de un gimnasio",
+      "eyebrow": "Invitación",
+      "title": "Únete a {gym} en Fit Planet",
+      "subtitle": "{place}. Esta invitación es para {email}.",
+      "signIn": "Inicia sesión para aceptar",
+      "createAccount": "Crear una cuenta",
+      "useEmail": "Usa {email} para que la invitación coincida.",
+      "wrongAccount": "Has iniciado sesión como {current}, pero esta invitación es para {email}.",
+      "switchAccount": "Inicia sesión con el correo invitado",
+      "accept": "Unirme al equipo",
+      "joining": "Uniéndote…",
+      "expiredTitle": "Esta invitación ha caducado",
+      "expiredText": "Los enlaces de invitación duran siete días. Pide uno nuevo al dueño del gimnasio.",
+      "toStudio": "Ir a Fit Planet Studio"
     }
   },
   "heroWallet": {
@@ -1823,7 +1864,12 @@
       "noOnlinePayment": "El pago en línea aún no está disponible. Elige pagar en recepción.",
       "deleteConfirm": "Escribe tu correo electrónico exactamente para confirmar.",
       "deleteRunsGym": "Gestionas un gimnasio, así que esta cuenta aún no se puede eliminar.",
-      "deleteActivePass": "Tienes un pase activo o próximo. Cancélalo primero."
+      "deleteActivePass": "Tienes un pase activo o próximo. Cancélalo primero.",
+      "inviteSelf": "Esa es tu propia cuenta.",
+      "teamFull": "Un gimnasio puede tener hasta {count} miembros del personal.",
+      "alreadyStaff": "Esa persona ya está en tu equipo.",
+      "inviteExpired": "Esta invitación ha caducado. Pide una nueva.",
+      "inviteOtherEmail": "Esta invitación es para {email}. Inicia sesión con ese correo para aceptarla."
     },
     "fields": {
       "addExercise": "Añade al menos un ejercicio",
@@ -1871,7 +1917,8 @@
       "saved": "Guardado.",
       "savedToRoutines": "Guardado en tus rutinas",
       "socialSaved": "Perfil social guardado.",
-      "unpublished": "Ficha oculta en las búsquedas."
+      "unpublished": "Ficha oculta en las búsquedas.",
+      "inviteSent": "Invitación enviada a {email}."
     }
   },
   "notify": {
@@ -1950,6 +1997,10 @@
     "postRemoved": {
       "title": "Se ha eliminado una de tus publicaciones",
       "body": "Incumplía nuestras normas de la comunidad tras las denuncias de otros miembros."
+    },
+    "staffJoined": {
+      "title": "{name} se ha unido a tu equipo",
+      "body": "Ya puede registrar miembros en {gym}."
     }
   },
   "email": {
@@ -1981,6 +2032,13 @@
       "payAtDesk": "{price} (pago en recepción)",
       "showQr": "Muestra el código QR en recepción:",
       "cta": "Abrir mi pase"
+    },
+    "staffInvite": {
+      "subject": "{name} te ha invitado a {gym} en Fit Planet",
+      "preheader": "Únete al equipo de recepción de {gym}.",
+      "heading": "Únete a {gym} en Fit Planet",
+      "body": "{name} te ha invitado a registrar miembros en {gym}. Abre el enlace en los próximos siete días e inicia sesión con este correo.",
+      "cta": "Aceptar invitación"
     }
   },
   "exerciseInfo": {

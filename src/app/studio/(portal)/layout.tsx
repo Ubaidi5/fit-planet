@@ -5,10 +5,11 @@ import { unreadCount } from "@/server/modules/notifications";
 export const dynamic = "force-dynamic";
 
 export default async function StudioPortalLayout({ children }: { children: React.ReactNode }) {
-  const { user, gym, gyms } = await requireOwner();
+  const { user, gym, gyms, role } = await requireOwner();
   const unread = await unreadCount(user._id);
   return (
     <StudioLayoutWrapper
+      role={role}
       unread={unread}
       user={{ name: user.name ?? "Owner", email: user.email ?? null, initials: initials(user.name) }}
       gym={{

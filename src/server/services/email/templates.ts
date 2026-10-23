@@ -75,3 +75,18 @@ ${escape(t("booking.valid"))}: ${escape(data.dates)}<br/>${escape(t("booking.cod
     }),
   };
 }
+
+export function staffInviteEmail(to: string, data: { gym: string; inviter: string; url: string }, t: Translate): EmailMessage {
+  const values = { gym: data.gym, name: data.inviter };
+  return {
+    to,
+    subject: t("staffInvite.subject", values),
+    text: `${t("staffInvite.heading", values)}\n\n${t("staffInvite.body", values)}\n\n${data.url}`,
+    html: layout(t, {
+      preheader: t("staffInvite.preheader", values),
+      heading: t("staffInvite.heading", values),
+      body: escape(t("staffInvite.body", values)),
+      cta: { label: t("staffInvite.cta"), url: data.url },
+    }),
+  };
+}

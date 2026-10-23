@@ -1367,7 +1367,8 @@
         "bookings": "Bookings",
         "scan": "Scan",
         "alerts": "Alerts"
-      }
+      },
+      "team": "Team"
     },
     "pages": {
       "inbox": "Inbox",
@@ -1726,6 +1727,46 @@
     },
     "meta": {
       "description": "Run your gym on Fit Planet: bookings, check-ins, pricing and revenue in one place."
+    },
+    "team": {
+      "title": "Team",
+      "subtitle": "Give front-desk staff their own sign-in to check members in.",
+      "inviteTitle": "Invite staff",
+      "inviteText": "We email them a link. They join with that email address, using a new or existing Fit Planet account.",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "name@yourgym.com",
+      "invite": "Send invite",
+      "sending": "Sending…",
+      "canCheckin": "Check passes in by QR or code",
+      "canBookings": "See bookings and who is coming",
+      "canDesk": "Mark front-desk payments as paid",
+      "noRevenue": "No revenue or payouts",
+      "noListing": "Can't edit the listing or prices",
+      "noCancel": "Can't cancel bookings or export data",
+      "staffTitle": "{count, plural, =0 {Staff} one {# staff member} other {# staff members}}",
+      "noStaff": "No staff yet. Invite the people who run your front desk.",
+      "remove": "Remove",
+      "pending": "Pending invites",
+      "expires": "Link expires {date}",
+      "cancelInvite": "Cancel",
+      "staffOf": "You're front-desk staff at {gym}.",
+      "leave": "Leave this gym"
+    },
+    "join": {
+      "meta": "Join a gym team",
+      "eyebrow": "Staff invite",
+      "title": "Join {gym} on Fit Planet",
+      "subtitle": "{place}. This invite is for {email}.",
+      "signIn": "Sign in to accept",
+      "createAccount": "Create an account",
+      "useEmail": "Use {email} so the invite matches.",
+      "wrongAccount": "You're signed in as {current}, but this invite is for {email}.",
+      "switchAccount": "Sign in with the invited email",
+      "accept": "Join the team",
+      "joining": "Joining…",
+      "expiredTitle": "This invite has expired",
+      "expiredText": "Invite links work for seven days. Ask the gym owner to send a new one.",
+      "toStudio": "Go to Fit Planet Studio"
     }
   },
   "heroWallet": {
@@ -1823,7 +1864,12 @@
       "noOnlinePayment": "Online payment isn't available yet. Choose pay at the desk.",
       "deleteConfirm": "Type your email address exactly to confirm.",
       "deleteRunsGym": "You manage a gym, so this account can't be deleted yet.",
-      "deleteActivePass": "You have an active or upcoming pass. Cancel it first."
+      "deleteActivePass": "You have an active or upcoming pass. Cancel it first.",
+      "inviteSelf": "That's your own account.",
+      "teamFull": "A gym can have up to {count} staff members.",
+      "alreadyStaff": "That person is already on your team.",
+      "inviteExpired": "This invite has expired. Ask for a new one.",
+      "inviteOtherEmail": "This invite is for {email}. Sign in with that email to accept it."
     },
     "fields": {
       "addExercise": "Add at least one exercise",
@@ -1871,7 +1917,8 @@
       "saved": "Saved.",
       "savedToRoutines": "Saved to your routines",
       "socialSaved": "Social profile saved.",
-      "unpublished": "Listing hidden from search."
+      "unpublished": "Listing hidden from search.",
+      "inviteSent": "Invite sent to {email}."
     }
   },
   "notify": {
@@ -1950,6 +1997,10 @@
     "postRemoved": {
       "title": "A post of yours was removed",
       "body": "It broke our community guidelines after members reported it."
+    },
+    "staffJoined": {
+      "title": "{name} joined your team",
+      "body": "They can now check members in at {gym}."
     }
   },
   "email": {
@@ -1981,6 +2032,13 @@
       "payAtDesk": "{price} (pay at the desk)",
       "showQr": "Show the QR code at the desk:",
       "cta": "Open my pass"
+    },
+    "staffInvite": {
+      "subject": "{name} invited you to {gym} on Fit Planet",
+      "preheader": "Join the front desk team at {gym}.",
+      "heading": "Join {gym} on Fit Planet",
+      "body": "{name} invited you to check members in at {gym}. Open the link within seven days and sign in with this email address.",
+      "cta": "Accept invite"
     }
   },
   "exerciseInfo": {

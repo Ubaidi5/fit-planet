@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
 const card = "rounded-[1.75rem] border border-gray-900/[0.06] bg-surface shadow-soft";
 
 export default async function RevenuePage() {
-  const { gyms } = await requireOwner("/studio/financial");
+  const { gyms } = await requireOwner("/studio/financial", { ownerOnly: true });
   const [stats, bookings] = await Promise.all([ownerStats(gyms), listGymBookings({ gymIds: gyms.map((g) => g._id), status: "all", limit: 60 })]);
   const [t, tp, region] = await Promise.all([getTranslations("studio.revenue"), getTranslations("passes"), getRegion()]);
   const locale = region.locale;

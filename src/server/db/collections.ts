@@ -2,6 +2,7 @@ import "server-only";
 import { ObjectId } from "mongodb";
 import { getDb } from "./client";
 import type {
+  StaffInviteDoc,
   AdminLogDoc,
   BookingDoc,
   CheckinDoc,
@@ -38,6 +39,7 @@ export const collections = {
   comments: async () => (await getDb()).collection<CommentDoc>("comments"),
   reports: async () => (await getDb()).collection<ReportDoc>("reports"),
   adminLog: async () => (await getDb()).collection<AdminLogDoc>("admin_log"),
+  staffInvites: async () => (await getDb()).collection<StaffInviteDoc>("staff_invites"),
 };
 
 /** Parses a string id, returning null instead of throwing on bad input */
@@ -86,6 +88,9 @@ export function ensureIndexes() {
         db.collection("comments").createIndex({ postId: 1, createdAt: 1 }),
         db.collection("reports").createIndex({ postId: 1 }),
         db.collection("admin_log").createIndex({ at: -1 }),
+        db.collection("staff_invites").createIndex({ tokenHash: 1 }, { unique: true }),
+        db.collection("staff_invites").createIndex({ gymId: 1, email: 1 }),
+        db.collection("staff_invites").createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
       ]);
     })().catch((error) => {
       indexesReady = null;

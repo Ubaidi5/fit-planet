@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 // means straight to sign-in, with a way back. Layouts still verify the session
 // properly on the server; this only saves a render and keeps the return path.
 
-const PUBLIC_PATHS = new Set(["/studio/login", "/studio/register", "/studio/forgot-password", "/app/login", "/app/register"]);
+const PUBLIC_PATHS = new Set(["/studio/login", "/studio/join", "/studio/register", "/studio/forgot-password", "/app/login", "/app/register"]);
 const SESSION_COOKIES = ["authjs.session-token", "__Secure-authjs.session-token"];
 
 export function proxy(request: NextRequest) {

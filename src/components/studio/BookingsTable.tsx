@@ -21,7 +21,8 @@ function statusBadge(b: BookingView) {
   return { label: "upcoming", cls: "bg-stamp-violet/10 text-stamp-violet" };
 }
 
-export function BookingsTable({ bookings, focusId }: { bookings: BookingView[]; focusId?: string }) {
+/** canManage: owners can cancel and export; front-desk staff only mark desk payments */
+export function BookingsTable({ bookings, focusId, canManage = true }: { bookings: BookingView[]; focusId?: string; canManage?: boolean }) {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
@@ -68,7 +69,7 @@ export function BookingsTable({ bookings, focusId }: { bookings: BookingView[]; 
 
   const Actions = ({ b }: { b: BookingView }) => {
     const canPay = b.status === "confirmed" && b.paymentMethod === "desk" && b.paymentStatus !== "paid";
-    const canCancel = b.status === "confirmed" && !b.lastCheckinAt;
+    const canCancel = canManage && b.status === "confirmed" && !b.lastCheckinAt;
     if (!canPay && !canCancel) return null;
     return (
       <div className="relative">
@@ -150,6 +151,7 @@ export function BookingsTable({ bookings, focusId }: { bookings: BookingView[]; 
             <option value="week">{tp("short.week")}</option>
             <option value="month">{tp("short.month")}</option>
           </select>
+          {canManage && (
           <button
             type="button"
             onClick={exportCsv}
@@ -159,6 +161,7 @@ export function BookingsTable({ bookings, focusId }: { bookings: BookingView[]; 
             <HiOutlineArrowDownTray className="size-4" />
             {t("export")}
           </button>
+          )}
         </div>
       </div>
 

@@ -64,24 +64,43 @@ export async function requireAdmin(): Promise<UserDoc> {
   return user;
 }
 
+export type StudioRole = "owner" | "staff";
+
 export interface OwnerContext {
   user: UserDoc;
   gyms: GymDoc[];
+  /** The gym the studio shows; an owned gym comes before ones the user only staffs */
   gym: GymDoc;
+  /** The user's role at that gym: staff run the front desk only */
+  role: StudioRole;
 }
 
 export const getOwnerContext = cache(async (): Promise<{ user: UserDoc | null; gyms: GymDoc[] }> => {
   const user = await getSessionUser();
   if (!user) return { user: null, gyms: [] };
-  return { user, gyms: await gymsManagedBy(user._id) };
+  const gyms = await gymsManagedBy(user._id);
+  // Owned gyms first, so the current gym is one the user runs whenever there is one
+  gyms.sort((a, b) => Number(b.ownerId.equals(user._id)) - Number(a.ownerId.equals(user._id)));
+  return { user, gyms };
 });
 
-/** For studio pages: needs a signed-in user who runs at least one gym */
-export async function requireOwner(returnTo = "/studio/dashboard"): Promise<OwnerContext> {
+/** Gyms in the list that this user owns, as opposed to staffs */
+export function ownedGyms(user: UserDoc, gyms: GymDoc[]) {
+  return gyms.filter((g) => g.ownerId.equals(user._id));
+}
+
+/**
+ * For studio pages: needs a signed-in user who runs or staffs at least one gym.
+ * Pages for owners only send staff to the check-in desk.
+ */
+export async function requireOwner(returnTo = "/studio/dashboard", options: { ownerOnly?: boolean } = {}): Promise<OwnerContext> {
   const { user, gyms } = await getOwnerContext();
   if (!user) redirect(`/studio/login?next=${encodeURIComponent(returnTo)}`);
   if (gyms.length === 0) redirect("/studio/onboarding");
-  return { user, gyms, gym: gyms[0] };
+  const gym = gyms[0];
+  const role: StudioRole = gym.ownerId.equals(user._id) ? "owner" : "staff";
+  if (options.ownerOnly && role !== "owner") redirect("/studio/checkin");
+  return { user, gyms, gym, role };
 }
 
 export { initials } from "@/lib/initials";

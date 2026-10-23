@@ -302,3 +302,13 @@ export interface AdminLogDoc {
   note?: string;
   at: Date;
 }
+
+export interface StaffInviteDoc {
+  _id: ObjectId;
+  gymId: ObjectId;
+  email: string;
+  tokenHash: string;
+  invitedBy: ObjectId;
+  createdAt: Date;
+  expiresAt: Date;
+}

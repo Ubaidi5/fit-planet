@@ -38,6 +38,15 @@ keep in mind when changing it.
 - Every admin action is written to the `admin_log` collection and shown on the
   console's front page.
 
+## Gym staff
+
+- Owners invite front-desk staff by email from Studio, Team. The link is good
+  for seven days, stored only as a hash, and only works for an account with
+  the invited email, so a forwarded link is useless to anyone else.
+- Staff can check passes in, see bookings and mark desk payments. Revenue,
+  the listing, prices, reviews, cancellations and exports stay owner-only,
+  enforced in each page and server action, not just hidden in the menu.
+
 ## Payments
 
 - Stripe webhooks are signature-checked.

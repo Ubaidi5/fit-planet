@@ -57,7 +57,8 @@ export async function exportAccount(userId: ObjectId) {
 
 /** Why an account can't be deleted yet, or null when it can */
 export async function deletionBlocker(userId: ObjectId): Promise<"runsGym" | "activePass" | null> {
-  if ((await gymsManagedBy(userId)).length > 0) return "runsGym";
+  // Front-desk staff can leave; owners have to close or hand over the gym first
+  if (await (await collections.gyms()).findOne({ ownerId: userId }, { projection: { _id: 1 } })) return "runsGym";
   // A day's slack covers gyms whose local date is behind UTC
   const since = addDays(todayIn("UTC"), -1);
   const active = await (await collections.bookings()).findOne({ userId, status: { $in: ["pending", "confirmed"] }, endDate: { $gte: since } });
@@ -120,6 +121,7 @@ export async function deleteAccount(userId: ObjectId) {
   await Promise.all([
     media.deleteMany({ ownerId: userId }),
     (await c.follows()).deleteMany({ $or: [{ followerId: userId }, { followeeId: userId }] }),
+    (await c.gyms()).updateMany({ staffIds: userId }, { $pull: { staffIds: userId } }),
     (await c.notifications()).deleteMany(byUser),
     (await c.pushTokens()).deleteMany(byUser),
     (await c.routines()).deleteMany(byUser),

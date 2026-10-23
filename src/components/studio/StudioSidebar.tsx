@@ -19,6 +19,7 @@ import {
   HiOutlineQrCode,
   HiOutlineBell,
   HiOutlineArrowRightOnRectangle,
+  HiOutlineUserGroup,
 } from "react-icons/hi2";
 import { signOutAction } from "@/actions/auth";
 
@@ -29,6 +30,8 @@ interface ModuleLink {
   href: string;
   icon: IconType;
   badge?: string;
+  /** Front-desk staff see this too */
+  staff?: boolean;
 }
 
 const moduleGroups: { label: string; items: ModuleLink[] }[] = [
@@ -36,9 +39,9 @@ const moduleGroups: { label: string; items: ModuleLink[] }[] = [
     label: "overview",
     items: [
       { key: "dashboard", href: "/studio/dashboard", icon: HiOutlineChartBarSquare },
-      { key: "checkin", href: "/studio/checkin", icon: HiOutlineQrCode, badge: "scan" },
-      { key: "bookings", href: "/studio/bookings", icon: HiOutlineCalendarDays },
-      { key: "notifications", href: "/studio/notifications", icon: HiOutlineBell },
+      { key: "checkin", href: "/studio/checkin", icon: HiOutlineQrCode, badge: "scan", staff: true },
+      { key: "bookings", href: "/studio/bookings", icon: HiOutlineCalendarDays, staff: true },
+      { key: "notifications", href: "/studio/notifications", icon: HiOutlineBell, staff: true },
     ],
   },
   {
@@ -53,12 +56,14 @@ const moduleGroups: { label: string; items: ModuleLink[] }[] = [
     items: [
       { key: "financial", href: "/studio/financial", icon: HiOutlineCurrencyDollar },
       { key: "profile", href: "/studio/profile", icon: HiOutlineBuildingOffice2 },
+      { key: "team", href: "/studio/team", icon: HiOutlineUserGroup },
     ],
   },
 ];
 
 interface StudioSidebarProps {
   gym: StudioGymSummary;
+  role: "owner" | "staff";
   user: StudioUser;
   gymCount: number;
   unread: number;
@@ -70,6 +75,7 @@ interface StudioSidebarProps {
 
 export function StudioSidebar({
   gym,
+  role,
   user,
   unread,
   isCollapsed,
@@ -108,11 +114,11 @@ export function StudioSidebar({
         {/* Header */}
         <div className={cn("flex h-18 items-center px-4", collapsed ? "justify-center" : "justify-between")}>
           {collapsed ? (
-            <Link href="/studio/dashboard" aria-label={t("dashboard")}>
+            <Link href={role === "owner" ? "/studio/dashboard" : "/studio/checkin"} aria-label={t("dashboard")}>
               <LogoMark />
             </Link>
           ) : (
-            <Logo href="/studio/dashboard" tag="Studio" />
+            <Logo href={role === "owner" ? "/studio/dashboard" : "/studio/checkin"} tag="Studio" />
           )}
           <button
             type="button"
@@ -144,7 +150,10 @@ export function StudioSidebar({
 
         {/* Navigation */}
         <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-3 no-scrollbar">
-          {moduleGroups.map((group) => (
+          {moduleGroups
+            .map((group) => ({ ...group, items: group.items.filter((item) => role === "owner" || item.staff) }))
+            .filter((group) => group.items.length > 0)
+            .map((group) => (
             <div key={group.label}>
               {!collapsed ? (
                 <p className="mb-1.5 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-400">

@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
 const STATUSES = ["active", "upcoming", "past", "cancelled", "all"] as const;
 
 export default async function StudioBookingsPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
-  const { gyms } = await requireOwner("/studio/bookings");
+  const { gyms, role } = await requireOwner("/studio/bookings");
   const params = await searchParams;
   const status = STATUSES.find((s) => s === params.status) ?? "all";
   const filter: OwnerBookingFilter = {
@@ -31,7 +31,7 @@ export default async function StudioBookingsPage({ searchParams }: { searchParam
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
       <PageHeader eyebrow={t("members")} title={t("bookings")} description={t("bookingsShown", { count: bookings.length })} />
       <Suspense>
-        <BookingsTable bookings={bookings} focusId={params.focus} />
+        <BookingsTable bookings={bookings} focusId={params.focus} canManage={role === "owner"} />
       </Suspense>
     </div>
   );

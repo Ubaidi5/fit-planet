@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function StudioProfilePage({ searchParams }: { searchParams: Promise<{ welcome?: string }> }) {
-  const { gym, user } = await requireOwner("/studio/profile");
+  const { gym, user } = await requireOwner("/studio/profile", { ownerOnly: true });
   const { welcome } = await searchParams;
   const isOwner = gym.ownerId.equals(user._id);
   const t = await getTranslations("studio.pages");

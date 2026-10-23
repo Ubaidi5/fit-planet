@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function StudioPassesPage() {
-  const { gym } = await requireOwner("/studio/passes");
+  const { gym } = await requireOwner("/studio/passes", { ownerOnly: true });
   const stats = await ownerStats([gym]);
   const t = await getTranslations("studio.pages");
   return (

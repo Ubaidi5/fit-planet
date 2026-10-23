@@ -1367,7 +1367,8 @@
         "bookings": "Rezervasyon",
         "scan": "Tara",
         "alerts": "Uyarılar"
-      }
+      },
+      "team": "Ekip"
     },
     "pages": {
       "inbox": "Gelen kutusu",
@@ -1726,6 +1727,46 @@
     },
     "meta": {
       "description": "Salonunu Fit Planet ile yönet: rezervasyonlar, girişler, fiyatlar ve gelir tek yerde."
+    },
+    "team": {
+      "title": "Ekip",
+      "subtitle": "Resepsiyon ekibine üyeleri giriş yaptırmaları için kendi hesaplarını ver.",
+      "inviteTitle": "Personel davet et",
+      "inviteText": "Onlara e-postayla bir bağlantı göndeririz. Yeni ya da mevcut bir Fit Planet hesabıyla, bu e-posta adresiyle katılırlar.",
+      "emailLabel": "E-posta adresi",
+      "emailPlaceholder": "isim@salonun.com",
+      "invite": "Davet gönder",
+      "sending": "Gönderiliyor…",
+      "canCheckin": "Pasları QR ya da kodla giriş yaptırma",
+      "canBookings": "Rezervasyonları ve kimin geleceğini görme",
+      "canDesk": "Resepsiyon ödemelerini ödendi olarak işaretleme",
+      "noRevenue": "Gelir ve ödemelere erişim yok",
+      "noListing": "İlanı ve fiyatları düzenleyemez",
+      "noCancel": "Rezervasyon iptal edemez, veri dışa aktaramaz",
+      "staffTitle": "{count, plural, =0 {Personel} one {# personel} other {# personel}}",
+      "noStaff": "Henüz personel yok. Resepsiyonunu yöneten kişileri davet et.",
+      "remove": "Çıkar",
+      "pending": "Bekleyen davetler",
+      "expires": "Bağlantının süresi {date} tarihinde doluyor",
+      "cancelInvite": "İptal et",
+      "staffOf": "{gym} resepsiyon ekibindesin.",
+      "leave": "Bu salondan ayrıl"
+    },
+    "join": {
+      "meta": "Bir salon ekibine katıl",
+      "eyebrow": "Personel daveti",
+      "title": "Fit Planet'te {gym} ekibine katıl",
+      "subtitle": "{place}. Bu davet {email} için.",
+      "signIn": "Kabul etmek için giriş yap",
+      "createAccount": "Hesap oluştur",
+      "useEmail": "Davetin eşleşmesi için {email} adresini kullan.",
+      "wrongAccount": "{current} olarak giriş yaptın ama bu davet {email} için.",
+      "switchAccount": "Davet edilen e-postayla giriş yap",
+      "accept": "Ekibe katıl",
+      "joining": "Katılınıyor…",
+      "expiredTitle": "Bu davetin süresi doldu",
+      "expiredText": "Davet bağlantıları yedi gün geçerlidir. Salon sahibinden yenisini iste.",
+      "toStudio": "Fit Planet Studio'ya git"
     }
   },
   "heroWallet": {
@@ -1823,7 +1864,12 @@
       "noOnlinePayment": "Online ödeme henüz kullanılamıyor. Resepsiyonda ödemeyi seç.",
       "deleteConfirm": "Onaylamak için e-posta adresini aynen yaz.",
       "deleteRunsGym": "Bir salon yönettiğin için bu hesap henüz silinemez.",
-      "deleteActivePass": "Aktif ya da yaklaşan bir pasın var. Önce iptal et."
+      "deleteActivePass": "Aktif ya da yaklaşan bir pasın var. Önce iptal et.",
+      "inviteSelf": "Bu senin kendi hesabın.",
+      "teamFull": "Bir salonda en fazla {count} personel olabilir.",
+      "alreadyStaff": "Bu kişi zaten ekibinde.",
+      "inviteExpired": "Bu davetin süresi doldu. Yenisini iste.",
+      "inviteOtherEmail": "Bu davet {email} için. Kabul etmek için bu e-postayla giriş yap."
     },
     "fields": {
       "addExercise": "En az bir egzersiz ekle",
@@ -1871,7 +1917,8 @@
       "saved": "Kaydedildi.",
       "savedToRoutines": "Rutinlerine kaydedildi",
       "socialSaved": "Sosyal profil kaydedildi.",
-      "unpublished": "İlan aramalardan gizlendi."
+      "unpublished": "İlan aramalardan gizlendi.",
+      "inviteSent": "Davet {email} adresine gönderildi."
     }
   },
   "notify": {
@@ -1950,6 +1997,10 @@
     "postRemoved": {
       "title": "Bir gönderin kaldırıldı",
       "body": "Üyelerin şikâyetleri sonrası topluluk kurallarımızı ihlal ettiği görüldü."
+    },
+    "staffJoined": {
+      "title": "{name} ekibine katıldı",
+      "body": "Artık {gym} salonunda üyeleri giriş yaptırabilir."
     }
   },
   "email": {
@@ -1981,6 +2032,13 @@
       "payAtDesk": "{price} (resepsiyonda ödenecek)",
       "showQr": "QR kodunu resepsiyonda göster:",
       "cta": "Kartımı aç"
+    },
+    "staffInvite": {
+      "subject": "{name} seni Fit Planet'te {gym} ekibine davet etti",
+      "preheader": "{gym} resepsiyon ekibine katıl.",
+      "heading": "Fit Planet'te {gym} ekibine katıl",
+      "body": "{name} seni {gym} salonunda üyeleri giriş yaptırmak için davet etti. Bağlantıyı yedi gün içinde aç ve bu e-posta adresiyle giriş yap.",
+      "cta": "Daveti kabul et"
     }
   },
   "exerciseInfo": {

@@ -5,15 +5,16 @@ import { recentCheckins } from "@/server/modules/checkins";
 import { PageHeader } from "@/components/studio/PageHeader";
 import { CheckinDesk } from "@/components/studio/CheckinDesk";
 import { getRegion } from "@/lib/i18n/server";
+import { leaveGymAction } from "@/actions/team";
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations("studio.nav"))("checkin") };
 }
 
 export default async function CheckinPage() {
-  const { gyms } = await requireOwner("/studio/checkin");
+  const { gyms, gym, role } = await requireOwner("/studio/checkin");
   const recent = await recentCheckins({ gymIds: gyms.map((g) => g._id) }, 12);
-  const [t, tp, region] = await Promise.all([getTranslations("studio.pages"), getTranslations("passes"), getRegion()]);
+  const [t, tp, tt, region] = await Promise.all([getTranslations("studio.pages"), getTranslations("passes"), getTranslations("studio.team"), getRegion()]);
   const timeFmt = new Intl.DateTimeFormat(region.locale, { hour: "numeric", minute: "2-digit", timeZone: gyms[0].timezone });
 
   return (
@@ -37,6 +38,15 @@ export default async function CheckinPage() {
             ))}
           </ul>
         </section>
+      )}
+      {role === "staff" && (
+        <form action={leaveGymAction} className="mt-10 flex flex-col items-start gap-2 border-t border-gray-900/[0.06] pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-gray-500">{tt("staffOf", { gym: gym.name })}</p>
+          <input type="hidden" name="gymId" value={gym._id.toHexString()} />
+          <button type="submit" className="h-9 cursor-pointer rounded-full px-3.5 text-[13px] font-semibold text-red-600 transition-colors hover:bg-red-50">
+            {tt("leave")}
+          </button>
+        </form>
       )}
     </div>
   );

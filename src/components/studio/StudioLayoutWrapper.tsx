@@ -32,8 +32,15 @@ export interface StudioUser {
   initials: string;
 }
 
-const tabs = [
+const ownerTabs = [
   { href: "/studio/dashboard", label: "today", icon: HiOutlineChartBarSquare },
+  { href: "/studio/bookings", label: "bookings", icon: HiOutlineCalendarDays },
+  { href: "/studio/checkin", label: "scan", icon: HiOutlineQrCode, primary: true },
+  { href: "/studio/notifications", label: "alerts", icon: HiOutlineBell },
+] as const;
+
+// Front-desk staff: the desk tools only, no revenue
+const staffTabs = [
   { href: "/studio/bookings", label: "bookings", icon: HiOutlineCalendarDays },
   { href: "/studio/checkin", label: "scan", icon: HiOutlineQrCode, primary: true },
   { href: "/studio/notifications", label: "alerts", icon: HiOutlineBell },
@@ -42,12 +49,14 @@ const tabs = [
 export function StudioLayoutWrapper({
   children,
   gym,
+  role,
   user,
   unread,
   gymCount,
 }: {
   children: React.ReactNode;
   gym: StudioGymSummary;
+  role: "owner" | "staff";
   user: StudioUser;
   unread: number;
   gymCount: number;
@@ -66,6 +75,7 @@ export function StudioLayoutWrapper({
       <PushListener />
       <StudioSidebar
         gym={gym}
+        role={role}
         user={user}
         gymCount={gymCount}
         unread={unread}
@@ -86,7 +96,7 @@ export function StudioLayoutWrapper({
           >
             <HiOutlineBars3 className="size-5" />
           </button>
-          <Logo href="/studio/dashboard" tag="Studio" />
+          <Logo href={role === "owner" ? "/studio/dashboard" : "/studio/checkin"} tag="Studio" />
           <Link
             href="/studio/notifications"
             className="relative flex size-10 items-center justify-center rounded-full text-gray-700 hover:bg-gray-900/5"
@@ -99,7 +109,7 @@ export function StudioLayoutWrapper({
       </header>
 
       <main className={cn("pb-28 transition-[padding] duration-500 ease-out-expo lg:pb-0", isCollapsed ? "lg:ps-24" : "lg:ps-72")}>
-        {gym.status === "draft" && pathname !== "/studio/profile" && (
+        {role === "owner" && gym.status === "draft" && pathname !== "/studio/profile" && (
           <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-6 lg:px-8 lg:pt-6">
             <Link
               href="/studio/profile"
@@ -120,7 +130,7 @@ export function StudioLayoutWrapper({
         aria-label={t("tabsAria")}
         className="glass fixed inset-x-3 bottom-3 z-30 flex items-center justify-around rounded-full border border-gray-900/[0.06] p-1.5 shadow-lift pb-[max(0.375rem,env(safe-area-inset-bottom))] lg:hidden"
       >
-        {tabs.map((tab) => {
+        {(role === "owner" ? ownerTabs : staffTabs).map((tab) => {
           const active = pathname === tab.href;
           const Icon = tab.icon;
           if ("primary" in tab) {

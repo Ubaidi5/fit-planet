@@ -28,7 +28,8 @@ export type NotificationKey =
   | "gymVerified"
   | "gymSuspended"
   | "gymRestored"
-  | "postRemoved";
+  | "postRemoved"
+  | "staffJoined";
 
 export interface NotifyInput {
   type: NotificationType;

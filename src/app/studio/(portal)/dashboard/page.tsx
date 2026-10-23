@@ -37,7 +37,7 @@ function greeting(hour: number) {
 }
 
 export default async function StudioDashboardPage() {
-  const { user, gyms, gym } = await requireOwner("/studio/dashboard");
+  const { user, gyms, gym } = await requireOwner("/studio/dashboard", { ownerOnly: true });
   const gymIds = gyms.map((g) => g._id);
   const [stats, bookings, checkins] = await Promise.all([ownerStats(gyms), listGymBookings({ gymIds, status: "all", limit: 8 }), recentCheckins({ gymIds }, 8)]);
 
