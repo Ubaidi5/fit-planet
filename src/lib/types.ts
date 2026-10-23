@@ -76,3 +76,40 @@ export interface CheckinView {
 export type ActionResult<T = undefined> =
   | ({ ok: true; message?: string } & (T extends undefined ? { data?: undefined } : { data: T }))
   | { ok: false; error: string; fieldErrors?: Record<string, string> };
+
+export interface RoutineItem {
+  exerciseId: string;
+  sets: number;
+  reps: string;
+  weight: number | null;
+  restSec: number;
+}
+
+export interface RoutineView {
+  id: string;
+  name: string;
+  category: string;
+  notes: string;
+  items: RoutineItem[];
+  favorite: boolean;
+  timesCompleted: number;
+  lastCompletedAt: string | null;
+}
+
+export interface WorkoutSetLog {
+  reps: number;
+  weight: number | null;
+  done: boolean;
+}
+
+export interface WorkoutView {
+  id: string;
+  routineId: string | null;
+  routineName: string;
+  startedAt: string;
+  completedAt: string;
+  durationMin: number;
+  volumeKg: number;
+  setsDone: number;
+  exercises: { exerciseId: string; sets: WorkoutSetLog[] }[];
+}

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
 import { HiOutlineChevronDown } from "react-icons/hi";
 import {
-  mockExercises,
+  exercises,
   formatMuscleGroup,
   formatEquipment,
   formatDifficulty,
@@ -14,7 +14,7 @@ import {
   type Exercise,
   type MuscleGroup,
   type Equipment,
-} from "@/lib/data/mock-routines";
+} from "@/lib/data/exercises";
 import Select from "@/components/ui/Select";
 
 const muscleGroups: MuscleGroup[] = [
@@ -57,7 +57,7 @@ export default function ExercisesPage() {
   const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
 
   const filteredExercises = useMemo(() => {
-    return mockExercises.filter((exercise) => {
+    return exercises.filter((exercise) => {
       // Search filter
       if (
         searchQuery &&
@@ -117,7 +117,7 @@ export default function ExercisesPage() {
           Exercise Library
         </h1>
         <p className="text-sm sm:text-base text-gray-600 mt-1">
-          Browse {mockExercises.length} exercises with detailed instructions
+          Browse {exercises.length} exercises with detailed instructions
         </p>
       </div>
 
@@ -197,7 +197,7 @@ export default function ExercisesPage() {
       {/* Results Count */}
       <div className="flex items-center justify-between">
         <p className="text-xs sm:text-sm text-gray-600">
-          Showing {filteredExercises.length} of {mockExercises.length} exercises
+          Showing {filteredExercises.length} of {exercises.length} exercises
         </p>
       </div>
 

@@ -9,7 +9,9 @@ import type {
   NotificationDoc,
   PushTokenDoc,
   ReviewDoc,
+  RoutineDoc,
   UserDoc,
+  WorkoutDoc,
 } from "./models";
 
 /** Typed collection accessors. Collection names match the NextAuth adapter defaults. */
@@ -22,6 +24,8 @@ export const collections = {
   notifications: async () => (await getDb()).collection<NotificationDoc>("notifications"),
   pushTokens: async () => (await getDb()).collection<PushTokenDoc>("push_tokens"),
   media: async () => (await getDb()).collection<MediaDoc>("media"),
+  routines: async () => (await getDb()).collection<RoutineDoc>("routines"),
+  workouts: async () => (await getDb()).collection<WorkoutDoc>("workouts"),
 };
 
 /** Parses a string id, returning null instead of throwing on bad input */
@@ -59,6 +63,8 @@ export function ensureIndexes() {
         db.collection("notifications").createIndex({ userId: 1, createdAt: -1 }),
         db.collection("push_tokens").createIndex({ token: 1 }, { unique: true }),
         db.collection("push_tokens").createIndex({ userId: 1 }),
+        db.collection("routines").createIndex({ userId: 1, updatedAt: -1 }),
+        db.collection("workouts").createIndex({ userId: 1, completedAt: -1 }),
       ]);
     })().catch((error) => {
       indexesReady = null;

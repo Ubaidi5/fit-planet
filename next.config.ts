@@ -18,6 +18,16 @@ const nextConfig: NextConfig = {
     // Photo uploads go through server actions
     serverActions: { bodySizeLimit: "12mb" },
   },
+  async redirects() {
+    // Demo-only pages that were retired; keep old links working
+    return [
+      { source: "/app/sessions", destination: "/app/security", permanent: false },
+      { source: "/app/email-digest", destination: "/app/notifications", permanent: false },
+      { source: "/app/social/:path*", destination: "/app/dashboard", permanent: false },
+      { source: "/app/routines/builder", destination: "/app/routines/new", permanent: false },
+      { source: "/app/routines/workout", destination: "/app/routines", permanent: false },
+    ];
+  },
   async headers() {
     return [
       {

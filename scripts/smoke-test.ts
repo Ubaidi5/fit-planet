@@ -13,6 +13,7 @@ import { listPublishedGyms, getPublicGymProfile, gymsManagedBy } from "@/server/
 import { upsertReview } from "@/server/modules/reviews";
 import { listNotifications } from "@/server/modules/notifications";
 import { sendPassReminders, releaseAbandonedCheckouts } from "@/server/modules/reminders";
+import { copyTemplate, getRoutine, lastWeights, logWorkout } from "@/server/modules/routines";
 import { addDays, todayIn } from "@/lib/dates";
 
 async function main() {
@@ -79,6 +80,20 @@ async function main() {
   await releaseAbandonedCheckouts(new Date(Date.now() + 3 * 60 * 60 * 1000));
   const staleDoc = await bookings.findOne({ _id: new (await import("mongodb")).ObjectId(stale.bookingId) });
   assert.equal(staleDoc?.status, "cancelled", "abandoned checkout released");
+
+  // Routines: copy a template, log a workout, prefill from it next time
+  const routineId = await copyTemplate(member._id, "tpl-push");
+  const routine = (await getRoutine(member._id, routineId))!;
+  const workoutId = await logWorkout(member._id, {
+    routineId,
+    startedAt: new Date(Date.now() - 50 * 60_000),
+    exercises: routine.items.map((item) => ({ exerciseId: item.exerciseId, sets: [{ reps: 8, weight: 60, done: true }, { reps: 8, weight: 65, done: true }, { reps: 0, weight: null, done: false }] })),
+  });
+  const workoutDoc = await (await collections.workouts()).findOne({ _id: workoutId });
+  assert.equal(workoutDoc?.setsDone, routine.items.length * 2, "only completed sets count");
+  assert.equal(workoutDoc?.volumeKg, routine.items.length * (8 * 60 + 8 * 65), "volume is reps x weight");
+  assert.equal((await getRoutine(member._id, routineId))?.timesCompleted, 1, "routine counter bumped");
+  assert.equal((await lastWeights(member._id, [routine.items[0].exerciseId]))[routine.items[0].exerciseId], 65, "heaviest set prefilled");
 
   console.log("✓ smoke test passed", { todayBookings: stats.todayBookings, occupancy: stats.occupancy, ownerNotifications: ownerFeed.length });
   await (await getMongoClient()).close();

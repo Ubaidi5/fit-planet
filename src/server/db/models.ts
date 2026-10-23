@@ -175,3 +175,42 @@ export interface MediaDoc {
   provider: string;
   createdAt: Date;
 }
+
+export interface RoutineItemDoc {
+  /** Id from the static exercise catalog (src/lib/data/exercises.ts) */
+  exerciseId: string;
+  sets: number;
+  /** Target, free text: "8-10", "12", or seconds for timed exercises */
+  reps: string;
+  weight: number | null;
+  restSec: number;
+}
+
+export interface RoutineDoc {
+  _id: ObjectId;
+  userId: ObjectId;
+  name: string;
+  category: string;
+  notes?: string;
+  items: RoutineItemDoc[];
+  favorite: boolean;
+  timesCompleted: number;
+  lastCompletedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface WorkoutDoc {
+  _id: ObjectId;
+  userId: ObjectId;
+  routineId: ObjectId | null;
+  routineName: string;
+  startedAt: Date;
+  completedAt: Date;
+  durationMin: number;
+  exercises: { exerciseId: string; sets: { reps: number; weight: number | null; done: boolean }[] }[];
+  /** Sum of reps x weight over completed sets */
+  volumeKg: number;
+  setsDone: number;
+  createdAt: Date;
+}
