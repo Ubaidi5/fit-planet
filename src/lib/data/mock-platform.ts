@@ -36,10 +36,10 @@ export const platformStats = {
 };
 
 export const heroStats = [
-  { value: String(platformStats.partnerGyms), label: "Partner gyms" },
-  { value: String(platformStats.cities.length), label: "Cities on one pass" },
-  { value: String(countries.length), label: "Local currencies" },
-  { value: `${platformStats.bookingTimeSeconds}s`, label: "From search to pass" },
+  { value: String(platformStats.partnerGyms), key: "gyms", label: "Partner gyms" },
+  { value: String(platformStats.cities.length), key: "cities", label: "Cities on one pass" },
+  { value: String(countries.length), key: "currencies", label: "Local currencies" },
+  { value: `${platformStats.bookingTimeSeconds}s`, key: "speed", label: "From search to pass" },
 ];
 
 export const launchAreas = Array.from(

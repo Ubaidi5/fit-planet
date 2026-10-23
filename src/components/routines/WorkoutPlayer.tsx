@@ -1,12 +1,15 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { HiCheck, HiOutlinePlus, HiXMark } from "react-icons/hi2";
 import { finishWorkoutAction } from "@/actions/routines";
 import { useToast } from "@/components/notifications/ToastProvider";
 import { exerciseById, isTimed } from "@/lib/data/exercises";
-import { formatRest, kgToUnit, targetLabel, unitToKg, type WeightUnit } from "@/lib/routines";
+import { kgToUnit, unitToKg, type WeightUnit } from "@/lib/routines";
+import { exerciseName, restText, targetText } from "@/lib/i18n/training";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import type { RoutineItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -67,6 +70,9 @@ export function WorkoutPlayer(props: Props) {
   const { routine, unit } = props;
   const router = useRouter();
   const toast = useToast();
+  const t = useTranslations("routines.player");
+  const tr = useTranslations("training");
+  const { region } = useLocale();
   const [draft, setDraft] = useState<Draft>(() => loadDraft(props));
   const [now, setNow] = useState(() => Date.now());
   const [rest, setRest] = useState<{ until: number; total: number } | null>(null);
@@ -145,7 +151,7 @@ export function WorkoutPlayer(props: Props) {
         })),
       });
       if (!result.ok) {
-        toast.error("Couldn't finish", result.error);
+        toast.error(t("finishFailed"), result.error);
         return;
       }
       try {
@@ -170,7 +176,7 @@ export function WorkoutPlayer(props: Props) {
             )}
           >
             <HiXMark className="size-4.5" />
-            {confirmQuit ? "Discard?" : <span className="sr-only">Quit workout</span>}
+            {confirmQuit ? t("discard") : <span className="sr-only">{t("quit")}</span>}
           </button>
           <div className="min-w-0 flex-1 text-center">
             <p className="truncate text-sm font-semibold text-ink">{routine.name}</p>
@@ -182,7 +188,7 @@ export function WorkoutPlayer(props: Props) {
             disabled={pending || done === 0}
             className="h-10 shrink-0 cursor-pointer rounded-full bg-ink px-4 text-sm font-semibold text-white disabled:opacity-40"
           >
-            {pending ? "Saving…" : "Finish"}
+            {pending ? t("saving") : t("finish")}
           </button>
         </div>
         <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-gray-900/[0.07]">
@@ -190,11 +196,11 @@ export function WorkoutPlayer(props: Props) {
         </div>
         <p className="mt-1.5 flex justify-between text-xs text-gray-500 tabular-nums">
           <span>
-            {done}/{total} sets
+            {t("setsProgress", { done, total })}
           </span>
           {volume > 0 && (
             <span>
-              {new Intl.NumberFormat("en").format(volume)} {unit} lifted
+              {t("lifted", { amount: new Intl.NumberFormat(region.locale).format(volume), unit })}
             </span>
           )}
         </p>
@@ -229,9 +235,9 @@ export function WorkoutPlayer(props: Props) {
                   {finished ? <HiCheck className="size-4.5" /> : String(ex + 1).padStart(2, "0")}
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate font-semibold text-ink">{exercise.name}</span>
+                  <span className="block truncate font-semibold text-ink">{exerciseName(tr, exercise.id, exercise.name)}</span>
                   <span className="text-xs text-gray-500">
-                    {sets.length} × {targetLabel(item)} · rest {formatRest(item.restSec)}
+                    {sets.length} × {targetText(tr, item)} · {t("restShort", { rest: restText(tr, item.restSec) })}
                   </span>
                 </span>
                 <span className="font-mono text-xs text-gray-400 tabular-nums">
@@ -242,9 +248,9 @@ export function WorkoutPlayer(props: Props) {
               {open && (
                 <div className="px-4 pb-4">
                   <div className="grid grid-cols-[2rem_1fr_1fr_3rem] items-center gap-2 px-1 pb-1.5 text-[11px] font-medium tracking-wide text-gray-400 uppercase">
-                    <span>Set</span>
+                    <span>{t("set")}</span>
                     <span>{timed ? "" : unit}</span>
-                    <span>{timed ? "Seconds" : "Reps"}</span>
+                    <span>{timed ? t("seconds") : t("reps")}</span>
                     <span />
                   </div>
                   <ul className="space-y-1.5">
@@ -259,7 +265,7 @@ export function WorkoutPlayer(props: Props) {
                             onChange={(e) => patchSet(ex, i, { weight: e.target.value.replace(/[^0-9.]/g, "") })}
                             inputMode="decimal"
                             placeholder="0"
-                            aria-label={`Set ${i + 1} weight in ${unit}`}
+                            aria-label={t("weightAria", { n: i + 1, unit })}
                             className="h-11 w-full min-w-0 rounded-xl bg-canvas text-center text-base font-semibold text-ink outline-none focus:ring-2 focus:ring-ink/15"
                           />
                         )}
@@ -268,14 +274,14 @@ export function WorkoutPlayer(props: Props) {
                           onChange={(e) => patchSet(ex, i, { reps: e.target.value.replace(/[^0-9]/g, "") })}
                           inputMode="numeric"
                           placeholder="0"
-                          aria-label={`Set ${i + 1} ${timed ? "seconds" : "reps"}`}
+                          aria-label={timed ? t("secondsAria", { n: i + 1 }) : t("repsAria", { n: i + 1 })}
                           className="h-11 w-full min-w-0 rounded-xl bg-canvas text-center text-base font-semibold text-ink outline-none focus:ring-2 focus:ring-ink/15"
                         />
                         <button
                           type="button"
                           onClick={() => toggleDone(ex, i)}
                           aria-pressed={s.done}
-                          aria-label={`Set ${i + 1} done`}
+                          aria-label={t("doneAria", { n: i + 1 })}
                           className={cn(
                             "flex size-11 cursor-pointer items-center justify-center rounded-xl transition-all active:scale-90",
                             s.done ? "bg-ink text-volt" : "bg-canvas text-gray-400 hover:text-ink",
@@ -292,7 +298,7 @@ export function WorkoutPlayer(props: Props) {
                     className="mt-2 flex h-10 w-full cursor-pointer items-center justify-center gap-1.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-canvas hover:text-ink"
                   >
                     <HiOutlinePlus className="size-4" />
-                    Add set
+                    {t("addSet")}
                   </button>
                 </div>
               )}
@@ -310,7 +316,7 @@ export function WorkoutPlayer(props: Props) {
               style={{ width: `${(1 - restLeft / rest.total) * 100}%` }}
             />
             <div className="relative flex items-center gap-3">
-              <span className="text-xs text-white/60">Rest</span>
+              <span className="text-xs text-white/60">{t("rest")}</span>
               <span className="flex-1 font-mono text-2xl font-semibold text-volt tabular-nums">{clock(restLeft)}</span>
               <button
                 type="button"
@@ -320,7 +326,7 @@ export function WorkoutPlayer(props: Props) {
                 +15s
               </button>
               <button type="button" onClick={() => setRest(null)} className="h-10 cursor-pointer rounded-full bg-volt px-4 text-sm font-semibold text-ink">
-                Skip
+                {t("skip")}
               </button>
             </div>
           </div>
@@ -335,7 +341,7 @@ export function WorkoutPlayer(props: Props) {
             disabled={pending}
             className="h-14 w-full cursor-pointer rounded-full bg-volt text-base font-semibold text-ink shadow-lift disabled:opacity-60"
           >
-            {pending ? "Saving…" : "All sets done · Finish workout"}
+            {pending ? t("saving") : t("allDone")}
           </button>
         </div>
       )}

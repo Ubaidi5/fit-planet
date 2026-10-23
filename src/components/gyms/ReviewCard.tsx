@@ -1,7 +1,9 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import Image from "next/image";
 import type { Review } from "@/lib/data/mock-gym-details";
 import {
@@ -19,6 +21,8 @@ interface ReviewCardProps {
 
 export function ReviewCard({ review, className }: ReviewCardProps) {
   const [showFullComment, setShowFullComment] = useState(false);
+  const t = useTranslations("reviews");
+  const { region } = useLocale();
   const [helpful, setHelpful] = useState(review.helpful);
   const [hasVoted, setHasVoted] = useState(false);
 
@@ -37,7 +41,7 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
+    return date.toLocaleDateString(region.locale, {
       year: "numeric",
       month: "long",
       day: "numeric",
@@ -74,7 +78,7 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
               {review.isVerified && (
                 <span className="inline-flex items-center gap-1 text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
                   <HiCheckCircle className="h-3 w-3" />
-                  Verified
+                  {t("verified")}
                 </span>
               )}
             </div>
@@ -105,7 +109,7 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
             onClick={() => setShowFullComment(!showFullComment)}
             className="text-emerald-600 text-sm font-medium mt-1 hover:underline"
           >
-            {showFullComment ? "Show less" : "Read more"}
+            {showFullComment ? t("less") : t("more")}
           </button>
         )}
       </div>
@@ -115,7 +119,7 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
         {Object.entries(review.categories).map(([category, rating]) => (
           <div key={category} className="text-center">
             <div className="text-xs text-gray-500 capitalize mb-1">
-              {category}
+              {t.has(`categories.${category}`) ? t(`categories.${category}`) : category}
             </div>
             <div className="flex items-center justify-center gap-1">
               <HiStar className="h-4 w-4 text-stamp-ochre" />
@@ -137,7 +141,7 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
             >
               <Image
                 src={image}
-                alt={`Review image ${index + 1}`}
+                alt={t("image", { n: index + 1 })}
                 fill
                 className="object-cover"
               />
@@ -152,7 +156,7 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
           <div className="flex items-center gap-2 mb-2">
             <HiOutlineReply className="h-5 w-5 text-emerald-600" />
             <span className="font-semibold text-gray-900 text-sm">
-              Response from the gym
+              {t("response")}
             </span>
             <span className="text-xs text-gray-500">
               {formatDate(review.gymResponse.date)}
@@ -179,11 +183,11 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
           ) : (
             <HiOutlineThumbUp className="h-4 w-4" />
           )}
-          Helpful ({helpful})
+          {t("helpful", { count: helpful })}
         </button>
 
         <button className="text-sm text-gray-500 hover:text-gray-700">
-          Report
+          {t("report")}
         </button>
       </div>
     </div>
@@ -209,6 +213,7 @@ export function ReviewsSummary({
   breakdown,
   className,
 }: ReviewsSummaryProps) {
+  const t = useTranslations("reviews");
   // Calculate star distribution (mock data)
   const starDistribution = [
     { stars: 5, percentage: 68 },
@@ -243,7 +248,7 @@ export function ReviewsSummary({
             ))}
           </div>
           <p className="text-sm text-gray-500 mt-1">
-            Based on {totalReviews} reviews
+            {t("basedOn", { count: totalReviews })}
           </p>
         </div>
 
@@ -252,7 +257,7 @@ export function ReviewsSummary({
           {starDistribution.map(({ stars, percentage }) => (
             <div key={stars} className="flex items-center gap-3">
               <span className="text-sm text-gray-600 w-12">
-                {stars} star{stars !== 1 && "s"}
+                {t("stars", { count: stars })}
               </span>
               <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
                 <div
@@ -271,7 +276,7 @@ export function ReviewsSummary({
             <div key={category}>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600 capitalize">
-                  {category}
+                  {t(`categories.${category}`)}
                 </span>
                 <span className="text-sm font-semibold text-gray-900">
                   {score.toFixed(1)}

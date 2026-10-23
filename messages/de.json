@@ -1,0 +1,1308 @@
+{
+  "nav": {
+    "home": "Start",
+    "passes": "Pässe",
+    "routines": "Routinen",
+    "social": "Community",
+    "passport": "Reisepass",
+    "exercises": "Übungsbibliothek",
+    "savedGyms": "Gespeicherte Gyms",
+    "notifications": "Benachrichtigungen",
+    "notificationsUnread": "Benachrichtigungen, {count} ungelesen",
+    "profile": "Profil",
+    "security": "Sicherheit",
+    "findGyms": "Gyms finden",
+    "accountMenu": "Kontomenü öffnen",
+    "closeMenu": "Menü schließen",
+    "openStudio": "Mein Studio öffnen",
+    "listYourGym": "Gym eintragen",
+    "memberSince": "Mitglied seit {date}",
+    "browseGyms": "Alle Gyms ansehen",
+    "signOut": "Abmelden"
+  },
+  "site": {
+    "findGyms": "Gyms finden",
+    "explore": "Entdecken",
+    "passport": "Reisepass",
+    "forOwners": "Für Gym-Betreiber",
+    "studioLogin": "Studio-Login",
+    "logIn": "Anmelden",
+    "getStarted": "Loslegen",
+    "ownGym": "Eigenes Gym? Studio-Login"
+  },
+  "footer": {
+    "members": "Mitglieder",
+    "owners": "Gym-Betreiber",
+    "explore": "Entdecken",
+    "findGyms": "Gyms finden",
+    "howItWorks": "So funktioniert's",
+    "createAccount": "Konto erstellen",
+    "memberLogin": "Mitglieder-Login",
+    "whyUs": "Warum Fit Planet",
+    "listGym": "Gym eintragen",
+    "studioLogin": "Studio-Login",
+    "exploreNearby": "In der Nähe",
+    "stories": "Pilotgeschichten",
+    "gymsIn": "Gyms in {city}",
+    "tagline": "Ein Fitness-Reisepass für jede Stadt. Mitglieder buchen jedes Partner-Gym in lokaler Währung. Betreiber füllen ruhige Stunden, ohne eigene Technik zu bauen.",
+    "copyright": "© {year} Fit Planet. Alle Rechte vorbehalten.",
+    "liveIn": "Jetzt in {count} Städten"
+  },
+  "hero": {
+    "liveBadge": "LIVE",
+    "live": "{gyms} Gyms in {cities} Städten",
+    "title": "Ein Pass. <accent>Jedes Gym</accent> auf dem Planeten.",
+    "lead": "Dein Fitness-Reisepass. Lande in einer Stadt, sieh, welche Gyms gerade ruhig sind, buche einen Pass in lokaler Währung und geh mit einem QR-Code rein. Jeder Besuch bringt einen Stempel.",
+    "city": "Stadt",
+    "all": "ALLE",
+    "searchLabel": "Nach Gym oder Viertel suchen",
+    "searchPlaceholder": "Gym oder Viertel",
+    "searchGyms": "Gyms suchen",
+    "search": "Suchen",
+    "stats": {
+      "gyms": "Partner-Gyms",
+      "cities": "Städte, ein Pass",
+      "currencies": "Lokale Währungen",
+      "speed": "Von der Suche zum Pass"
+    }
+  },
+  "departures": {
+    "eyebrow": "Abflüge · Live",
+    "title": "Wo du auch landest, dein Pass funktioniert schon.",
+    "lead": "Preise bleiben in der Währung der jeweiligen Stadt. Uhrzeiten, Entfernungen und Zahlen folgen deiner Region.",
+    "cols": {
+      "city": "Stadt",
+      "destination": "Ziel",
+      "local": "Ortszeit",
+      "gyms": "Gyms",
+      "from": "Ab",
+      "crowd": "Auslastung"
+    },
+    "crowd": {
+      "busy": "Voll",
+      "moderate": "Mittel",
+      "quiet": "Ruhig"
+    }
+  },
+  "orbit": {
+    "eyebrow": "Orbit · in der Nähe",
+    "title": "Gyms um dich herum, <accent>nicht in einer Liste</accent>",
+    "lead": "Nähere Gyms liegen näher an der Mitte. Jeder Ring zeigt, wie voll es gerade ist, so findest du das ruhige Gym sofort."
+  },
+  "passportSection": {
+    "eyebrow": "Dein Reisepass",
+    "title": "Jedes Training hinterlässt <accent>einen Stempel</accent>",
+    "lead": "Deine Trainingshistorie reist mit dir. Ein Profil, eine Serie und ein QR-Code für jedes Partner-Gym der Welt.",
+    "visas": "Visa · Einreisen",
+    "holder": "Inhaber",
+    "memberSince": "Mitglied seit",
+    "weeks": "{count} Wo.",
+    "stats": {
+      "cities": "Städte",
+      "visits": "Besuche",
+      "streak": "Serie"
+    },
+    "perks": {
+      "stamp": {
+        "title": "Ein Stempel pro Stadt",
+        "text": "Einmal einchecken und die Stadt bleibt für immer in deinem Pass."
+      },
+      "streak": {
+        "title": "Serien, die mitreisen",
+        "text": "Deine Wochenserie läuft in jeder Stadt und mit jedem Pass weiter."
+      },
+      "perks": {
+        "title": "Vorteile für Stammgäste",
+        "text": "Partner-Gyms belohnen volle Pässe mit Gratis-Trainings und Ausrüstung."
+      }
+    }
+  },
+  "pulse": {
+    "eyebrow": "Pulse · Auslastungsprognose",
+    "title": "Kein Anstehen mehr am <accent>Squat Rack</accent>",
+    "lead": "Fit Planet zeigt dir, wie voll ein Gym ist, bevor du das Haus verlässt, egal wo du diese Woche zu Hause bist.",
+    "points": {
+      "live": {
+        "title": "Live-Auslastung",
+        "text": "Jedes Gym meldet seine Auslastung, sobald Mitglieder einchecken."
+      },
+      "forecast": {
+        "title": "Prognose pro Stunde",
+        "text": "Sieh die ruhigen Zeitfenster für heute in der Zeitzone des Gyms."
+      },
+      "alerts": {
+        "title": "Ruhe-Hinweise",
+        "text": "Erhalte einen Hinweis, wenn dein Lieblingsgym unter halb voll fällt."
+      }
+    },
+    "chooseGym": "Gym auswählen",
+    "fullNow": "jetzt belegt",
+    "chartLabel": "Erwartete Auslastung pro Stunde",
+    "now": "Jetzt",
+    "quietestToday": "Am ruhigsten heute:",
+    "quietestLater": "Am ruhigsten später heute:"
+  },
+  "twoSides": {
+    "eyebrow": "Ein Netzwerk",
+    "title": "Wo Trainierende auf Gyms treffen, die <accent>sie wollen</accent>",
+    "lead": "Fit Planet ist ein zweiseitiger Marktplatz. Mitglieder bekommen Freiheit und Transparenz. Gyms bekommen Nachfrage, Werkzeuge und Daten, die sie nie hatten.",
+    "members": {
+      "label": "Für Mitglieder",
+      "title": "Überall trainieren, nur zahlen, was du nutzt.",
+      "points": {
+        "compare": "Gyms nach Preis, Ausstattung und Live-Auslastung vergleichen",
+        "book": "Tages-, Wochen- oder Monatspässe in Sekunden buchen",
+        "walkIn": "Mit dem QR-Pass auf dem Handy reingehen"
+      },
+      "cta": "Kostenloses Konto erstellen"
+    },
+    "owners": {
+      "label": "Für Gym-Betreiber",
+      "title": "Leere Stunden füllen, ganz ohne eigene Technik.",
+      "points": {
+        "listing": "Sofort ein professionelles Profil mit Buchungsseite",
+        "capacity": "Live-Auslastung, Passpreise und Veröffentlichung im Griff",
+        "studio": "QR-Check-ins, Bewertungen und Auszahlungen in einem Studio"
+      },
+      "cta": "Gym eintragen"
+    }
+  },
+  "how": {
+    "eyebrow": "So funktioniert's",
+    "title": "Vom Sofa zum Squat Rack in <accent>vier Schritten</accent>",
+    "lead": "Wir haben jeden Schritt entfernt, der den Gym-Beitritt mühsam machte. Was bleibt, dauert etwa eine Minute.",
+    "cta": "Jetzt Gym finden",
+    "steps": {
+      "search": {
+        "title": "Gyms suchen",
+        "text": "Wähle eine Stadt oder nutze deinen Standort. Filtere nach Preis, Ausstattung, Bewertung und aktueller Auslastung.",
+        "meta": "{cities} Städte · {gyms} Gyms"
+      },
+      "choose": {
+        "title": "Pass wählen",
+        "text": "Tag, Woche oder Monat. Vergleiche, was jedes Gym bietet, und nimm, was zu deiner Woche passt, statt eines Jahresvertrags.",
+        "meta": "Preise in lokaler Währung"
+      },
+      "pay": {
+        "title": "Online buchen und bezahlen",
+        "text": "Sicherer Checkout mit sofortiger Bestätigung. Extras wie Trainerstunde oder Spind mit einem Tipp.",
+        "meta": "In unter einer Minute bestätigt"
+      },
+      "train": {
+        "title": "QR zeigen und trainieren",
+        "text": "Dein Pass lebt in der App. Das Gym scannt ihn am Eingang und du bist drin. Das ist alles.",
+        "meta": "Keine Karte, kein Papierkram"
+      }
+    }
+  },
+  "owners": {
+    "eyebrow": "Für Gym-Betreiber",
+    "title": "Führe dein Gym wie ein <accent>modernes Unternehmen</accent>",
+    "lead": "Die meisten Gyms laufen noch über WhatsApp und Papierlisten. Fit Planet Studio bündelt Buchungen, Check-ins, Preise und Umsatz an einem Ort und bringt dir neue Mitglieder.",
+    "benefits": {
+      "noSoftware": {
+        "title": "Kein Software-Stress",
+        "text": "Ein schickes Profil mit Buchung, ohne eigene Website oder App."
+      },
+      "occupancy": {
+        "title": "Live-Auslastung",
+        "text": "Sieh auf dem Handy, wie voll die Fläche ist, anhand echter Check-ins."
+      },
+      "pricing": {
+        "title": "Flexible Preise",
+        "text": "Tages-, Wochen- und Monatspässe, online oder am Tresen bezahlt."
+      },
+      "checkins": {
+        "title": "QR-Check-ins",
+        "text": "Mitglieder sofort scannen und prüfen. Keine Papierlisten."
+      },
+      "analytics": {
+        "title": "Auswertungen",
+        "text": "Buchungen, Umsatz, Stoßzeiten und Pass-Mix auf einen Blick."
+      },
+      "reviews": {
+        "title": "Bewertungen und Antworten",
+        "text": "Verifizierte Bewertungen echter Besuche, deine Antwort direkt darunter."
+      }
+    },
+    "ctaList": "Gym kostenlos eintragen",
+    "ctaLogin": "Studio-Login",
+    "days": "M,D,M,D,F,S,S",
+    "preview": {
+      "dashboard": "Studio-Dashboard",
+      "open": "Jetzt geöffnet",
+      "checkins": "Check-ins heute",
+      "revenue": "Umsatz heute",
+      "inGym": "Im Gym",
+      "weekly": "Buchungen pro Woche",
+      "payoutTitle": "Neue Buchung",
+      "payoutText": "Push-Hinweis in Sekunden"
+    }
+  },
+  "stories": {
+    "eyebrow": "Pilotgeschichten",
+    "title": "Erste Mitglieder und Gyms, <accent>in ihren Worten</accent>"
+  },
+  "cta": {
+    "title": "Dein Reisepass ist nur <accent>einen Tipp</accent> entfernt",
+    "lead": "Hol dir deinen Pass und trainiere in jeder Partnerstadt, oder bring dein Gym ins Netzwerk und nimm noch diese Woche Buchungen an.",
+    "find": "Gyms in deiner Nähe",
+    "list": "Gym eintragen",
+    "assurances": {
+      "secure": "Sichere Zahlungen",
+      "free": "Kostenlos für Mitglieder",
+      "verified": "Nur verifizierte Gyms"
+    }
+  },
+  "common": {
+    "working": "Einen Moment..."
+  },
+  "auth": {
+    "shell": {
+      "back": "Zurück zur Website",
+      "member": {
+        "eyebrow": "Fit Planet für Mitglieder",
+        "title": "Ein Konto. <accent>Jedes Gym</accent> der Stadt.",
+        "points": {
+          "phone": {
+            "title": "Dein Handy ist dein Pass",
+            "text": "QR-Code in jedem Partner-Gym zeigen und reingehen."
+          },
+          "signIn": {
+            "title": "Anmelden, wie du willst",
+            "text": "Google, Facebook, E-Mail-Link oder Passwort."
+          },
+          "friends": {
+            "title": "Mit Freunden trainieren",
+            "text": "Freunden folgen, Workouts teilen und Routinen übernehmen."
+          }
+        }
+      },
+      "studio": {
+        "eyebrow": "Fit Planet Studio",
+        "title": "Führe dein Gym wie ein <accent>modernes Unternehmen</accent>.",
+        "points": {
+          "checkins": {
+            "title": "QR-Check-ins",
+            "text": "Mitglieder am Eingang in einer Sekunde prüfen."
+          },
+          "capacity": {
+            "title": "Live-Auslastung und Auswertungen",
+            "text": "Kenne deine Stoßzeiten und plane dein Personal danach."
+          },
+          "alerts": {
+            "title": "Sofortige Buchungshinweise",
+            "text": "Ein Push aufs Handy, sobald ein Pass gebucht wird."
+          }
+        }
+      },
+      "visual": {
+        "dayPass": "Tagespass",
+        "active": "Aktiv",
+        "validToday": "Heute gültig",
+        "checkedIn": "Eingecheckt",
+        "weekly": "Buchungen pro Woche",
+        "checkinsToday": "Check-ins heute",
+        "capacityNow": "Auslastung jetzt",
+        "booked": "Neuer Tagespass gebucht"
+      }
+    },
+    "form": {
+      "google": "Weiter mit Google",
+      "facebook": "Weiter mit Facebook",
+      "orEmail": "oder mit E-Mail",
+      "orSignUpEmail": "oder mit E-Mail registrieren",
+      "method": "Anmeldemethode",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "emailLink": "E-Mail-Link",
+      "passwordPlaceholder": "Dein Passwort",
+      "forgot": "Passwort vergessen?",
+      "signIn": "Anmelden",
+      "signingIn": "Anmeldung läuft...",
+      "linkHint": "Wir schicken dir einen Anmeldelink per E-Mail. Kein Passwort nötig.",
+      "sendLink": "Link per E-Mail senden",
+      "sendingLink": "Link wird gesendet...",
+      "fullName": "Vollständiger Name",
+      "namePlaceholder": "Dein Name",
+      "newPasswordPlaceholder": "Mindestens 8 Zeichen",
+      "create": "Konto erstellen",
+      "creating": "Konto wird erstellt...",
+      "terms": "Mit dem Fortfahren stimmst du den Nutzungsbedingungen und der Datenschutzerklärung von Fit Planet zu.",
+      "sending": "Wird gesendet...",
+      "sendReset": "Link zum Zurücksetzen senden",
+      "newPassword": "Neues Passwort",
+      "confirmPassword": "Passwort bestätigen",
+      "saving": "Wird gespeichert...",
+      "saveSignIn": "Speichern und anmelden",
+      "errors": {
+        "OAuthAccountNotLinked": "Für diese E-Mail gibt es schon ein Konto. Melde dich so an wie beim letzten Mal.",
+        "AccessDenied": "Zugriff verweigert. Bitte versuch es noch einmal.",
+        "Verification": "Dieser Anmeldelink ist abgelaufen oder wurde schon benutzt. Fordere einen neuen an.",
+        "Configuration": "Die Anmeldung ist gerade nicht verfügbar. Bitte versuch es gleich noch einmal.",
+        "default": "Anmeldung fehlgeschlagen. Bitte versuch es noch einmal."
+      }
+    },
+    "login": {
+      "meta": "Anmelden",
+      "asideText": "Neu bei Fit Planet?",
+      "asideLink": "Konto erstellen",
+      "eyebrow": "Willkommen zurück",
+      "title": "Bei deinem Reisepass anmelden",
+      "subtitle": "Deine Pässe, Stempel und Buchungen auf jedem Gerät."
+    },
+    "register": {
+      "meta": "Konto erstellen",
+      "asideText": "Schon Mitglied?",
+      "asideLink": "Anmelden",
+      "eyebrow": "Hol dir deinen Pass",
+      "title": "Dein Fit Planet Konto erstellen",
+      "subtitle": "Buche Tagespässe in Gyms jeder Stadt und geh mit einem QR-Code rein."
+    },
+    "forgot": {
+      "meta": "Passwort zurücksetzen",
+      "asideText": "Doch wieder eingefallen?",
+      "asideLink": "Anmelden",
+      "eyebrow": "Kontowiederherstellung",
+      "title": "Passwort vergessen?",
+      "subtitle": "Gib deine E-Mail ein und wir schicken dir einen Link für ein neues Passwort."
+    },
+    "reset": {
+      "eyebrow": "Kontowiederherstellung",
+      "title": "Neues Passwort wählen",
+      "missing": "Diesem Link fehlt der Code.",
+      "askNew": "Neuen Link anfordern"
+    },
+    "checkEmail": {
+      "meta": "E-Mail prüfen",
+      "title": "Schau in dein Postfach",
+      "text": "Wir haben dir einen Anmeldelink geschickt. Öffne ihn auf diesem Gerät. Er ist 24 Stunden gültig.",
+      "nothing": "Nichts angekommen? Prüf den Spam-Ordner oder",
+      "retry": "versuch es noch einmal"
+    },
+    "studioLogin": {
+      "meta": "Studio-Anmeldung",
+      "asideText": "Neues Gym?",
+      "asideLink": "Gym eintragen",
+      "eyebrow": "Fit Planet Studio",
+      "title": "Bei deinem Studio anmelden",
+      "subtitle": "Buchungen, Check-ins und Umsatz für dein Gym."
+    },
+    "studioRegister": {
+      "meta": "Gym eintragen",
+      "asideText": "Schon eingetragen?",
+      "asideLink": "Anmelden",
+      "eyebrow": "Gym eintragen · Kostenlos",
+      "title": "Bring dein Gym auf die Karte",
+      "subtitle": "Erstelle dein Konto und füge dein Gym in etwa fünf Minuten hinzu. Mitglieder können buchen, sobald du veröffentlichst.",
+      "cta": "Konto erstellen und weiter"
+    },
+    "studioForgot": {
+      "meta": "Studio-Passwort zurücksetzen",
+      "asideText": "Doch wieder eingefallen?",
+      "asideLink": "Anmelden",
+      "eyebrow": "Kontowiederherstellung",
+      "title": "Passwort vergessen?",
+      "subtitle": "Gib die E-Mail deines Studios ein und wir schicken dir einen Link zum Zurücksetzen."
+    }
+  },
+  "explore": {
+    "meta": "Gyms finden",
+    "metaDescription": "Finde Partner-Gyms in jeder Stadt. Vergleiche Pässe in lokaler Währung und die Live-Auslastung und buche in Sekunden.",
+    "eyebrow": "Entdecken",
+    "cities": "{count, plural, one {# Stadt} other {# Städte}}",
+    "title": "Finde ein Gym, das zu <accent>deinem Tag</accent> passt",
+    "lead": "{gyms, plural, one {# Partner-Gym} other {# Partner-Gyms}} in {cities, plural, one {# Stadt} other {# Städten}}. Vergleiche Pässe in lokaler Währung, sieh die aktuelle Auslastung und buche in Sekunden.",
+    "chooseCity": "Stadt wählen",
+    "allCode": "ALLE",
+    "everywhere": "Überall",
+    "results": "<n>{count}</n> {count, plural, one {Gym} other {Gyms}}",
+    "resultsFor": "<n>{count}</n> {count, plural, one {Gym} other {Gyms}} für <q>„{query}“</q>",
+    "views": {
+      "orbit": "Orbit",
+      "grid": "Raster",
+      "list": "Liste",
+      "orbitAria": "Orbit-Ansicht",
+      "gridAria": "Rasteransicht",
+      "listAria": "Listenansicht"
+    },
+    "empty": {
+      "title": "Noch keine passenden Gyms",
+      "text": "Probier eine andere Gegend oder lockere einen Filter. Jede Woche kommen neue Gyms dazu.",
+      "reset": "Suche und Filter zurücksetzen"
+    },
+    "owner": {
+      "title": "Du hast ein Gym?",
+      "titleCity": "Du hast ein Gym in {city}?",
+      "text": "Trag es bei Fit Planet ein und nimm Buchungen neuer Mitglieder an.",
+      "cta": "Gym eintragen"
+    }
+  },
+  "tags": {
+    "parking": "Parkplätze",
+    "showers": "Duschen",
+    "lockers": "Spinde",
+    "ac": "Klimaanlage",
+    "wifi": "WLAN",
+    "sauna": "Sauna",
+    "steamroom": "Dampfbad",
+    "pool": "Pool",
+    "spa": "Spa",
+    "towels": "Handtücher",
+    "cafe": "Café",
+    "womenonlyarea": "Frauenbereich",
+    "personaltraining": "Personal Training",
+    "groupclasses": "Gruppenkurse",
+    "kidsarea": "Kinderbereich",
+    "wheelchairaccess": "Barrierefrei",
+    "meditationroom": "Meditationsraum",
+    "juicebar": "Saftbar",
+    "supplementshop": "Supplement-Shop",
+    "cardio": "Cardio",
+    "strength": "Kraft",
+    "functional": "Functional",
+    "freeweights": "Freihantel",
+    "crossfit": "CrossFit",
+    "yoga": "Yoga",
+    "pilates": "Pilates",
+    "swimming": "Schwimmen",
+    "powerlifting": "Powerlifting",
+    "bodybuilding": "Bodybuilding",
+    "olympiclifting": "Gewichtheben",
+    "boxing": "Boxen",
+    "martialarts": "Kampfsport",
+    "spin": "Indoor Cycling"
+  },
+  "filters": {
+    "search": "Gyms nach Name oder Viertel suchen",
+    "clearSearch": "Suche löschen",
+    "filters": "Filter",
+    "sortBy": "Sortieren nach",
+    "distance": "Entfernung",
+    "sort": {
+      "distance": "Nächste zuerst",
+      "rating": "Beste Bewertung",
+      "price_asc": "Preis: aufsteigend",
+      "price_desc": "Preis: absteigend",
+      "reviews": "Meiste Bewertungen"
+    },
+    "within": "Im Umkreis von {distance}",
+    "anyDistance": "Beliebige Entfernung",
+    "open247": "Rund um die Uhr",
+    "verified": "Verifiziert",
+    "clearAll": "Alle löschen",
+    "price": "Preis Tagespass",
+    "any": "Alle",
+    "tiers": {
+      "Budget": "Günstig",
+      "Mid-range": "Mittel",
+      "Premium": "Premium"
+    },
+    "amenities": "Ausstattung",
+    "style": "Trainingsart"
+  },
+  "gym": {
+    "featured": "Empfohlen",
+    "crowd": {
+      "busy": "Voll",
+      "moderate": "Mittel",
+      "quiet": "Ruhig"
+    },
+    "perDay": "/ Tag",
+    "verified": "Verifiziert",
+    "open247": "Rund um die Uhr",
+    "hours": "{open} bis {close}",
+    "photoN": "{name} Foto {n}",
+    "tabs": {
+      "overview": "Überblick",
+      "passes": "Pässe",
+      "classes": "Kurse",
+      "trainers": "Trainer",
+      "reviews": "Bewertungen"
+    },
+    "gymsIn": "Gyms in {city}",
+    "breadcrumb": "Entdecken",
+    "photos": "{count, plural, one {# Foto} other {# Fotos}}",
+    "more": "+{count} weitere",
+    "reviewsCount": "{count, plural, one {# Bewertung} other {# Bewertungen}}",
+    "openNow": "Jetzt geöffnet",
+    "closed": "Geschlossen",
+    "crowdNow": {
+      "busy": "Gerade voll",
+      "moderate": "Gerade mittel",
+      "quiet": "Gerade ruhig"
+    },
+    "dayPass": "Tagespass",
+    "localTime": "Ortszeit",
+    "sections": "Gym-Bereiche",
+    "about": "Über uns",
+    "inside": "Einblick in {name}",
+    "training": "Training",
+    "pulse": "Pulse",
+    "pulseTitle": "So voll wird es heute",
+    "cityTime": "Ortszeit {city}",
+    "gallery": "Galerie",
+    "galleryTitle": "Schau dich um",
+    "hoursEyebrow": "Zeiten",
+    "hoursTitle": "Öffnungszeiten",
+    "today": "Heute",
+    "rules": "Hausregeln",
+    "rulesTitle": "Gut zu wissen",
+    "policies": {
+      "cancellation": "Stornierung",
+      "guestPolicy": "Gäste",
+      "dresscode": "Kleiderordnung",
+      "ageRestriction": "Altersgrenze"
+    },
+    "equipment": "Geräte",
+    "equipmentTitle": "Das steht auf der Fläche",
+    "addOns": "Extras",
+    "addOnsTitle": "Zu jedem Pass hinzufügen",
+    "add": "{name} hinzufügen",
+    "unavailable": "Nicht verfügbar",
+    "passesTitle": "Wähle, wie lange du trainieren willst",
+    "classesTitle": "Gruppenkurse diese Woche",
+    "difficulty": {
+      "beginner": "Einsteiger",
+      "intermediate": "Fortgeschritten",
+      "advanced": "Profi",
+      "alllevels": "Alle Level"
+    },
+    "minutes": "{count} Min.",
+    "spotsLeft": "{left} von {total} Plätzen frei",
+    "bookClass": "Kurs buchen",
+    "coaches": "Coaches",
+    "coachesTitle": "Trainiere mit dem Team",
+    "trainerStats": "{clients} Kunden · {years} J.",
+    "perHour": "/ Stunde",
+    "bookSession": "Termin buchen",
+    "noReviews": "Noch keine Bewertungen. Schreib die erste.",
+    "directions": "Route planen",
+    "contact": "Kontakt",
+    "website": "Website",
+    "inside_now": "Gerade {current} von {max} Personen im Gym",
+    "bookPass": "Pass buchen",
+    "unsave": "Aus gespeicherten Gyms entfernen",
+    "saveGym": "Gym speichern",
+    "saveFailed": "Speichern fehlgeschlagen",
+    "saved": "Gespeichert",
+    "save": "Speichern",
+    "notFound": "Gym nicht gefunden",
+    "trainedHere": "Hier trainiert?",
+    "verifiedReviewHint": "Wer über Fit Planet bucht, kann eine verifizierte Bewertung schreiben.",
+    "signInReview": "Zum Bewerten anmelden"
+  },
+  "passes": {
+    "name": {
+      "day": "Tagespass",
+      "week": "Wochenpass",
+      "month": "Monatspass",
+      "annual": "Jahrespass"
+    },
+    "duration": {
+      "day": "1 Tag",
+      "week": "7 Tage",
+      "month": "30 Tage",
+      "annual": "12 Monate"
+    },
+    "book": {
+      "day": "Tagespass buchen",
+      "week": "Wochenpass buchen",
+      "month": "Monatspass buchen",
+      "annual": "Jahrespass buchen"
+    },
+    "features": {
+      "access": "Voller Gym-Zugang",
+      "equipment": "Alle Geräte",
+      "locker": "Spind",
+      "groupClass": "1 Gruppenkurs",
+      "unlimitedClasses": "Unbegrenzt Kurse",
+      "towel": "Handtuchservice",
+      "everythingMonth": "Alles aus dem Monatspass",
+      "ptSessions": "2 PT-Einheiten pro Monat",
+      "guestPasses": "2 Gästepässe pro Monat"
+    },
+    "popular": "Am beliebtesten",
+    "choose": "Auswählen",
+    "special": "Sonderangebote",
+    "perMonth": "pro Monat",
+    "getPackage": "Paket wählen",
+    "boarding": "Bordkarte",
+    "choosePass": "Pass wählen",
+    "totalToday": "Heute gesamt",
+    "instant": "Sofortiger QR-Pass · Preise in {currency}",
+    "short": {
+      "day": "Tag",
+      "week": "Woche",
+      "month": "Monat"
+    }
+  },
+  "reviews": {
+    "verified": "Verifiziert",
+    "less": "Weniger anzeigen",
+    "more": "Weiterlesen",
+    "categories": {
+      "cleanliness": "Sauberkeit",
+      "equipment": "Geräte",
+      "staff": "Personal",
+      "value": "Preis-Leistung"
+    },
+    "image": "Bewertungsbild {n}",
+    "response": "Antwort des Gyms",
+    "helpful": "Hilfreich ({count})",
+    "report": "Melden",
+    "basedOn": "Basierend auf {count, plural, one {# Bewertung} other {# Bewertungen}}",
+    "stars": "{count, plural, one {# Stern} other {# Sterne}}",
+    "howWas": "Wie war {gym}?",
+    "helps": "Deine Bewertung hilft Reisenden, das richtige Gym zu finden.",
+    "write": "Bewertung schreiben",
+    "overall": "Gesamt",
+    "headline": "Überschrift",
+    "headlinePlaceholder": "Top-Geräte, nie zu voll",
+    "yours": "Deine Bewertung",
+    "commentPlaceholder": "Was ist dir aufgefallen? Was sollten Reisende wissen?",
+    "cancel": "Abbrechen",
+    "posting": "Wird veröffentlicht...",
+    "post": "Bewertung veröffentlichen"
+  },
+  "gallery": {
+    "none": "Keine Fotos vorhanden",
+    "all": "Alle",
+    "photo": "Gym-Foto",
+    "counter": "{n} von {total}",
+    "categories": {
+      "Equipment": "Geräte",
+      "Facility": "Räume",
+      "Classes": "Kurse",
+      "Trainers": "Trainer",
+      "Exterior": "Außen"
+    }
+  },
+  "checkout": {
+    "securing": "Dein Pass wird gesichert...",
+    "range": "{from} bis {to}",
+    "reserveDesk": "Reservieren, am Tresen zahlen",
+    "pay": "{total} bezahlen",
+    "title": "Pass buchen",
+    "cancelled": "Die Zahlung wurde abgebrochen. Es wurde nichts belastet, du kannst es unten erneut versuchen.",
+    "steps": {
+      "pass": "Pass",
+      "date": "Startdatum",
+      "holder": "Passinhaber",
+      "payment": "Zahlung"
+    },
+    "passType": "Passart",
+    "oneEntry": "Ein Eintritt",
+    "daysOnce": "{days} Tage · einmal pro Tag",
+    "perDay": "/ Tag",
+    "otherDate": "Anderes Datum",
+    "pickDate": "Startdatum wählen",
+    "today": "Heute",
+    "validLine": "Gültig <b>{validity}</b>",
+    "cityTime": "Ortszeit {city}",
+    "holderName": "Name auf dem Pass",
+    "phone": "Telefon (optional)",
+    "phoneHint": "So kann dich das Gym erreichen, falls sich etwas ändert.",
+    "method": "Zahlungsart",
+    "payNow": "Jetzt bezahlen",
+    "testMode": "Testmodus: Es wird keine echte Karte belastet.",
+    "onlineText": "Karte, Apple Pay oder Google Pay. Sofort bestätigt.",
+    "deskTitle": "Am Tresen bezahlen",
+    "deskText": "Jetzt reservieren und bei Ankunft im Gym bezahlen.",
+    "valid": "Gültig",
+    "location": "Ort",
+    "atDesk": "Am Tresen",
+    "online": "Online",
+    "total": "Gesamt",
+    "freeCancel": "Kostenlos stornierbar bis zum Vortag.",
+    "reserve": "Reservieren"
+  },
+  "home": {
+    "range": "{from} bis {to}",
+    "active": "Aktiv",
+    "showPass": "Pass zeigen",
+    "empty": {
+      "eyebrow": "Kein aktiver Pass",
+      "title": "Wo trainierst du als Nächstes?",
+      "text": "Buche in unter einer Minute einen Tagespass und geh mit einem QR-Code rein.",
+      "cta": "Gym finden"
+    },
+    "quick": {
+      "explore": "Entdecken",
+      "passes": "Pässe",
+      "stamps": "Stempel",
+      "saved": "Gespeichert"
+    },
+    "greeting": {
+      "late": "Spätes Training",
+      "morning": "Guten Morgen",
+      "afternoon": "Guten Tag",
+      "evening": "Guten Abend"
+    },
+    "hi": "Hallo {name}",
+    "hiThere": "Hallo",
+    "stampsWord": "{count, plural, one {Stempel} other {Stempel}}",
+    "activePass": "Aktiver Pass",
+    "shortcuts": "Schnellzugriff",
+    "upcoming": "Demnächst",
+    "allPasses": "Alle Pässe",
+    "noUpcoming": "Noch nichts im Voraus gebucht. Plane ein Training und es erscheint hier.",
+    "push": {
+      "title": "Sofort wissen, wenn es bestätigt ist",
+      "body": "Buchungsbestätigungen und Pass-Erinnerungen auf diesem Gerät erhalten."
+    },
+    "passport": "Mein Reisepass",
+    "stats": {
+      "gyms": "Gyms",
+      "cities": "Städte",
+      "visits": "Besuche"
+    },
+    "firstStamp": "Check in einem Gym ein und hol dir deinen ersten Stempel.",
+    "trainIn": "Trainieren in {city}",
+    "popular": "Gerade beliebt",
+    "seeAll": "Alle ansehen",
+    "crowd": {
+      "busy": "Voll",
+      "steady": "Mittel",
+      "quiet": "Ruhig"
+    },
+    "perDay": "/ Tag"
+  },
+  "wallet": {
+    "eyebrow": "Wallet · {count, plural, one {# Pass} other {# Pässe}}",
+    "title": "Meine Pässe",
+    "bookNew": "Neuen Pass buchen",
+    "walletAria": "Aktive und kommende Pässe",
+    "starts": "Ab {date}",
+    "qrFull": "QR im Vollbild zeigen",
+    "active": "Aktiv",
+    "upcoming": "Demnächst",
+    "valid": "Gültig",
+    "checkins": "Check-ins",
+    "paid": "Bezahlt",
+    "showEntrance": "Am Eingang zeigen",
+    "details": "Passdetails",
+    "empty": {
+      "title": "Deine Wallet ist leer",
+      "text": "Buche einen Pass in einem Partner-Gym und er landet hier mit QR-Code.",
+      "cta": "Gym finden"
+    },
+    "stampsAria": "Reisepass-Stempel",
+    "passportStamps": "Reisepass · Stempel",
+    "checkIn": "Einchecken",
+    "stats": {
+      "cities": "Städte",
+      "countries": "Länder",
+      "visits": "Besuche"
+    },
+    "pendingStamp": "Check bei {gym} ein und hol dir deinen Stempel für {city}.",
+    "past": "Frühere Pässe",
+    "refunded": "Erstattet",
+    "cancelled": "Storniert",
+    "again": "Erneut buchen",
+    "entranceQr": "QR für den Eingang",
+    "close": "Schließen",
+    "gymDetails": "Gym-Details"
+  },
+  "pass": {
+    "meta": "Dein Pass",
+    "status": {
+      "upcoming": "Demnächst",
+      "confirmed": "Gültig",
+      "pending": "Zahlung ausstehend",
+      "cancelled": "Storniert",
+      "refunded": "Erstattet",
+      "expired": "Abgelaufen"
+    },
+    "range": "{from} bis {to}",
+    "all": "Alle Pässe",
+    "booked": "Du bist gebucht",
+    "payAtDesk": "Zahle {amount} bei Ankunft am Tresen.",
+    "paymentReceived": "Zahlung erhalten. Die Quittung ist unterwegs in dein Postfach.",
+    "showDesk": "Zeig das am Tresen. Dreh die Bildschirmhelligkeit hoch.",
+    "unusable": "Dieser Pass kann nicht genutzt werden.",
+    "valid": "Gültig",
+    "holder": "Inhaber",
+    "payDesk": "Am Tresen zahlen",
+    "paid": "Bezahlt",
+    "entry": "Eintritt",
+    "single": "Einmaliger Eintritt",
+    "onceDay": "Einmal pro Tag",
+    "checkins": "Check-ins",
+    "directions": "Route",
+    "gymPage": "Gym-Seite",
+    "cancellation": "Stornierung",
+    "refundNote": "Du erhältst den vollen Betrag auf deine ursprüngliche Zahlungsart zurück.",
+    "nothingCharged": "Es wurde nichts belastet.",
+    "cancel": {
+      "button": "Buchung stornieren",
+      "confirm": "Diesen Pass stornieren?",
+      "done": "Buchung storniert",
+      "failed": "Stornierung fehlgeschlagen",
+      "cancelling": "Wird storniert...",
+      "yes": "Ja, stornieren",
+      "keep": "Behalten"
+    }
+  },
+  "passport": {
+    "eyebrow": "Reisepass",
+    "stampsCount": "{padded} Stempel",
+    "title": "Dein Reisepass",
+    "first": "ERSTER",
+    "empty": {
+      "title": "Noch keine Stempel",
+      "text": "Jedes neue Gym, in dem du eincheckst, bringt einen Stempel. Sammle Städte auf deinen Reisen.",
+      "cta": "Gym finden"
+    },
+    "stats": {
+      "gyms": "Gyms",
+      "cities": "Städte",
+      "countries": "Länder"
+    },
+    "visits": "Besuche",
+    "noVisits": "Deine Check-ins erscheinen hier."
+  },
+  "saved": {
+    "title": "Gespeicherte Gyms",
+    "count": "{count} gespeichert",
+    "empty": {
+      "title": "Noch nichts gespeichert",
+      "text": "Tippe bei einem Gym auf das Herz, um es hier für schnelles Buchen zu sammeln.",
+      "cta": "Gyms entdecken"
+    },
+    "perDay": "/ Tag",
+    "book": "Pass buchen"
+  },
+  "settings": {
+    "notifications": "Benachrichtigungen",
+    "push": {
+      "title": "Hinweise auf diesem Gerät",
+      "body": "Buchungsbestätigungen und Pass-Erinnerungen, auch wenn Fit Planet geschlossen ist."
+    },
+    "settings": "Einstellungen",
+    "profile": "Profil",
+    "profileLead": "So sehen dich Gyms, wenn du buchst.",
+    "security": "Anmeldung und Sicherheit",
+    "securityHint": "Passwort, verknüpfte Konten",
+    "password": "Passwort",
+    "addPassword": "Passwort hinzufügen",
+    "passwordHint": "Mindestens 8 Zeichen. Eine Passphrase merkt man sich am leichtesten.",
+    "addPasswordHint": "Du meldest dich per Link oder Social-Konto an. Füge ein Passwort hinzu, um dich auch mit deiner E-Mail anzumelden.",
+    "ways": "Anmeldemöglichkeiten",
+    "emailLink": "E-Mail-Link",
+    "alwaysOn": "Immer aktiv",
+    "connected": "Verknüpft",
+    "notConnected": "Nicht verknüpft",
+    "connectHint": "Melde dich einmal mit Google oder Facebook und derselben E-Mail an, um es zu verknüpfen.",
+    "signOut": "Auf diesem Gerät abmelden",
+    "prefs": {
+      "failed": "Speichern fehlgeschlagen",
+      "push": {
+        "title": "Push-Benachrichtigungen",
+        "text": "Hinweise auf Geräten, auf denen du sie aktiviert hast"
+      },
+      "email": {
+        "title": "E-Mail",
+        "text": "Quittungen und wichtige Konto-E-Mails"
+      },
+      "bookingUpdates": {
+        "title": "Buchungs-Updates",
+        "text": "Bestätigungen, Änderungen und Stornierungen"
+      },
+      "passReminders": {
+        "title": "Pass-Erinnerungen",
+        "text": "Am Tag vor Beginn oder Ende eines Passes"
+      },
+      "promotions": {
+        "title": "Angebote von Gyms",
+        "text": "Gelegentliche Angebote von Gyms, die du besucht hast"
+      }
+    },
+    "currentPassword": "Aktuelles Passwort",
+    "newPassword": "Neues Passwort",
+    "confirmPassword": "Passwort bestätigen",
+    "saving": "Wird gespeichert...",
+    "changePassword": "Passwort ändern",
+    "addPasswordCta": "Passwort hinzufügen",
+    "uploadFailed": "Upload fehlgeschlagen",
+    "changePhoto": "Foto ändern",
+    "yourName": "Dein Name",
+    "uploadPhoto": "Foto hochladen",
+    "remove": "Entfernen",
+    "fullName": "Vollständiger Name",
+    "phone": "Telefon",
+    "phoneHint": "Wird mit Gyms geteilt, bei denen du buchst",
+    "homeCity": "Heimatstadt",
+    "homeCityPlaceholder": "Wo du meistens trainierst",
+    "region": "Region und Sprache",
+    "saveProfile": "Profil speichern"
+  },
+  "notifications": {
+    "empty": {
+      "title": "Alles ruhig",
+      "text": "Buchungen, Check-ins und Bewertungen erscheinen hier."
+    },
+    "unread": "{count} ungelesen",
+    "unreadOne": "Ungelesen",
+    "caughtUp": "Du bist auf dem neuesten Stand",
+    "markAll": "Alle als gelesen markieren",
+    "push": {
+      "notNow": "Nicht jetzt",
+      "onTitle": "Benachrichtigungen an",
+      "onText": "Wir melden uns auf diesem Gerät, wenn etwas ansteht.",
+      "blockedTitle": "Benachrichtigungen blockiert",
+      "blockedText": "Erlaube sie für diese Seite in deinen Browser-Einstellungen.",
+      "turningOn": "Wird aktiviert...",
+      "turnOn": "Benachrichtigungen aktivieren"
+    }
+  },
+  "training": {
+    "targetReps": "{reps} Wdh.",
+    "targetSec": "{reps} s",
+    "restSec": "{sec} s",
+    "restMin": "{m} Min.",
+    "muscles": {
+      "chest": "Brust",
+      "back": "Rücken",
+      "shoulders": "Schultern",
+      "biceps": "Bizeps",
+      "triceps": "Trizeps",
+      "forearms": "Unterarme",
+      "core": "Rumpf",
+      "quadriceps": "Quadrizeps",
+      "hamstrings": "Beinbeuger",
+      "glutes": "Gesäß",
+      "calves": "Waden",
+      "full_body": "Ganzkörper",
+      "cardio": "Cardio"
+    },
+    "equipment": {
+      "barbell": "Langhantel",
+      "dumbbell": "Kurzhantel",
+      "cable": "Kabelzug",
+      "machine": "Maschine",
+      "bodyweight": "Körpergewicht",
+      "kettlebell": "Kettlebell",
+      "resistance_band": "Widerstandsband",
+      "pull_up_bar": "Klimmzugstange",
+      "bench": "Bank",
+      "treadmill": "Laufband",
+      "bike": "Fahrrad",
+      "rowing_machine": "Rudergerät",
+      "none": "Keine"
+    },
+    "categories": {
+      "push": "Push",
+      "pull": "Pull",
+      "legs": "Beine",
+      "upper_body": "Oberkörper",
+      "lower_body": "Unterkörper",
+      "full_body": "Ganzkörper",
+      "core": "Rumpf",
+      "cardio": "Cardio",
+      "custom": "Eigene"
+    },
+    "difficulty": {
+      "beginner": "Einsteiger",
+      "intermediate": "Fortgeschritten",
+      "advanced": "Profi"
+    },
+    "exercises": {
+      "ex001": "Bankdrücken mit Langhantel",
+      "ex002": "Schrägbankdrücken mit Kurzhanteln",
+      "ex003": "Liegestütze",
+      "ex004": "Klimmzüge",
+      "ex005": "Langhantelrudern",
+      "ex006": "Latziehen",
+      "ex007": "Schulterdrücken",
+      "ex008": "Seitheben",
+      "ex009": "Kniebeuge mit Langhantel",
+      "ex010": "Rumänisches Kreuzheben",
+      "ex011": "Beinpresse",
+      "ex012": "Langhantel-Curls",
+      "ex013": "Trizepsdrücken am Kabel",
+      "ex014": "Unterarmstütz",
+      "ex015": "Kabel-Crunches",
+      "ex016": "Laufband",
+      "ex017": "Rudergerät"
+    },
+    "templates": {
+      "tpl-push": {
+        "name": "Push-Tag",
+        "notes": "Brust, Schultern und Trizeps."
+      },
+      "tpl-pull": {
+        "name": "Pull-Tag",
+        "notes": "Rücken und Bizeps."
+      },
+      "tpl-legs": {
+        "name": "Beintag",
+        "notes": "Quadrizeps, Beinbeuger und Gesäß."
+      },
+      "tpl-full": {
+        "name": "Ganzkörper für Einsteiger",
+        "notes": "Alle großen Muskelgruppen in einer kurzen Einheit. Ideal für die ersten Wochen."
+      },
+      "tpl-core": {
+        "name": "Schnelles Rumpftraining",
+        "notes": "Fünfzehn Minuten, als Abschluss jeder Einheit."
+      },
+      "tpl-hiit": {
+        "name": "Cardio-Intervalle",
+        "notes": "Kurze, harte Belastungen mit kurzen Pausen."
+      }
+    }
+  },
+  "routines": {
+    "title": "Routinen",
+    "eyebrow": "Trainingstagebuch",
+    "new": "Neu",
+    "empty": {
+      "title": "Erstelle deine erste Routine",
+      "text": "Übungen wählen, Ziele festlegen und jeden Satz im Gym auf dem Handy erfassen. Oder starte unten mit einer Vorlage.",
+      "cta": "Routine erstellen"
+    },
+    "cardSummary": "{exercises, plural, one {# Übung} other {# Übungen}} · {sets, plural, one {# Satz} other {# Sätze}} · ~{minutes} Min.",
+    "summary": {
+      "meta": "Workout-Zusammenfassung",
+      "time": "Zeit",
+      "min": "Min.",
+      "sets": "Sätze",
+      "done": "erledigt",
+      "volume": "Volumen",
+      "complete": "Workout abgeschlossen",
+      "workout": "Workout",
+      "again": "Nochmal machen",
+      "back": "Zurück zu den Routinen"
+    },
+    "done": "{count}× gemacht · zuletzt {date}",
+    "notDone": "Noch nicht gemacht",
+    "start": "Start",
+    "templates": "Mit einer Vorlage starten",
+    "templatesHint": "Wird in deine Routinen kopiert, damit du sie anpassen kannst.",
+    "templateSummary": "{exercises, plural, one {# Übung} other {# Übungen}} · ~{minutes} Min.",
+    "useTemplate": "Vorlage nutzen",
+    "recent": "Letzte Workouts",
+    "noRecent": "Abgeschlossene Workouts erscheinen hier mit Sätzen und Volumen.",
+    "minutes": "{count} Min.",
+    "sets": "{count, plural, one {# Satz} other {# Sätze}}",
+    "library": "Zur Übungsbibliothek",
+    "week": {
+      "title": "Letzte 7 Tage",
+      "workouts": "<n>{count}</n> {count, plural, one {Workout} other {Workouts}}",
+      "time": "Trainingszeit",
+      "minutes": "{count} Min.",
+      "volume": "Bewegtes Gewicht"
+    },
+    "editor": {
+      "saved": "Routine gespeichert",
+      "created": "Routine erstellt",
+      "name": "Name der Routine",
+      "namePlaceholder": "z. B. Push am Montag",
+      "notesPlaceholder": "Notizen (optional): Fokus, Hinweise, was du nächstes Mal änderst",
+      "moveUp": "Nach oben",
+      "moveDown": "Nach unten",
+      "remove": "{name} entfernen",
+      "sets": "Sätze",
+      "fewer": "Weniger Sätze",
+      "more": "Mehr Sätze",
+      "seconds": "Sekunden",
+      "reps": "Wdh.",
+      "weight": "Gewicht ({unit})",
+      "optional": "Optional",
+      "rest": "Pause zwischen Sätzen",
+      "add": "Übungen hinzufügen",
+      "summary": "{exercises, plural, one {# Übung} other {# Übungen}} · {sets, plural, one {# Satz} other {# Sätze}}",
+      "about": "Etwa {minutes} Min.",
+      "saving": "Wird gespeichert…",
+      "save": "Änderungen speichern",
+      "create": "Routine erstellen",
+      "close": "Schließen",
+      "search": "Übungen suchen",
+      "alreadyAdded": "schon hinzugefügt",
+      "noMatch": "Keine passenden Übungen.",
+      "addCount": "{count, plural, one {# Übung} other {# Übungen}} hinzufügen",
+      "select": "Übungen auswählen"
+    },
+    "player": {
+      "finishFailed": "Abschließen fehlgeschlagen",
+      "discard": "Verwerfen?",
+      "quit": "Workout beenden",
+      "saving": "Wird gespeichert…",
+      "finish": "Fertig",
+      "setsProgress": "{done}/{total} Sätze",
+      "lifted": "{amount} {unit} bewegt",
+      "restShort": "Pause {rest}",
+      "set": "Satz",
+      "seconds": "Sekunden",
+      "reps": "Wdh.",
+      "weightAria": "Satz {n}, Gewicht in {unit}",
+      "secondsAria": "Satz {n}, Sekunden",
+      "repsAria": "Satz {n}, Wiederholungen",
+      "doneAria": "Satz {n} erledigt",
+      "addSet": "Satz hinzufügen",
+      "rest": "Pause",
+      "skip": "Überspringen",
+      "allDone": "Alle Sätze erledigt · Workout beenden"
+    },
+    "pages": {
+      "new": "Neue Routine",
+      "edit": "Routine bearbeiten",
+      "makeYours": "Mach sie zu deiner",
+      "templateHint": "Die Vorlage ist in deinen Routinen gespeichert. Passe Sätze, Gewichte und Pausen an und speichere.",
+      "editHint": "Änderungen gelten ab deinem nächsten Workout.",
+      "workout": "Workout"
+    },
+    "menu": {
+      "updateFailed": "Aktualisieren fehlgeschlagen",
+      "deleted": "{name} gelöscht",
+      "deleteFailed": "Löschen fehlgeschlagen",
+      "unfavourite": "Aus Favoriten entfernen",
+      "favourite": "Zu Favoriten hinzufügen",
+      "more": "Weitere Aktionen",
+      "edit": "Routine bearbeiten",
+      "share": "Im Feed teilen",
+      "confirmDelete": "Zum Löschen nochmal tippen",
+      "delete": "Löschen"
+    }
+  },
+  "social": {
+    "post": {
+      "commentFailed": "Kommentieren fehlgeschlagen",
+      "deleteFailed": "Löschen fehlgeschlagen",
+      "deleted": "Beitrag gelöscht",
+      "reported": "Danke. Wir sehen es uns an.",
+      "routineSaved": "Routine in deine übernommen",
+      "saveFailed": "Speichern fehlgeschlagen",
+      "followersOnly": "Nur Follower",
+      "options": "Beitragsoptionen",
+      "delete": "Beitrag löschen",
+      "report": "Melden",
+      "workoutLogged": "Workout erfasst",
+      "time": "Zeit",
+      "min": "Min.",
+      "sets": "Sätze",
+      "volume": "Volumen",
+      "checkedIn": "Eingecheckt",
+      "routine": "Routine",
+      "more": "+{count} weitere",
+      "saveRoutine": "In meine Routinen übernehmen",
+      "unlike": "Gefällt mir nicht mehr",
+      "like": "Gefällt mir",
+      "comments": "Kommentare",
+      "deleteComment": "Kommentar löschen",
+      "noComments": "Noch keine Kommentare. Schreib etwas Nettes.",
+      "addComment": "Kommentar schreiben",
+      "send": "Kommentar senden"
+    },
+    "loading": "Wird geladen…",
+    "loadMore": "Mehr laden",
+    "updateFailed": "Aktualisieren fehlgeschlagen",
+    "following": "Folge ich",
+    "follow": "Folgen",
+    "composer": {
+      "uploadFailed": "Upload fehlgeschlagen",
+      "postFailed": "Posten fehlgeschlagen",
+      "placeholder": "Wie war dein Training heute?",
+      "aria": "Beitrag schreiben",
+      "removePhoto": "Foto entfernen",
+      "uploading": "Wird hochgeladen…",
+      "photo": "Foto",
+      "posting": "Wird gepostet…",
+      "post": "Posten"
+    },
+    "share": {
+      "failed": "Teilen fehlgeschlagen",
+      "done": "In deinem Feed geteilt",
+      "button": "Im Feed teilen",
+      "close": "Schließen",
+      "workout": "Workout teilen",
+      "routine": "Routine teilen",
+      "workoutPlaceholder": "Wie hat es sich angefühlt? (optional)",
+      "routinePlaceholder": "Warum dir diese Routine gefällt (optional)",
+      "sharing": "Wird geteilt…",
+      "post": "Im Feed posten"
+    },
+    "settings": {
+      "saved": "Gespeichert",
+      "username": "Benutzername",
+      "bio": "Bio",
+      "bioPlaceholder": "Powerlifterin, Frühaufsteherin, immer unterwegs",
+      "visibility": "Wer deine Beiträge sieht",
+      "public": {
+        "title": "Alle",
+        "text": "Alle, die bei Fit Planet angemeldet sind."
+      },
+      "followers": {
+        "title": "Follower",
+        "text": "Nur Leute, die dir folgen."
+      },
+      "checkins": "Gym-Check-ins teilen",
+      "checkinsText": "Automatisch posten, wenn ein Gym deinen Pass scannt.",
+      "saving": "Wird gespeichert…",
+      "save": "Speichern"
+    },
+    "tabs": {
+      "aria": "Community",
+      "following": "Folge ich",
+      "discover": "Entdecken",
+      "people": "Leute"
+    },
+    "title": "Community",
+    "you": "Du",
+    "eyebrow": "Community",
+    "empty": {
+      "followingTitle": "Dein Feed ist still",
+      "discoverTitle": "Hier ist noch nichts",
+      "followingText": "Folge Leuten, mit denen du trainierst, um ihre Workouts und Check-ins zu sehen. Teile ein abgeschlossenes Workout, um loszulegen.",
+      "discoverText": "Poste als Erste oder Erster. Workouts und Routinen kannst du auf ihren Übersichtsseiten teilen.",
+      "findPeople": "Leute finden",
+      "routines": "Zu den Routinen"
+    },
+    "followers": "Follower",
+    "viewProfile": "Profil ansehen",
+    "settingsLink": "Einstellungen",
+    "toFollow": "Vorschläge zum Folgen",
+    "people": {
+      "meta": "Leute finden",
+      "search": "Nach Name oder @Benutzername suchen",
+      "searchAria": "Leute suchen",
+      "noMatch": "Niemand passt zu „{query}“.",
+      "suggested": "Vorschläge für dich",
+      "suggestedHint": "Mitglieder, die dort trainieren, wo du trainierst, und aktive Leute in der Nähe.",
+      "none": "Noch keine Vorschläge. Check in einem Gym ein oder <link>stöbere in Entdecken</link>."
+    },
+    "postMeta": "Beitrag",
+    "profileSettings": {
+      "meta": "Community-Einstellungen",
+      "title": "Community-Profil",
+      "lead": "So sehen dich andere Mitglieder und das teilst du."
+    },
+    "profile": {
+      "edit": "Profil bearbeiten",
+      "workouts": "{count, plural, one {Workout} other {Workouts}}",
+      "followers": "{count, plural, one {Follower} other {Follower}}",
+      "following": "folgt",
+      "selfEmpty": "Du hast noch nichts gepostet.",
+      "empty": "Noch keine sichtbaren Beiträge von {name}."
+    }
+  },
+  "library": {
+    "count": "{count} Übungen",
+    "title": "Übungsbibliothek",
+    "build": "Routine erstellen",
+    "buildShort": "Routine",
+    "search": "Übungen suchen",
+    "muscle": "Muskel",
+    "allMuscles": "Alle Muskeln",
+    "equipment": "Ausrüstung",
+    "allEquipment": "Alle Geräte",
+    "level": "Level",
+    "allLevels": "Alle Level",
+    "clear": "Filter löschen",
+    "showing": "{shown} von {total}",
+    "empty": "Keine Übungen passen zu diesen Filtern.",
+    "how": "So geht's",
+    "tips": "Tipps"
+  }
+}

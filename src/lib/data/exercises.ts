@@ -351,64 +351,6 @@ export const exercises: Exercise[] = [
 
 export const exerciseById = new Map(exercises.map((e) => [e.id, e]));
 
-export function getExerciseById(id: string): Exercise | undefined {
-  return exercises.find((e) => e.id === id);
-}
-
-export function getExercisesByMuscleGroup(group: MuscleGroup): Exercise[] {
-  return exercises.filter(
-    (e) => e.muscleGroup === group || e.secondaryMuscles?.includes(group),
-  );
-}
-
-export function getExercisesByEquipment(equipment: Equipment): Exercise[] {
-  return exercises.filter((e) => e.equipment.includes(equipment));
-}
-
-export function formatMuscleGroup(group: MuscleGroup): string {
-  return group
-    .split("_")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
-}
-
-export function formatEquipment(equipment: Equipment): string {
-  return equipment
-    .split("_")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
-}
-
-export function formatDifficulty(
-  difficulty: "beginner" | "intermediate" | "advanced",
-): { label: string; color: string } {
-  switch (difficulty) {
-    case "beginner":
-      return { label: "Beginner", color: "text-green-600 bg-green-100" };
-    case "intermediate":
-      return { label: "Intermediate", color: "text-yellow-600 bg-yellow-100" };
-    case "advanced":
-      return { label: "Advanced", color: "text-red-600 bg-red-100" };
-  }
-}
-
-export const muscleGroupIcons: Record<MuscleGroup, string> = {
-  chest: "💪",
-  back: "🏋️",
-  shoulders: "🎯",
-  biceps: "💪",
-  triceps: "💪",
-  forearms: "🤜",
-  core: "🎯",
-  quadriceps: "🦵",
-  hamstrings: "🦵",
-  glutes: "🍑",
-  calves: "🦶",
-  full_body: "🏃",
-  cardio: "❤️",
-};
-
-
 export type RoutineCategory = "push" | "pull" | "legs" | "upper_body" | "lower_body" | "full_body" | "core" | "cardio" | "custom";
 
 export const ROUTINE_CATEGORIES: { value: RoutineCategory; label: string }[] = [

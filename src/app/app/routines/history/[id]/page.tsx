@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -7,11 +8,14 @@ import { getWorkout } from "@/server/modules/routines";
 import { BackLink } from "@/components/routines/BackLink";
 import { ShareToFeed } from "@/components/social/ShareToFeed";
 import { exerciseById, isTimed } from "@/lib/data/exercises";
-import { findRegion } from "@/lib/i18n/regions";
+import { getRegion } from "@/lib/i18n/server";
 import { kgToUnit, weightUnitFor } from "@/lib/routines";
 import { cn } from "@/lib/utils";
+import { exerciseName } from "@/lib/i18n/training";
 
-export const metadata: Metadata = { title: "Workout summary" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getTranslations("routines.summary"))("meta") };
+}
 
 export default async function WorkoutSummaryPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ new?: string }> }) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
@@ -20,15 +24,16 @@ export default async function WorkoutSummaryPage({ params, searchParams }: { par
   const workout = workoutId ? await getWorkout(user._id, workoutId) : null;
   if (!workout) notFound();
 
-  const unit = weightUnitFor(findRegion(user.regionCode));
-  const number = new Intl.NumberFormat("en");
-  const date = new Intl.DateTimeFormat("en", { weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" });
+  const [t, tr, region] = await Promise.all([getTranslations("routines.summary"), getTranslations("training"), getRegion()]);
+  const unit = weightUnitFor(region);
+  const number = new Intl.NumberFormat(region.locale);
+  const date = new Intl.DateTimeFormat(region.locale, { weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" });
   const justFinished = query.new === "1";
 
   const stats = [
-    { label: "Time", value: `${workout.durationMin}`, unit: "min" },
-    { label: "Sets", value: `${workout.setsDone}`, unit: "done" },
-    { label: "Volume", value: number.format(kgToUnit(workout.volumeKg, unit)), unit },
+    { label: t("time"), value: `${workout.durationMin}`, unit: t("min") },
+    { label: t("sets"), value: `${workout.setsDone}`, unit: t("done") },
+    { label: t("volume"), value: number.format(kgToUnit(workout.volumeKg, unit)), unit },
   ];
 
   return (
@@ -36,7 +41,7 @@ export default async function WorkoutSummaryPage({ params, searchParams }: { par
       <BackLink />
       <section className="mt-2 overflow-hidden rounded-[2rem] bg-ink text-white shadow-pass">
         <div className="p-6 sm:p-8">
-          <p className="font-mono text-[11px] tracking-[0.14em] text-white/50 uppercase">{justFinished ? "Workout complete" : "Workout"}</p>
+          <p className="font-mono text-[11px] tracking-[0.14em] text-white/50 uppercase">{justFinished ? t("complete") : t("workout")}</p>
           <h1 className="mt-2 text-[1.75rem] leading-tight font-semibold tracking-[-0.035em] sm:text-4xl">{workout.routineName}</h1>
           <p className="mt-1 text-sm text-white/60">{date.format(new Date(workout.completedAt))}</p>
         </div>
@@ -60,7 +65,7 @@ export default async function WorkoutSummaryPage({ params, searchParams }: { par
           const timed = isTimed(e.exerciseId);
           return (
             <li key={`${e.exerciseId}-${i}`} className="rounded-3xl bg-surface p-4 shadow-soft ring-1 ring-gray-900/[0.05] sm:p-5">
-              <p className="font-semibold text-ink">{exercise.name}</p>
+              <p className="font-semibold text-ink">{exerciseName(tr, exercise.id, exercise.name)}</p>
               <ul className="mt-3 flex flex-wrap gap-2">
                 {e.sets.map((s, j) => (
                   <li
@@ -70,7 +75,7 @@ export default async function WorkoutSummaryPage({ params, searchParams }: { par
                       s.done ? "bg-canvas font-medium text-ink" : "bg-transparent text-gray-400 line-through ring-1 ring-gray-900/10",
                     )}
                   >
-                    {timed ? `${s.reps}s` : s.weight ? `${kgToUnit(s.weight, unit)} ${unit} × ${s.reps}` : `${s.reps} reps`}
+                    {timed ? `${s.reps}s` : s.weight ? `${kgToUnit(s.weight, unit)} ${unit} × ${s.reps}` : tr("targetReps", { reps: s.reps })}
                   </li>
                 ))}
               </ul>
@@ -83,11 +88,11 @@ export default async function WorkoutSummaryPage({ params, searchParams }: { par
         <ShareToFeed kind="workout" id={workout.id} title={workout.routineName} className="flex h-12 flex-1 items-center justify-center rounded-full bg-volt text-sm font-semibold text-ink" />
         {workout.routineId && (
           <Link href={`/app/routines/${workout.routineId}/start`} className="flex h-12 flex-1 items-center justify-center rounded-full bg-ink text-sm font-semibold text-white">
-            Do it again
+            {t("again")}
           </Link>
         )}
         <Link href="/app/routines" className="flex h-12 flex-1 items-center justify-center rounded-full border border-gray-900/10 text-sm font-semibold text-ink hover:bg-surface">
-          Back to routines
+          {t("back")}
         </Link>
       </div>
     </div>

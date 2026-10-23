@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { useTranslations } from "next-intl";
 import { HiOutlineEnvelope, HiOutlineLockClosed } from "react-icons/hi2";
 import { Input } from "@/components/ui/Input";
 import { PasswordStrength } from "@/components/ui/PasswordStrength";
@@ -8,6 +9,7 @@ import { forgotPasswordAction, resetPasswordAction } from "@/actions/auth";
 import { FormAlert, SubmitButton } from "./FormBits";
 
 export function ForgotPasswordForm({ portal }: { portal: "app" | "studio" }) {
+  const t = useTranslations("auth.form");
   const [state, action] = useActionState(forgotPasswordAction, null);
   if (state?.ok) return <FormAlert tone="success">{state.message}</FormAlert>;
   return (
@@ -15,7 +17,7 @@ export function ForgotPasswordForm({ portal }: { portal: "app" | "studio" }) {
       <input type="hidden" name="portal" value={portal} />
       {state && !state.ok && !state.fieldErrors && <FormAlert>{state.error}</FormAlert>}
       <Input
-        label="Email"
+        label={t("email")}
         name="email"
         type="email"
         autoComplete="email"
@@ -25,12 +27,13 @@ export function ForgotPasswordForm({ portal }: { portal: "app" | "studio" }) {
         error={state && !state.ok ? state.fieldErrors?.email : undefined}
         required
       />
-      <SubmitButton pendingLabel="Sending...">Send reset link</SubmitButton>
+      <SubmitButton pendingLabel={t("sending")}>{t("sendReset")}</SubmitButton>
     </form>
   );
 }
 
 export function ResetPasswordForm({ token, portal }: { token: string; portal?: string }) {
+  const t = useTranslations("auth.form");
   const [state, action] = useActionState(resetPasswordAction, null);
   const [password, setPassword] = useState("");
   const errors = state && !state.ok ? state.fieldErrors : undefined;
@@ -41,7 +44,7 @@ export function ResetPasswordForm({ token, portal }: { token: string; portal?: s
       {state && !state.ok && !state.fieldErrors && <FormAlert>{state.error}</FormAlert>}
       <div>
         <Input
-          label="New password"
+          label={t("newPassword")}
           name="password"
           type="password"
           autoComplete="new-password"
@@ -54,7 +57,7 @@ export function ResetPasswordForm({ token, portal }: { token: string; portal?: s
         {password && <PasswordStrength password={password} className="mt-2.5" />}
       </div>
       <Input
-        label="Confirm password"
+        label={t("confirmPassword")}
         name="confirm"
         type="password"
         autoComplete="new-password"
@@ -62,7 +65,7 @@ export function ResetPasswordForm({ token, portal }: { token: string; portal?: s
         error={errors?.confirm}
         required
       />
-      <SubmitButton pendingLabel="Saving...">Save and sign in</SubmitButton>
+      <SubmitButton pendingLabel={t("saving")}>{t("saveSignIn")}</SubmitButton>
     </form>
   );
 }

@@ -1,25 +1,30 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { HiOutlineEnvelopeOpen } from "react-icons/hi2";
 import { AuthShell } from "@/components/auth/AuthShell";
 
-export const metadata: Metadata = { title: "Check your email" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("auth.checkEmail");
+  return { title: t("meta") };
+}
 
-export default function CheckEmailPage() {
+export default async function CheckEmailPage() {
+  const t = await getTranslations("auth.checkEmail");
   return (
     <AuthShell variant="member">
       <div className="text-center">
         <span className="mx-auto flex size-16 items-center justify-center rounded-3xl bg-volt text-ink shadow-soft">
           <HiOutlineEnvelopeOpen className="size-7" />
         </span>
-        <h1 className="mt-6 text-[1.75rem] font-semibold tracking-[-0.03em] text-ink">Check your inbox</h1>
+        <h1 className="mt-6 text-[1.75rem] font-semibold tracking-[-0.03em] text-ink">{t("title")}</h1>
         <p className="mt-2 text-[15px] leading-relaxed text-gray-600">
-          We sent you a sign-in link. Open it on this device to continue. It expires in 24 hours.
+          {t("text")}
         </p>
         <p className="mt-8 text-sm text-gray-500">
-          Nothing there? Check spam, or{" "}
+          {t("nothing")}{" "}
           <Link href="/login" className="font-semibold text-ink underline-offset-4 hover:underline">
-            try again
+            {t("retry")}
           </Link>
           .
         </p>

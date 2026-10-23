@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -14,8 +15,9 @@ import {
 } from "react-icons/hi2";
 import { saveRoutineAction } from "@/actions/routines";
 import { useToast } from "@/components/notifications/ToastProvider";
-import { exerciseById, exercises, formatMuscleGroup, isTimed, ROUTINE_CATEGORIES, type MuscleGroup } from "@/lib/data/exercises";
-import { estimateMinutes, formatRest, kgToUnit, totalSets, unitToKg, type WeightUnit } from "@/lib/routines";
+import { exerciseById, exercises, isTimed, ROUTINE_CATEGORIES, type MuscleGroup } from "@/lib/data/exercises";
+import { exerciseName, restText } from "@/lib/i18n/training";
+import { estimateMinutes, kgToUnit, totalSets, unitToKg, type WeightUnit } from "@/lib/routines";
 import type { RoutineItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -39,6 +41,8 @@ const nextKey = () => `item-${++keySeq}`;
 export function RoutineEditor({ routine, unit }: Props) {
   const router = useRouter();
   const toast = useToast();
+  const t = useTranslations("routines.editor");
+  const tr = useTranslations("training");
   const [pending, startTransition] = useTransition();
   const [name, setName] = useState(routine?.name ?? "");
   const [category, setCategory] = useState(routine?.category ?? "custom");
@@ -87,7 +91,7 @@ export function RoutineEditor({ routine, unit }: Props) {
         setError(result.error);
         return;
       }
-      toast.success(routine ? "Routine saved" : "Routine created");
+      toast.success(routine ? t("saved") : t("created"));
       router.push("/app/routines");
       router.refresh();
     });
@@ -100,12 +104,12 @@ export function RoutineEditor({ routine, unit }: Props) {
       <div className="min-w-0 space-y-4">
         <section className="rounded-3xl bg-surface p-4 shadow-soft ring-1 ring-gray-900/[0.05] sm:p-6">
           <label className="block">
-            <span className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">Routine name</span>
+            <span className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">{t("name")}</span>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
               maxLength={60}
-              placeholder="e.g. Monday push"
+              placeholder={t("namePlaceholder")}
               className="mt-1 w-full border-0 border-b border-gray-900/10 bg-transparent pb-2 text-2xl font-semibold tracking-tight text-ink outline-none placeholder:text-gray-300 focus:border-ink"
             />
           </label>
@@ -121,7 +125,7 @@ export function RoutineEditor({ routine, unit }: Props) {
                   category === c.value ? "bg-ink text-white" : "bg-canvas text-gray-600 hover:bg-canvas-deep",
                 )}
               >
-                {c.label}
+                {tr(`categories.${c.value}`)}
               </button>
             ))}
           </div>
@@ -130,7 +134,7 @@ export function RoutineEditor({ routine, unit }: Props) {
             onChange={(e) => setNotes(e.target.value)}
             maxLength={300}
             rows={2}
-            placeholder="Notes (optional): focus, cues, what to change next time"
+            placeholder={t("notesPlaceholder")}
             className="mt-4 w-full resize-none rounded-2xl bg-canvas px-4 py-3 text-sm text-ink outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-ink/10"
           />
         </section>
@@ -147,17 +151,17 @@ export function RoutineEditor({ routine, unit }: Props) {
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-semibold text-ink">{exercise.name}</p>
-                    <p className="text-xs text-gray-500">{formatMuscleGroup(exercise.muscleGroup)}</p>
+                    <p className="truncate font-semibold text-ink">{exerciseName(tr, exercise.id, exercise.name)}</p>
+                    <p className="text-xs text-gray-500">{tr(`muscles.${exercise.muscleGroup}`)}</p>
                   </div>
                   <div className="-me-1.5 -mt-1 flex">
-                    <IconButton label="Move up" disabled={index === 0} onClick={() => move(index, -1)}>
+                    <IconButton label={t("moveUp")} disabled={index === 0} onClick={() => move(index, -1)}>
                       <HiChevronUp className="size-4.5" />
                     </IconButton>
-                    <IconButton label="Move down" disabled={index === items.length - 1} onClick={() => move(index, 1)}>
+                    <IconButton label={t("moveDown")} disabled={index === items.length - 1} onClick={() => move(index, 1)}>
                       <HiChevronDown className="size-4.5" />
                     </IconButton>
-                    <IconButton label={`Remove ${exercise.name}`} onClick={() => setItems((list) => list.filter((i) => i.key !== item.key))}>
+                    <IconButton label={t("remove", { name: exerciseName(tr, exercise.id, exercise.name) })} onClick={() => setItems((list) => list.filter((i) => i.key !== item.key))}>
                       <HiOutlineXMark className="size-4.5" />
                     </IconButton>
                   </div>
@@ -165,11 +169,11 @@ export function RoutineEditor({ routine, unit }: Props) {
 
                 <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-[auto_1fr_1fr]">
                   <div className="col-span-2 sm:col-span-1 sm:w-fit">
-                    <span className="text-xs font-medium text-gray-500">Sets</span>
+                    <span className="text-xs font-medium text-gray-500">{t("sets")}</span>
                     <div className="mt-1 flex h-11 w-fit items-center rounded-full bg-canvas p-1">
                       <button
                         type="button"
-                        aria-label="Fewer sets"
+                        aria-label={t("fewer")}
                         disabled={item.sets <= 1}
                         onClick={() => update(item.key, { sets: item.sets - 1 })}
                         className="flex size-9 cursor-pointer items-center justify-center rounded-full text-ink hover:bg-surface disabled:opacity-30"
@@ -179,7 +183,7 @@ export function RoutineEditor({ routine, unit }: Props) {
                       <span className="w-10 text-center font-semibold text-ink tabular-nums">{item.sets}</span>
                       <button
                         type="button"
-                        aria-label="More sets"
+                        aria-label={t("more")}
                         disabled={item.sets >= 20}
                         onClick={() => update(item.key, { sets: item.sets + 1 })}
                         className="flex size-9 cursor-pointer items-center justify-center rounded-full text-ink hover:bg-surface disabled:opacity-30"
@@ -189,7 +193,7 @@ export function RoutineEditor({ routine, unit }: Props) {
                     </div>
                   </div>
                   <label>
-                    <span className="text-xs font-medium text-gray-500">{timed ? "Seconds" : "Reps"}</span>
+                    <span className="text-xs font-medium text-gray-500">{timed ? t("seconds") : t("reps")}</span>
                     <input
                       value={item.reps}
                       onChange={(e) => update(item.key, { reps: e.target.value })}
@@ -200,12 +204,12 @@ export function RoutineEditor({ routine, unit }: Props) {
                   </label>
                   {!timed && (
                     <label>
-                      <span className="text-xs font-medium text-gray-500">Weight ({unit})</span>
+                      <span className="text-xs font-medium text-gray-500">{t("weight", { unit })}</span>
                       <input
                         value={item.weightText}
                         onChange={(e) => update(item.key, { weightText: e.target.value.replace(/[^0-9.]/g, "") })}
                         inputMode="decimal"
-                        placeholder="Optional"
+                        placeholder={t("optional")}
                         className="mt-1 h-11 w-full rounded-full bg-canvas px-4 text-sm font-semibold text-ink outline-none placeholder:font-normal placeholder:text-gray-400 focus:ring-2 focus:ring-ink/10"
                       />
                     </label>
@@ -213,7 +217,7 @@ export function RoutineEditor({ routine, unit }: Props) {
                 </div>
 
                 <div className="mt-3">
-                  <span className="text-xs font-medium text-gray-500">Rest between sets</span>
+                  <span className="text-xs font-medium text-gray-500">{t("rest")}</span>
                   <div className="-mx-4 mt-1 flex gap-1.5 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0">
                     {REST_OPTIONS.map((sec) => (
                       <button
@@ -226,7 +230,7 @@ export function RoutineEditor({ routine, unit }: Props) {
                           item.restSec === sec ? "bg-ink text-white" : "bg-canvas text-gray-600 hover:bg-canvas-deep",
                         )}
                       >
-                        {formatRest(sec)}
+                        {restText(tr, sec)}
                       </button>
                     ))}
                   </div>
@@ -242,7 +246,7 @@ export function RoutineEditor({ routine, unit }: Props) {
           className="flex h-14 w-full cursor-pointer items-center justify-center gap-2 rounded-3xl border-2 border-dashed border-gray-900/15 text-sm font-semibold text-ink transition-colors hover:border-ink/30 hover:bg-surface"
         >
           <HiOutlinePlus className="size-5" />
-          Add exercises
+          {t("add")}
         </button>
       </div>
 
@@ -251,9 +255,9 @@ export function RoutineEditor({ routine, unit }: Props) {
         <div className="flex items-center gap-3 rounded-full bg-ink p-2 ps-5 text-white shadow-lift lg:block lg:rounded-3xl lg:p-5">
           <div className="min-w-0 flex-1 lg:mb-5">
             <p className="truncate text-sm font-semibold lg:text-base">
-              {items.length} exercise{items.length === 1 ? "" : "s"} · {totalSets(summary)} sets
+              {t("summary", { exercises: items.length, sets: totalSets(summary) })}
             </p>
-            <p className="text-xs text-white/60 lg:mt-1 lg:text-sm">About {items.length ? estimateMinutes(summary) : 0} min</p>
+            <p className="text-xs text-white/60 lg:mt-1 lg:text-sm">{t("about", { minutes: items.length ? estimateMinutes(summary) : 0 })}</p>
             {error && <p className="mt-3 hidden rounded-2xl bg-stamp-magenta/20 px-3 py-2 text-sm text-white lg:block">{error}</p>}
           </div>
           <button
@@ -262,7 +266,7 @@ export function RoutineEditor({ routine, unit }: Props) {
             disabled={pending}
             className="h-11 shrink-0 cursor-pointer rounded-full bg-volt px-6 text-sm font-semibold text-ink transition-opacity disabled:opacity-60 lg:w-full"
           >
-            {pending ? "Saving…" : routine ? "Save changes" : "Create routine"}
+            {pending ? t("saving") : routine ? t("save") : t("create")}
           </button>
         </div>
         {error && <p className="mt-2 rounded-2xl bg-surface px-4 py-2 text-sm text-stamp-magenta shadow-soft lg:hidden">{error}</p>}
@@ -291,26 +295,28 @@ function IconButton({ label, onClick, disabled, children }: { label: string; onC
 
 function ExercisePicker({ onClose, onAdd, existing }: { onClose: () => void; onAdd: (ids: string[]) => void; existing: Set<string> }) {
   const [query, setQuery] = useState("");
+  const t = useTranslations("routines.editor");
+  const tr = useTranslations("training");
   const [muscle, setMuscle] = useState<MuscleGroup | null>(null);
   const [selected, setSelected] = useState<string[]>([]);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
     return exercises.filter(
-      (e) => (!muscle || e.muscleGroup === muscle || e.secondaryMuscles?.includes(muscle)) && (!q || e.name.toLowerCase().includes(q)),
+      (e) => (!muscle || e.muscleGroup === muscle || e.secondaryMuscles?.includes(muscle)) && (!q || e.name.toLowerCase().includes(q) || exerciseName(tr, e.id, e.name).toLowerCase().includes(q)),
     );
-  }, [query, muscle]);
+  }, [query, muscle, tr]);
 
   const toggle = (id: string) => setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label="Add exercises">
-      <button type="button" aria-label="Close" className="absolute inset-0 cursor-default bg-ink/40 backdrop-blur-[2px]" onClick={onClose} />
+    <div className="fixed inset-0 z-[60] flex items-end justify-center sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={t("add")}>
+      <button type="button" aria-label={t("close")} className="absolute inset-0 cursor-default bg-ink/40 backdrop-blur-[2px]" onClick={onClose} />
       <div className="relative flex max-h-[88dvh] w-full flex-col rounded-t-[2rem] bg-surface shadow-lift sm:max-w-lg sm:rounded-[2rem]">
         <div className="mx-auto mt-2.5 h-1 w-10 rounded-full bg-gray-900/15 sm:hidden" />
         <div className="flex items-center justify-between px-5 pt-4 sm:pt-5">
-          <h2 className="text-lg font-semibold text-ink">Add exercises</h2>
-          <button type="button" onClick={onClose} aria-label="Close" className="flex size-9 cursor-pointer items-center justify-center rounded-full text-gray-400 hover:bg-gray-900/5">
+          <h2 className="text-lg font-semibold text-ink">{t("add")}</h2>
+          <button type="button" onClick={onClose} aria-label={t("close")} className="flex size-9 cursor-pointer items-center justify-center rounded-full text-gray-400 hover:bg-gray-900/5">
             <HiOutlineXMark className="size-5" />
           </button>
         </div>
@@ -320,7 +326,7 @@ function ExercisePicker({ onClose, onAdd, existing }: { onClose: () => void; onA
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search exercises"
+              placeholder={t("search")}
               className="min-w-0 flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-gray-400"
             />
           </label>
@@ -336,7 +342,7 @@ function ExercisePicker({ onClose, onAdd, existing }: { onClose: () => void; onA
                   muscle === m ? "bg-ink text-white" : "bg-canvas text-gray-600",
                 )}
               >
-                {formatMuscleGroup(m)}
+                {tr(`muscles.${m}`)}
               </button>
             ))}
           </div>
@@ -361,17 +367,17 @@ function ExercisePicker({ onClose, onAdd, existing }: { onClose: () => void; onA
                     {on && <HiCheck className="size-3.5" />}
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-medium text-ink">{e.name}</span>
+                    <span className="block truncate text-sm font-medium text-ink">{exerciseName(tr, e.id, e.name)}</span>
                     <span className="text-xs text-gray-500">
-                      {formatMuscleGroup(e.muscleGroup)}
-                      {existing.has(e.id) && " · already added"}
+                      {tr(`muscles.${e.muscleGroup}`)}
+                      {existing.has(e.id) && ` · ${t("alreadyAdded")}`}
                     </span>
                   </span>
                 </button>
               </li>
             );
           })}
-          {results.length === 0 && <li className="px-3 py-8 text-center text-sm text-gray-500">No exercises match.</li>}
+          {results.length === 0 && <li className="px-3 py-8 text-center text-sm text-gray-500">{t("noMatch")}</li>}
         </ul>
         <div className="border-t border-gray-900/[0.06] p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
           <button
@@ -380,7 +386,7 @@ function ExercisePicker({ onClose, onAdd, existing }: { onClose: () => void; onA
             onClick={() => onAdd(selected)}
             className="h-12 w-full cursor-pointer rounded-full bg-ink text-sm font-semibold text-white disabled:opacity-40"
           >
-            {selected.length ? `Add ${selected.length} exercise${selected.length === 1 ? "" : "s"}` : "Select exercises"}
+            {selected.length ? t("addCount", { count: selected.length }) : t("select")}
           </button>
         </div>
       </div>

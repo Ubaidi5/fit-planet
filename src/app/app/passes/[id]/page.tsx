@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -10,17 +11,19 @@ import { CancelBookingButton } from "@/components/pass/CancelBookingButton";
 import { MrzLine } from "@/components/passport/MrzLine";
 import { cityCode } from "@/lib/data/cities";
 import { formatDate, todayIn } from "@/lib/dates";
-import { passMeta } from "@/lib/passes";
+import { getRegion } from "@/lib/i18n/server";
 import { cn } from "@/lib/utils";
 
-export const metadata: Metadata = { title: "Your pass" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getTranslations("pass"))("meta") };
+}
 
-const statusCopy = {
-  confirmed: { label: "Valid", tone: "bg-volt text-ink" },
-  pending: { label: "Awaiting payment", tone: "bg-stamp-ochre/15 text-stamp-ochre" },
-  cancelled: { label: "Cancelled", tone: "bg-gray-900/[0.06] text-gray-600" },
-  refunded: { label: "Refunded", tone: "bg-gray-900/[0.06] text-gray-600" },
-  expired: { label: "Expired", tone: "bg-gray-900/[0.06] text-gray-600" },
+const statusTone = {
+  confirmed: "bg-volt text-ink",
+  pending: "bg-stamp-ochre/15 text-stamp-ochre",
+  cancelled: "bg-gray-900/[0.06] text-gray-600",
+  refunded: "bg-gray-900/[0.06] text-gray-600",
+  expired: "bg-gray-900/[0.06] text-gray-600",
 } as const;
 
 export default async function PassPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ new?: string }> }) {
@@ -31,33 +34,38 @@ export default async function PassPage({ params, searchParams }: { params: Promi
   if (!booking) notFound();
 
   const gymDoc = await (await collections.gyms()).findOne({ _id: toObjectId(booking.gym.id)! }, { projection: { location: 1, policies: 1 } });
-  const meta = passMeta[booking.passType];
-  const status = booking.isUpcoming ? { label: "Upcoming", tone: "bg-emerald-50 text-emerald-700" } : statusCopy[booking.status];
+  const [t, tp, { locale }] = await Promise.all([getTranslations("pass"), getTranslations("passes"), getRegion()]);
+  const status = booking.isUpcoming
+    ? { label: t("status.upcoming"), tone: "bg-emerald-50 text-emerald-700" }
+    : { label: t(`status.${booking.status}`), tone: statusTone[booking.status] };
   const usable = booking.status === "confirmed";
   const today = todayIn(booking.gym.timezone);
   const canCancel = (booking.status === "confirmed" && booking.startDate > today && booking.checkinCount === 0) || booking.status === "pending";
   const dates =
     booking.startDate === booking.endDate
-      ? formatDate(booking.startDate, "en", { weekday: "long", day: "numeric", month: "long" })
-      : `${formatDate(booking.startDate, "en", { day: "numeric", month: "short" })} to ${formatDate(booking.endDate, "en", { day: "numeric", month: "short", year: "numeric" })}`;
+      ? formatDate(booking.startDate, locale, { weekday: "long", day: "numeric", month: "long" })
+      : t("range", {
+          from: formatDate(booking.startDate, locale, { day: "numeric", month: "short" }),
+          to: formatDate(booking.endDate, locale, { day: "numeric", month: "short", year: "numeric" }),
+        });
   const directions = gymDoc ? `https://www.google.com/maps/dir/?api=1&destination=${gymDoc.location.coordinates[1]},${gymDoc.location.coordinates[0]}` : null;
 
   return (
     <div className="mx-auto max-w-md lg:max-w-4xl">
       <Link href="/app/passes" className="mb-4 inline-flex h-10 items-center gap-2 rounded-full ps-1 pe-3 text-sm font-medium text-gray-600 hover:text-ink">
         <HiArrowLeft className="size-4 rtl:rotate-180" />
-        All passes
+        {t("all")}
       </Link>
 
       {isNew && usable && (
         <div className="mb-5 flex items-start gap-3 rounded-3xl bg-emerald-50 p-4 ring-1 ring-emerald-600/15 animate-fade-up">
           <HiCheckCircle className="mt-0.5 size-5 shrink-0 text-emerald-600" />
           <div>
-            <p className="text-sm font-semibold text-emerald-900">You&apos;re booked in</p>
+            <p className="text-sm font-semibold text-emerald-900">{t("booked")}</p>
             <p className="text-sm text-emerald-800/80">
               {booking.paymentMethod === "desk"
-                ? `Pay ${formatMoney(booking.amount, booking.currency)} at the front desk when you arrive.`
-                : "Payment received. A receipt is on its way to your inbox."}
+                ? t("payAtDesk", { amount: formatMoney(booking.amount, booking.currency) })
+                : t("paymentReceived")}
             </p>
           </div>
         </div>
@@ -68,7 +76,7 @@ export default async function PassPage({ params, searchParams }: { params: Promi
         <article className="overflow-hidden rounded-[2rem] bg-surface shadow-pass ring-1 ring-gray-900/[0.06]">
           <div className="bg-ink px-6 pt-6 pb-7 text-white">
             <div className="flex items-center justify-between font-mono text-[11px] tracking-[0.14em] text-white/60 uppercase">
-              <span>Fit Planet · {meta.label}</span>
+              <span>Fit Planet · {tp(`name.${booking.passType}`)}</span>
               <span className={cn("rounded-full px-2.5 py-1 font-sans text-xs font-semibold tracking-normal normal-case", status.tone)}>{status.label}</span>
             </div>
             <div className="mt-6 flex items-end justify-between gap-4">
@@ -98,28 +106,28 @@ export default async function PassPage({ params, searchParams }: { params: Promi
               {booking.code}
             </p>
             <p className="mt-1 text-center text-xs text-gray-500">
-              {usable ? "Show this at the front desk. Turn your screen brightness up." : "This pass can't be used."}
+              {usable ? t("showDesk") : t("unusable")}
             </p>
 
             <dl className="mt-7 grid grid-cols-2 gap-x-4 gap-y-5 border-t border-gray-900/[0.06] pt-6 text-sm">
               <div className="col-span-2">
-                <dt className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">Valid</dt>
+                <dt className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">{t("valid")}</dt>
                 <dd className="mt-1 font-semibold text-ink">{dates}</dd>
               </div>
               <div>
-                <dt className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">Holder</dt>
+                <dt className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">{t("holder")}</dt>
                 <dd className="mt-1 truncate font-semibold text-ink">{booking.guest.name}</dd>
               </div>
               <div>
-                <dt className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">{booking.paymentMethod === "desk" ? "Pay at desk" : "Paid"}</dt>
+                <dt className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">{booking.paymentMethod === "desk" ? t("payDesk") : t("paid")}</dt>
                 <dd className="mt-1 font-semibold whitespace-nowrap text-ink">{formatMoney(booking.amount, booking.currency)}</dd>
               </div>
               <div>
-                <dt className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">Entry</dt>
-                <dd className="mt-1 font-semibold text-ink">{booking.passType === "day" ? "Single entry" : "Once a day"}</dd>
+                <dt className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">{t("entry")}</dt>
+                <dd className="mt-1 font-semibold text-ink">{booking.passType === "day" ? t("single") : t("onceDay")}</dd>
               </div>
               <div>
-                <dt className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">Check-ins</dt>
+                <dt className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">{t("checkins")}</dt>
                 <dd className="mt-1 font-semibold text-ink tabular-nums">{booking.checkinCount}</dd>
               </div>
             </dl>
@@ -141,7 +149,7 @@ export default async function PassPage({ params, searchParams }: { params: Promi
                 className="flex h-12 items-center justify-center gap-2 rounded-full bg-ink text-sm font-semibold text-white transition-colors hover:bg-gray-800"
               >
                 <HiOutlineMapPin className="size-4.5" />
-                Directions
+                {t("directions")}
               </a>
             )}
             <Link
@@ -149,19 +157,19 @@ export default async function PassPage({ params, searchParams }: { params: Promi
               className="flex h-12 items-center justify-center gap-2 rounded-full bg-surface text-sm font-semibold text-ink shadow-soft ring-1 ring-gray-900/[0.06] hover:bg-white"
             >
               <HiOutlineArrowTopRightOnSquare className="size-4.5" />
-              Gym page
+              {t("gymPage")}
             </Link>
           </div>
           {gymDoc?.policies?.cancellation && (
             <div className="rounded-3xl bg-surface p-5 text-sm shadow-soft ring-1 ring-gray-900/[0.05]">
-              <p className="font-semibold text-ink">Cancellation</p>
+              <p className="font-semibold text-ink">{t("cancellation")}</p>
               <p className="mt-1 leading-relaxed text-gray-600">{gymDoc.policies.cancellation}</p>
             </div>
           )}
           {canCancel && (
             <CancelBookingButton
               bookingId={booking.id}
-              refundNote={booking.paymentStatus === "paid" ? "You'll get a full refund to your original payment method." : "Nothing has been charged."}
+              refundNote={booking.paymentStatus === "paid" ? t("refundNote") : t("nothingCharged")}
             />
           )}
         </aside>

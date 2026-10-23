@@ -1,14 +1,14 @@
+import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { GymsExplorer } from "@/components/gyms/GymsExplorer";
 import { listPublishedGyms } from "@/server/modules/gyms";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Find gyms",
-  description:
-    "Find partner gyms in any city. Compare passes in local currency and live capacity, then book in seconds.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("explore");
+  return { title: t("meta"), description: t("metaDescription") };
+}
 
 export default async function GymsPage({
   searchParams,

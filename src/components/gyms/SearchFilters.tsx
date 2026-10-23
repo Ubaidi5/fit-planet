@@ -1,9 +1,11 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { filterOptions } from "@/lib/data/mock-gyms";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { tagLabel } from "@/lib/i18n/tags";
 import {
   HiCheck,
   HiChevronDown,
@@ -106,6 +108,8 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
     search: initialSearch,
   });
   const [showPanel, setShowPanel] = useState(false);
+  const t = useTranslations("filters");
+  const tt = useTranslations("tags");
   const { distance } = useLocale();
 
   const updateFilters = (newFilters: Partial<FilterState>) => {
@@ -149,8 +153,8 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
         <HiMagnifyingGlass className="ms-3.5 size-5 shrink-0 text-gray-400" />
         <input
           type="text"
-          placeholder="Search gyms by name or area"
-          aria-label="Search gyms by name or area"
+          placeholder={t("search")}
+          aria-label={t("search")}
           value={filters.search}
           onChange={(e) => updateFilters({ search: e.target.value })}
           className="h-11 min-w-0 flex-1 bg-transparent px-1 text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none"
@@ -160,7 +164,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
             type="button"
             onClick={() => updateFilters({ search: "" })}
             className="flex size-8 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-900/5 hover:text-gray-700"
-            aria-label="Clear search"
+            aria-label={t("clearSearch")}
           >
             <HiXMark className="size-4" />
           </button>
@@ -176,7 +180,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
           )}
         >
           <HiOutlineAdjustmentsHorizontal className="size-4.5" />
-          <span className="hidden sm:inline">Filters</span>
+          <span className="hidden sm:inline">{t("filters")}</span>
           {panelFiltersCount > 0 && (
             <span
               className={cn(
@@ -193,25 +197,25 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
       {/* Quick row */}
       <div className="-mx-4 flex items-center gap-2 overflow-x-auto px-4 pb-1 no-scrollbar sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
         <PillSelect
-          label="Sort by"
+          label={t("sortBy")}
           value={filters.sortBy}
           onChange={(value) => updateFilters({ sortBy: value })}
         >
           {filterOptions.sortOptions.map((option) => (
             <option key={option.value} value={option.value}>
-              {option.label}
+              {t(`sort.${option.value}`)}
             </option>
           ))}
         </PillSelect>
 
         <PillSelect
-          label="Distance"
+          label={t("distance")}
           value={filters.distance}
           onChange={(value) => updateFilters({ distance: Number(value) })}
         >
           {filterOptions.distanceRanges.map((option) => (
             <option key={option.label} value={option.value}>
-              {Number.isFinite(option.value) ? `Within ${distance(option.value)}` : option.label}
+              {Number.isFinite(option.value) ? t("within", { distance: distance(option.value) }) : t("anyDistance")}
             </option>
           ))}
         </PillSelect>
@@ -223,14 +227,14 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
           onClick={() => updateFilters({ is24Hours: !filters.is24Hours })}
         >
           {!filters.is24Hours && <HiOutlineClock className="size-4" />}
-          Open 24/7
+          {t("open247")}
         </Chip>
         <Chip
           active={filters.isVerified}
           onClick={() => updateFilters({ isVerified: !filters.isVerified })}
         >
           {!filters.isVerified && <HiOutlineCheckBadge className="size-4" />}
-          Verified
+          {t("verified")}
         </Chip>
 
         {activeFiltersCount > 0 && (
@@ -239,7 +243,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
             onClick={clearFilters}
             className="h-9 shrink-0 rounded-full px-3 text-sm font-medium text-gray-500 underline-offset-4 transition-colors hover:text-ink hover:underline"
           >
-            Clear all
+            {t("clearAll")}
           </button>
         )}
       </div>
@@ -256,14 +260,14 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
           <div className="grid gap-8 rounded-4xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft sm:p-8 lg:grid-cols-[1fr_2fr_2fr]">
             <fieldset>
               <legend className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-gray-400">
-                Day pass price
+                {t("price")}
               </legend>
               <div className="flex flex-wrap gap-2">
                 <Chip
                   active={filters.priceRange === null}
                   onClick={() => updateFilters({ priceRange: null })}
                 >
-                  Any
+                  {t("any")}
                 </Chip>
                 {filterOptions.priceRanges.map((range) => (
                   <Chip
@@ -278,7 +282,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
                       })
                     }
                   >
-                    {range.label}
+                    {t(`tiers.${range.label}`)}
                   </Chip>
                 ))}
               </div>
@@ -286,7 +290,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
 
             <fieldset>
               <legend className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-gray-400">
-                Amenities
+                {t("amenities")}
               </legend>
               <div className="flex flex-wrap gap-2">
                 {filterOptions.amenities.map((amenity) => (
@@ -295,7 +299,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
                     active={filters.amenities.includes(amenity)}
                     onClick={() => toggleArrayFilter("amenities", amenity)}
                   >
-                    {amenity}
+                    {tagLabel(tt, amenity)}
                   </Chip>
                 ))}
               </div>
@@ -303,7 +307,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
 
             <fieldset>
               <legend className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-gray-400">
-                Training style
+                {t("style")}
               </legend>
               <div className="flex flex-wrap gap-2">
                 {filterOptions.equipmentTypes.map((type) => (
@@ -312,7 +316,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
                     active={filters.equipmentTypes.includes(type)}
                     onClick={() => toggleArrayFilter("equipmentTypes", type)}
                   >
-                    {type}
+                    {tagLabel(tt, type)}
                   </Chip>
                 ))}
               </div>

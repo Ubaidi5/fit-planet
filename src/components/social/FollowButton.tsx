@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { followAction } from "@/actions/social";
 import { useToast } from "@/components/notifications/ToastProvider";
@@ -9,6 +10,7 @@ export function FollowButton({ userId, following, size = "md", className }: { us
   const [on, setOn] = useState(following);
   const [pending, startTransition] = useTransition();
   const toast = useToast();
+  const t = useTranslations("social");
 
   const toggle = () => {
     const next = !on;
@@ -17,7 +19,7 @@ export function FollowButton({ userId, following, size = "md", className }: { us
       const result = await followAction(userId, next);
       if (!result.ok) {
         setOn(!next);
-        toast.error("Couldn't update", result.error);
+        toast.error(t("updateFailed"), result.error);
       }
     });
   };
@@ -35,7 +37,7 @@ export function FollowButton({ userId, following, size = "md", className }: { us
         className,
       )}
     >
-      {on ? "Following" : "Follow"}
+      {on ? t("following") : t("follow")}
     </button>
   );
 }

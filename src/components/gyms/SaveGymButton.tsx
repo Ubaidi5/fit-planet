@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useOptimistic, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { HiHeart, HiOutlineHeart } from "react-icons/hi2";
@@ -12,18 +13,19 @@ export function SaveGymButton({ gymId, saved, signedIn, className, label = true 
   const [, startTransition] = useTransition();
   const router = useRouter();
   const toast = useToast();
+  const t = useTranslations("gym");
 
   return (
     <button
       type="button"
       aria-pressed={optimistic}
-      aria-label={optimistic ? "Remove from saved gyms" : "Save gym"}
+      aria-label={optimistic ? t("unsave") : t("saveGym")}
       onClick={() => {
         if (!signedIn) return router.push(`/login?next=${encodeURIComponent(location.pathname)}`);
         startTransition(async () => {
           setOptimistic(!optimistic);
           const result = await toggleSavedGymAction(gymId);
-          if (!result.ok) toast.error("Couldn't save", result.error);
+          if (!result.ok) toast.error(t("saveFailed"), result.error);
           router.refresh();
         });
       }}
@@ -34,7 +36,7 @@ export function SaveGymButton({ gymId, saved, signedIn, className, label = true 
       )}
     >
       {optimistic ? <HiHeart className="size-5 text-stamp-magenta" /> : <HiOutlineHeart className="size-5" />}
-      {label && (optimistic ? "Saved" : "Save")}
+      {label && (optimistic ? t("saved") : t("save"))}
     </button>
   );
 }

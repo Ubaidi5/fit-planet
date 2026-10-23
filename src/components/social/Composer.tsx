@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { HiOutlinePhoto, HiXMark } from "react-icons/hi2";
@@ -11,6 +12,7 @@ import { Avatar } from "./Avatar";
 export function Composer({ me }: { me: { name: string; image: string | null; initials: string } }) {
   const router = useRouter();
   const toast = useToast();
+  const t = useTranslations("social.composer");
   const [text, setText] = useState("");
   const [image, setImage] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -26,13 +28,13 @@ export function Composer({ me }: { me: { name: string; image: string | null; ini
     const result = await uploadImageAction(data);
     setUploading(false);
     if (result.ok) setImage(result.data.url);
-    else toast.error("Upload failed", result.error);
+    else toast.error(t("uploadFailed"), result.error);
   };
 
   const post = () =>
     startTransition(async () => {
       const result = await createPostAction({ text, imageUrl: image ?? undefined });
-      if (!result.ok) return toast.error("Couldn't post", result.error);
+      if (!result.ok) return toast.error(t("postFailed"), result.error);
       setText("");
       setImage(null);
       router.refresh();
@@ -47,8 +49,8 @@ export function Composer({ me }: { me: { name: string; image: string | null; ini
           onChange={(e) => setText(e.target.value)}
           maxLength={1000}
           rows={text ? 3 : 1}
-          placeholder="How was training today?"
-          aria-label="Write a post"
+          placeholder={t("placeholder")}
+          aria-label={t("aria")}
           className="min-h-10 flex-1 resize-none bg-transparent py-2 text-[15px] text-ink outline-none placeholder:text-gray-400"
         />
       </div>
@@ -58,7 +60,7 @@ export function Composer({ me }: { me: { name: string; image: string | null; ini
           <button
             type="button"
             onClick={() => setImage(null)}
-            aria-label="Remove photo"
+            aria-label={t("removePhoto")}
             className="absolute top-2 end-2 flex size-8 cursor-pointer items-center justify-center rounded-full bg-ink/70 text-white"
           >
             <HiXMark className="size-4" />
@@ -73,7 +75,7 @@ export function Composer({ me }: { me: { name: string; image: string | null; ini
           className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-3 text-sm font-medium text-gray-600 hover:bg-gray-900/5 disabled:opacity-50"
         >
           <HiOutlinePhoto className="size-5" />
-          {uploading ? "Uploading…" : "Photo"}
+          {uploading ? t("uploading") : t("photo")}
         </button>
         <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={(e) => upload(e.target.files?.[0])} />
         <button
@@ -82,7 +84,7 @@ export function Composer({ me }: { me: { name: string; image: string | null; ini
           disabled={pending || uploading || (!text.trim() && !image)}
           className="h-9 cursor-pointer rounded-full bg-ink px-5 text-sm font-semibold text-white disabled:opacity-30"
         >
-          {pending ? "Posting…" : "Post"}
+          {pending ? t("posting") : t("post")}
         </button>
       </div>
     </div>

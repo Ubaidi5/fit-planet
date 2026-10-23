@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/brand/Logo";
@@ -29,24 +30,25 @@ type IconType = React.ComponentType<{ className?: string }>;
 
 interface NavItem {
   href: string;
+  /** Key in the "nav" messages */
   label: string;
   icon: IconType;
 }
 
 const primaryNav: NavItem[] = [
-  { href: "/app/dashboard", label: "Home", icon: HiOutlineHome },
-  { href: "/app/passes", label: "Passes", icon: HiOutlineTicket },
-  { href: "/app/routines", label: "Routines", icon: HiOutlineClipboardDocumentList },
-  { href: "/app/social", label: "Social", icon: HiOutlineUserGroup },
-  { href: "/app/checkins", label: "Passport", icon: HiOutlineClipboardDocumentCheck },
+  { href: "/app/dashboard", label: "home", icon: HiOutlineHome },
+  { href: "/app/passes", label: "passes", icon: HiOutlineTicket },
+  { href: "/app/routines", label: "routines", icon: HiOutlineClipboardDocumentList },
+  { href: "/app/social", label: "social", icon: HiOutlineUserGroup },
+  { href: "/app/checkins", label: "passport", icon: HiOutlineClipboardDocumentCheck },
 ];
 
 const secondaryNav: NavItem[] = [
-  { href: "/app/exercises", label: "Exercise library", icon: HiOutlineQueueList },
-  { href: "/app/saved-gyms", label: "Saved gyms", icon: HiOutlineBookmark },
-  { href: "/app/notifications", label: "Notifications", icon: HiOutlineBell },
-  { href: "/app/profile", label: "Profile", icon: HiOutlineUser },
-  { href: "/app/security", label: "Security", icon: HiOutlineShieldCheck },
+  { href: "/app/exercises", label: "exercises", icon: HiOutlineQueueList },
+  { href: "/app/saved-gyms", label: "savedGyms", icon: HiOutlineBookmark },
+  { href: "/app/notifications", label: "notifications", icon: HiOutlineBell },
+  { href: "/app/profile", label: "profile", icon: HiOutlineUser },
+  { href: "/app/security", label: "security", icon: HiOutlineShieldCheck },
 ];
 
 // Items shown in the mobile tab bar
@@ -55,7 +57,7 @@ const tabNav: NavItem[] = [
   primaryNav[1],
   primaryNav[2],
   primaryNav[3],
-  { href: "/app/profile", label: "Profile", icon: HiOutlineUser },
+  { href: "/app/profile", label: "profile", icon: HiOutlineUser },
 ];
 
 function isActivePath(pathname: string, href: string) {
@@ -73,6 +75,7 @@ export interface ShellUser {
 
 export function AppShell({ user, unread, children }: { user: ShellUser; unread: number; children: React.ReactNode }) {
   const pathname = usePathname();
+  const t = useTranslations("nav");
   const [moreOpen, setMoreOpen] = useState(false);
 
   useEffect(() => {
@@ -107,7 +110,7 @@ export function AppShell({ user, unread, children }: { user: ShellUser; unread: 
                   )}
                 >
                   <Icon className={cn("size-4.5", active && "text-emerald-600")} />
-                  {item.label}
+                  {t(item.label)}
                 </Link>
               );
             })}
@@ -119,11 +122,11 @@ export function AppShell({ user, unread, children }: { user: ShellUser; unread: 
               className="hidden h-10 items-center gap-2 rounded-full px-3.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-900/5 hover:text-ink sm:flex"
             >
               <HiOutlineMagnifyingGlass className="size-4.5" />
-              <span className="hidden md:inline">Find gyms</span>
+              <span className="hidden md:inline">{t("findGyms")}</span>
             </Link>
             <Link
               href="/app/notifications"
-              aria-label={unread > 0 ? `Notifications, ${unread} unread` : "Notifications"}
+              aria-label={unread > 0 ? t("notificationsUnread", { count: unread }) : t("notifications")}
               className="relative flex size-10 items-center justify-center rounded-full text-gray-700 transition-colors hover:bg-gray-900/5 hover:text-ink"
             >
               <HiOutlineBell className="size-5" />
@@ -133,7 +136,7 @@ export function AppShell({ user, unread, children }: { user: ShellUser; unread: 
               type="button"
               onClick={() => setMoreOpen((open) => !open)}
               aria-expanded={moreOpen}
-              aria-label="Open account menu"
+              aria-label={t("accountMenu")}
               className="flex items-center gap-2 rounded-full p-1 transition-colors hover:bg-gray-900/5"
             >
               <Avatar user={user} />
@@ -151,13 +154,13 @@ export function AppShell({ user, unread, children }: { user: ShellUser; unread: 
           <div className="flex items-center justify-between px-3 pt-2 pb-3">
             <div>
               <p className="max-w-[13rem] truncate text-sm font-semibold text-ink">{user.name}</p>
-              <p className="max-w-[13rem] truncate text-xs text-gray-500">{user.memberSince ? `Member since ${user.memberSince}` : user.email}</p>
+              <p className="max-w-[13rem] truncate text-xs text-gray-500">{user.memberSince ? t("memberSince", { date: user.memberSince }) : user.email}</p>
             </div>
             <button
               type="button"
               onClick={() => setMoreOpen(false)}
               className="flex size-8 items-center justify-center rounded-full text-gray-400 hover:bg-gray-900/5 hover:text-gray-700"
-              aria-label="Close menu"
+              aria-label={t("closeMenu")}
             >
               <HiXMark className="size-4" />
             </button>
@@ -176,7 +179,7 @@ export function AppShell({ user, unread, children }: { user: ShellUser; unread: 
                   )}
                 >
                   <Icon className="size-4.5 text-gray-400" />
-                  {item.label}
+                  {t(item.label)}
                 </Link>
               );
             })}
@@ -185,14 +188,14 @@ export function AppShell({ user, unread, children }: { user: ShellUser; unread: 
               className="flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-emerald-700 hover:bg-emerald-50"
             >
               <HiOutlineSquares2X2 className="size-4.5" />
-              Browse all gyms
+              {t("browseGyms")}
             </Link>
             <Link
               href={user.isOwner ? "/studio/dashboard" : "/studio/register"}
               className="flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-canvas"
             >
               <HiOutlineBuildingStorefront className="size-4.5 text-gray-400" />
-              {user.isOwner ? "Open my studio" : "List your gym"}
+              {user.isOwner ? t("openStudio") : t("listYourGym")}
             </Link>
           </div>
           <div className="mt-1.5 border-t border-gray-900/[0.06] pt-1.5">
@@ -202,7 +205,7 @@ export function AppShell({ user, unread, children }: { user: ShellUser; unread: 
                 className="flex w-full cursor-pointer items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-canvas"
               >
                 <HiOutlineArrowRightOnRectangle className="size-4.5 text-gray-400" />
-                Sign out
+                {t("signOut")}
               </button>
             </form>
           </div>
@@ -234,7 +237,7 @@ export function AppShell({ user, unread, children }: { user: ShellUser; unread: 
               )}
             >
               <Icon className={cn("size-5", active && "text-volt")} />
-              {item.label}
+              {t(item.label)}
             </Link>
           );
         })}

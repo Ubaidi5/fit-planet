@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import {
   HiArrowTrendingUp,
@@ -25,77 +26,31 @@ interface AuthShellProps {
   width?: "sm" | "md" | "lg";
 }
 
-const panelCopy: Record<
-  Variant,
-  {
-    eyebrow: string;
-    title: React.ReactNode;
-    points: { icon: React.ComponentType<{ className?: string }>; title: string; text: string }[];
-  }
-> = {
-  member: {
-    eyebrow: "Fit Planet for members",
-    title: (
-      <>
-        One account. <Accent>Every gym</Accent> in the city.
-      </>
-    ),
-    points: [
-      {
-        icon: HiOutlineDevicePhoneMobile,
-        title: "Your phone is your pass",
-        text: "Show a QR code at any partner gym and walk in.",
-      },
-      {
-        icon: HiOutlineShieldCheck,
-        title: "Sign in your way",
-        text: "Google, Facebook, an email link or a password.",
-      },
-      {
-        icon: HiOutlineUserGroup,
-        title: "Train with friends",
-        text: "Share routines and plan sessions together.",
-      },
-    ],
-  },
-  studio: {
-    eyebrow: "Fit Planet Studio",
-    title: (
-      <>
-        Run your gym like a <Accent>modern business</Accent>.
-      </>
-    ),
-    points: [
-      {
-        icon: HiOutlineQrCode,
-        title: "QR check-ins",
-        text: "Verify members at the door in a second.",
-      },
-      {
-        icon: HiOutlineChartBar,
-        title: "Live capacity and analytics",
-        text: "Know your peak hours and plan staff around them.",
-      },
-      {
-        icon: HiOutlineCurrencyDollar,
-        title: "Instant booking alerts",
-        text: "A push on your phone the moment a pass is booked.",
-      },
-    ],
-  },
+const panelPoints: Record<Variant, { icon: React.ComponentType<{ className?: string }>; key: string }[]> = {
+  member: [
+    { icon: HiOutlineDevicePhoneMobile, key: "phone" },
+    { icon: HiOutlineShieldCheck, key: "signIn" },
+    { icon: HiOutlineUserGroup, key: "friends" },
+  ],
+  studio: [
+    { icon: HiOutlineQrCode, key: "checkins" },
+    { icon: HiOutlineChartBar, key: "capacity" },
+    { icon: HiOutlineCurrencyDollar, key: "alerts" },
+  ],
 };
 
-function MemberVisual() {
+async function MemberVisual() {
+  const t = await getTranslations("auth.shell.visual");
   return (
     <div className="relative mx-auto w-full max-w-sm">
       <div className="rounded-4xl border border-gray-900/[0.06] bg-surface p-5 shadow-lift">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs text-gray-500">Day pass</p>
+            <p className="text-xs text-gray-500">{t("dayPass")}</p>
             <p className="text-lg font-semibold tracking-tight text-ink">FitZone Karachi</p>
           </div>
           <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-600/15">
-            Active
+            {t("active")}
           </span>
         </div>
         <div className="mt-4 flex items-center gap-4 rounded-3xl bg-canvas p-4">
@@ -103,7 +58,7 @@ function MemberVisual() {
             <FauxQR seed="auth-member" size={96} />
           </div>
           <div className="space-y-2 text-sm">
-            <p className="text-gray-500">Valid today</p>
+            <p className="text-gray-500">{t("validToday")}</p>
             <p className="font-semibold text-ink">06:00 to 23:00</p>
             <p className="text-gray-500">Clifton · 1.2 km</p>
           </div>
@@ -113,19 +68,20 @@ function MemberVisual() {
         <span className="flex size-8 items-center justify-center rounded-full bg-volt text-ink">
           <HiCheck className="size-4" />
         </span>
-        <span className="text-sm font-semibold text-ink">Checked in</span>
+        <span className="text-sm font-semibold text-ink">{t("checkedIn")}</span>
       </div>
     </div>
   );
 }
 
-function StudioVisual() {
+async function StudioVisual() {
+  const t = await getTranslations("auth.shell.visual");
   const bars = [40, 62, 48, 74, 66, 88, 100];
   return (
     <div className="relative mx-auto w-full max-w-sm">
       <div className="rounded-4xl border border-gray-900/[0.06] bg-surface p-5 shadow-lift">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-semibold text-ink">Weekly bookings</p>
+          <p className="text-sm font-semibold text-ink">{t("weekly")}</p>
           <span className="flex items-center gap-1 text-xs font-semibold text-emerald-700">
             <HiArrowTrendingUp className="size-3.5" />
             +12%
@@ -146,11 +102,11 @@ function StudioVisual() {
         <div className="mt-4 grid grid-cols-2 gap-2">
           <div className="rounded-2xl bg-canvas p-3">
             <p className="text-xl font-semibold text-ink tabular-nums">42</p>
-            <p className="text-xs text-gray-500">Check-ins today</p>
+            <p className="text-xs text-gray-500">{t("checkinsToday")}</p>
           </div>
           <div className="rounded-2xl bg-canvas p-3">
             <p className="text-xl font-semibold text-ink tabular-nums">64%</p>
-            <p className="text-xs text-gray-500">Capacity now</p>
+            <p className="text-xs text-gray-500">{t("capacityNow")}</p>
           </div>
         </div>
       </div>
@@ -158,14 +114,15 @@ function StudioVisual() {
         <span className="flex size-8 items-center justify-center rounded-full bg-volt text-ink">
           <HiOutlineCurrencyDollar className="size-4" />
         </span>
-        <span className="text-sm font-semibold text-ink">New day pass booked</span>
+        <span className="text-sm font-semibold text-ink">{t("booked")}</span>
       </div>
     </div>
   );
 }
 
-export function AuthShell({ variant, children, aside, width = "sm" }: AuthShellProps) {
-  const copy = panelCopy[variant];
+export async function AuthShell({ variant, children, aside, width = "sm" }: AuthShellProps) {
+  const t = await getTranslations(`auth.shell.${variant}`);
+  const tc = await getTranslations("auth.shell");
 
   return (
     <div className="min-h-screen p-3 lg:grid lg:grid-cols-[1fr_1fr] lg:gap-3">
@@ -199,7 +156,7 @@ export function AuthShell({ variant, children, aside, width = "sm" }: AuthShellP
         <p className="pb-3 text-center text-xs text-gray-400 lg:text-start">
           &copy; {new Date().getFullYear()} Fit Planet ·{" "}
           <Link href="/" className="hover:text-gray-600">
-            Back to website
+            {tc("back")}
           </Link>
         </p>
       </div>
@@ -214,10 +171,10 @@ export function AuthShell({ variant, children, aside, width = "sm" }: AuthShellP
 
         <div className="relative">
           <p className="text-[13px] font-semibold uppercase tracking-[0.16em] text-emerald-700">
-            {copy.eyebrow}
+            {t("eyebrow")}
           </p>
           <h2 className="mt-4 max-w-md text-4xl leading-[1.08] font-semibold tracking-[-0.035em] text-ink xl:text-[2.75rem]">
-            {copy.title}
+            {t.rich("title", { accent: (c) => <Accent>{c}</Accent> })}
           </h2>
         </div>
 
@@ -226,13 +183,13 @@ export function AuthShell({ variant, children, aside, width = "sm" }: AuthShellP
         </div>
 
         <ul className="relative grid gap-5 xl:grid-cols-3">
-          {copy.points.map(({ icon: Icon, title, text }) => (
-            <li key={title}>
+          {panelPoints[variant].map(({ icon: Icon, key }) => (
+            <li key={key}>
               <span className="flex size-9 items-center justify-center rounded-xl bg-surface text-emerald-700 shadow-soft">
                 <Icon className="size-4.5" />
               </span>
-              <p className="mt-3 text-sm font-semibold text-ink">{title}</p>
-              <p className="mt-1 text-[13px] leading-relaxed text-gray-600">{text}</p>
+              <p className="mt-3 text-sm font-semibold text-ink">{t(`points.${key}.title`)}</p>
+              <p className="mt-1 text-[13px] leading-relaxed text-gray-600">{t(`points.${key}.text`)}</p>
             </li>
           ))}
         </ul>

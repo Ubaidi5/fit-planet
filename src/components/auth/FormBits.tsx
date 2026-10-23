@@ -1,6 +1,7 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
+import { useTranslations } from "next-intl";
 import { HiOutlineExclamationCircle, HiOutlineCheckCircle } from "react-icons/hi2";
 import { Button, type ButtonProps } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
@@ -8,8 +9,9 @@ import { cn } from "@/lib/utils";
 /** Submit button that shows a spinner while its form's action runs */
 export function SubmitButton({ children, pendingLabel, className, ...props }: ButtonProps & { pendingLabel?: string }) {
   const { pending } = useFormStatus();
+  const t = useTranslations("common");
   return (
-    <Button type="submit" size="lg" fullWidth loading={pending} loadingText={pendingLabel ?? "Working..."} className={className} {...props}>
+    <Button type="submit" size="lg" fullWidth loading={pending} loadingText={pendingLabel ?? t("working")} className={className} {...props}>
       {children}
     </Button>
   );

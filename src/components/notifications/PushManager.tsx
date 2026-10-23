@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { HiOutlineBellAlert, HiXMark } from "react-icons/hi2";
@@ -40,6 +41,7 @@ export function PushPrompt({ title, body, className }: { title: string; body: st
   const [dismissed, setDismissed] = useState(true);
   const [busy, setBusy] = useState(false);
   const toast = useToast();
+  const t = useTranslations("notifications.push");
 
   useEffect(() => {
     try {
@@ -61,7 +63,7 @@ export function PushPrompt({ title, body, className }: { title: string; body: st
   return (
     <div className={cn("relative overflow-hidden rounded-[1.75rem] bg-ink p-5 text-white shadow-lift", className)}>
       <div aria-hidden="true" className="absolute -top-10 -end-10 size-36 rounded-full bg-volt/25 blur-2xl" />
-      <button type="button" onClick={dismiss} aria-label="Not now" className="absolute top-3 end-3 flex size-8 cursor-pointer items-center justify-center rounded-full text-white/60 hover:bg-white/10 hover:text-white">
+      <button type="button" onClick={dismiss} aria-label={t("notNow")} className="absolute top-3 end-3 flex size-8 cursor-pointer items-center justify-center rounded-full text-white/60 hover:bg-white/10 hover:text-white">
         <HiXMark className="size-4" />
       </button>
       <span className="relative flex size-10 items-center justify-center rounded-2xl bg-volt text-ink">
@@ -76,12 +78,12 @@ export function PushPrompt({ title, body, className }: { title: string; body: st
           setBusy(true);
           const ok = await enable();
           setBusy(false);
-          if (ok) toast.success("Notifications on", "We'll ping this device when something needs you.");
-          else if (pushSupport() === "denied") toast.warning("Notifications are blocked", "Allow them for this site in your browser settings.");
+          if (ok) toast.success(t("onTitle"), t("onText"));
+          else if (pushSupport() === "denied") toast.warning(t("blockedTitle"), t("blockedText"));
         }}
         className="relative mt-4 inline-flex h-11 cursor-pointer items-center rounded-full bg-volt px-5 text-sm font-semibold text-ink transition-[filter] hover:brightness-95 disabled:opacity-60"
       >
-        {busy ? "Turning on..." : "Turn on notifications"}
+        {busy ? t("turningOn") : t("turnOn")}
       </button>
     </div>
   );

@@ -1,0 +1,1308 @@
+{
+  "nav": {
+    "home": "Ana sayfa",
+    "passes": "Pasolar",
+    "routines": "Rutinler",
+    "social": "Sosyal",
+    "passport": "Pasaport",
+    "exercises": "Egzersiz kütüphanesi",
+    "savedGyms": "Kayıtlı salonlar",
+    "notifications": "Bildirimler",
+    "notificationsUnread": "Bildirimler, {count} okunmamış",
+    "profile": "Profil",
+    "security": "Güvenlik",
+    "findGyms": "Salon bul",
+    "accountMenu": "Hesap menüsünü aç",
+    "closeMenu": "Menüyü kapat",
+    "openStudio": "Stüdyomu aç",
+    "listYourGym": "Salonunu ekle",
+    "memberSince": "{date} tarihinden beri üye",
+    "browseGyms": "Tüm salonlara göz at",
+    "signOut": "Çıkış yap"
+  },
+  "site": {
+    "findGyms": "Salon bul",
+    "explore": "Keşfet",
+    "passport": "Pasaport",
+    "forOwners": "Salon sahipleri için",
+    "studioLogin": "Stüdyo girişi",
+    "logIn": "Giriş yap",
+    "getStarted": "Başla",
+    "ownGym": "Salonun mu var? Stüdyo girişi"
+  },
+  "footer": {
+    "members": "Üyeler",
+    "owners": "Salon sahipleri",
+    "explore": "Keşfet",
+    "findGyms": "Salon bul",
+    "howItWorks": "Nasıl çalışır",
+    "createAccount": "Hesap oluştur",
+    "memberLogin": "Üye girişi",
+    "whyUs": "Neden Fit Planet",
+    "listGym": "Salonunu ekle",
+    "studioLogin": "Stüdyo girişi",
+    "exploreNearby": "Yakındakileri keşfet",
+    "stories": "Pilot hikâyeleri",
+    "gymsIn": "{city} salonları",
+    "tagline": "Her şehir için tek bir fitness pasaportu. Üyeler her partner salonu yerel para birimiyle rezerve eder. Salon sahipleri kendi teknolojisini kurmadan sakin saatleri doldurur.",
+    "copyright": "© {year} Fit Planet. Tüm hakları saklıdır.",
+    "liveIn": "Şu anda {count} şehirde"
+  },
+  "hero": {
+    "liveBadge": "CANLI",
+    "live": "{cities} şehirde {gyms} salon",
+    "title": "Tek paso. <accent>Dünyadaki her salon</accent>.",
+    "lead": "Fitness pasaportun. Hangi şehre inersen in, hangi salonların sakin olduğunu gör, yerel para birimiyle paso al ve QR kodla içeri gir. Her ziyaret pasaportuna bir damga ekler.",
+    "city": "Şehir",
+    "all": "TÜMÜ",
+    "searchLabel": "Salon veya semt ara",
+    "searchPlaceholder": "Salon veya semt",
+    "searchGyms": "Salon ara",
+    "search": "Ara",
+    "stats": {
+      "gyms": "Partner salon",
+      "cities": "Tek pasoyla şehir",
+      "currencies": "Yerel para birimi",
+      "speed": "Aramadan pasoya"
+    }
+  },
+  "departures": {
+    "eyebrow": "Kalkışlar · Canlı",
+    "title": "Nereye inersen in, pason zaten geçerli.",
+    "lead": "Fiyatlar her şehrin kendi para biriminde kalır. Saatler, mesafeler ve sayılar bölgene göre gösterilir.",
+    "cols": {
+      "city": "Şehir",
+      "destination": "Varış",
+      "local": "Yerel saat",
+      "gyms": "Salon",
+      "from": "En düşük",
+      "crowd": "Yoğunluk"
+    },
+    "crowd": {
+      "busy": "Yoğun",
+      "moderate": "Orta",
+      "quiet": "Sakin"
+    }
+  },
+  "orbit": {
+    "eyebrow": "Orbit · yakındakileri keşfet",
+    "title": "Etrafındaki salonlar, <accent>liste hâlinde değil</accent>",
+    "lead": "Yakın salonlar merkeze daha yakın durur. Her halka salonun şu anki doluluğunu gösterir, böylece sakin olanı hemen bulursun."
+  },
+  "passportSection": {
+    "eyebrow": "Pasaportun",
+    "title": "Her antrenman <accent>bir damga</accent> bırakır",
+    "lead": "Geçmişin seninle her yere gelir. Dünyadaki tüm partner salonlar için tek profil, tek seri ve tek QR.",
+    "visas": "Vizeler · Girişler",
+    "holder": "Sahibi",
+    "memberSince": "Üyelik başlangıcı",
+    "weeks": "{count} hf",
+    "stats": {
+      "cities": "Şehir",
+      "visits": "Ziyaret",
+      "streak": "Seri"
+    },
+    "perks": {
+      "stamp": {
+        "title": "Her şehre bir damga",
+        "text": "Bir kez giriş yap, şehir sonsuza kadar pasaportunda kalsın."
+      },
+      "streak": {
+        "title": "Seninle gelen seriler",
+        "text": "Haftalık serin her şehirde, her pasoyla saymaya devam eder."
+      },
+      "perks": {
+        "title": "Düzenli gelenlere ayrıcalık",
+        "text": "Partner salonlar dolu pasaportları ücretsiz antrenman ve ekipmanla ödüllendirir."
+      }
+    }
+  },
+  "pulse": {
+    "eyebrow": "Pulse · yoğunluk tahmini",
+    "title": "<accent>Squat rack</accent> için sıra bekleme",
+    "lead": "Fit Planet, bu hafta evin neresi olursa olsun, evden çıkmadan önce salonun ne kadar dolu olduğunu gösterir.",
+    "points": {
+      "live": {
+        "title": "Canlı yoğunluk",
+        "text": "Üyeler giriş yaptıkça her salon doluluğunu bildirir."
+      },
+      "forecast": {
+        "title": "Saatlik tahmin",
+        "text": "Bugünün sakin saatlerini salonun kendi saat diliminde gör."
+      },
+      "alerts": {
+        "title": "Sakinlik uyarıları",
+        "text": "Favori salonun yarının altına düştüğünde haber al."
+      }
+    },
+    "chooseGym": "Salon seç",
+    "fullNow": "şu an dolu",
+    "chartLabel": "Saatlere göre beklenen yoğunluk",
+    "now": "Şimdi",
+    "quietestToday": "Bugün en sakin:",
+    "quietestLater": "Bugün daha sonra en sakin:"
+  },
+  "twoSides": {
+    "eyebrow": "Tek ağ",
+    "title": "Spor yapanların, <accent>onları isteyen</accent> salonlarla buluştuğu yer",
+    "lead": "Fit Planet iki taraflı bir pazar yeri. Üyeler özgürlük ve şeffaflık kazanır. Salonlar daha önce hiç sahip olmadıkları talebe, araçlara ve verilere kavuşur.",
+    "members": {
+      "label": "Üyeler için",
+      "title": "Her yerde antrenman yap, sadece kullandığın kadar öde.",
+      "points": {
+        "compare": "Salonları fiyat, olanak ve canlı yoğunluğa göre karşılaştır",
+        "book": "Günlük, haftalık veya aylık pasoyu saniyeler içinde al",
+        "walkIn": "Telefonundaki QR pasoyla içeri gir"
+      },
+      "cta": "Ücretsiz hesap oluştur"
+    },
+    "owners": {
+      "label": "Salon sahipleri için",
+      "title": "Hiç teknoloji kurmadan boş saatleri doldur.",
+      "points": {
+        "listing": "Anında profesyonel bir profil ve rezervasyon sayfası",
+        "capacity": "Canlı doluluk, paso fiyatları ve yayın kontrolü",
+        "studio": "QR girişleri, yorumlar ve ödemeler tek stüdyoda"
+      },
+      "cta": "Salonunu ekle"
+    }
+  },
+  "how": {
+    "eyebrow": "Nasıl çalışır",
+    "title": "Koltuktan squat rack'e <accent>dört adımda</accent>",
+    "lead": "Salona katılmayı zorlaştıran her adımı kaldırdık. Geriye kalan yaklaşık bir dakika sürüyor.",
+    "cta": "Hemen salon bul",
+    "steps": {
+      "search": {
+        "title": "Salon ara",
+        "text": "Bir şehir seç ya da konumunu kullan. Fiyat, olanaklar, puan ve anlık yoğunluğa göre filtrele.",
+        "meta": "{cities} şehir · {gyms} salon"
+      },
+      "choose": {
+        "title": "Pasonu seç",
+        "text": "Günlük, haftalık veya aylık. Her salonun sunduklarını karşılaştır ve yıllık sözleşme yerine haftana uyanı seç.",
+        "meta": "Yerel para biriminde fiyat"
+      },
+      "pay": {
+        "title": "Online rezerve et ve öde",
+        "text": "Anında onaylı güvenli ödeme. Antrenör seansı veya dolap gibi ekstralar tek dokunuşla.",
+        "meta": "Bir dakikadan kısa sürede onay"
+      },
+      "train": {
+        "title": "QR'ını göster ve çalış",
+        "text": "Pason uygulamada durur. Salon kapıda okutur ve içeridesin. Hepsi bu kadar.",
+        "meta": "Kart yok, evrak yok"
+      }
+    }
+  },
+  "owners": {
+    "eyebrow": "Salon sahipleri için",
+    "title": "Salonunu <accent>modern bir işletme</accent> gibi yönet",
+    "lead": "Çoğu salon hâlâ WhatsApp ve kâğıt defterle yönetiliyor. Fit Planet Studio rezervasyonları, girişleri, fiyatları ve geliri tek yerde toplar ve sana yeni üyeler getirir.",
+    "benefits": {
+      "noSoftware": {
+        "title": "Yazılım derdi yok",
+        "text": "Web sitesi ya da uygulama yapmadan şık bir profil ve rezervasyon akışı."
+      },
+      "occupancy": {
+        "title": "Canlı doluluk",
+        "text": "Gerçek girişlere göre salonun ne kadar dolu olduğunu telefonundan gör."
+      },
+      "pricing": {
+        "title": "Esnek fiyatlar",
+        "text": "Online ya da kasada ödenen günlük, haftalık ve aylık pasolar."
+      },
+      "checkins": {
+        "title": "QR girişleri",
+        "text": "Üyeleri anında okut ve doğrula. Kâğıt defter yok."
+      },
+      "analytics": {
+        "title": "Analizler",
+        "text": "Rezervasyonlar, gelir, yoğun saatler ve paso dağılımı tek bakışta."
+      },
+      "reviews": {
+        "title": "Yorumlar ve yanıtlar",
+        "text": "Gerçek ziyaretlerden doğrulanmış yorumlar, yanıtın hemen altında."
+      }
+    },
+    "ctaList": "Salonunu ücretsiz ekle",
+    "ctaLogin": "Stüdyo girişi",
+    "days": "P,S,Ç,P,C,C,P",
+    "preview": {
+      "dashboard": "Stüdyo paneli",
+      "open": "Şu an açık",
+      "checkins": "Bugünkü girişler",
+      "revenue": "Bugünkü gelir",
+      "inGym": "Salonda",
+      "weekly": "Haftalık rezervasyonlar",
+      "payoutTitle": "Yeni rezervasyon",
+      "payoutText": "Saniyeler içinde bildirim"
+    }
+  },
+  "stories": {
+    "eyebrow": "Pilot hikâyeleri",
+    "title": "İlk üyeler ve salonlar, <accent>kendi sözleriyle</accent>"
+  },
+  "cta": {
+    "title": "Pasaportun <accent>bir dokunuş</accent> uzağında",
+    "lead": "Pasaportunu al ve her partner şehirde antrenman yap ya da salonunu ağa kat ve bu hafta rezervasyon almaya başla.",
+    "find": "Yakındaki salonları bul",
+    "list": "Salonunu ekle",
+    "assurances": {
+      "secure": "Güvenli ödeme",
+      "free": "Üyeler için ücretsiz",
+      "verified": "Sadece doğrulanmış salonlar"
+    }
+  },
+  "common": {
+    "working": "İşleniyor..."
+  },
+  "auth": {
+    "shell": {
+      "back": "Siteye dön",
+      "member": {
+        "eyebrow": "Üyeler için Fit Planet",
+        "title": "Tek hesap. Şehirdeki <accent>her salon</accent>.",
+        "points": {
+          "phone": {
+            "title": "Telefonun, pason",
+            "text": "Herhangi bir partner salonda QR kodu göster ve gir."
+          },
+          "signIn": {
+            "title": "İstediğin gibi giriş yap",
+            "text": "Google, Facebook, e-posta bağlantısı ya da şifre."
+          },
+          "friends": {
+            "title": "Arkadaşlarınla çalış",
+            "text": "Arkadaşlarını takip et, antrenman paylaş, rutin kopyala."
+          }
+        }
+      },
+      "studio": {
+        "eyebrow": "Fit Planet Studio",
+        "title": "Salonunu <accent>modern bir işletme</accent> gibi yönet.",
+        "points": {
+          "checkins": {
+            "title": "QR girişleri",
+            "text": "Üyeleri kapıda bir saniyede doğrula."
+          },
+          "capacity": {
+            "title": "Canlı doluluk ve analiz",
+            "text": "Yoğun saatlerini bil, personelini ona göre planla."
+          },
+          "alerts": {
+            "title": "Anında rezervasyon uyarısı",
+            "text": "Paso alındığı an telefonuna bildirim."
+          }
+        }
+      },
+      "visual": {
+        "dayPass": "Günlük paso",
+        "active": "Aktif",
+        "validToday": "Bugün geçerli",
+        "checkedIn": "Giriş yapıldı",
+        "weekly": "Haftalık rezervasyonlar",
+        "checkinsToday": "Bugünkü girişler",
+        "capacityNow": "Şu anki doluluk",
+        "booked": "Yeni günlük paso alındı"
+      }
+    },
+    "form": {
+      "google": "Google ile devam et",
+      "facebook": "Facebook ile devam et",
+      "orEmail": "veya e-posta ile",
+      "orSignUpEmail": "veya e-posta ile kaydol",
+      "method": "Giriş yöntemi",
+      "email": "E-posta",
+      "password": "Şifre",
+      "emailLink": "E-posta bağlantısı",
+      "passwordPlaceholder": "Şifren",
+      "forgot": "Şifreni mi unuttun?",
+      "signIn": "Giriş yap",
+      "signingIn": "Giriş yapılıyor...",
+      "linkHint": "Sana tek dokunuşla giriş bağlantısı göndereceğiz. Şifre gerekmez.",
+      "sendLink": "Bağlantı gönder",
+      "sendingLink": "Bağlantı gönderiliyor...",
+      "fullName": "Ad soyad",
+      "namePlaceholder": "Adın",
+      "newPasswordPlaceholder": "En az 8 karakter",
+      "create": "Hesap oluştur",
+      "creating": "Hesap oluşturuluyor...",
+      "terms": "Devam ederek Fit Planet kullanım koşullarını ve gizlilik politikasını kabul etmiş olursun.",
+      "sending": "Gönderiliyor...",
+      "sendReset": "Sıfırlama bağlantısı gönder",
+      "newPassword": "Yeni şifre",
+      "confirmPassword": "Şifreyi onayla",
+      "saving": "Kaydediliyor...",
+      "saveSignIn": "Kaydet ve giriş yap",
+      "errors": {
+        "OAuthAccountNotLinked": "Bu e-postayla zaten bir hesap var. Önceki gibi giriş yap.",
+        "AccessDenied": "Erişim reddedildi. Lütfen tekrar dene.",
+        "Verification": "Bu giriş bağlantısının süresi dolmuş ya da kullanılmış. Yenisini iste.",
+        "Configuration": "Giriş şu anda kullanılamıyor. Lütfen biraz sonra tekrar dene.",
+        "default": "Giriş başarısız. Lütfen tekrar dene."
+      }
+    },
+    "login": {
+      "meta": "Giriş yap",
+      "asideText": "Fit Planet'te yeni misin?",
+      "asideLink": "Hesap oluştur",
+      "eyebrow": "Tekrar hoş geldin",
+      "title": "Pasaportuna giriş yap",
+      "subtitle": "Pasoların, damgaların ve rezervasyonların her cihazda."
+    },
+    "register": {
+      "meta": "Hesabını oluştur",
+      "asideText": "Zaten üye misin?",
+      "asideLink": "Giriş yap",
+      "eyebrow": "Pasaportunu al",
+      "title": "Fit Planet hesabını oluştur",
+      "subtitle": "Her şehirdeki salonlarda günlük paso al ve QR kodla gir."
+    },
+    "forgot": {
+      "meta": "Şifreni sıfırla",
+      "asideText": "Hatırladın mı?",
+      "asideLink": "Giriş yap",
+      "eyebrow": "Hesap kurtarma",
+      "title": "Şifreni mi unuttun?",
+      "subtitle": "E-postanı gir, yeni şifre belirlemen için bir bağlantı gönderelim."
+    },
+    "reset": {
+      "eyebrow": "Hesap kurtarma",
+      "title": "Yeni şifre belirle",
+      "missing": "Bu bağlantıda kod eksik.",
+      "askNew": "Yeni bağlantı iste"
+    },
+    "checkEmail": {
+      "meta": "E-postanı kontrol et",
+      "title": "Gelen kutuna bak",
+      "text": "Sana bir giriş bağlantısı gönderdik. Devam etmek için bu cihazda aç. 24 saat geçerlidir.",
+      "nothing": "Gelmedi mi? Spam klasörüne bak ya da",
+      "retry": "tekrar dene"
+    },
+    "studioLogin": {
+      "meta": "Stüdyo girişi",
+      "asideText": "Yeni salon mu?",
+      "asideLink": "Salonunu ekle",
+      "eyebrow": "Fit Planet Studio",
+      "title": "Stüdyona giriş yap",
+      "subtitle": "Salonun için rezervasyonlar, girişler ve gelir."
+    },
+    "studioRegister": {
+      "meta": "Salonunu ekle",
+      "asideText": "Zaten ekli mi?",
+      "asideLink": "Giriş yap",
+      "eyebrow": "Salonunu ekle · Ücretsiz",
+      "title": "Salonunu haritaya koy",
+      "subtitle": "Hesabını oluştur, ardından salonunu yaklaşık beş dakikada ekle. Yayınladığın an üyeler rezervasyon yapabilir.",
+      "cta": "Hesap oluştur ve devam et"
+    },
+    "studioForgot": {
+      "meta": "Stüdyo şifresini sıfırla",
+      "asideText": "Hatırladın mı?",
+      "asideLink": "Giriş yap",
+      "eyebrow": "Hesap kurtarma",
+      "title": "Şifreni mi unuttun?",
+      "subtitle": "Stüdyonda kullandığın e-postayı gir, sıfırlama bağlantısı gönderelim."
+    }
+  },
+  "explore": {
+    "meta": "Salon bul",
+    "metaDescription": "Her şehirde partner salonları bul. Pasoları yerel para biriminde ve canlı dolulukla karşılaştır, saniyeler içinde rezerve et.",
+    "eyebrow": "Keşfet",
+    "cities": "{count} şehir",
+    "title": "<accent>Gününe</accent> uyan salonu bul",
+    "lead": "{cities} şehirde {gyms} partner salon. Pasoları yerel para biriminde karşılaştır, şu anki yoğunluğu gör ve saniyeler içinde rezerve et.",
+    "chooseCity": "Şehir seç",
+    "allCode": "TÜMÜ",
+    "everywhere": "Her yer",
+    "results": "<n>{count}</n> salon",
+    "resultsFor": "<q>“{query}”</q> için <n>{count}</n> salon",
+    "views": {
+      "orbit": "Orbit",
+      "grid": "Izgara",
+      "list": "Liste",
+      "orbitAria": "Orbit görünümü",
+      "gridAria": "Izgara görünümü",
+      "listAria": "Liste görünümü"
+    },
+    "empty": {
+      "title": "Henüz eşleşen salon yok",
+      "text": "Başka bir bölge dene ya da bir filtreyi gevşet. Ağa her hafta yeni salonlar katılıyor.",
+      "reset": "Aramayı ve filtreleri sıfırla"
+    },
+    "owner": {
+      "title": "Salonun mu var?",
+      "titleCity": "{city} şehrinde salonun mu var?",
+      "text": "Fit Planet'e ekle ve yeni üyelerden rezervasyon almaya başla.",
+      "cta": "Salonunu ekle"
+    }
+  },
+  "tags": {
+    "parking": "Otopark",
+    "showers": "Duş",
+    "lockers": "Dolap",
+    "ac": "Klima",
+    "wifi": "Wi-Fi",
+    "sauna": "Sauna",
+    "steamroom": "Buhar odası",
+    "pool": "Havuz",
+    "spa": "Spa",
+    "towels": "Havlu",
+    "cafe": "Kafe",
+    "womenonlyarea": "Kadınlara özel alan",
+    "personaltraining": "Kişisel antrenman",
+    "groupclasses": "Grup dersleri",
+    "kidsarea": "Çocuk alanı",
+    "wheelchairaccess": "Engelli erişimi",
+    "meditationroom": "Meditasyon odası",
+    "juicebar": "Meyve suyu barı",
+    "supplementshop": "Takviye mağazası",
+    "cardio": "Kardiyo",
+    "strength": "Kuvvet",
+    "functional": "Fonksiyonel",
+    "freeweights": "Serbest ağırlık",
+    "crossfit": "CrossFit",
+    "yoga": "Yoga",
+    "pilates": "Pilates",
+    "swimming": "Yüzme",
+    "powerlifting": "Powerlifting",
+    "bodybuilding": "Vücut geliştirme",
+    "olympiclifting": "Halter",
+    "boxing": "Boks",
+    "martialarts": "Dövüş sanatları",
+    "spin": "Spinning"
+  },
+  "filters": {
+    "search": "Salonları ada veya semte göre ara",
+    "clearSearch": "Aramayı temizle",
+    "filters": "Filtreler",
+    "sortBy": "Sırala",
+    "distance": "Mesafe",
+    "sort": {
+      "distance": "En yakın",
+      "rating": "En yüksek puan",
+      "price_asc": "Fiyat: artan",
+      "price_desc": "Fiyat: azalan",
+      "reviews": "En çok yorum"
+    },
+    "within": "{distance} içinde",
+    "anyDistance": "Tüm mesafeler",
+    "open247": "7/24 açık",
+    "verified": "Doğrulanmış",
+    "clearAll": "Tümünü temizle",
+    "price": "Günlük paso fiyatı",
+    "any": "Tümü",
+    "tiers": {
+      "Budget": "Ekonomik",
+      "Mid-range": "Orta",
+      "Premium": "Premium"
+    },
+    "amenities": "Olanaklar",
+    "style": "Antrenman türü"
+  },
+  "gym": {
+    "featured": "Öne çıkan",
+    "crowd": {
+      "busy": "Yoğun",
+      "moderate": "Orta",
+      "quiet": "Sakin"
+    },
+    "perDay": "/ gün",
+    "verified": "Doğrulanmış",
+    "open247": "7/24 açık",
+    "hours": "{open} - {close}",
+    "photoN": "{name} fotoğraf {n}",
+    "tabs": {
+      "overview": "Genel bakış",
+      "passes": "Pasolar",
+      "classes": "Dersler",
+      "trainers": "Antrenörler",
+      "reviews": "Yorumlar"
+    },
+    "gymsIn": "{city} salonları",
+    "breadcrumb": "Keşfet",
+    "photos": "{count} fotoğraf",
+    "more": "+{count} daha",
+    "reviewsCount": "{count} yorum",
+    "openNow": "Şu an açık",
+    "closed": "Kapalı",
+    "crowdNow": {
+      "busy": "Şu an yoğun",
+      "moderate": "Şu an orta",
+      "quiet": "Şu an sakin"
+    },
+    "dayPass": "Günlük paso",
+    "localTime": "Yerel saat",
+    "sections": "Salon bölümleri",
+    "about": "Hakkında",
+    "inside": "{name} içeriden",
+    "training": "Antrenman",
+    "pulse": "Pulse",
+    "pulseTitle": "Bugün ne kadar yoğun olacak",
+    "cityTime": "{city} saati",
+    "gallery": "Galeri",
+    "galleryTitle": "Etrafa bir göz at",
+    "hoursEyebrow": "Saatler",
+    "hoursTitle": "Çalışma saatleri",
+    "today": "Bugün",
+    "rules": "Salon kuralları",
+    "rulesTitle": "Bilmekte fayda var",
+    "policies": {
+      "cancellation": "İptal",
+      "guestPolicy": "Misafir politikası",
+      "dresscode": "Kıyafet kuralı",
+      "ageRestriction": "Yaş sınırı"
+    },
+    "equipment": "Ekipman",
+    "equipmentTitle": "Salonda neler var",
+    "addOns": "Ekstralar",
+    "addOnsTitle": "Her pasoya ekle",
+    "add": "{name} ekle",
+    "unavailable": "Mevcut değil",
+    "passesTitle": "Ne kadar süre çalışmak istediğini seç",
+    "classesTitle": "Bu haftaki grup dersleri",
+    "difficulty": {
+      "beginner": "Başlangıç",
+      "intermediate": "Orta",
+      "advanced": "İleri",
+      "alllevels": "Tüm seviyeler"
+    },
+    "minutes": "{count} dk",
+    "spotsLeft": "{total} yerden {left} boş",
+    "bookClass": "Derse kaydol",
+    "coaches": "Koçlar",
+    "coachesTitle": "Ekiple çalış",
+    "trainerStats": "{clients} danışan · {years} yıl",
+    "perHour": "/ saat",
+    "bookSession": "Seans al",
+    "noReviews": "Henüz yazılı yorum yok. İlk yorumu sen yaz.",
+    "directions": "Yol tarifi al",
+    "contact": "İletişim",
+    "website": "Web sitesi",
+    "inside_now": "Şu an içeride {max} kişiden {current} kişi",
+    "bookPass": "Paso al",
+    "unsave": "Kayıtlı salonlardan çıkar",
+    "saveGym": "Salonu kaydet",
+    "saveFailed": "Kaydedilemedi",
+    "saved": "Kaydedildi",
+    "save": "Kaydet",
+    "notFound": "Salon bulunamadı",
+    "trainedHere": "Burada çalıştın mı?",
+    "verifiedReviewHint": "Fit Planet üzerinden rezervasyon yapan üyeler doğrulanmış yorum bırakabilir.",
+    "signInReview": "Yorum için giriş yap"
+  },
+  "passes": {
+    "name": {
+      "day": "Günlük paso",
+      "week": "Haftalık paso",
+      "month": "Aylık paso",
+      "annual": "Yıllık paso"
+    },
+    "duration": {
+      "day": "1 gün",
+      "week": "7 gün",
+      "month": "30 gün",
+      "annual": "12 ay"
+    },
+    "book": {
+      "day": "Günlük paso al",
+      "week": "Haftalık paso al",
+      "month": "Aylık paso al",
+      "annual": "Yıllık paso al"
+    },
+    "features": {
+      "access": "Tam salon erişimi",
+      "equipment": "Tüm ekipman",
+      "locker": "Dolap",
+      "groupClass": "1 grup dersi",
+      "unlimitedClasses": "Sınırsız ders",
+      "towel": "Havlu hizmeti",
+      "everythingMonth": "Aylık pasodaki her şey",
+      "ptSessions": "Ayda 2 PT seansı",
+      "guestPasses": "Ayda 2 misafir pasosu"
+    },
+    "popular": "En popüler",
+    "choose": "Seç",
+    "special": "Özel paketler",
+    "perMonth": "aylık",
+    "getPackage": "Bu paketi al",
+    "boarding": "Biniş kartı",
+    "choosePass": "Paso seç",
+    "totalToday": "Bugünkü toplam",
+    "instant": "Anında QR paso · Fiyatlar {currency}",
+    "short": {
+      "day": "Gün",
+      "week": "Hafta",
+      "month": "Ay"
+    }
+  },
+  "reviews": {
+    "verified": "Doğrulanmış",
+    "less": "Daha az göster",
+    "more": "Devamını oku",
+    "categories": {
+      "cleanliness": "Temizlik",
+      "equipment": "Ekipman",
+      "staff": "Personel",
+      "value": "Fiyat/performans"
+    },
+    "image": "Yorum görseli {n}",
+    "response": "Salonun yanıtı",
+    "helpful": "Faydalı ({count})",
+    "report": "Bildir",
+    "basedOn": "{count} yoruma göre",
+    "stars": "{count} yıldız",
+    "howWas": "{gym} nasıldı?",
+    "helps": "Yorumun, gezginlerin doğru salonu seçmesine yardım eder.",
+    "write": "Yorum yaz",
+    "overall": "Genel",
+    "headline": "Başlık",
+    "headlinePlaceholder": "Harika ekipman, hiç kalabalık değil",
+    "yours": "Yorumun",
+    "commentPlaceholder": "Ne dikkatini çekti? Gezginlerin bilmesi gereken bir şey var mı?",
+    "cancel": "Vazgeç",
+    "posting": "Yayınlanıyor...",
+    "post": "Yorumu yayınla"
+  },
+  "gallery": {
+    "none": "Fotoğraf yok",
+    "all": "Tümü",
+    "photo": "Salon fotoğrafı",
+    "counter": "{n} / {total}",
+    "categories": {
+      "Equipment": "Ekipman",
+      "Facility": "Tesis",
+      "Classes": "Dersler",
+      "Trainers": "Antrenörler",
+      "Exterior": "Dış mekân"
+    }
+  },
+  "checkout": {
+    "securing": "Pason ayarlanıyor...",
+    "range": "{from} - {to}",
+    "reserveDesk": "Rezerve et, kasada öde",
+    "pay": "{total} öde",
+    "title": "Pasonu al",
+    "cancelled": "Ödeme iptal edildi. Hiçbir ücret alınmadı, aşağıdan tekrar deneyebilirsin.",
+    "steps": {
+      "pass": "Paso",
+      "date": "Başlangıç tarihi",
+      "holder": "Paso sahibi",
+      "payment": "Ödeme"
+    },
+    "passType": "Paso türü",
+    "oneEntry": "Tek giriş",
+    "daysOnce": "{days} gün · günde bir kez",
+    "perDay": "/ gün",
+    "otherDate": "Başka tarih",
+    "pickDate": "Başlangıç tarihi seç",
+    "today": "Bugün",
+    "validLine": "Geçerlilik <b>{validity}</b>",
+    "cityTime": "{city} saati",
+    "holderName": "Pasodaki ad",
+    "phone": "Telefon (isteğe bağlı)",
+    "phoneHint": "Planlar değişirse salon sana ulaşabilir.",
+    "method": "Ödeme yöntemi",
+    "payNow": "Şimdi öde",
+    "testMode": "Test modu: gerçek karttan ücret alınmaz.",
+    "onlineText": "Kart, Apple Pay veya Google Pay. Anında onay.",
+    "deskTitle": "Kasada öde",
+    "deskText": "Şimdi rezerve et, salona vardığında öde.",
+    "valid": "Geçerlilik",
+    "location": "Konum",
+    "atDesk": "Kasada",
+    "online": "Online",
+    "total": "Toplam",
+    "freeCancel": "Bir gün öncesine kadar ücretsiz iptal.",
+    "reserve": "Rezerve et"
+  },
+  "home": {
+    "range": "{from} - {to}",
+    "active": "Aktif",
+    "showPass": "Pasoyu göster",
+    "empty": {
+      "eyebrow": "Aktif paso yok",
+      "title": "Bir sonraki antrenmanın nerede?",
+      "text": "Bir dakikadan kısa sürede günlük paso al ve QR kodla gir.",
+      "cta": "Salon bul"
+    },
+    "quick": {
+      "explore": "Keşfet",
+      "passes": "Pasolar",
+      "stamps": "Damgalar",
+      "saved": "Kayıtlı"
+    },
+    "greeting": {
+      "late": "Gece antrenmanı",
+      "morning": "Günaydın",
+      "afternoon": "İyi günler",
+      "evening": "İyi akşamlar"
+    },
+    "hi": "Merhaba {name}",
+    "hiThere": "Merhaba",
+    "stampsWord": "damga",
+    "activePass": "Aktif paso",
+    "shortcuts": "Kısayollar",
+    "upcoming": "Yaklaşan",
+    "allPasses": "Tüm pasolar",
+    "noUpcoming": "İleri tarihli rezervasyon yok. Bir antrenman planla, burada görünsün.",
+    "push": {
+      "title": "Onaylandığı an haberin olsun",
+      "body": "Rezervasyon onaylarını ve paso hatırlatmalarını bu cihazda al."
+    },
+    "passport": "Pasaportum",
+    "stats": {
+      "gyms": "Salon",
+      "cities": "Şehir",
+      "visits": "Ziyaret"
+    },
+    "firstStamp": "İlk damgan için bir salona giriş yap.",
+    "trainIn": "{city} şehrinde çalış",
+    "popular": "Şu an popüler",
+    "seeAll": "Tümünü gör",
+    "crowd": {
+      "busy": "Yoğun",
+      "steady": "Orta",
+      "quiet": "Sakin"
+    },
+    "perDay": "/ gün"
+  },
+  "wallet": {
+    "eyebrow": "Cüzdan · {count} paso",
+    "title": "Pasolarım",
+    "bookNew": "Yeni paso al",
+    "walletAria": "Aktif ve yaklaşan pasolar",
+    "starts": "{date} başlıyor",
+    "qrFull": "QR'ı tam ekran göster",
+    "active": "Aktif",
+    "upcoming": "Yaklaşan",
+    "valid": "Geçerlilik",
+    "checkins": "Girişler",
+    "paid": "Ödenen",
+    "showEntrance": "Girişte göster",
+    "details": "Paso detayları",
+    "empty": {
+      "title": "Cüzdanın boş",
+      "text": "Herhangi bir partner salonda paso al, QR koduyla birlikte buraya gelsin.",
+      "cta": "Salon bul"
+    },
+    "stampsAria": "Pasaport damgaları",
+    "passportStamps": "Pasaport · Damgalar",
+    "checkIn": "Giriş yap",
+    "stats": {
+      "cities": "Şehir",
+      "countries": "Ülke",
+      "visits": "Ziyaret"
+    },
+    "pendingStamp": "{city} damgasını almak için {gym} salonuna giriş yap.",
+    "past": "Geçmiş pasolar",
+    "refunded": "İade edildi",
+    "cancelled": "İptal edildi",
+    "again": "Tekrar al",
+    "entranceQr": "Giriş QR'ı",
+    "close": "Kapat",
+    "gymDetails": "Salon detayları"
+  },
+  "pass": {
+    "meta": "Pason",
+    "status": {
+      "upcoming": "Yaklaşan",
+      "confirmed": "Geçerli",
+      "pending": "Ödeme bekleniyor",
+      "cancelled": "İptal edildi",
+      "refunded": "İade edildi",
+      "expired": "Süresi doldu"
+    },
+    "range": "{from} - {to}",
+    "all": "Tüm pasolar",
+    "booked": "Rezervasyonun tamam",
+    "payAtDesk": "Vardığında kasada {amount} öde.",
+    "paymentReceived": "Ödeme alındı. Makbuzun e-postana geliyor.",
+    "showDesk": "Bunu kasada göster. Ekran parlaklığını artır.",
+    "unusable": "Bu paso kullanılamaz.",
+    "valid": "Geçerlilik",
+    "holder": "Sahibi",
+    "payDesk": "Kasada ödenecek",
+    "paid": "Ödenen",
+    "entry": "Giriş",
+    "single": "Tek giriş",
+    "onceDay": "Günde bir kez",
+    "checkins": "Girişler",
+    "directions": "Yol tarifi",
+    "gymPage": "Salon sayfası",
+    "cancellation": "İptal",
+    "refundNote": "Tutarın tamamı orijinal ödeme yöntemine iade edilecek.",
+    "nothingCharged": "Hiçbir ücret alınmadı.",
+    "cancel": {
+      "button": "Rezervasyonu iptal et",
+      "confirm": "Bu paso iptal edilsin mi?",
+      "done": "Rezervasyon iptal edildi",
+      "failed": "İptal edilemedi",
+      "cancelling": "İptal ediliyor...",
+      "yes": "Evet, iptal et",
+      "keep": "Kalsın"
+    }
+  },
+  "passport": {
+    "eyebrow": "Pasaport",
+    "stampsCount": "{padded} damga",
+    "title": "Pasaportun",
+    "first": "İLK",
+    "empty": {
+      "title": "Henüz damga yok",
+      "text": "Giriş yaptığın her yeni salon bir damga ekler. Gezdikçe şehir topla.",
+      "cta": "Salon bul"
+    },
+    "stats": {
+      "gyms": "Salon",
+      "cities": "Şehir",
+      "countries": "Ülke"
+    },
+    "visits": "Ziyaretler",
+    "noVisits": "Girişlerin burada listelenecek."
+  },
+  "saved": {
+    "title": "Kayıtlı salonlar",
+    "count": "{count} kayıtlı",
+    "empty": {
+      "title": "Henüz kayıt yok",
+      "text": "Hızlı rezervasyon için herhangi bir salonda kalbe dokun.",
+      "cta": "Salonları keşfet"
+    },
+    "perDay": "/ gün",
+    "book": "Paso al"
+  },
+  "settings": {
+    "notifications": "Bildirimler",
+    "push": {
+      "title": "Bu cihazda bildirim al",
+      "body": "Fit Planet kapalıyken bile rezervasyon onayları ve paso hatırlatmaları."
+    },
+    "settings": "Ayarlar",
+    "profile": "Profil",
+    "profileLead": "Rezervasyon yaptığında salonların seni nasıl gördüğü.",
+    "security": "Giriş ve güvenlik",
+    "securityHint": "Şifre, bağlı hesaplar",
+    "password": "Şifre",
+    "addPassword": "Şifre ekle",
+    "passwordHint": "En az 8 karakter kullan. Bir parola cümlesi akılda kalması en kolay olanıdır.",
+    "addPasswordHint": "Bağlantıyla ya da sosyal hesapla giriş yapıyorsun. E-postanla da giriş yapmak için şifre ekle.",
+    "ways": "Giriş yöntemleri",
+    "emailLink": "E-posta bağlantısı",
+    "alwaysOn": "Her zaman açık",
+    "connected": "Bağlı",
+    "notConnected": "Bağlı değil",
+    "connectHint": "Bağlamak için aynı e-postayla bir kez Google veya Facebook ile giriş yap.",
+    "signOut": "Bu cihazda çıkış yap",
+    "prefs": {
+      "failed": "Kaydedilemedi",
+      "push": {
+        "title": "Anlık bildirimler",
+        "text": "Açtığın cihazlarda uyarılar"
+      },
+      "email": {
+        "title": "E-posta",
+        "text": "Makbuzlar ve önemli hesap e-postaları"
+      },
+      "bookingUpdates": {
+        "title": "Rezervasyon güncellemeleri",
+        "text": "Onaylar, değişiklikler ve iptaller"
+      },
+      "passReminders": {
+        "title": "Paso hatırlatmaları",
+        "text": "Paso başlamadan ya da bitmeden bir gün önce"
+      },
+      "promotions": {
+        "title": "Salonlardan teklifler",
+        "text": "Ziyaret ettiğin salonlardan ara sıra fırsatlar"
+      }
+    },
+    "currentPassword": "Mevcut şifre",
+    "newPassword": "Yeni şifre",
+    "confirmPassword": "Şifreyi onayla",
+    "saving": "Kaydediliyor...",
+    "changePassword": "Şifreyi değiştir",
+    "addPasswordCta": "Şifre ekle",
+    "uploadFailed": "Yükleme başarısız",
+    "changePhoto": "Fotoğrafı değiştir",
+    "yourName": "Adın",
+    "uploadPhoto": "Fotoğraf yükle",
+    "remove": "Kaldır",
+    "fullName": "Ad soyad",
+    "phone": "Telefon",
+    "phoneHint": "Rezervasyon yaptığın salonlarla paylaşılır",
+    "homeCity": "Yaşadığın şehir",
+    "homeCityPlaceholder": "Genelde çalıştığın yer",
+    "region": "Bölge ve dil",
+    "saveProfile": "Profili kaydet"
+  },
+  "notifications": {
+    "empty": {
+      "title": "Her şey sakin",
+      "text": "Rezervasyonlar, girişler ve yorumlar burada görünecek."
+    },
+    "unread": "{count} okunmamış",
+    "unreadOne": "Okunmamış",
+    "caughtUp": "Hepsini okudun",
+    "markAll": "Tümünü okundu say",
+    "push": {
+      "notNow": "Şimdi değil",
+      "onTitle": "Bildirimler açık",
+      "onText": "Bir şey olduğunda bu cihaza haber vereceğiz.",
+      "blockedTitle": "Bildirimler engelli",
+      "blockedText": "Tarayıcı ayarlarından bu site için izin ver.",
+      "turningOn": "Açılıyor...",
+      "turnOn": "Bildirimleri aç"
+    }
+  },
+  "training": {
+    "targetReps": "{reps} tekrar",
+    "targetSec": "{reps} sn",
+    "restSec": "{sec} sn",
+    "restMin": "{m} dk",
+    "muscles": {
+      "chest": "Göğüs",
+      "back": "Sırt",
+      "shoulders": "Omuz",
+      "biceps": "Biseps",
+      "triceps": "Triseps",
+      "forearms": "Ön kol",
+      "core": "Karın",
+      "quadriceps": "Ön bacak",
+      "hamstrings": "Arka bacak",
+      "glutes": "Kalça",
+      "calves": "Baldır",
+      "full_body": "Tüm vücut",
+      "cardio": "Kardiyo"
+    },
+    "equipment": {
+      "barbell": "Halter",
+      "dumbbell": "Dambıl",
+      "cable": "Kablo",
+      "machine": "Makine",
+      "bodyweight": "Vücut ağırlığı",
+      "kettlebell": "Kettlebell",
+      "resistance_band": "Direnç bandı",
+      "pull_up_bar": "Barfiks barı",
+      "bench": "Sehpa",
+      "treadmill": "Koşu bandı",
+      "bike": "Bisiklet",
+      "rowing_machine": "Kürek makinesi",
+      "none": "Yok"
+    },
+    "categories": {
+      "push": "İtiş",
+      "pull": "Çekiş",
+      "legs": "Bacak",
+      "upper_body": "Üst vücut",
+      "lower_body": "Alt vücut",
+      "full_body": "Tüm vücut",
+      "core": "Karın",
+      "cardio": "Kardiyo",
+      "custom": "Özel"
+    },
+    "difficulty": {
+      "beginner": "Başlangıç",
+      "intermediate": "Orta",
+      "advanced": "İleri"
+    },
+    "exercises": {
+      "ex001": "Halter bench press",
+      "ex002": "Eğimli dambıl press",
+      "ex003": "Şınav",
+      "ex004": "Barfiks",
+      "ex005": "Halter row",
+      "ex006": "Lat pulldown",
+      "ex007": "Omuz press",
+      "ex008": "Yana açış",
+      "ex009": "Halter squat",
+      "ex010": "Romanian deadlift",
+      "ex011": "Leg press",
+      "ex012": "Halter curl",
+      "ex013": "Triseps pushdown",
+      "ex014": "Plank",
+      "ex015": "Kablo crunch",
+      "ex016": "Koşu bandında koşu",
+      "ex017": "Kürek makinesi"
+    },
+    "templates": {
+      "tpl-push": {
+        "name": "İtiş günü",
+        "notes": "Göğüs, omuz ve triseps."
+      },
+      "tpl-pull": {
+        "name": "Çekiş günü",
+        "notes": "Sırt ve biseps."
+      },
+      "tpl-legs": {
+        "name": "Bacak günü",
+        "notes": "Ön bacak, arka bacak ve kalça."
+      },
+      "tpl-full": {
+        "name": "Yeni başlayanlar için tüm vücut",
+        "notes": "Tüm büyük kas gruplarını kısa bir seansta çalıştır. İlk haftaların için ideal."
+      },
+      "tpl-core": {
+        "name": "Hızlı karın",
+        "notes": "On beş dakika, her seansı bununla bitir."
+      },
+      "tpl-hiit": {
+        "name": "Kardiyo aralıkları",
+        "notes": "Kısa dinlenmeli, kısa ve sert efor aralıkları."
+      }
+    }
+  },
+  "routines": {
+    "title": "Rutinler",
+    "eyebrow": "Antrenman günlüğü",
+    "new": "Yeni",
+    "empty": {
+      "title": "İlk rutinini oluştur",
+      "text": "Egzersizleri seç, hedeflerini belirle ve salonda her seti telefonundan kaydet. Ya da aşağıdaki bir şablonla başla.",
+      "cta": "Rutin oluştur"
+    },
+    "cardSummary": "{exercises} egzersiz · {sets} set · ~{minutes} dk",
+    "summary": {
+      "meta": "Antrenman özeti",
+      "time": "Süre",
+      "min": "dk",
+      "sets": "Set",
+      "done": "tamam",
+      "volume": "Hacim",
+      "complete": "Antrenman tamamlandı",
+      "workout": "Antrenman",
+      "again": "Tekrar yap",
+      "back": "Rutinlere dön"
+    },
+    "done": "{count}× yapıldı · son {date}",
+    "notDone": "Henüz yapılmadı",
+    "start": "Başla",
+    "templates": "Şablonla başla",
+    "templatesHint": "Düzenleyebilmen için rutinlerine kopyalanır.",
+    "templateSummary": "{exercises} egzersiz · ~{minutes} dk",
+    "useTemplate": "Şablonu kullan",
+    "recent": "Son antrenmanlar",
+    "noRecent": "Biten antrenmanlar setleri ve hacimleriyle burada görünür.",
+    "minutes": "{count} dk",
+    "sets": "{count} set",
+    "library": "Egzersiz kütüphanesine göz at",
+    "week": {
+      "title": "Son 7 gün",
+      "workouts": "<n>{count}</n> antrenman",
+      "time": "Antrenman süresi",
+      "minutes": "{count} dk",
+      "volume": "Kaldırılan ağırlık"
+    },
+    "editor": {
+      "saved": "Rutin kaydedildi",
+      "created": "Rutin oluşturuldu",
+      "name": "Rutin adı",
+      "namePlaceholder": "örn. Pazartesi itiş",
+      "notesPlaceholder": "Notlar (isteğe bağlı): odak, ipuçları, bir dahaki sefere neyi değiştireceğin",
+      "moveUp": "Yukarı taşı",
+      "moveDown": "Aşağı taşı",
+      "remove": "{name} kaldır",
+      "sets": "Set",
+      "fewer": "Set azalt",
+      "more": "Set artır",
+      "seconds": "Saniye",
+      "reps": "Tekrar",
+      "weight": "Ağırlık ({unit})",
+      "optional": "İsteğe bağlı",
+      "rest": "Setler arası dinlenme",
+      "add": "Egzersiz ekle",
+      "summary": "{exercises} egzersiz · {sets} set",
+      "about": "Yaklaşık {minutes} dk",
+      "saving": "Kaydediliyor…",
+      "save": "Değişiklikleri kaydet",
+      "create": "Rutin oluştur",
+      "close": "Kapat",
+      "search": "Egzersiz ara",
+      "alreadyAdded": "zaten eklendi",
+      "noMatch": "Eşleşen egzersiz yok.",
+      "addCount": "{count} egzersiz ekle",
+      "select": "Egzersiz seç"
+    },
+    "player": {
+      "finishFailed": "Bitirilemedi",
+      "discard": "Silinsin mi?",
+      "quit": "Antrenmandan çık",
+      "saving": "Kaydediliyor…",
+      "finish": "Bitir",
+      "setsProgress": "{done}/{total} set",
+      "lifted": "{amount} {unit} kaldırıldı",
+      "restShort": "dinlenme {rest}",
+      "set": "Set",
+      "seconds": "Saniye",
+      "reps": "Tekrar",
+      "weightAria": "Set {n} ağırlığı ({unit})",
+      "secondsAria": "Set {n} saniye",
+      "repsAria": "Set {n} tekrar",
+      "doneAria": "Set {n} tamam",
+      "addSet": "Set ekle",
+      "rest": "Dinlenme",
+      "skip": "Atla",
+      "allDone": "Tüm setler tamam · Antrenmanı bitir"
+    },
+    "pages": {
+      "new": "Yeni rutin",
+      "edit": "Rutini düzenle",
+      "makeYours": "Kendine göre ayarla",
+      "templateHint": "Şablon rutinlerine kaydedildi. Setleri, ağırlıkları ve dinlenmeyi ayarla, sonra kaydet.",
+      "editHint": "Değişiklikler bir sonraki antrenmanında geçerli olur.",
+      "workout": "Antrenman"
+    },
+    "menu": {
+      "updateFailed": "Güncellenemedi",
+      "deleted": "{name} silindi",
+      "deleteFailed": "Silinemedi",
+      "unfavourite": "Favorilerden çıkar",
+      "favourite": "Favorilere ekle",
+      "more": "Diğer işlemler",
+      "edit": "Rutini düzenle",
+      "share": "Akışta paylaş",
+      "confirmDelete": "Silmek için tekrar dokun",
+      "delete": "Sil"
+    }
+  },
+  "social": {
+    "post": {
+      "commentFailed": "Yorum yapılamadı",
+      "deleteFailed": "Silinemedi",
+      "deleted": "Gönderi silindi",
+      "reported": "Teşekkürler. İnceleyeceğiz.",
+      "routineSaved": "Rutin seninkilere kaydedildi",
+      "saveFailed": "Kaydedilemedi",
+      "followersOnly": "Sadece takipçiler",
+      "options": "Gönderi seçenekleri",
+      "delete": "Gönderiyi sil",
+      "report": "Bildir",
+      "workoutLogged": "Antrenman kaydedildi",
+      "time": "Süre",
+      "min": "dk",
+      "sets": "Set",
+      "volume": "Hacim",
+      "checkedIn": "Giriş yaptı",
+      "routine": "Rutin",
+      "more": "+{count} daha",
+      "saveRoutine": "Rutinlerime kaydet",
+      "unlike": "Beğenmekten vazgeç",
+      "like": "Beğen",
+      "comments": "Yorumlar",
+      "deleteComment": "Yorumu sil",
+      "noComments": "Henüz yorum yok. Güzel bir şey yaz.",
+      "addComment": "Yorum ekle",
+      "send": "Yorumu gönder"
+    },
+    "loading": "Yükleniyor…",
+    "loadMore": "Daha fazla yükle",
+    "updateFailed": "Güncellenemedi",
+    "following": "Takip ediliyor",
+    "follow": "Takip et",
+    "composer": {
+      "uploadFailed": "Yükleme başarısız",
+      "postFailed": "Paylaşılamadı",
+      "placeholder": "Bugünkü antrenman nasıldı?",
+      "aria": "Gönderi yaz",
+      "removePhoto": "Fotoğrafı kaldır",
+      "uploading": "Yükleniyor…",
+      "photo": "Fotoğraf",
+      "posting": "Paylaşılıyor…",
+      "post": "Paylaş"
+    },
+    "share": {
+      "failed": "Paylaşılamadı",
+      "done": "Akışında paylaşıldı",
+      "button": "Akışta paylaş",
+      "close": "Kapat",
+      "workout": "Antrenmanı paylaş",
+      "routine": "Rutini paylaş",
+      "workoutPlaceholder": "Nasıl hissettirdi? (isteğe bağlı)",
+      "routinePlaceholder": "Bu rutini neden seviyorsun? (isteğe bağlı)",
+      "sharing": "Paylaşılıyor…",
+      "post": "Akışta paylaş"
+    },
+    "settings": {
+      "saved": "Kaydedildi",
+      "username": "Kullanıcı adı",
+      "bio": "Biyografi",
+      "bioPlaceholder": "Powerlifter, erken kalkan, hep yolda",
+      "visibility": "Gönderilerini kim görür",
+      "public": {
+        "title": "Herkes",
+        "text": "Fit Planet'e giriş yapmış herkes."
+      },
+      "followers": {
+        "title": "Takipçiler",
+        "text": "Sadece seni takip edenler."
+      },
+      "checkins": "Salon girişlerini paylaş",
+      "checkinsText": "Bir salon pasonu okuttuğunda otomatik paylaş.",
+      "saving": "Kaydediliyor…",
+      "save": "Kaydet"
+    },
+    "tabs": {
+      "aria": "Sosyal",
+      "following": "Takip edilenler",
+      "discover": "Keşfet",
+      "people": "Kişiler"
+    },
+    "title": "Sosyal",
+    "you": "Sen",
+    "eyebrow": "Topluluk",
+    "empty": {
+      "followingTitle": "Akışın sessiz",
+      "discoverTitle": "Burada henüz bir şey yok",
+      "followingText": "Antrenmanlarını ve girişlerini görmek için birlikte çalıştığın kişileri takip et. Başlamak için bitirdiğin bir antrenmanı paylaş.",
+      "discoverText": "İlk paylaşan sen ol. Biten antrenmanlar ve rutinler özet sayfalarından paylaşılabilir.",
+      "findPeople": "Kişi bul",
+      "routines": "Rutinlere git"
+    },
+    "followers": "Takipçi",
+    "viewProfile": "Profili gör",
+    "settingsLink": "Ayarlar",
+    "toFollow": "Takip edebileceklerin",
+    "people": {
+      "meta": "Kişi bul",
+      "search": "Ad veya @kullanıcıadı ile ara",
+      "searchAria": "Kişi ara",
+      "noMatch": "“{query}” ile eşleşen kimse yok.",
+      "suggested": "Sana önerilenler",
+      "suggestedHint": "Senin çalıştığın yerde çalışan üyeler ve yakındaki aktif kişiler.",
+      "none": "Henüz öneri yok. Bir salona giriş yap ya da <link>Keşfet'e göz at</link>."
+    },
+    "postMeta": "Gönderi",
+    "profileSettings": {
+      "meta": "Sosyal ayarlar",
+      "title": "Sosyal profil",
+      "lead": "Diğer üyelerin seni nasıl gördüğü ve neleri paylaştığın."
+    },
+    "profile": {
+      "edit": "Profili düzenle",
+      "workouts": "antrenman",
+      "followers": "takipçi",
+      "following": "takip",
+      "selfEmpty": "Henüz bir şey paylaşmadın.",
+      "empty": "{name} kullanıcısından görebileceğin bir gönderi yok."
+    }
+  },
+  "library": {
+    "count": "{count} egzersiz",
+    "title": "Egzersiz kütüphanesi",
+    "build": "Rutin oluştur",
+    "buildShort": "Rutin",
+    "search": "Egzersiz ara",
+    "muscle": "Kas",
+    "allMuscles": "Tüm kaslar",
+    "equipment": "Ekipman",
+    "allEquipment": "Tüm ekipmanlar",
+    "level": "Seviye",
+    "allLevels": "Tüm seviyeler",
+    "clear": "Filtreleri temizle",
+    "showing": "{total} egzersizden {shown} tanesi",
+    "empty": "Bu filtrelere uyan egzersiz yok.",
+    "how": "Nasıl yapılır",
+    "tips": "İpuçları"
+  }
+}

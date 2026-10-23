@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import {
@@ -24,10 +26,10 @@ const icons: Record<string, { icon: React.ComponentType<{ className?: string }>;
   "review.reply": { icon: HiOutlineStar, tone: "bg-stamp-ochre/10 text-stamp-ochre" },
 };
 
-function relative(iso: string) {
+function relative(iso: string, locale: string) {
   const diff = (Date.now() - new Date(iso).getTime()) / 1000;
-  const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
-  if (diff < 60) return "just now";
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+  if (diff < 60) return rtf.format(0, "second");
   if (diff < 3600) return rtf.format(-Math.round(diff / 60), "minute");
   if (diff < 86400) return rtf.format(-Math.round(diff / 3600), "hour");
   return rtf.format(-Math.round(diff / 86400), "day");
@@ -36,6 +38,8 @@ function relative(iso: string) {
 /** Notification list that refreshes itself every 30 seconds */
 export function NotificationFeed({ initial }: { initial: NotificationView[] }) {
   const [items, setItems] = useState(initial);
+  const t = useTranslations("notifications");
+  const { region } = useLocale();
   const [pending, startTransition] = useTransition();
   const unread = items.filter((n) => !n.read).length;
 
@@ -56,8 +60,8 @@ export function NotificationFeed({ initial }: { initial: NotificationView[] }) {
     return (
       <div className="flex flex-col items-center rounded-[1.75rem] border-2 border-dashed border-gray-900/10 px-6 py-16 text-center">
         <HiOutlineBellSlash className="size-10 text-gray-300" />
-        <p className="mt-3 font-semibold text-ink">All quiet</p>
-        <p className="mt-1 max-w-xs text-sm text-gray-500">Bookings, check-ins and reviews will show up here.</p>
+        <p className="mt-3 font-semibold text-ink">{t("empty.title")}</p>
+        <p className="mt-1 max-w-xs text-sm text-gray-500">{t("empty.text")}</p>
       </div>
     );
   }
@@ -65,7 +69,7 @@ export function NotificationFeed({ initial }: { initial: NotificationView[] }) {
   return (
     <div>
       <div className="mb-3 flex items-center justify-between">
-        <p className="text-sm text-gray-500">{unread > 0 ? `${unread} unread` : "You're all caught up"}</p>
+        <p className="text-sm text-gray-500">{unread > 0 ? t("unread", { count: unread }) : t("caughtUp")}</p>
         {unread > 0 && (
           <button
             type="button"
@@ -78,7 +82,7 @@ export function NotificationFeed({ initial }: { initial: NotificationView[] }) {
             }
             className="h-9 cursor-pointer rounded-full px-3 text-sm font-semibold text-emerald-700 hover:bg-emerald-50"
           >
-            Mark all read
+            {t("markAll")}
           </button>
         )}
       </div>
@@ -93,11 +97,11 @@ export function NotificationFeed({ initial }: { initial: NotificationView[] }) {
               <div className="min-w-0 flex-1">
                 <div className="flex items-start justify-between gap-3">
                   <p className={cn("text-[15px] text-ink", !n.read ? "font-semibold" : "font-medium")}>{n.title}</p>
-                  <span className="shrink-0 pt-0.5 text-xs text-gray-400">{relative(n.createdAt)}</span>
+                  <span className="shrink-0 pt-0.5 text-xs text-gray-400">{relative(n.createdAt, region.locale)}</span>
                 </div>
                 <p className="mt-0.5 text-sm leading-relaxed text-gray-600">{n.body}</p>
               </div>
-              {!n.read && <span aria-label="Unread" className="mt-2 size-2 shrink-0 rounded-full bg-emerald-500" />}
+              {!n.read && <span aria-label={t("unreadOne")} className="mt-2 size-2 shrink-0 rounded-full bg-emerald-500" />}
             </div>
           );
           return (

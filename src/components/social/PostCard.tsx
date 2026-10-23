@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -18,9 +19,10 @@ import { addCommentAction, commentsAction, deleteCommentAction, deletePostAction
 import { useToast } from "@/components/notifications/ToastProvider";
 import { Stamp } from "@/components/passport/Stamp";
 import { Avatar } from "./Avatar";
-import { exerciseById } from "@/lib/data/exercises";
 import { cityCode } from "@/lib/data/cities";
-import { categoryLabel, kgToUnit, targetLabel, type WeightUnit } from "@/lib/routines";
+import { kgToUnit, type WeightUnit } from "@/lib/routines";
+import { exerciseName, targetText } from "@/lib/i18n/training";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { timeAgo } from "@/lib/time-ago";
 import type { CommentView, PostView } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -36,6 +38,9 @@ interface Props {
 export function PostCard({ post, unit, initialComments, onDeleted }: Props) {
   const toast = useToast();
   const router = useRouter();
+  const t = useTranslations("social.post");
+  const tr = useTranslations("training");
+  const { region } = useLocale();
   const [liked, setLiked] = useState(post.liked);
   const [likes, setLikes] = useState(post.likeCount);
   const [commentCount, setCommentCount] = useState(post.commentCount);
@@ -81,7 +86,7 @@ export function PostCard({ post, unit, initialComments, onDeleted }: Props) {
         setComments(result.data);
         setCommentCount(result.data.length);
         setDraft("");
-      } else toast.error("Couldn't comment", result.error);
+      } else toast.error(t("commentFailed"), result.error);
     });
   };
 
@@ -98,8 +103,8 @@ export function PostCard({ post, unit, initialComments, onDeleted }: Props) {
     startTransition(async () => {
       const result = await deletePostAction(post.id);
       setMenu(false);
-      if (!result.ok) return toast.error("Couldn't delete", result.error);
-      toast.success("Post deleted");
+      if (!result.ok) return toast.error(t("deleteFailed"), result.error);
+      toast.success(t("deleted"));
       if (onDeleted) onDeleted(post.id);
       else router.push("/app/social");
     });
@@ -108,16 +113,16 @@ export function PostCard({ post, unit, initialComments, onDeleted }: Props) {
     startTransition(async () => {
       const result = await reportPostAction(post.id, "Reported from feed");
       setMenu(false);
-      if (result.ok) toast.success(result.message ?? "Reported");
+      if (result.ok) toast.success(t("reported"));
     });
 
   const saveRoutine = () =>
     startTransition(async () => {
       const result = await saveRoutineFromPostAction(post.id);
       if (result.ok) {
-        toast.success(result.message ?? "Saved");
+        toast.success(t("routineSaved"));
         router.push(`/app/routines/${result.data.routineId}/edit`);
-      } else toast.error("Couldn't save", result.error);
+      } else toast.error(t("saveFailed"), result.error);
     });
 
   const profile = post.author.handle ? `/app/u/${post.author.handle}` : "#";
@@ -137,17 +142,17 @@ export function PostCard({ post, unit, initialComments, onDeleted }: Props) {
             <span aria-hidden>·</span>
             <Link href={`/app/social/post/${post.id}`} className="shrink-0 hover:underline">
               <time dateTime={post.createdAt} suppressHydrationWarning>
-                {timeAgo(post.createdAt)}
+                {timeAgo(post.createdAt, region.locale)}
               </time>
             </Link>
-            {post.visibility === "followers" && <HiOutlineLockClosed className="size-3 shrink-0" aria-label="Followers only" />}
+            {post.visibility === "followers" && <HiOutlineLockClosed className="size-3 shrink-0" aria-label={t("followersOnly")} />}
           </p>
         </div>
         <div className="relative -me-2">
           <button
             type="button"
             onClick={() => setMenu((m) => !m)}
-            aria-label="Post options"
+            aria-label={t("options")}
             aria-expanded={menu}
             className="flex size-9 cursor-pointer items-center justify-center rounded-full text-gray-400 hover:bg-gray-900/5 hover:text-ink"
           >
@@ -160,12 +165,12 @@ export function PostCard({ post, unit, initialComments, onDeleted }: Props) {
                 {post.mine ? (
                   <button type="button" onClick={remove} className="flex w-full cursor-pointer items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-stamp-magenta hover:bg-canvas">
                     <HiOutlineTrash className="size-4.5" />
-                    Delete post
+                    {t("delete")}
                   </button>
                 ) : (
                   <button type="button" onClick={report} className="flex w-full cursor-pointer items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-canvas">
                     <HiOutlineFlag className="size-4.5 text-gray-400" />
-                    Report
+                    {t("report")}
                   </button>
                 )}
               </div>
@@ -181,13 +186,13 @@ export function PostCard({ post, unit, initialComments, onDeleted }: Props) {
 
         {post.workout && (
           <Link href={post.mine ? `/app/routines/history/${post.workout.id}` : `/app/social/post/${post.id}`} className="block rounded-2xl bg-ink p-4 text-white">
-            <p className="font-mono text-[10px] tracking-[0.14em] text-white/50 uppercase">Workout logged</p>
+            <p className="font-mono text-[10px] tracking-[0.14em] text-white/50 uppercase">{t("workoutLogged")}</p>
             <p className="mt-1 text-lg font-semibold tracking-tight">{post.workout.routineName}</p>
             <dl className="mt-3 grid grid-cols-3 gap-2 border-t border-dashed border-white/15 pt-3">
               {[
-                ["Time", `${post.workout.durationMin}`, "min"],
-                ["Sets", `${post.workout.setsDone}`, ""],
-                ["Volume", new Intl.NumberFormat("en").format(kgToUnit(post.workout.volumeKg, unit)), unit],
+                [t("time"), `${post.workout.durationMin}`, t("min")],
+                [t("sets"), `${post.workout.setsDone}`, ""],
+                [t("volume"), new Intl.NumberFormat(region.locale).format(kgToUnit(post.workout.volumeKg, unit)), unit],
               ].map(([label, value, suffix]) => (
                 <div key={label}>
                   <dt className="text-[11px] text-white/50">{label}</dt>
@@ -201,8 +206,7 @@ export function PostCard({ post, unit, initialComments, onDeleted }: Props) {
             {post.workout.exerciseIds.length > 0 && (
               <p className="mt-3 truncate text-xs text-white/60">
                 {post.workout.exerciseIds
-                  .map((id) => exerciseById.get(id)?.name)
-                  .filter(Boolean)
+                  .map((id) => exerciseName(tr, id))
                   .join(" · ")}
               </p>
             )}
@@ -213,7 +217,7 @@ export function PostCard({ post, unit, initialComments, onDeleted }: Props) {
           <Link href={`/gyms/${post.checkin.gymSlug}`} className="flex items-center gap-4 rounded-2xl bg-[linear-gradient(var(--color-volt-soft),var(--color-surface))] p-4 ring-1 ring-gray-900/[0.05]">
             <Stamp code={cityCode(post.checkin.city)} label={post.checkin.city} tone="teal" shape="circle" rotate={-8} size="sm" />
             <div className="min-w-0">
-              <p className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">Checked in</p>
+              <p className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">{t("checkedIn")}</p>
               <p className="truncate font-semibold text-ink">{post.checkin.gymName}</p>
               <p className="text-sm text-gray-500">{post.checkin.city}</p>
             </div>
@@ -222,22 +226,22 @@ export function PostCard({ post, unit, initialComments, onDeleted }: Props) {
 
         {post.routine && (
           <div className="rounded-2xl bg-canvas p-4">
-            <p className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">Routine · {categoryLabel(post.routine.category)}</p>
+            <p className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">{t("routine")} · {tr.has(`categories.${post.routine.category}`) ? tr(`categories.${post.routine.category}`) : tr("categories.custom")}</p>
             <p className="mt-1 font-semibold text-ink">{post.routine.name}</p>
             <ol className="mt-2 space-y-1 text-sm text-gray-600">
               {post.routine.items.slice(0, 6).map((item, i) => (
                 <li key={`${item.exerciseId}-${i}`} className="flex justify-between gap-3">
-                  <span className="truncate">{exerciseById.get(item.exerciseId)?.name}</span>
+                  <span className="truncate">{exerciseName(tr, item.exerciseId)}</span>
                   <span className="shrink-0 text-gray-400 tabular-nums">
-                    {item.sets} × {targetLabel(item)}
+                    {item.sets} × {targetText(tr, item)}
                   </span>
                 </li>
               ))}
-              {post.routine.items.length > 6 && <li className="text-gray-400">+{post.routine.items.length - 6} more</li>}
+              {post.routine.items.length > 6 && <li className="text-gray-400">{t("more", { count: post.routine.items.length - 6 })}</li>}
             </ol>
             {!post.mine && (
               <button type="button" onClick={saveRoutine} disabled={pending} className="mt-3 h-10 w-full cursor-pointer rounded-full bg-ink text-sm font-semibold text-white disabled:opacity-60">
-                Save to my routines
+                {t("saveRoutine")}
               </button>
             )}
           </div>
@@ -249,7 +253,7 @@ export function PostCard({ post, unit, initialComments, onDeleted }: Props) {
           type="button"
           onClick={like}
           aria-pressed={liked}
-          aria-label={liked ? "Unlike" : "Like"}
+          aria-label={liked ? t("unlike") : t("like")}
           className="flex h-10 cursor-pointer items-center gap-1.5 rounded-full px-3 text-sm font-medium text-gray-600 hover:bg-gray-900/5"
         >
           {liked ? <HiHeart className="size-5 text-stamp-magenta" /> : <HiOutlineHeart className="size-5" />}
@@ -259,7 +263,7 @@ export function PostCard({ post, unit, initialComments, onDeleted }: Props) {
           type="button"
           onClick={toggleComments}
           aria-expanded={showComments}
-          aria-label="Comments"
+          aria-label={t("comments")}
           className="flex h-10 cursor-pointer items-center gap-1.5 rounded-full px-3 text-sm font-medium text-gray-600 hover:bg-gray-900/5"
         >
           {showComments ? <HiChatBubbleOvalLeft className="size-5 text-ink" /> : <HiOutlineChatBubbleOvalLeft className="size-5" />}
@@ -282,7 +286,7 @@ export function PostCard({ post, unit, initialComments, onDeleted }: Props) {
                         {c.author.name}
                       </Link>
                       <span className="ms-1.5 text-gray-400" suppressHydrationWarning>
-                        {timeAgo(c.createdAt)}
+                        {timeAgo(c.createdAt, region.locale)}
                       </span>
                     </p>
                     <p className="mt-0.5 text-sm break-words whitespace-pre-line text-gray-800">{c.text}</p>
@@ -291,7 +295,7 @@ export function PostCard({ post, unit, initialComments, onDeleted }: Props) {
                     <button
                       type="button"
                       onClick={() => removeComment(c.id)}
-                      aria-label="Delete comment"
+                      aria-label={t("deleteComment")}
                       className="flex size-8 shrink-0 cursor-pointer items-center justify-center self-center rounded-full text-gray-300 hover:text-stamp-magenta sm:opacity-0 sm:group-hover:opacity-100"
                     >
                       <HiOutlineTrash className="size-4" />
@@ -299,7 +303,7 @@ export function PostCard({ post, unit, initialComments, onDeleted }: Props) {
                   )}
                 </li>
               ))}
-              {comments.length === 0 && <li className="text-sm text-gray-500">No comments yet. Say something nice.</li>}
+              {comments.length === 0 && <li className="text-sm text-gray-500">{t("noComments")}</li>}
             </ul>
           )}
           <form
@@ -313,14 +317,14 @@ export function PostCard({ post, unit, initialComments, onDeleted }: Props) {
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               maxLength={500}
-              placeholder="Add a comment"
-              aria-label="Add a comment"
+              placeholder={t("addComment")}
+              aria-label={t("addComment")}
               className="h-11 min-w-0 flex-1 rounded-full bg-canvas px-4 text-sm text-ink outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-ink/10"
             />
             <button
               type="submit"
               disabled={pending || !draft.trim()}
-              aria-label="Send comment"
+              aria-label={t("send")}
               className={cn("flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full bg-ink text-white transition-opacity disabled:opacity-30")}
             >
               <HiPaperAirplane className="size-4.5 rtl:-scale-x-100" />

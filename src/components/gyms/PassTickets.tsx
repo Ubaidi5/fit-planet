@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { HiArrowRight, HiCheck, HiOutlineSparkles } from "react-icons/hi2";
 import { cn } from "@/lib/utils";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
@@ -10,10 +11,9 @@ export type PassKey = "day" | "week" | "month" | "annual";
 
 export interface PassPlan {
   key: PassKey;
-  name: string;
   price: number;
-  duration: string;
   popular?: boolean;
+  /** Keys under passes.features */
   features: string[];
 }
 
@@ -24,28 +24,15 @@ interface SpecialPackage {
   features: string[];
 }
 
-/** Standard passes for a gym, in its own currency */
+/** Standard passes for a gym, in its own currency. Names, durations and features come from the "passes" messages */
 export function passPlans(gym: Pick<Gym, "pricing">, annualPass?: number): PassPlan[] {
   const plans: PassPlan[] = [
-    { key: "day", name: "Day pass", price: gym.pricing.dayPass, duration: "1 day", features: ["Full gym access", "All equipment", "Locker"] },
-    { key: "week", name: "Week pass", price: gym.pricing.weekPass, duration: "7 days", features: ["Full gym access", "All equipment", "Locker", "1 group class"] },
-    {
-      key: "month",
-      name: "Month pass",
-      price: gym.pricing.monthPass,
-      duration: "30 days",
-      popular: true,
-      features: ["Full gym access", "Unlimited classes", "Locker", "Towel service"],
-    },
+    { key: "day", price: gym.pricing.dayPass, features: ["access", "equipment", "locker"] },
+    { key: "week", price: gym.pricing.weekPass, features: ["access", "equipment", "locker", "groupClass"] },
+    { key: "month", price: gym.pricing.monthPass, popular: true, features: ["access", "unlimitedClasses", "locker", "towel"] },
   ];
   if (annualPass) {
-    plans.push({
-      key: "annual",
-      name: "Annual pass",
-      price: annualPass,
-      duration: "12 months",
-      features: ["Everything in Month", "2 PT sessions a month", "2 guest passes a month"],
-    });
+    plans.push({ key: "annual", price: annualPass, features: ["everythingMonth", "ptSessions", "guestPasses"] });
   }
   return plans;
 }
@@ -60,6 +47,7 @@ interface PassTicketsProps {
 /** Passes drawn as boarding-pass tickets: details on the left, price stub on the right */
 export function PassTickets({ gym, annualPass, specialPackages, onSelect }: PassTicketsProps) {
   const { money } = useLocale();
+  const t = useTranslations("passes");
   const plans = passPlans(gym, annualPass);
   const code = cityCode(gym.address.city);
 
@@ -81,20 +69,20 @@ export function PassTickets({ gym, annualPass, specialPackages, onSelect }: Pass
                   {code} · {gym.country}
                 </span>
                 <span aria-hidden="true">·</span>
-                <span>{plan.duration}</span>
+                <span>{t(`duration.${plan.key}`)}</span>
                 {plan.popular && (
                   <span className="ms-auto inline-flex items-center gap-1 rounded-full bg-volt px-2.5 py-1 tracking-[0.1em] text-ink">
                     <HiOutlineSparkles className="size-3.5" />
-                    Most popular
+                    {t("popular")}
                   </span>
                 )}
               </div>
-              <h3 className="text-2xl font-semibold tracking-[-0.03em]">{plan.name}</h3>
+              <h3 className="text-2xl font-semibold tracking-[-0.03em]">{t(`name.${plan.key}`)}</h3>
               <ul className="flex flex-wrap gap-x-4 gap-y-2">
                 {plan.features.map((feature) => (
                   <li key={feature} className={cn("flex items-center gap-1.5 text-sm", ink ? "text-white/80" : "text-gray-600")}>
                     <HiCheck className={cn("size-4 shrink-0", ink ? "text-volt" : "text-emerald-600")} />
-                    {feature}
+                    {t(`features.${feature}`)}
                   </li>
                 ))}
               </ul>
@@ -115,7 +103,7 @@ export function PassTickets({ gym, annualPass, specialPackages, onSelect }: Pass
                   {money(plan.price, gym.currency)}
                 </p>
                 <p className={cn("mt-1.5 font-mono text-[11px] tracking-[0.1em] uppercase", ink ? "text-white/50" : "text-gray-400")}>
-                  {plan.duration}
+                  {t(`duration.${plan.key}`)}
                 </p>
               </div>
               <button
@@ -126,7 +114,7 @@ export function PassTickets({ gym, annualPass, specialPackages, onSelect }: Pass
                   ink ? "bg-volt text-ink hover:bg-white" : "bg-ink text-white hover:bg-gray-800",
                 )}
               >
-                Choose
+                {t("choose")}
                 <HiArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
               </button>
             </div>
@@ -136,7 +124,7 @@ export function PassTickets({ gym, annualPass, specialPackages, onSelect }: Pass
 
       {specialPackages && specialPackages.length > 0 && (
         <div className="pt-6">
-          <p className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">Special packages</p>
+          <p className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">{t("special")}</p>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             {specialPackages.map((pkg) => (
               <article key={pkg.name} className="flex flex-col rounded-3xl border border-dashed border-stamp-violet/30 bg-surface p-5 sm:p-6">
@@ -144,7 +132,7 @@ export function PassTickets({ gym, annualPass, specialPackages, onSelect }: Pass
                   <h4 className="font-semibold text-ink">{pkg.name}</h4>
                   <p className="shrink-0 text-end">
                     <span className="block text-lg font-semibold whitespace-nowrap text-ink tabular-nums">{money(pkg.price, gym.currency)}</span>
-                    <span className="font-mono text-[10px] tracking-[0.1em] text-gray-400 uppercase">per month</span>
+                    <span className="font-mono text-[10px] tracking-[0.1em] text-gray-400 uppercase">{t("perMonth")}</span>
                   </p>
                 </div>
                 <p className="mt-2 text-sm leading-relaxed text-gray-600">{pkg.description}</p>
@@ -161,7 +149,7 @@ export function PassTickets({ gym, annualPass, specialPackages, onSelect }: Pass
                   onClick={() => onSelect?.("month")}
                   className="mt-5 inline-flex h-10 items-center justify-center rounded-full bg-surface text-sm font-medium text-ink ring-1 ring-gray-900/10 transition-colors hover:bg-gray-100"
                 >
-                  Get this package
+                  {t("getPackage")}
                 </button>
               </article>
             ))}

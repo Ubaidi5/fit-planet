@@ -1,363 +1,205 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { Badge } from "@/components/ui/Badge";
-import { HiOutlineChevronDown } from "react-icons/hi";
-import {
-  exercises,
-  formatMuscleGroup,
-  formatEquipment,
-  formatDifficulty,
-  muscleGroupIcons,
-  type Exercise,
-  type MuscleGroup,
-  type Equipment,
-} from "@/lib/data/exercises";
-import Select from "@/components/ui/Select";
+import { useMemo, useState } from "react";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { HiChevronDown, HiOutlineMagnifyingGlass, HiOutlinePlus } from "react-icons/hi2";
+import { exercises, type Equipment, type Exercise, type MuscleGroup } from "@/lib/data/exercises";
+import { exerciseName } from "@/lib/i18n/training";
+import { cn } from "@/lib/utils";
 
-const muscleGroups: MuscleGroup[] = [
-  "chest",
-  "back",
-  "shoulders",
-  "biceps",
-  "triceps",
-  "forearms",
-  "core",
-  "quadriceps",
-  "hamstrings",
-  "glutes",
-  "calves",
-  "cardio",
-];
+const muscleGroups: MuscleGroup[] = ["chest", "back", "shoulders", "biceps", "triceps", "core", "quadriceps", "hamstrings", "glutes", "calves", "cardio"];
+const equipmentList: Equipment[] = ["bodyweight", "barbell", "dumbbell", "cable", "machine", "treadmill", "rowing_machine"];
+const levels = ["beginner", "intermediate", "advanced"] as const;
 
-const equipmentList: Equipment[] = [
-  "bodyweight",
-  "barbell",
-  "dumbbell",
-  "cable",
-  "machine",
-  "kettlebell",
-  "resistance_band",
-  "pull_up_bar",
-];
+const levelTone: Record<Exercise["difficulty"], string> = {
+  beginner: "bg-emerald-50 text-emerald-700",
+  intermediate: "bg-stamp-ochre/10 text-stamp-ochre",
+  advanced: "bg-stamp-magenta/10 text-stamp-magenta",
+};
 
-export default function ExercisesPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedMuscle, setSelectedMuscle] = useState<MuscleGroup | "all">(
-    "all",
-  );
-  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | "all">(
-    "all",
-  );
-  const [selectedDifficulty, setSelectedDifficulty] = useState<
-    "all" | "beginner" | "intermediate" | "advanced"
-  >("all");
-  const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
+const selectClass =
+  "h-10 cursor-pointer appearance-none rounded-full bg-surface ps-4 pe-9 text-sm font-medium text-gray-700 ring-1 ring-gray-900/[0.08] focus:ring-2 focus:ring-ink/15 focus:outline-none";
 
-  const filteredExercises = useMemo(() => {
-    return exercises.filter((exercise) => {
-      // Search filter
-      if (
-        searchQuery &&
-        !exercise.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        !exercise.description.toLowerCase().includes(searchQuery.toLowerCase())
-      ) {
-        return false;
-      }
+export default function ExerciseLibraryPage() {
+  const t = useTranslations("library");
+  const tr = useTranslations("training");
+  const [query, setQuery] = useState("");
+  const [muscle, setMuscle] = useState<MuscleGroup | "all">("all");
+  const [equipment, setEquipment] = useState<Equipment | "all">("all");
+  const [level, setLevel] = useState<Exercise["difficulty"] | "all">("all");
+  const [open, setOpen] = useState<string | null>(null);
 
-      // Muscle group filter
-      if (
-        selectedMuscle !== "all" &&
-        exercise.muscleGroup !== selectedMuscle &&
-        !exercise.secondaryMuscles?.includes(selectedMuscle)
-      ) {
-        return false;
-      }
+  const results = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return exercises.filter(
+      (e) =>
+        (!q || e.name.toLowerCase().includes(q) || exerciseName(tr, e.id, e.name).toLowerCase().includes(q)) &&
+        (muscle === "all" || e.muscleGroup === muscle || e.secondaryMuscles?.includes(muscle)) &&
+        (equipment === "all" || e.equipment.includes(equipment)) &&
+        (level === "all" || e.difficulty === level),
+    );
+  }, [query, muscle, equipment, level, tr]);
 
-      // Equipment filter
-      if (
-        selectedEquipment !== "all" &&
-        !exercise.equipment.includes(selectedEquipment)
-      ) {
-        return false;
-      }
-
-      // Difficulty filter
-      if (
-        selectedDifficulty !== "all" &&
-        exercise.difficulty !== selectedDifficulty
-      ) {
-        return false;
-      }
-
-      return true;
-    });
-  }, [searchQuery, selectedMuscle, selectedEquipment, selectedDifficulty]);
-
-  const clearFilters = () => {
-    setSearchQuery("");
-    setSelectedMuscle("all");
-    setSelectedEquipment("all");
-    setSelectedDifficulty("all");
+  const filtered = query || muscle !== "all" || equipment !== "all" || level !== "all";
+  const clear = () => {
+    setQuery("");
+    setMuscle("all");
+    setEquipment("all");
+    setLevel("all");
   };
 
-  const hasFilters =
-    searchQuery ||
-    selectedMuscle !== "all" ||
-    selectedEquipment !== "all" ||
-    selectedDifficulty !== "all";
-
   return (
-    <div className="space-y-4 sm:space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
-          Exercise Library
-        </h1>
-        <p className="text-sm sm:text-base text-gray-600 mt-1">
-          Browse {exercises.length} exercises with detailed instructions
-        </p>
-      </div>
-
-      {/* Search & Filters */}
-      <div className="bg-white rounded-lg sm:rounded-xl border border-gray-200 p-3 sm:p-4 space-y-3 sm:space-y-4">
-        {/* Search */}
-        <Input
-          type="text"
-          placeholder="Search exercises..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full text-sm sm:text-base"
-        />
-
-        {/* Filter Row */}
-        <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
-          {/* Muscle Group */}
-          <Select
-            value={selectedMuscle}
-            onChange={(e) =>
-              setSelectedMuscle(e.target.value as MuscleGroup | "all")
-            }
-            // className="w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          >
-            <option value="all">All Muscles</option>
-            {muscleGroups.map((muscle) => (
-              <option key={muscle} value={muscle}>
-                {muscleGroupIcons[muscle]} {formatMuscleGroup(muscle)}
-              </option>
-            ))}
-          </Select>
-
-          {/* Equipment */}
-          <Select
-            value={selectedEquipment}
-            onChange={(e) =>
-              setSelectedEquipment(e.target.value as Equipment | "all")
-            }
-            // className="w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          >
-            <option value="all">All Equipment</option>
-            {equipmentList.map((equip) => (
-              <option key={equip} value={equip}>
-                {formatEquipment(equip)}
-              </option>
-            ))}
-          </Select>
-
-          {/* Difficulty */}
-          <Select
-            value={selectedDifficulty}
-            onChange={(e) =>
-              setSelectedDifficulty(
-                e.target.value as
-                  | "all"
-                  | "beginner"
-                  | "intermediate"
-                  | "advanced",
-              )
-            }
-            // className="w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          >
-            <option value="all">All Levels</option>
-            <option value="beginner">Beginner</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="advanced">Advanced</option>
-          </Select>
-
-          {hasFilters && (
-            <Button variant="ghost" size="sm" onClick={clearFilters}>
-              Clear Filters
-            </Button>
-          )}
+    <div className="mx-auto max-w-3xl">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <p className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">{t("count", { count: exercises.length })}</p>
+          <h1 className="mt-1 text-[1.75rem] font-semibold tracking-[-0.035em] text-ink sm:text-4xl">{t("title")}</h1>
         </div>
+        <Link
+          href="/app/routines/new"
+          className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full bg-ink ps-4 pe-5 text-sm font-semibold text-white transition-colors hover:bg-gray-800"
+        >
+          <HiOutlinePlus className="size-4.5" />
+          <span className="hidden sm:inline">{t("build")}</span>
+          <span className="sm:hidden">{t("buildShort")}</span>
+        </Link>
       </div>
 
-      {/* Results Count */}
-      <div className="flex items-center justify-between">
-        <p className="text-xs sm:text-sm text-gray-600">
-          Showing {filteredExercises.length} of {exercises.length} exercises
-        </p>
-      </div>
+      <label className="mt-6 flex h-12 items-center gap-2 rounded-full bg-surface px-4 shadow-soft ring-1 ring-gray-900/[0.05] focus-within:ring-ink/20">
+        <HiOutlineMagnifyingGlass className="size-5 text-gray-400" />
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={t("search")}
+          aria-label={t("search")}
+          className="min-w-0 flex-1 bg-transparent text-[15px] text-ink outline-none placeholder:text-gray-400"
+        />
+      </label>
 
-      {/* Exercise List */}
-      <div className="grid gap-3 sm:gap-4">
-        {filteredExercises.map((exercise) => (
-          <ExerciseCard
-            key={exercise.id}
-            exercise={exercise}
-            isExpanded={expandedExercise === exercise.id}
-            onToggle={() =>
-              setExpandedExercise(
-                expandedExercise === exercise.id ? null : exercise.id,
-              )
-            }
-          />
-        ))}
-
-        {filteredExercises.length === 0 && (
-          <div className="text-center py-12 bg-gray-50 rounded-xl">
-            <p className="text-gray-500">No exercises found</p>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={clearFilters}
-              className="mt-2"
-            >
-              Clear filters
-            </Button>
-          </div>
+      <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0">
+        <FilterSelect label={t("muscle")} value={muscle} onChange={(v) => setMuscle(v as MuscleGroup | "all")}>
+          <option value="all">{t("allMuscles")}</option>
+          {muscleGroups.map((m) => (
+            <option key={m} value={m}>
+              {tr(`muscles.${m}`)}
+            </option>
+          ))}
+        </FilterSelect>
+        <FilterSelect label={t("equipment")} value={equipment} onChange={(v) => setEquipment(v as Equipment | "all")}>
+          <option value="all">{t("allEquipment")}</option>
+          {equipmentList.map((e) => (
+            <option key={e} value={e}>
+              {tr(`equipment.${e}`)}
+            </option>
+          ))}
+        </FilterSelect>
+        <FilterSelect label={t("level")} value={level} onChange={(v) => setLevel(v as Exercise["difficulty"] | "all")}>
+          <option value="all">{t("allLevels")}</option>
+          {levels.map((l) => (
+            <option key={l} value={l}>
+              {tr(`difficulty.${l}`)}
+            </option>
+          ))}
+        </FilterSelect>
+        {filtered && (
+          <button type="button" onClick={clear} className="h-10 shrink-0 cursor-pointer rounded-full px-3 text-sm font-medium text-gray-500 hover:text-ink">
+            {t("clear")}
+          </button>
         )}
       </div>
+
+      <p className="mt-5 mb-3 text-sm text-gray-500" aria-live="polite">
+        {t("showing", { shown: results.length, total: exercises.length })}
+      </p>
+
+      {results.length === 0 ? (
+        <div className="rounded-[1.75rem] border-2 border-dashed border-gray-900/10 px-6 py-12 text-center">
+          <p className="font-semibold text-ink">{t("empty")}</p>
+          <button type="button" onClick={clear} className="mt-4 inline-flex h-10 cursor-pointer items-center rounded-full bg-ink px-5 text-sm font-semibold text-white">
+            {t("clear")}
+          </button>
+        </div>
+      ) : (
+        <ul className="space-y-2.5">
+          {results.map((e) => {
+            const expanded = open === e.id;
+            return (
+              <li key={e.id} className="overflow-hidden rounded-3xl bg-surface shadow-soft ring-1 ring-gray-900/[0.05]">
+                <button
+                  type="button"
+                  onClick={() => setOpen(expanded ? null : e.id)}
+                  aria-expanded={expanded}
+                  className="flex w-full cursor-pointer items-center gap-3 p-4 text-start sm:p-5"
+                >
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-volt-soft font-mono text-[11px] font-semibold tracking-[0.08em] text-ink uppercase">
+                    {tr(`muscles.${e.muscleGroup}`).slice(0, 3)}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate font-semibold text-ink">{exerciseName(tr, e.id, e.name)}</span>
+                    <span className="block truncate text-sm text-gray-500">
+                      {[e.muscleGroup, ...(e.secondaryMuscles ?? [])].map((m) => tr(`muscles.${m}`)).join(" · ")}
+                    </span>
+                  </span>
+                  <span className={cn("hidden shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold sm:inline", levelTone[e.difficulty])}>
+                    {tr(`difficulty.${e.difficulty}`)}
+                  </span>
+                  <HiChevronDown className={cn("size-5 shrink-0 text-gray-400 transition-transform duration-300", expanded && "rotate-180")} />
+                </button>
+
+                {expanded && (
+                  <div className="space-y-4 border-t border-dashed border-gray-900/10 px-4 pt-4 pb-5 sm:px-5">
+                    <div className="flex flex-wrap gap-1.5">
+                      <span className={cn("rounded-full px-2.5 py-1 text-xs font-semibold sm:hidden", levelTone[e.difficulty])}>{tr(`difficulty.${e.difficulty}`)}</span>
+                      {e.equipment.map((item) => (
+                        <span key={item} className="rounded-full bg-canvas px-2.5 py-1 text-xs font-medium text-gray-600">
+                          {tr(`equipment.${item}`)}
+                        </span>
+                      ))}
+                    </div>
+                    {/* Descriptions and steps are English-only content for now */}
+                    <p className="text-[15px] leading-relaxed text-gray-700" lang="en">
+                      {e.description}
+                    </p>
+                    <div>
+                      <p className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">{t("how")}</p>
+                      <ol className="mt-2 space-y-2" lang="en">
+                        {e.instructions.map((step, i) => (
+                          <li key={i} className="flex gap-3 text-sm text-gray-700">
+                            <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-canvas font-mono text-[11px] font-semibold text-gray-500">{i + 1}</span>
+                            <span className="pt-0.5">{step}</span>
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                    {e.tips && e.tips.length > 0 && (
+                      <div className="rounded-2xl bg-volt-soft/70 p-4">
+                        <p className="font-mono text-[11px] tracking-[0.14em] text-emerald-800 uppercase">{t("tips")}</p>
+                        <ul className="mt-2 space-y-1.5 text-sm text-emerald-900" lang="en">
+                          {e.tips.map((tip, i) => (
+                            <li key={i}>{tip}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 }
 
-interface ExerciseCardProps {
-  exercise: Exercise;
-  isExpanded: boolean;
-  onToggle: () => void;
-}
-
-function ExerciseCard({ exercise, isExpanded, onToggle }: ExerciseCardProps) {
-  const difficulty = formatDifficulty(exercise.difficulty);
-
+function FilterSelect({ label, value, onChange, children }: { label: string; value: string; onChange: (value: string) => void; children: React.ReactNode }) {
   return (
-    <div className="bg-surface rounded-3xl sm:rounded-xl border border-gray-900/[0.06] overflow-hidden shadow-soft">
-      {/* Header - Always Visible */}
-      <button
-        onClick={onToggle}
-        className="w-full p-3 sm:p-4 flex items-center gap-3 sm:gap-4 hover:bg-gray-50 transition-colors text-start"
-      >
-        {/* Icon/Image */}
-        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-emerald-100 flex items-center justify-center text-xl sm:text-2xl shrink-0">
-          {muscleGroupIcons[exercise.muscleGroup]}
-        </div>
-
-        {/* Info */}
-        <div className="flex-1 min-w-0">
-          <h3 className="text-sm sm:text-base font-semibold text-gray-900">
-            {exercise.name}
-          </h3>
-          <p className="text-xs sm:text-sm text-gray-600 truncate">
-            {formatMuscleGroup(exercise.muscleGroup)}
-            {exercise.secondaryMuscles &&
-              exercise.secondaryMuscles.length > 0 && (
-                <span className="text-gray-400">
-                  {" "}
-                  •{" "}
-                  {exercise.secondaryMuscles.map(formatMuscleGroup).join(", ")}
-                </span>
-              )}
-          </p>
-        </div>
-
-        {/* Badges */}
-        <div className="hidden sm:flex items-center gap-2">
-          <Badge variant="default" className={difficulty.color}>
-            {difficulty.label}
-          </Badge>
-        </div>
-
-        {/* Expand Icon */}
-        <HiOutlineChevronDown
-          className={`w-5 h-5 text-gray-400 transition-transform ${
-            isExpanded ? "rotate-180" : ""
-          }`}
-        />
-      </button>
-
-      {/* Expanded Content */}
-      {isExpanded && (
-        <div className="border-t border-gray-200 p-3 sm:p-4 space-y-3 sm:space-y-4 bg-gray-50">
-          {/* Mobile Badge */}
-          <div className="sm:hidden">
-            <Badge variant="default" className={difficulty.color}>
-              {difficulty.label}
-            </Badge>
-          </div>
-
-          {/* Description */}
-          <p className="text-sm sm:text-base text-gray-700">
-            {exercise.description}
-          </p>
-
-          {/* Equipment */}
-          <div>
-            <h4 className="text-sm font-medium text-gray-900 mb-2">
-              Equipment Needed
-            </h4>
-            <div className="flex flex-wrap gap-2">
-              {exercise.equipment.map((equip) => (
-                <Badge key={equip} variant="outline">
-                  {formatEquipment(equip)}
-                </Badge>
-              ))}
-            </div>
-          </div>
-
-          {/* Instructions */}
-          <div>
-            <h4 className="text-sm font-medium text-gray-900 mb-2">
-              Instructions
-            </h4>
-            <ol className="list-decimal list-inside space-y-2 text-gray-700">
-              {exercise.instructions.map((instruction, index) => (
-                <li key={index} className="text-sm">
-                  {instruction}
-                </li>
-              ))}
-            </ol>
-          </div>
-
-          {/* Tips */}
-          {exercise.tips && exercise.tips.length > 0 && (
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-              <h4 className="text-sm font-medium text-amber-800 mb-2">
-                💡 Pro Tips
-              </h4>
-              <ul className="list-disc list-inside space-y-1 text-amber-700">
-                {exercise.tips.map((tip, index) => (
-                  <li key={index} className="text-sm">
-                    {tip}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Action */}
-          <div className="flex flex-col sm:flex-row gap-2 pt-2">
-            <Button size="sm" className="w-full sm:w-auto">
-              Add to Routine
-            </Button>
-            <Button variant="outline" size="sm" className="w-full sm:w-auto">
-              View Demo
-            </Button>
-          </div>
-        </div>
-      )}
+    <div className="relative shrink-0">
+      <select aria-label={label} value={value} onChange={(e) => onChange(e.target.value)} className={selectClass}>
+        {children}
+      </select>
+      <HiChevronDown className="pointer-events-none absolute end-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
     </div>
   );
 }

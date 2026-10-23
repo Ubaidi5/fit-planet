@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -9,14 +10,15 @@ import { HiArrowRight, HiOutlineArrowUpRight } from "react-icons/hi2";
 import { RegionSwitcher } from "@/components/i18n/RegionSwitcher";
 
 const navLinks = [
-  { href: "/gyms", label: "Find gyms" },
-  { href: "/#orbit", label: "Explore" },
-  { href: "/#passport", label: "Passport" },
-  { href: "/#for-owners", label: "For gym owners" },
+  { href: "/gyms", label: "findGyms" },
+  { href: "/#orbit", label: "explore" },
+  { href: "/#passport", label: "passport" },
+  { href: "/#for-owners", label: "forOwners" },
 ];
 
 const Header: React.FC = () => {
   const pathname = usePathname();
+  const t = useTranslations("site");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -66,7 +68,7 @@ const Header: React.FC = () => {
                     : "text-gray-600 hover:bg-gray-900/[0.04] hover:text-ink",
                 )}
               >
-                {link.label}
+                {t(link.label)}
               </Link>
             );
           })}
@@ -79,19 +81,19 @@ const Header: React.FC = () => {
             href="/studio/login"
             className="rounded-full px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:text-ink"
           >
-            Studio login
+            {t("studioLogin")}
           </Link>
           <Link
             href="/app/login"
             className="rounded-full px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-900/[0.04] hover:text-ink"
           >
-            Log in
+            {t("logIn")}
           </Link>
           <Link
             href="/app/register"
             className="group inline-flex h-11 items-center gap-2 rounded-full bg-ink ps-5 pe-1.5 text-sm font-medium text-white shadow-[inset_0_1px_0_oklch(1_0_0/0.12)] transition-colors hover:bg-gray-800"
           >
-            Get started
+            {t("getStarted")}
             <span className="flex size-8 items-center justify-center rounded-full bg-volt text-ink transition-transform duration-500 ease-out-expo group-hover:-rotate-45 rtl:rotate-180">
               <HiArrowRight className="size-4" />
             </span>
@@ -153,7 +155,7 @@ const Header: React.FC = () => {
                 transitionDelay: `${isMobileMenuOpen ? 60 + index * 40 : 0}ms`,
               }}
             >
-              {link.label}
+              {t(link.label)}
               <HiOutlineArrowUpRight className="size-4 text-gray-400 rtl:-scale-x-100" />
             </Link>
           ))}
@@ -163,19 +165,19 @@ const Header: React.FC = () => {
             href="/app/login"
             className="flex h-12 items-center justify-center rounded-full border border-gray-200 text-sm font-medium text-gray-800"
           >
-            Log in
+            {t("logIn")}
           </Link>
           <Link
             href="/app/register"
             className="flex h-12 items-center justify-center rounded-full bg-ink text-sm font-medium text-white"
           >
-            Get started
-          </Link>
+            {t("getStarted")}
+            </Link>
           <Link
             href="/studio/login"
             className="col-span-2 flex h-11 items-center justify-center text-sm font-medium text-gray-500"
           >
-            Own a gym? Studio login
+            {t("ownGym")}
           </Link>
         </div>
       </div>

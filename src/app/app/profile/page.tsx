@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { HiArrowRight, HiOutlineShieldCheck } from "react-icons/hi2";
@@ -5,15 +6,18 @@ import { requireUser, initials } from "@/server/session";
 import { listCities } from "@/server/modules/gyms";
 import { ProfileForm } from "@/components/member/ProfileForm";
 
-export const metadata: Metadata = { title: "Profile" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getTranslations("settings"))("profile") };
+}
 
 export default async function ProfilePage() {
   const user = await requireUser("/app/profile");
   const cities = (await listCities()).map((c) => c.city);
+  const t = await getTranslations("settings");
   return (
     <div className="mx-auto max-w-3xl">
-      <h1 className="text-[1.75rem] font-semibold tracking-[-0.035em] text-ink sm:text-4xl">Profile</h1>
-      <p className="mt-1 text-gray-500">How you appear to gyms when you book.</p>
+      <h1 className="text-[1.75rem] font-semibold tracking-[-0.035em] text-ink sm:text-4xl">{t("profile")}</h1>
+      <p className="mt-1 text-gray-500">{t("profileLead")}</p>
       <div className="mt-6 rounded-[1.75rem] bg-surface p-5 shadow-soft ring-1 ring-gray-900/[0.05] sm:p-8">
         <ProfileForm
           cities={cities}
@@ -33,8 +37,8 @@ export default async function ProfilePage() {
           <HiOutlineShieldCheck className="size-5" />
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block font-medium text-ink">Sign-in and security</span>
-          <span className="block text-sm text-gray-500">Password, connected accounts</span>
+          <span className="block font-medium text-ink">{t("security")}</span>
+          <span className="block text-sm text-gray-500">{t("securityHint")}</span>
         </span>
         <HiArrowRight className="size-4 text-gray-400 rtl:rotate-180" />
       </Link>

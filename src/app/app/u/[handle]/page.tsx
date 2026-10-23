@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -6,7 +7,7 @@ import { postsBy, profileByHandle } from "@/server/modules/social";
 import { Avatar } from "@/components/social/Avatar";
 import { FeedList } from "@/components/social/FeedList";
 import { FollowButton } from "@/components/social/FollowButton";
-import { findRegion } from "@/lib/i18n/regions";
+import { getRegion } from "@/lib/i18n/server";
 import { weightUnitFor } from "@/lib/routines";
 
 export async function generateMetadata({ params }: { params: Promise<{ handle: string }> }): Promise<Metadata> {
@@ -21,6 +22,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ handle
   if (!profile) notFound();
   const { person, stats } = profile;
   const posts = await postsBy(user._id, profile.userId);
+  const t = await getTranslations("social.profile");
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">
@@ -31,7 +33,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ handle
             <Avatar name={person.name} image={person.image} initials={person.initials} size="lg" className="ring-4 ring-surface" />
             {person.isSelf ? (
               <Link href="/app/social/settings" className="flex h-10 items-center rounded-full px-5 text-sm font-semibold ring-1 ring-gray-900/10 hover:bg-canvas">
-                Edit profile
+                {t("edit")}
               </Link>
             ) : (
               <FollowButton userId={person.id} following={person.following} />
@@ -42,9 +44,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ handle
           {person.bio && <p className="mt-2 text-[15px] text-gray-700">{person.bio}</p>}
           <dl className="mt-4 flex gap-6 text-sm">
             {[
-              [stats.workouts === 1 ? "workout" : "workouts", stats.workouts],
-              [stats.followers === 1 ? "follower" : "followers", stats.followers],
-              ["following", stats.following],
+              [t("workouts", { count: stats.workouts }), stats.workouts],
+              [t("followers", { count: stats.followers }), stats.followers],
+              [t("following"), stats.following],
             ].map(([label, value]) => (
               <div key={label} className="flex items-baseline gap-1">
                 <dd className="font-semibold text-ink tabular-nums">{value}</dd>
@@ -56,10 +58,10 @@ export default async function ProfilePage({ params }: { params: Promise<{ handle
       </section>
       <FeedList
         initial={posts}
-        unit={weightUnitFor(findRegion(user.regionCode))}
+        unit={weightUnitFor(await getRegion())}
         empty={
           <p className="rounded-[1.75rem] border-2 border-dashed border-gray-900/10 px-6 py-10 text-center text-sm text-gray-500">
-            {person.isSelf ? "You haven't posted yet." : `No posts you can see from ${person.name.split(" ")[0]} yet.`}
+            {person.isSelf ? t("selfEmpty") : t("empty", { name: person.name.split(" ")[0] })}
           </p>
         }
       />

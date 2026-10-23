@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { HiArrowUpRight } from "react-icons/hi2";
 import { Reveal } from "@/components/motion/Reveal";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
@@ -26,9 +27,9 @@ const rows = gymCities.map((city) => {
 });
 
 function status(load: number) {
-  if (load >= 75) return { label: "Busy", className: "bg-stamp-magenta/20 text-[oklch(0.8_0.12_5)]" };
-  if (load >= 50) return { label: "Moderate", className: "bg-stamp-ochre/20 text-[oklch(0.85_0.12_80)]" };
-  return { label: "Quiet", className: "bg-volt/15 text-volt" };
+  if (load >= 75) return { label: "busy", className: "bg-stamp-magenta/20 text-[oklch(0.8_0.12_5)]" };
+  if (load >= 50) return { label: "moderate", className: "bg-stamp-ochre/20 text-[oklch(0.85_0.12_80)]" };
+  return { label: "quiet", className: "bg-volt/15 text-volt" };
 }
 
 /** Split-flap style letters for the city code */
@@ -51,6 +52,7 @@ function FlapCode({ code }: { code: string }) {
 
 export default function Departures() {
   const { region, money } = useLocale();
+  const t = useTranslations("departures");
   const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -69,26 +71,25 @@ export default function Departures() {
 
         <div className="relative flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="font-mono text-[12px] tracking-[0.16em] text-volt uppercase">Departures · Live</p>
+            <p className="font-mono text-[12px] tracking-[0.16em] text-volt uppercase">{t("eyebrow")}</p>
             <h2 className="mt-3 max-w-xl text-[2rem] leading-[1.05] font-semibold tracking-[-0.035em] text-balance-safe sm:text-5xl">
-              Wherever you land, your pass already works.
+              {t("title")}
             </h2>
           </div>
           <p className="max-w-xs text-[15px] leading-relaxed text-white/60">
-            Prices stay in each city&apos;s own currency. Times, distances and
-            numbers follow your region.
+            {t("lead")}
           </p>
         </div>
 
         <div className="relative mt-10 sm:mt-12">
           {/* Column labels */}
           <div className="hidden grid-cols-[7rem_minmax(0,1fr)_6rem_5rem_7rem_7rem_2.5rem] gap-4 border-b border-white/10 pb-3 font-mono text-[11px] tracking-[0.14em] text-white/40 uppercase md:grid">
-            <span>City</span>
-            <span>Destination</span>
-            <span>Local</span>
-            <span>Gyms</span>
-            <span>From</span>
-            <span>Crowd</span>
+            <span>{t("cols.city")}</span>
+            <span>{t("cols.destination")}</span>
+            <span>{t("cols.local")}</span>
+            <span>{t("cols.gyms")}</span>
+            <span>{t("cols.from")}</span>
+            <span>{t("cols.crowd")}</span>
             <span />
           </div>
 
@@ -121,7 +122,7 @@ export default function Departures() {
                     <span className="max-md:col-start-3 max-md:justify-self-end">
                       <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[11px] tracking-[0.08em] uppercase ${state.className}`}>
                         <span className="size-1.5 rounded-full bg-current" />
-                        {state.label}
+                        {t(`crowd.${state.label}`)}
                       </span>
                     </span>
                     <span className="hidden size-9 items-center justify-center rounded-full border border-white/15 text-white/60 transition-all duration-500 ease-out-expo group-hover:border-volt group-hover:bg-volt group-hover:text-ink md:flex rtl:-scale-x-100">

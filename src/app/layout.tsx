@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
 import "@/styles/globals.css";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
 import { LocaleProvider } from "@/lib/i18n/LocaleProvider";
+import { getRegion } from "@/lib/i18n/server";
 import { ToastProvider } from "@/components/notifications/ToastProvider";
 
 const bricolage = Bricolage_Grotesque({
@@ -38,19 +41,22 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [region, messages] = await Promise.all([getRegion(), getMessages()]);
   return (
-    <html lang="en" dir="ltr" className="scroll-pt-24" suppressHydrationWarning>
+    <html lang={region.locale} dir={region.dir} className="scroll-pt-24" suppressHydrationWarning>
       <body
         className={`${bricolage.variable} ${jetbrains.variable} font-sans antialiased`}
       >
-        <LocaleProvider>
-          <ToastProvider>{children}</ToastProvider>
-        </LocaleProvider>
+        <NextIntlClientProvider locale={region.lang} messages={messages} timeZone="UTC">
+          <LocaleProvider initialRegion={region.code}>
+            <ToastProvider>{children}</ToastProvider>
+          </LocaleProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

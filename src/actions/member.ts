@@ -1,6 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
+import { findRegion, REGION_COOKIE } from "@/lib/i18n/regions";
 import { z } from "zod";
 import type { ActionResult } from "@/lib/types";
 import { collections, toObjectId } from "@/server/db/collections";
@@ -39,6 +41,10 @@ export async function updateProfileAction(_prev: ActionResult | null, formData: 
     { _id: user._id },
     { $set: { ...rest, ...(image !== undefined ? { image: image || null } : {}), updatedAt: new Date() } },
   );
+  // The profile's region also drives the interface language on this device
+  if (rest.regionCode && findRegion(rest.regionCode)) {
+    (await cookies()).set(REGION_COOKIE, rest.regionCode, { path: "/", maxAge: 60 * 60 * 24 * 365, sameSite: "lax" });
+  }
   await updateSession({ user: { name: parsed.data.name, ...(image !== undefined ? { image: image || null } : {}) } });
   revalidatePath("/app", "layout");
   return { ok: true, message: "Profile saved." };

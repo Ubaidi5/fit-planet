@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { HiOutlinePlus, HiPlay } from "react-icons/hi2";
@@ -8,11 +9,13 @@ import { RoutineMenu } from "@/components/routines/RoutineMenu";
 import { routineTemplates } from "@/lib/data/exercises";
 import { findCountry } from "@/lib/data/countries";
 import { addDays, todayIn } from "@/lib/dates";
-import { categoryLabel, estimateMinutes, kgToUnit, musclesOf, totalSets, weightUnitFor, type WeightUnit } from "@/lib/routines";
-import { findRegion } from "@/lib/i18n/regions";
+import { getRegion } from "@/lib/i18n/server";
+import { estimateMinutes, kgToUnit, musclesOf, totalSets, weightUnitFor, type WeightUnit } from "@/lib/routines";
 import { cn } from "@/lib/utils";
 
-export const metadata: Metadata = { title: "Routines" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getTranslations("routines"))("title") };
+}
 
 const spine: Record<string, string> = {
   push: "bg-stamp-magenta",
@@ -24,6 +27,7 @@ const spine: Record<string, string> = {
 
 export default async function RoutinesPage() {
   const user = await requireUser("/app/routines");
+  const [t, tr, region] = await Promise.all([getTranslations("routines"), getTranslations("training"), getRegion()]);
   const [routines, workouts] = await Promise.all([listRoutines(user._id), recentWorkouts(user._id, 30)]);
 
   // The last seven days, in the member's own timezone when we know their country
@@ -35,39 +39,39 @@ export default async function RoutinesPage() {
   const thisWeek = workouts.filter((w) => dayOf(w.completedAt) >= days[0]);
   const weekMinutes = thisWeek.reduce((s, w) => s + w.durationMin, 0);
   const weekVolume = thisWeek.reduce((s, w) => s + w.volumeKg, 0);
-  const weekday = new Intl.DateTimeFormat("en", { weekday: "narrow", timeZone: "UTC" });
-  const when = new Intl.DateTimeFormat("en", { weekday: "short", day: "numeric", month: "short", timeZone });
-  const number = new Intl.NumberFormat("en");
-  const unit = weightUnitFor(findRegion(user.regionCode));
+  const weekday = new Intl.DateTimeFormat(region.locale, { weekday: "narrow", timeZone: "UTC" });
+  const when = new Intl.DateTimeFormat(region.locale, { weekday: "short", day: "numeric", month: "short", timeZone });
+  const number = new Intl.NumberFormat(region.locale);
+  const unit = weightUnitFor(region);
 
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
       <div className="min-w-0">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">Training log</p>
-            <h1 className="mt-1 text-[1.75rem] font-semibold tracking-[-0.035em] text-ink sm:text-4xl">Routines</h1>
+            <p className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">{t("eyebrow")}</p>
+            <h1 className="mt-1 text-[1.75rem] font-semibold tracking-[-0.035em] text-ink sm:text-4xl">{t("title")}</h1>
           </div>
           <Link
             href="/app/routines/new"
             className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full bg-ink ps-4 pe-5 text-sm font-semibold text-white transition-colors hover:bg-gray-800"
           >
             <HiOutlinePlus className="size-4.5" />
-            New
+            {t("new")}
           </Link>
         </div>
 
         {/* Week at a glance: on mobile it sits on top, on desktop it moves to the side column */}
-        <WeekCard className="mt-6 lg:hidden" days={days} trained={trainedDays} today={today} weekday={weekday} count={thisWeek.length} minutes={weekMinutes} volume={kgToUnit(weekVolume, unit)} unit={unit} />
+        <WeekCard locale={region.locale} className="mt-6 lg:hidden" days={days} trained={trainedDays} today={today} weekday={weekday} count={thisWeek.length} minutes={weekMinutes} volume={kgToUnit(weekVolume, unit)} unit={unit} />
 
         {routines.length === 0 ? (
           <div className="mt-6 rounded-[1.75rem] border-2 border-dashed border-gray-900/10 px-6 py-12 text-center">
-            <p className="font-semibold text-ink">Build your first routine</p>
+            <p className="font-semibold text-ink">{t("empty.title")}</p>
             <p className="mx-auto mt-1 max-w-sm text-sm text-gray-500">
-              Pick exercises, set your targets, then log every set from your phone at the gym. Or start from a template below.
+              {t("empty.text")}
             </p>
             <Link href="/app/routines/new" className="mt-5 inline-flex h-11 items-center rounded-full bg-ink px-5 text-sm font-semibold text-white">
-              Create a routine
+              {t("empty.cta")}
             </Link>
           </div>
         ) : (
@@ -80,7 +84,7 @@ export default async function RoutinesPage() {
                   <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
-                        <p className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">{categoryLabel(r.category)}</p>
+                        <p className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">{tr.has(`categories.${r.category}`) ? tr(`categories.${r.category}`) : tr("categories.custom")}</p>
                         <h2 className="mt-0.5 truncate text-[17px] font-semibold tracking-tight text-ink">{r.name}</h2>
                       </div>
                       <div className="-me-2 -mt-1.5">
@@ -88,27 +92,27 @@ export default async function RoutinesPage() {
                       </div>
                     </div>
                     <p className="mt-1 text-sm text-gray-500">
-                      {r.items.length} exercises · {totalSets(r.items)} sets · ~{estimateMinutes(r.items)} min
+                      {t("cardSummary", { exercises: r.items.length, sets: totalSets(r.items), minutes: estimateMinutes(r.items) })}
                     </p>
                     <div className="mt-3 flex flex-wrap gap-1.5">
                       {muscles.map((m) => (
                         <span key={m.id} className="rounded-full bg-canvas px-2.5 py-1 text-xs font-medium text-gray-600">
-                          {m.label}
+                          {tr(`muscles.${m.id}`)}
                         </span>
                       ))}
                     </div>
                     <div className="mt-4 flex items-center justify-between gap-3 border-t border-dashed border-gray-900/10 pt-3">
                       <p className="truncate text-xs text-gray-500">
                         {r.timesCompleted > 0 && r.lastCompletedAt
-                          ? `Done ${r.timesCompleted}× · last ${when.format(new Date(r.lastCompletedAt))}`
-                          : "Not done yet"}
+                          ? t("done", { count: r.timesCompleted, date: when.format(new Date(r.lastCompletedAt)) })
+                          : t("notDone")}
                       </p>
                       <Link
                         href={`/app/routines/${r.id}/start`}
                         className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-volt ps-3.5 pe-4 text-sm font-semibold text-ink transition-transform hover:scale-[1.03] active:scale-95"
                       >
                         <HiPlay className="size-4" />
-                        Start
+                        {t("start")}
                       </Link>
                     </div>
                   </div>
@@ -119,22 +123,22 @@ export default async function RoutinesPage() {
         )}
 
         <section className="mt-10">
-          <h2 className="text-lg font-semibold tracking-tight text-ink">Start from a template</h2>
-          <p className="mt-0.5 text-sm text-gray-500">Copies into your routines so you can tweak it.</p>
+          <h2 className="text-lg font-semibold tracking-tight text-ink">{t("templates")}</h2>
+          <p className="mt-0.5 text-sm text-gray-500">{t("templatesHint")}</p>
           <ul className="-mx-4 mt-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 xl:grid-cols-3">
-            {routineTemplates.map((t) => (
-              <li key={t.id} className="flex w-64 shrink-0 snap-start flex-col rounded-3xl bg-surface p-4 ring-1 ring-gray-900/[0.06] sm:w-auto">
+            {routineTemplates.map((tpl) => (
+              <li key={tpl.id} className="flex w-64 shrink-0 snap-start flex-col rounded-3xl bg-surface p-4 ring-1 ring-gray-900/[0.06] sm:w-auto">
                 <p className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">
-                  {t.items.length} exercises · ~{estimateMinutes(t.items)} min
+                  {t("templateSummary", { exercises: tpl.items.length, minutes: estimateMinutes(tpl.items) })}
                 </p>
-                <p className="mt-1 font-semibold text-ink">{t.name}</p>
-                <p className="mt-1 line-clamp-2 flex-1 text-sm text-gray-500">{t.notes}</p>
-                <form action={copyTemplateAction.bind(null, t.id)} className="mt-4">
+                <p className="mt-1 font-semibold text-ink">{tr(`templates.${tpl.id}.name`)}</p>
+                <p className="mt-1 line-clamp-2 flex-1 text-sm text-gray-500">{tr(`templates.${tpl.id}.notes`)}</p>
+                <form action={copyTemplateAction.bind(null, tpl.id)} className="mt-4">
                   <button
                     type="submit"
                     className="h-10 w-full cursor-pointer rounded-full border border-gray-900/10 text-sm font-semibold text-ink transition-colors hover:bg-canvas"
                   >
-                    Use template
+                    {t("useTemplate")}
                   </button>
                 </form>
               </li>
@@ -144,11 +148,11 @@ export default async function RoutinesPage() {
       </div>
 
       <aside className="grid gap-4 lg:sticky lg:top-24">
-        <WeekCard className="hidden lg:block" days={days} trained={trainedDays} today={today} weekday={weekday} count={thisWeek.length} minutes={weekMinutes} volume={kgToUnit(weekVolume, unit)} unit={unit} />
+        <WeekCard locale={region.locale} className="hidden lg:block" days={days} trained={trainedDays} today={today} weekday={weekday} count={thisWeek.length} minutes={weekMinutes} volume={kgToUnit(weekVolume, unit)} unit={unit} />
         <section className="rounded-3xl bg-surface p-5 shadow-soft ring-1 ring-gray-900/[0.05]">
-          <h2 className="text-base font-semibold text-ink">Recent workouts</h2>
+          <h2 className="text-base font-semibold text-ink">{t("recent")}</h2>
           {workouts.length === 0 ? (
-            <p className="mt-2 text-sm text-gray-500">Finished workouts show up here with your sets and volume.</p>
+            <p className="mt-2 text-sm text-gray-500">{t("noRecent")}</p>
           ) : (
             <ul className="mt-3 divide-y divide-gray-900/[0.06]">
               {workouts.slice(0, 8).map((w) => (
@@ -159,8 +163,8 @@ export default async function RoutinesPage() {
                       <span className="text-xs text-gray-500">{when.format(new Date(w.completedAt))}</span>
                     </span>
                     <span className="shrink-0 text-end text-xs text-gray-500 tabular-nums">
-                      <span className="block font-semibold text-ink">{w.durationMin} min</span>
-                      {w.volumeKg > 0 ? `${number.format(kgToUnit(w.volumeKg, unit))} ${unit}` : `${w.setsDone} sets`}
+                      <span className="block font-semibold text-ink">{t("minutes", { count: w.durationMin })}</span>
+                      {w.volumeKg > 0 ? `${number.format(kgToUnit(w.volumeKg, unit))} ${unit}` : t("sets", { count: w.setsDone })}
                     </span>
                   </Link>
                 </li>
@@ -169,14 +173,15 @@ export default async function RoutinesPage() {
           )}
         </section>
         <Link href="/app/exercises" className="rounded-3xl bg-canvas-deep px-5 py-4 text-sm font-medium text-ink hover:bg-gray-200/70">
-          Browse the exercise library →
+          {t("library")} <span className="rtl:hidden">→</span><span className="hidden rtl:inline">←</span>
         </Link>
       </aside>
     </div>
   );
 }
 
-function WeekCard({
+async function WeekCard({
+  locale,
   className,
   days,
   trained,
@@ -187,6 +192,7 @@ function WeekCard({
   volume,
   unit,
 }: {
+  locale: string;
   className?: string;
   days: string[];
   trained: Set<string>;
@@ -197,12 +203,13 @@ function WeekCard({
   volume: number;
   unit: WeightUnit;
 }) {
+  const t = await getTranslations("routines.week");
   return (
     <section className={cn("rounded-3xl bg-ink p-5 text-white", className)}>
       <div className="flex items-baseline justify-between">
-        <p className="font-mono text-[11px] tracking-[0.14em] text-white/50 uppercase">Last 7 days</p>
+        <p className="font-mono text-[11px] tracking-[0.14em] text-white/50 uppercase">{t("title")}</p>
         <p className="text-sm text-white/70">
-          <span className="text-2xl font-semibold text-volt tabular-nums">{count}</span> workout{count === 1 ? "" : "s"}
+          {t.rich("workouts", { count, n: (c) => <span className="text-2xl font-semibold text-volt tabular-nums">{c}</span> })}
         </p>
       </div>
       <ol className="mt-4 grid grid-cols-7 gap-1.5">
@@ -226,12 +233,12 @@ function WeekCard({
       </ol>
       <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-white/10 pt-4">
         <div>
-          <dt className="text-xs text-white/50">Time trained</dt>
-          <dd className="text-lg font-semibold tabular-nums">{minutes} min</dd>
+          <dt className="text-xs text-white/50">{t("time")}</dt>
+          <dd className="text-lg font-semibold tabular-nums">{t("minutes", { count: minutes })}</dd>
         </div>
         <div>
-          <dt className="text-xs text-white/50">Volume lifted</dt>
-          <dd className="text-lg font-semibold tabular-nums">{new Intl.NumberFormat("en").format(volume)} {unit}</dd>
+          <dt className="text-xs text-white/50">{t("volume")}</dt>
+          <dd className="text-lg font-semibold tabular-nums">{new Intl.NumberFormat(locale).format(volume)} {unit}</dd>
         </div>
       </dl>
     </section>

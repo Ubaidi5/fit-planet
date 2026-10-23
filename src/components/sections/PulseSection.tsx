@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { HiOutlineBellAlert, HiOutlineChartBar, HiOutlineClock } from "react-icons/hi2";
 import { Reveal } from "@/components/motion/Reveal";
 import { CrowdCurve } from "@/components/pulse/CrowdCurve";
@@ -14,12 +15,13 @@ const featured = ["marina-box-dubai", "fitzone-karachi", "southbank-strength-lon
   .filter((g): g is (typeof mockGyms)[number] => Boolean(g));
 
 const points = [
-  { icon: HiOutlineChartBar, title: "Live crowd", text: "Every gym reports how full it is as members check in." },
-  { icon: HiOutlineClock, title: "Hourly forecast", text: "See the quiet windows for today in the gym's own time zone." },
-  { icon: HiOutlineBellAlert, title: "Quiet alerts", text: "Get a nudge when your favourite gym drops below half full." },
+  { icon: HiOutlineChartBar, key: "live" },
+  { icon: HiOutlineClock, key: "forecast" },
+  { icon: HiOutlineBellAlert, key: "alerts" },
 ];
 
 export default function PulseSection() {
+  const t = useTranslations("pulse");
   const [active, setActive] = useState(featured[0]?.slug);
   const gym = featured.find((g) => g.slug === active) ?? featured[0];
   if (!gym) return null;
@@ -31,24 +33,20 @@ export default function PulseSection() {
         <div>
           <SectionHeading
             align="left"
-            eyebrow="Pulse · crowd forecast"
-            title={
-              <>
-                Skip the queue for <Accent>the squat rack</Accent>
-              </>
-            }
-            description="Fit Planet shows how busy a gym is before you leave home, wherever home is this week."
+            eyebrow={t("eyebrow")}
+            title={t.rich("title", { accent: (c) => <Accent>{c}</Accent> })}
+            description={t("lead")}
             className="mx-auto text-center lg:mx-0 lg:text-start"
           />
           <ul className="mt-10 space-y-5">
-            {points.map(({ icon: Icon, title, text }, index) => (
-              <Reveal as="li" key={title} delay={index * 80} className="flex gap-4">
+            {points.map(({ icon: Icon, key }, index) => (
+              <Reveal as="li" key={key} delay={index * 80} className="flex gap-4">
                 <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-surface text-emerald-700 shadow-soft ring-1 ring-gray-900/[0.05]">
                   <Icon className="size-5" />
                 </span>
                 <span>
-                  <span className="block font-semibold text-ink">{title}</span>
-                  <span className="mt-0.5 block text-[15px] leading-relaxed text-gray-600">{text}</span>
+                  <span className="block font-semibold text-ink">{t(`points.${key}.title`)}</span>
+                  <span className="mt-0.5 block text-[15px] leading-relaxed text-gray-600">{t(`points.${key}.text`)}</span>
                 </span>
               </Reveal>
             ))}
@@ -56,7 +54,7 @@ export default function PulseSection() {
         </div>
 
         <Reveal delay={120} className="rounded-4xl border border-gray-900/[0.06] bg-surface p-5 shadow-lift sm:p-8">
-          <div role="tablist" aria-label="Choose a gym" className="flex gap-1 overflow-x-auto rounded-full bg-gray-100 p-1 no-scrollbar">
+          <div role="tablist" aria-label={t("chooseGym")} className="flex gap-1 overflow-x-auto rounded-full bg-gray-100 p-1 no-scrollbar">
             {featured.map((g) => (
               <button
                 key={g.slug}
@@ -82,7 +80,7 @@ export default function PulseSection() {
             </div>
             <div className="shrink-0 text-end">
               <p className="text-3xl font-semibold tracking-tight text-ink tabular-nums">{pct}%</p>
-              <p className="font-mono text-[11px] tracking-[0.08em] text-gray-500 uppercase">full now</p>
+              <p className="font-mono text-[11px] tracking-[0.08em] text-gray-500 uppercase">{t("fullNow")}</p>
             </div>
           </div>
 

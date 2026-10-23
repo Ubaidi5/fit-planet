@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import QRCode from "qrcode";
 import { requireUser } from "@/server/session";
@@ -5,7 +6,9 @@ import { listUserBookings } from "@/server/modules/bookings";
 import { passportStamps } from "@/server/modules/checkins";
 import { PassesView } from "@/components/pass/PassesView";
 
-export const metadata: Metadata = { title: "My passes" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getTranslations("wallet"))("title") };
+}
 
 export default async function PassesPage() {
   const user = await requireUser("/app/passes");

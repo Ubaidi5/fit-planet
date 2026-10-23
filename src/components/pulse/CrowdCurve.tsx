@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
@@ -30,6 +31,7 @@ const pad = (hour: number) => `${String(hour).padStart(2, "0")}:00`;
 export function CrowdCurve({ gym, tone = "light", className }: CrowdCurveProps) {
   const { clock } = useLocale();
   const forecast = useMemo(() => crowdForecast(gym), [gym]);
+  const t = useTranslations("pulse");
   const [now, setNow] = useState<number | null>(null);
 
   useEffect(() => {
@@ -45,7 +47,7 @@ export function CrowdCurve({ gym, tone = "light", className }: CrowdCurveProps) 
 
   return (
     <div className={cn("w-full", className)}>
-      <div className="flex h-36 items-end gap-[3px] sm:h-40 sm:gap-1" role="img" aria-label="Expected crowd by hour">
+      <div className="flex h-36 items-end gap-[3px] sm:h-40 sm:gap-1" role="img" aria-label={t("chartLabel")}>
         {hours.map(({ hour, value }) => {
           const isNow = hour === now;
           const isBest = best.some((b) => b.hour === hour);
@@ -53,7 +55,7 @@ export function CrowdCurve({ gym, tone = "light", className }: CrowdCurveProps) 
             <div key={hour} className="group relative flex h-full flex-1 flex-col items-center justify-end">
               {isNow && (
                 <span className={cn("absolute -top-1 rounded-full px-1.5 py-0.5 font-mono text-[9px] tracking-[0.1em] uppercase", dark ? "bg-volt text-ink" : "bg-ink text-white")}>
-                  Now
+                  {t("now")}
                 </span>
               )}
               <span
@@ -87,7 +89,7 @@ export function CrowdCurve({ gym, tone = "light", className }: CrowdCurveProps) 
       </div>
       {best.length > 0 && (
         <p className={cn("mt-4 text-sm", dark ? "text-white/70" : "text-gray-600")}>
-          Quietest {now === null ? "today" : "later today"}:{" "}
+          {now === null ? t("quietestToday") : t("quietestLater")}{" "}
           <span className={cn("font-mono font-medium", dark ? "text-volt" : "text-emerald-700")}>
             {best.map((b) => clock(pad(b.hour))).join(", ")}
           </span>

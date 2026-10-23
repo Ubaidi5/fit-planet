@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -22,6 +23,7 @@ interface PhotoGalleryProps {
 
 export function PhotoGallery({ images, className }: PhotoGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const t = useTranslations("gallery");
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
@@ -62,7 +64,7 @@ export function PhotoGallery({ images, className }: PhotoGalleryProps) {
           className,
         )}
       >
-        <p className="text-gray-500">No photos available</p>
+        <p className="text-gray-500">{t("none")}</p>
       </div>
     );
   }
@@ -81,7 +83,7 @@ export function PhotoGallery({ images, className }: PhotoGalleryProps) {
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200",
             )}
           >
-            All
+            {t("all")}
           </button>
           {categories.map((category) => (
             <button
@@ -94,7 +96,7 @@ export function PhotoGallery({ images, className }: PhotoGalleryProps) {
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200",
               )}
             >
-              {category}
+              {t.has(`categories.${category}`) ? t(`categories.${category}`) : category}
             </button>
           ))}
         </div>
@@ -109,7 +111,7 @@ export function PhotoGallery({ images, className }: PhotoGalleryProps) {
         >
           <Image
             src={filteredImages[0]?.url || ""}
-            alt={filteredImages[0]?.caption || "Gym photo"}
+            alt={filteredImages[0]?.caption || t("photo")}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
@@ -212,7 +214,7 @@ export function PhotoGallery({ images, className }: PhotoGalleryProps) {
                 {filteredImages[selectedIndex]?.caption}
               </p>
               <p className="text-gray-400 text-sm mt-1">
-                {selectedIndex + 1} of {filteredImages.length}
+                {t("counter", { n: selectedIndex + 1, total: filteredImages.length })}
               </p>
             </div>
           </div>

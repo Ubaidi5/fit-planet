@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { CheckoutForm } from "@/components/booking/CheckoutForm";
@@ -8,7 +9,9 @@ import { env } from "@/server/env";
 import { addDays, daysBetween, isIsoDate, todayIn } from "@/lib/dates";
 import { isPassType } from "@/lib/passes";
 
-export const metadata: Metadata = { title: "Book a pass" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getTranslations("gym"))("bookPass") };
+}
 
 type Props = {
   params: Promise<{ id: string }>;

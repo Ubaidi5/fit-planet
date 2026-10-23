@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { requireUser } from "@/server/session";
@@ -5,10 +6,12 @@ import { toObjectId } from "@/server/db/collections";
 import { getPost, listComments } from "@/server/modules/social";
 import { BackLink } from "@/components/routines/BackLink";
 import { PostCard } from "@/components/social/PostCard";
-import { findRegion } from "@/lib/i18n/regions";
+import { getRegion } from "@/lib/i18n/server";
 import { weightUnitFor } from "@/lib/routines";
 
-export const metadata: Metadata = { title: "Post" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getTranslations("social"))("postMeta") };
+}
 
 export default async function PostPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -17,12 +20,13 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
   const post = postId ? await getPost(user._id, postId) : null;
   if (!post || !postId) notFound();
   const comments = await listComments(user._id, postId);
+  const t = await getTranslations("social");
 
   return (
     <div className="mx-auto max-w-2xl">
-      <BackLink href="/app/social" label="Social" />
+      <BackLink href="/app/social" label={t("title")} />
       <div className="mt-3">
-        <PostCard post={post} unit={weightUnitFor(findRegion(user.regionCode))} initialComments={comments} />
+        <PostCard post={post} unit={weightUnitFor(await getRegion())} initialComments={comments} />
       </div>
     </div>
   );

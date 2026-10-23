@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
@@ -15,7 +16,6 @@ import { cn } from "@/lib/utils";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { formatPassDate } from "@/lib/i18n/format";
 import { cityCode } from "@/lib/data/cities";
-import { passMeta } from "@/lib/passes";
 import type { BookingView } from "@/lib/types";
 import { PassCard, type PassTone } from "@/components/passport/PassCard";
 import { Stamp } from "@/components/passport/Stamp";
@@ -35,8 +35,6 @@ export interface StampView {
   visits: number;
 }
 
-const formatPassType = (type: BookingView["passType"]) => passMeta[type].label;
-
 /** Server-rendered QR markup (see PassQR); kept as a string so the code stays scannable */
 function QrSvg({ svg, size }: { svg?: string; size: number }) {
   return <div aria-hidden="true" className="[&>svg]:size-full" style={{ width: size, height: size }} dangerouslySetInnerHTML={{ __html: svg ?? "" }} />;
@@ -52,6 +50,9 @@ const utcDate = (iso: string) => new Date(`${iso}T00:00:00Z`);
 
 export function PassesView({ bookings, stampList, qr }: { bookings: BookingView[]; stampList: StampView[]; qr: Record<string, string> }) {
   const { region, money } = useLocale();
+  const t = useTranslations("wallet");
+  const tp = useTranslations("passes");
+  const formatPassType = (type: BookingView["passType"]) => tp(`name.${type}`);
   const passes = useMemo<WalletPass[]>(() => bookings.map((booking) => ({ booking, gym: booking.gym })), [bookings]);
   const wallet = passes
     .filter(({ booking }) => booking.isActive || booking.isUpcoming)
@@ -103,15 +104,15 @@ export function PassesView({ bookings, stampList, qr }: { bookings: BookingView[
       <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="font-mono text-[12px] tracking-[0.16em] text-emerald-700 uppercase">
-            Wallet · {wallet.length} {wallet.length === 1 ? "pass" : "passes"}
+            {t("eyebrow", { count: wallet.length })}
           </p>
-          <h1 className="mt-2 text-4xl font-bold tracking-[-0.04em] text-ink sm:text-5xl">My passes</h1>
+          <h1 className="mt-2 text-4xl font-bold tracking-[-0.04em] text-ink sm:text-5xl">{t("title")}</h1>
         </div>
         <Link
           href="/gyms"
           className="group inline-flex h-12 w-fit items-center gap-2 rounded-full bg-ink ps-5 pe-1.5 text-sm font-medium text-white transition-colors hover:bg-gray-800"
         >
-          Book a new pass
+          {t("bookNew")}
           <span className="flex size-9 items-center justify-center rounded-full bg-volt text-ink transition-transform duration-500 ease-out-expo group-hover:rotate-90">
             <HiPlus className="size-4" />
           </span>
@@ -120,7 +121,7 @@ export function PassesView({ bookings, stampList, qr }: { bookings: BookingView[
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-8">
         {/* Wallet */}
-        <section aria-label="Active and upcoming passes" className="min-w-0">
+        <section aria-label={t("walletAria")} className="min-w-0">
           {wallet.length > 0 && selected ? (
             <>
               <div className="relative" style={{ height: CARD_HEIGHT + (order.length - 1) * STEP }}>
@@ -145,7 +146,7 @@ export function PassesView({ bookings, stampList, qr }: { bookings: BookingView[
                         cityCode={cityCode(gym.city)}
                         country={gym.country}
                         gymName={gym.name}
-                        passType={booking.isUpcoming ? `Starts ${dateFormat(booking.startDate)}` : formatPassType(booking.passType)}
+                        passType={booking.isUpcoming ? t("starts", { date: dateFormat(booking.startDate) }) : formatPassType(booking.passType)}
                         price={money(booking.amount, booking.currency)}
                         meta={validity(booking)}
                         tone={toneFor(pass)}
@@ -163,7 +164,7 @@ export function PassesView({ bookings, stampList, qr }: { bookings: BookingView[
                     type="button"
                     onClick={() => setShowQr(true)}
                     className="group relative mx-auto w-fit shrink-0 overflow-hidden rounded-3xl bg-white p-3 ring-1 ring-gray-900/[0.06] sm:mx-0"
-                    aria-label="Show QR full screen"
+                    aria-label={t("qrFull")}
                   >
                     <QrSvg svg={qr[selected.booking.code]} size={132} />
                     {selected.booking.isActive && (
@@ -180,22 +181,22 @@ export function PassesView({ bookings, stampList, qr }: { bookings: BookingView[
                           selected.booking.isActive ? "bg-emerald-50 text-emerald-700" : "bg-stamp-violet/10 text-stamp-violet",
                         )}
                       >
-                        {selected.booking.isActive ? "Active" : "Upcoming"}
+                        {selected.booking.isActive ? t("active") : t("upcoming")}
                       </span>
                       <span className="truncate font-mono text-[11px] tracking-[0.08em] text-gray-400">{selected.booking.code}</span>
                     </div>
                     <p className="mt-3 truncate text-2xl font-semibold tracking-[-0.03em] text-ink">{selected.gym.name}</p>
                     <dl className="mt-4 grid grid-cols-3 gap-3">
                       <div>
-                        <dt className="font-mono text-[10px] tracking-[0.12em] text-gray-400 uppercase">Valid</dt>
+                        <dt className="font-mono text-[10px] tracking-[0.12em] text-gray-400 uppercase">{t("valid")}</dt>
                         <dd className="mt-0.5 text-sm font-medium text-ink">{validity(selected.booking)}</dd>
                       </div>
                       <div>
-                        <dt className="font-mono text-[10px] tracking-[0.12em] text-gray-400 uppercase">Check-ins</dt>
+                        <dt className="font-mono text-[10px] tracking-[0.12em] text-gray-400 uppercase">{t("checkins")}</dt>
                         <dd className="mt-0.5 text-sm font-medium text-ink tabular-nums">{selected.booking.checkinCount}</dd>
                       </div>
                       <div>
-                        <dt className="font-mono text-[10px] tracking-[0.12em] text-gray-400 uppercase">Paid</dt>
+                        <dt className="font-mono text-[10px] tracking-[0.12em] text-gray-400 uppercase">{t("paid")}</dt>
                         <dd className="mt-0.5 text-sm font-medium whitespace-nowrap text-ink tabular-nums">
                           {money(selected.booking.amount, selected.booking.currency)}
                         </dd>
@@ -210,14 +211,14 @@ export function PassesView({ bookings, stampList, qr }: { bookings: BookingView[
                     className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-ink text-sm font-medium text-white transition-colors hover:bg-gray-800"
                   >
                     <HiOutlineQrCode className="size-5" />
-                    Show at entrance
+                    {t("showEntrance")}
                   </button>
                   <Link
                     href={`/app/passes/${selected.booking.id}`}
                     className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-canvas text-sm font-medium text-ink ring-1 ring-gray-900/[0.06] transition-colors hover:bg-gray-100"
                   >
                     <HiOutlineMapPin className="size-5" />
-                    Pass details
+                    {t("details")}
                   </Link>
                 </div>
               </div>
@@ -225,21 +226,21 @@ export function PassesView({ bookings, stampList, qr }: { bookings: BookingView[
           ) : (
             <div className="flex flex-col items-center rounded-4xl border border-dashed border-gray-900/15 bg-surface/60 px-6 py-16 text-center">
               <HiOutlineQrCode className="size-10 text-gray-300" />
-              <h2 className="mt-4 text-lg font-semibold text-ink">Your wallet is empty</h2>
-              <p className="mt-1 max-w-xs text-sm text-gray-500">Book a pass at any partner gym and it will land here with its QR.</p>
+              <h2 className="mt-4 text-lg font-semibold text-ink">{t("empty.title")}</h2>
+              <p className="mt-1 max-w-xs text-sm text-gray-500">{t("empty.text")}</p>
               <Link href="/gyms" className="mt-6 inline-flex h-11 items-center rounded-full bg-ink px-5 text-sm font-medium text-white">
-                Find a gym
+                {t("empty.cta")}
               </Link>
             </div>
           )}
         </section>
 
         {/* Passport */}
-        <section aria-label="Passport stamps" className="min-w-0">
+        <section aria-label={t("stampsAria")} className="min-w-0">
           <div className="overflow-hidden rounded-4xl bg-surface shadow-pass ring-1 ring-gray-900/[0.06]">
             <div className="bg-[linear-gradient(var(--color-volt-soft),var(--color-surface))] p-6 sm:p-8">
               <div className="flex items-center justify-between font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">
-                <span>Passport · Stamps</span>
+                <span>{t("passportStamps")}</span>
                 <span>{String(stamps.length).padStart(2, "0")}</span>
               </div>
               <div className="mt-6 grid grid-cols-3 place-items-center gap-y-5 sm:gap-y-7">
@@ -260,16 +261,16 @@ export function PassesView({ bookings, stampList, qr }: { bookings: BookingView[
                 {pendingStamp && (
                   <div className="flex size-16 flex-col items-center justify-center rounded-full border-2 border-dashed border-gray-300 text-center font-mono text-gray-400 sm:scale-125">
                     <span className="text-[11px] font-semibold tracking-[0.12em]">{cityCode(pendingStamp.gym.city)}</span>
-                    <span className="text-[7px] tracking-[0.1em] uppercase">Check in</span>
+                    <span className="text-[7px] tracking-[0.1em] uppercase">{t("checkIn")}</span>
                   </div>
                 )}
               </div>
             </div>
             <dl className="grid grid-cols-3 divide-x divide-dashed divide-gray-900/15 border-y border-dashed border-gray-900/15 rtl:divide-x-reverse">
               {[
-                { label: "Cities", value: stamps.length },
-                { label: "Countries", value: countries.size },
-                { label: "Visits", value: visits },
+                { label: t("stats.cities"), value: stamps.length },
+                { label: t("stats.countries"), value: countries.size },
+                { label: t("stats.visits"), value: visits },
               ].map((stat) => (
                 <div key={stat.label} className="flex flex-col items-center py-4">
                   <dt className="order-2 font-mono text-[10px] tracking-[0.12em] text-gray-400 uppercase">{stat.label}</dt>
@@ -285,7 +286,7 @@ export function PassesView({ bookings, stampList, qr }: { bookings: BookingView[
           {pendingStamp && (
             <p className="mt-4 flex items-center gap-2 rounded-2xl bg-volt-soft px-4 py-3 text-sm text-emerald-800">
               <HiOutlineClock className="size-4.5 shrink-0" />
-              Check in at {pendingStamp.gym.name} to collect your {pendingStamp.gym.city} stamp.
+              {t("pendingStamp", { gym: pendingStamp.gym.name, city: pendingStamp.gym.city })}
             </p>
           )}
         </section>
@@ -294,7 +295,7 @@ export function PassesView({ bookings, stampList, qr }: { bookings: BookingView[
       {/* History */}
       {history.length > 0 && (
         <section className="mt-12">
-          <h2 className="font-mono text-[12px] tracking-[0.16em] text-gray-400 uppercase">Past passes</h2>
+          <h2 className="font-mono text-[12px] tracking-[0.16em] text-gray-400 uppercase">{t("past")}</h2>
           <ul className="mt-4 divide-y divide-gray-900/[0.06] overflow-hidden rounded-4xl border border-gray-900/[0.06] bg-surface shadow-soft">
             {history.map(({ booking, gym }) => (
               <li key={booking.id} className="relative flex items-center gap-4 px-4 py-4 sm:px-6">
@@ -307,7 +308,7 @@ export function PassesView({ bookings, stampList, qr }: { bookings: BookingView[
                   </Link>
                   <p className="truncate text-sm text-gray-500">
                     {formatPassType(booking.passType)} · {validity(booking)}
-                    {booking.status === "cancelled" || booking.status === "refunded" ? ` · ${booking.status === "refunded" ? "Refunded" : "Cancelled"}` : ""}
+                    {booking.status === "cancelled" || booking.status === "refunded" ? ` · ${booking.status === "refunded" ? t("refunded") : t("cancelled")}` : ""}
                   </p>
                 </div>
                 <span className="hidden shrink-0 text-sm font-medium whitespace-nowrap text-ink tabular-nums sm:block">
@@ -318,7 +319,7 @@ export function PassesView({ bookings, stampList, qr }: { bookings: BookingView[
                   className="group relative z-10 inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-canvas px-3.5 text-[13px] font-medium text-ink ring-1 ring-gray-900/[0.06] transition-colors hover:bg-gray-100"
                 >
                   <HiArrowPath className="size-4 transition-transform duration-500 group-hover:-rotate-180" />
-                  <span className="hidden sm:inline">Book again</span>
+                  <span className="hidden sm:inline">{t("again")}</span>
                 </Link>
               </li>
             ))}
@@ -328,7 +329,7 @@ export function PassesView({ bookings, stampList, qr }: { bookings: BookingView[
 
       {/* Full-screen QR */}
       {showQr && selected && (
-        <div role="dialog" aria-modal="true" aria-label="Entrance QR" className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/70 p-4 backdrop-blur-md">
+        <div role="dialog" aria-modal="true" aria-label={t("entranceQr")} className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/70 p-4 backdrop-blur-md">
           <div className="w-full max-w-sm animate-fade-up rounded-[2rem] bg-surface p-6 text-center shadow-lift">
             <div className="flex items-center justify-between">
               <span className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">
@@ -337,7 +338,7 @@ export function PassesView({ bookings, stampList, qr }: { bookings: BookingView[
               <button
                 type="button"
                 onClick={() => setShowQr(false)}
-                aria-label="Close"
+                aria-label={t("close")}
                 className="flex size-9 items-center justify-center rounded-full bg-canvas text-gray-600 transition-colors hover:text-ink"
               >
                 <HiXMark className="size-5" />
@@ -356,7 +357,7 @@ export function PassesView({ bookings, stampList, qr }: { bookings: BookingView[
               href={`/gyms/${selected.gym.slug}`}
               className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-emerald-700"
             >
-              Gym details
+              {t("gymDetails")}
               <HiArrowRight className="size-4 rtl:rotate-180" />
             </Link>
           </div>

@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,10 +9,13 @@ import { occupancyFor, toGym } from "@/server/modules/gyms";
 import { formatMoney } from "@/server/modules/bookings";
 import { SaveGymButton } from "@/components/gyms/SaveGymButton";
 
-export const metadata: Metadata = { title: "Saved gyms" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getTranslations("saved"))("title") };
+}
 
 export default async function SavedGymsPage() {
   const user = await requireUser("/app/saved-gyms");
+  const t = await getTranslations("saved");
   const ids = user.savedGymIds ?? [];
   const docs = ids.length ? await (await collections.gyms()).find({ _id: { $in: ids }, status: "published" }).toArray() : [];
   const occupancy = await occupancyFor(docs.map((d) => d._id));
@@ -19,16 +23,16 @@ export default async function SavedGymsPage() {
 
   return (
     <div>
-      <p className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">{gyms.length} saved</p>
-      <h1 className="mt-1 text-[1.75rem] font-semibold tracking-[-0.035em] text-ink sm:text-4xl">Saved gyms</h1>
+      <p className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">{t("count", { count: gyms.length })}</p>
+      <h1 className="mt-1 text-[1.75rem] font-semibold tracking-[-0.035em] text-ink sm:text-4xl">{t("title")}</h1>
 
       {gyms.length === 0 ? (
         <div className="mt-8 flex flex-col items-center rounded-[1.75rem] border-2 border-dashed border-gray-900/10 px-6 py-16 text-center">
           <HiOutlineHeart className="size-10 text-gray-300" />
-          <p className="mt-3 font-semibold text-ink">Nothing saved yet</p>
-          <p className="mt-1 max-w-xs text-sm text-gray-500">Tap the heart on any gym to keep it here for quick booking.</p>
+          <p className="mt-3 font-semibold text-ink">{t("empty.title")}</p>
+          <p className="mt-1 max-w-xs text-sm text-gray-500">{t("empty.text")}</p>
           <Link href="/gyms" className="mt-5 inline-flex h-11 items-center rounded-full bg-ink px-5 text-sm font-semibold text-white">
-            Explore gyms
+            {t("empty.cta")}
           </Link>
         </div>
       ) : (
@@ -51,7 +55,7 @@ export default async function SavedGymsPage() {
                       {gym.rating.toFixed(1)}
                     </span>
                     <span className="text-gray-600">
-                      <span className="font-semibold whitespace-nowrap text-ink">{formatMoney(gym.pricing.dayPass, gym.currency)}</span> / day
+                      <span className="font-semibold whitespace-nowrap text-ink">{formatMoney(gym.pricing.dayPass, gym.currency)}</span> {t("perDay")}
                     </span>
                   </div>
                 </div>
@@ -61,7 +65,7 @@ export default async function SavedGymsPage() {
               </div>
               <div className="px-4 pb-4">
                 <Link href={`/gyms/${gym.slug}/book`} className="flex h-11 items-center justify-center rounded-full bg-ink text-sm font-semibold text-white hover:bg-gray-800">
-                  Book a pass
+                  {t("book")}
                 </Link>
               </div>
             </li>

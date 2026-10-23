@@ -1,5 +1,5 @@
 import type { Region } from "@/lib/i18n/regions";
-import { exerciseById, formatMuscleGroup, isTimed, ROUTINE_CATEGORIES, type MuscleGroup } from "@/lib/data/exercises";
+import { exerciseById, isTimed, type MuscleGroup } from "@/lib/data/exercises";
 import type { RoutineItem } from "@/lib/types";
 
 /** Rough session length: each set's work plus its rest, rounded to 5 minutes */
@@ -22,32 +22,16 @@ export function musclesOf(items: { exerciseId: string }[], limit = 4) {
     const group = exerciseById.get(item.exerciseId)?.muscleGroup;
     if (group) seen.add(group);
   }
-  return [...seen].slice(0, limit).map((g) => ({ id: g, label: formatMuscleGroup(g) }));
-}
-
-export function categoryLabel(value: string) {
-  return ROUTINE_CATEGORIES.find((c) => c.value === value)?.label ?? "Custom";
-}
-
-/** "8-10 reps" or "45 s" */
-export function targetLabel(item: Pick<RoutineItem, "exerciseId" | "reps">) {
-  return isTimed(item.exerciseId) ? `${item.reps} s` : `${item.reps} reps`;
-}
-
-export function formatRest(sec: number) {
-  if (sec < 60) return `${sec}s`;
-  const m = Math.floor(sec / 60);
-  const s = sec % 60;
-  return s ? `${m}:${String(s).padStart(2, "0")}` : `${m} min`;
+  return [...seen].slice(0, limit).map((g) => ({ id: g }));
 }
 
 export type WeightUnit = "kg" | "lb";
 
 const LB_PER_KG = 2.20462;
 
-/** Weights are stored in kg; imperial regions see and type pounds */
-export function weightUnitFor(region: Pick<Region, "units"> | null | undefined): WeightUnit {
-  return region?.units === "imperial" ? "lb" : "kg";
+/** Weights are stored in kg; the viewer's region decides whether they see pounds */
+export function weightUnitFor(region: Pick<Region, "weight"> | null | undefined): WeightUnit {
+  return region?.weight ?? "kg";
 }
 
 export function kgToUnit(kg: number, unit: WeightUnit) {

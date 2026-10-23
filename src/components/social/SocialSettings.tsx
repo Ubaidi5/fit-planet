@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { updateSocialProfileAction } from "@/actions/social";
 import { useToast } from "@/components/notifications/ToastProvider";
@@ -11,6 +12,7 @@ interface Props {
 
 export function SocialSettings({ initial }: Props) {
   const toast = useToast();
+  const t = useTranslations("social.settings");
   const [values, setValues] = useState(initial);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
@@ -19,14 +21,14 @@ export function SocialSettings({ initial }: Props) {
     startTransition(async () => {
       setError(null);
       const result = await updateSocialProfileAction(values);
-      if (result.ok) toast.success(result.message ?? "Saved");
+      if (result.ok) toast.success(t("saved"));
       else setError(result.error);
     });
 
   return (
     <div className="space-y-5">
       <label className="block">
-        <span className="text-sm font-medium text-gray-700">Username</span>
+        <span className="text-sm font-medium text-gray-700">{t("username")}</span>
         <span className="mt-1.5 flex h-12 items-center rounded-2xl bg-canvas px-4 focus-within:ring-2 focus-within:ring-ink/10">
           <span className="text-gray-400">@</span>
           <input
@@ -44,7 +46,7 @@ export function SocialSettings({ initial }: Props) {
 
       <label className="block">
         <span className="flex justify-between text-sm font-medium text-gray-700">
-          Bio
+          {t("bio")}
           <span className="font-normal text-gray-400 tabular-nums">{values.bio.length}/160</span>
         </span>
         <textarea
@@ -52,18 +54,18 @@ export function SocialSettings({ initial }: Props) {
           onChange={(e) => setValues((v) => ({ ...v, bio: e.target.value }))}
           maxLength={160}
           rows={3}
-          placeholder="Powerlifter, early riser, always travelling"
+          placeholder={t("bioPlaceholder")}
           className="mt-1.5 w-full resize-none rounded-2xl bg-canvas px-4 py-3 text-[15px] text-ink outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-ink/10"
         />
       </label>
 
       <fieldset>
-        <legend className="text-sm font-medium text-gray-700">Who sees your posts</legend>
+        <legend className="text-sm font-medium text-gray-700">{t("visibility")}</legend>
         <div className="mt-1.5 grid gap-2 sm:grid-cols-2">
           {(
             [
-              ["public", "Everyone", "Anyone signed in to Fit Planet."],
-              ["followers", "Followers", "Only people who follow you."],
+              ["public", t("public.title"), t("public.text")],
+              ["followers", t("followers.title"), t("followers.text")],
             ] as const
           ).map(([value, title, text]) => (
             <button
@@ -85,8 +87,8 @@ export function SocialSettings({ initial }: Props) {
 
       <label className="flex cursor-pointer items-start justify-between gap-4 rounded-2xl bg-canvas p-4">
         <span>
-          <span className="block text-sm font-semibold text-ink">Share gym check-ins</span>
-          <span className="text-sm text-gray-500">Post automatically when a gym scans your pass.</span>
+          <span className="block text-sm font-semibold text-ink">{t("checkins")}</span>
+          <span className="text-sm text-gray-500">{t("checkinsText")}</span>
         </span>
         <input
           type="checkbox"
@@ -98,7 +100,7 @@ export function SocialSettings({ initial }: Props) {
       </label>
 
       <button type="button" onClick={save} disabled={pending} className="h-12 w-full cursor-pointer rounded-full bg-ink text-sm font-semibold text-white disabled:opacity-60 sm:w-auto sm:px-8">
-        {pending ? "Saving…" : "Save"}
+        {pending ? t("saving") : t("save")}
       </button>
     </div>
   );

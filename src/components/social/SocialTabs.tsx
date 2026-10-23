@@ -1,15 +1,17 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { cn } from "@/lib/utils";
 
 const tabs = [
-  { key: "following", href: "/app/social", label: "Following" },
-  { key: "discover", href: "/app/social?tab=discover", label: "Discover" },
-  { key: "people", href: "/app/social/people", label: "People" },
+  { key: "following", href: "/app/social" },
+  { key: "discover", href: "/app/social?tab=discover" },
+  { key: "people", href: "/app/social/people" },
 ] as const;
 
-export function SocialTabs({ active }: { active: (typeof tabs)[number]["key"] | null }) {
+export async function SocialTabs({ active }: { active: (typeof tabs)[number]["key"] | null }) {
+  const tt = await getTranslations("social.tabs");
   return (
-    <nav aria-label="Social" className="flex gap-1 rounded-full bg-gray-900/[0.05] p-1">
+    <nav aria-label={tt("aria")} className="flex gap-1 rounded-full bg-gray-900/[0.05] p-1">
       {tabs.map((t) => (
         <Link
           key={t.key}
@@ -20,7 +22,7 @@ export function SocialTabs({ active }: { active: (typeof tabs)[number]["key"] | 
             active === t.key ? "bg-surface text-ink shadow-soft" : "text-gray-500 hover:text-ink",
           )}
         >
-          {t.label}
+          {tt(t.key)}
         </Link>
       ))}
     </nav>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -40,6 +41,7 @@ const stepLabel = "font-mono text-[11px] tracking-[0.14em] text-gray-400 upperca
 
 function PayButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
+  const t = useTranslations("checkout");
   return (
     <button
       type="submit"
@@ -49,7 +51,7 @@ function PayButton({ label }: { label: string }) {
       {pending ? (
         <>
           <span className="size-4 animate-spin rounded-full border-2 border-current border-e-transparent" aria-hidden="true" />
-          Securing your pass...
+          {t("securing")}
         </>
       ) : (
         <>
@@ -64,6 +66,8 @@ function PayButton({ label }: { label: string }) {
 export function CheckoutForm(props: CheckoutFormProps) {
   const { gym, today } = props;
   const { region, money } = useLocale();
+  const tc = useTranslations("checkout");
+  const tp = useTranslations("passes");
   const [state, action] = useActionState(bookPassAction, null);
   const available = PASS_TYPES.filter((t) => gym.pricing[passMeta[t].pricingKey] > 0);
   const [passType, setPassType] = useState<PassType>(available.includes(props.initialPass) ? props.initialPass : available[0]);
@@ -79,9 +83,9 @@ export function CheckoutForm(props: CheckoutFormProps) {
   const validity =
     meta.days === 1
       ? fmt(startDate, { weekday: "long", day: "numeric", month: "long" })
-      : `${fmt(startDate, { day: "numeric", month: "short" })} to ${fmt(endDate, { day: "numeric", month: "short" })}`;
+      : tc("range", { from: fmt(startDate, { day: "numeric", month: "short" }), to: fmt(endDate, { day: "numeric", month: "short" }) });
   const total = money(price, gym.currency);
-  const cta = payment === "desk" ? "Reserve, pay at the desk" : `Pay ${total}`;
+  const cta = payment === "desk" ? tc("reserveDesk") : tc("pay", { total });
 
   return (
     <form action={action} className="mx-auto max-w-6xl pb-36 lg:pb-16">
@@ -94,9 +98,9 @@ export function CheckoutForm(props: CheckoutFormProps) {
         <HiArrowLeft className="size-4 rtl:rotate-180" />
         {gym.name}
       </Link>
-      <h1 className="mt-2 text-[1.75rem] leading-tight font-semibold tracking-[-0.035em] text-ink sm:text-4xl">Book your pass</h1>
+      <h1 className="mt-2 text-[1.75rem] leading-tight font-semibold tracking-[-0.035em] text-ink sm:text-4xl">{tc("title")}</h1>
 
-      {props.cancelled && <FormAlert className="mt-5">Payment was cancelled. Nothing was charged; you can try again below.</FormAlert>}
+      {props.cancelled && <FormAlert className="mt-5">{tc("cancelled")}</FormAlert>}
       {state && !state.ok && !state.fieldErrors && <FormAlert className="mt-5">{state.error}</FormAlert>}
 
       <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-start">
@@ -104,9 +108,9 @@ export function CheckoutForm(props: CheckoutFormProps) {
           {/* 1. Pass */}
           <section aria-labelledby="step-pass">
             <p id="step-pass" className={stepLabel}>
-              01 · Pass
+              01 · {tc("steps.pass")}
             </p>
-            <div role="radiogroup" aria-label="Pass type" className="mt-3 grid gap-2.5 sm:grid-cols-3">
+            <div role="radiogroup" aria-label={tc("passType")} className="mt-3 grid gap-2.5 sm:grid-cols-3">
               {available.map((type) => {
                 const m = passMeta[type];
                 const selected = type === passType;
@@ -124,16 +128,16 @@ export function CheckoutForm(props: CheckoutFormProps) {
                     )}
                   >
                     <div className="min-w-0">
-                      <p className={cn("font-mono text-[11px] tracking-[0.12em] uppercase", selected ? "text-volt" : "text-gray-400")}>{m.short}</p>
-                      <p className="mt-0.5 text-base font-semibold">{m.label}</p>
+                      <p className={cn("font-mono text-[11px] tracking-[0.12em] uppercase", selected ? "text-volt" : "text-gray-400")}>{tp(`short.${type}`)}</p>
+                      <p className="mt-0.5 text-base font-semibold">{tp(`name.${type}`)}</p>
                       <p className={cn("mt-0.5 text-xs", selected ? "text-white/60" : "text-gray-500")}>
-                        {type === "day" ? "One entry" : `${m.days} days · once a day`}
+                        {type === "day" ? tc("oneEntry") : tc("daysOnce", { days: m.days })}
                       </p>
                     </div>
                     <div className="shrink-0 text-end sm:text-start">
                       <p className="text-lg font-semibold whitespace-nowrap tabular-nums">{money(gym.pricing[m.pricingKey], gym.currency)}</p>
                       {perDay && (
-                        <p className={cn("text-xs whitespace-nowrap", selected ? "text-white/60" : "text-gray-500")}>{money(Math.round(perDay), gym.currency)} / day</p>
+                        <p className={cn("text-xs whitespace-nowrap", selected ? "text-white/60" : "text-gray-500")}>{money(Math.round(perDay), gym.currency)} {tc("perDay")}</p>
                       )}
                     </div>
                     {selected && (
@@ -151,11 +155,11 @@ export function CheckoutForm(props: CheckoutFormProps) {
           <section aria-labelledby="step-date">
             <div className="flex items-end justify-between gap-3">
               <p id="step-date" className={stepLabel}>
-                02 · Start date
+                02 · {tc("steps.date")}
               </p>
               <label className="relative inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-3 text-sm font-medium text-emerald-700 hover:bg-emerald-50">
                 <HiOutlineCalendarDays className="size-4" />
-                Other date
+                {tc("otherDate")}
                 <input
                   type="date"
                   min={today}
@@ -163,7 +167,7 @@ export function CheckoutForm(props: CheckoutFormProps) {
                   value={startDate}
                   onChange={(e) => e.target.value && setStartDate(e.target.value)}
                   className="absolute inset-0 cursor-pointer opacity-0"
-                  aria-label="Pick a start date"
+                  aria-label={tc("pickDate")}
                 />
               </label>
             </div>
@@ -182,7 +186,7 @@ export function CheckoutForm(props: CheckoutFormProps) {
                     )}
                   >
                     <span className={cn("font-mono text-[10px] tracking-[0.1em] uppercase", selected ? "text-ink/70" : "text-gray-400")}>
-                      {i === 0 ? "Today" : fmt(date, { weekday: "short" })}
+                      {i === 0 ? tc("today") : fmt(date, { weekday: "short" })}
                     </span>
                     <span className="mt-0.5 text-lg leading-none font-semibold tabular-nums">{fmt(date, { day: "numeric" })}</span>
                     <span className={cn("mt-0.5 text-[10px]", selected ? "text-ink/70" : "text-gray-400")}>{fmt(date, { month: "short" })}</span>
@@ -191,43 +195,43 @@ export function CheckoutForm(props: CheckoutFormProps) {
               })}
             </div>
             <p className="mt-3 text-sm text-gray-600">
-              Valid <span className="font-semibold text-ink">{validity}</span>
-              <span className="text-gray-400"> · {gym.address.city} time</span>
+              {tc.rich("validLine", { validity, b: (c) => <span className="font-semibold text-ink">{c}</span> })}
+              <span className="text-gray-400"> · {tc("cityTime", { city: gym.address.city })}</span>
             </p>
           </section>
 
           {/* 3. Holder */}
           <section aria-labelledby="step-holder">
             <p id="step-holder" className={stepLabel}>
-              03 · Pass holder
+              03 · {tc("steps.holder")}
             </p>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               <Input
                 name="guestName"
-                label="Name on the pass"
+                label={tc("holderName")}
                 defaultValue={props.holder.name}
                 autoComplete="name"
                 leftIcon={<HiOutlineUser className="size-4.5" />}
                 error={errors?.guestName}
                 required
               />
-              <Input name="guestPhone" label="Phone (optional)" type="tel" defaultValue={props.holder.phone} autoComplete="tel" hint="The gym can reach you if plans change." />
+              <Input name="guestPhone" label={tc("phone")} type="tel" defaultValue={props.holder.phone} autoComplete="tel" hint={tc("phoneHint")} />
             </div>
           </section>
 
           {/* 4. Payment */}
           <section aria-labelledby="step-pay">
             <p id="step-pay" className={stepLabel}>
-              04 · Payment
+              04 · {tc("steps.payment")}
             </p>
-            <div role="radiogroup" aria-label="Payment method" className="mt-3 grid gap-2.5">
+            <div role="radiogroup" aria-label={tc("method")} className="mt-3 grid gap-2.5">
               {props.onlineEnabled && (
                 <PaymentOption
                   selected={payment === "online"}
                   onSelect={() => setPayment("online")}
                   icon={<HiOutlineCreditCard className="size-5" />}
-                  title="Pay now"
-                  text={props.onlineProvider === "mock" ? "Test mode: no real card is charged." : "Card, Apple Pay or Google Pay. Instant confirmation."}
+                  title={tc("payNow")}
+                  text={props.onlineProvider === "mock" ? tc("testMode") : tc("onlineText")}
                 />
               )}
               {props.deskEnabled && (
@@ -235,8 +239,8 @@ export function CheckoutForm(props: CheckoutFormProps) {
                   selected={payment === "desk"}
                   onSelect={() => setPayment("desk")}
                   icon={<HiOutlineBuildingStorefront className="size-5" />}
-                  title="Pay at the front desk"
-                  text="Reserve now and pay the gym when you arrive."
+                  title={tc("deskTitle")}
+                  text={tc("deskText")}
                 />
               )}
             </div>
@@ -254,32 +258,32 @@ export function CheckoutForm(props: CheckoutFormProps) {
                   <p className="font-mono text-2xl font-semibold tracking-[0.06em] text-volt">{cityCode(gym.address.city)}</p>
                   <p className="truncate text-sm font-semibold">{gym.name}</p>
                 </div>
-                <span className="shrink-0 font-mono text-[11px] tracking-[0.12em] text-white/70 uppercase">{meta.short} pass</span>
+                <span className="shrink-0 font-mono text-[11px] tracking-[0.12em] text-white/70 uppercase">{tp(`name.${passType}`)}</span>
               </div>
             </div>
             <dl className="space-y-3 p-5 text-sm">
               <div className="flex justify-between gap-4">
-                <dt className="text-gray-500">Valid</dt>
+                <dt className="text-gray-500">{tc("valid")}</dt>
                 <dd className="text-end font-medium text-ink">{validity}</dd>
               </div>
               <div className="flex justify-between gap-4">
-                <dt className="text-gray-500">Location</dt>
+                <dt className="text-gray-500">{tc("location")}</dt>
                 <dd className="truncate text-end font-medium text-ink">
                   {gym.address.area}, {gym.address.city}
                 </dd>
               </div>
               <div className="flex justify-between gap-4">
-                <dt className="text-gray-500">Payment</dt>
-                <dd className="text-end font-medium text-ink">{payment === "desk" ? "At the desk" : "Online"}</dd>
+                <dt className="text-gray-500">{tc("steps.payment")}</dt>
+                <dd className="text-end font-medium text-ink">{payment === "desk" ? tc("atDesk") : tc("online")}</dd>
               </div>
               <div className="flex items-baseline justify-between gap-4 border-t border-dashed border-gray-900/15 pt-4">
-                <dt className="font-semibold text-ink">Total</dt>
+                <dt className="font-semibold text-ink">{tc("total")}</dt>
                 <dd className="text-2xl font-semibold tracking-tight whitespace-nowrap text-ink tabular-nums">{total}</dd>
               </div>
             </dl>
             <div className="hidden px-5 pb-5 lg:block">
               <PayButton label={cta} />
-              <p className="mt-3 text-center text-xs text-gray-500">Free cancellation until the day before.</p>
+              <p className="mt-3 text-center text-xs text-gray-500">{tc("freeCancel")}</p>
             </div>
           </div>
         </aside>
@@ -289,11 +293,11 @@ export function CheckoutForm(props: CheckoutFormProps) {
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-gray-900/[0.06] bg-surface/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur lg:hidden">
         <div className="mx-auto flex max-w-md items-center gap-3">
           <div className="min-w-0 shrink-0">
-            <p className="text-xs text-gray-500">{meta.label}</p>
+            <p className="text-xs text-gray-500">{tp(`name.${passType}`)}</p>
             <p className="text-lg font-semibold whitespace-nowrap text-ink tabular-nums">{total}</p>
           </div>
           <div className="min-w-0 flex-1">
-            <PayButton label={payment === "desk" ? "Reserve" : "Pay now"} />
+            <PayButton label={payment === "desk" ? tc("reserve") : tc("payNow")} />
           </div>
         </div>
       </div>

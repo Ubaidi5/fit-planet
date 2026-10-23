@@ -1,18 +1,16 @@
+import { getTranslations } from "next-intl/server";
 import { Reveal } from "@/components/motion/Reveal";
 import { testimonials } from "@/lib/data/mock-platform";
 import { Accent, SectionHeading } from "./SectionHeading";
 
-export default function Testimonials() {
+export default async function Testimonials() {
+  const t = await getTranslations("stories");
   return (
     <section id="stories" className="py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Pilot stories"
-          title={
-            <>
-              Early members and gyms, <Accent>in their words</Accent>
-            </>
-          }
+          eyebrow={t("eyebrow")}
+          title={t.rich("title", { accent: (c) => <Accent>{c}</Accent> })}
         />
 
         <div className="mt-14 grid gap-4 md:grid-cols-3 lg:gap-5">
