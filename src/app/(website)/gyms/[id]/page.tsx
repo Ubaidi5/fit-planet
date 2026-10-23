@@ -8,6 +8,8 @@ import { SaveGymButton } from "@/components/gyms/SaveGymButton";
 import { getPublicGymProfile } from "@/server/modules/gyms";
 import { getSessionUser } from "@/server/session";
 import { collections, toObjectId } from "@/server/db/collections";
+import { env } from "@/server/env";
+import type { Gym } from "@/lib/types";
 
 type Props = { params: Promise<{ id: string }>; searchParams: Promise<{ tab?: string }> };
 
@@ -16,10 +18,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const profile = await getPublicGymProfile(id);
   if (!profile) return { title: (await getTranslations("gym"))("notFound") };
   const { gym } = profile;
+  const title = `${gym.name}, ${gym.address.city}`;
   return {
-    title: `${gym.name}, ${gym.address.city}`,
+    title,
     description: gym.description,
-    openGraph: { images: [gym.coverImage] },
+    alternates: { canonical: `/gyms/${gym.slug}` },
+    openGraph: { type: "website", title, description: gym.description, url: `/gyms/${gym.slug}`, images: [{ url: gym.coverImage, alt: gym.name }] },
+    twitter: { card: "summary_large_image", title, description: gym.description, images: [gym.coverImage] },
   };
 }
 
@@ -57,7 +62,9 @@ export default async function GymPage({ params, searchParams }: Props) {
   if (user && profile.ownerId === user._id.toHexString()) reviewSlot = null;
 
   return (
-    <GymProfileView
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: gymJsonLd(profile.gym) }} />
+      <GymProfileView
       gym={profile.gym}
       details={profile.details}
       initialTab={TABS.includes(tab as TabType) ? (tab as TabType) : "overview"}
@@ -65,6 +72,33 @@ export default async function GymPage({ params, searchParams }: Props) {
       headerActions={
         <SaveGymButton gymId={profile.gym.id} signedIn={Boolean(user)} saved={Boolean(user?.savedGymIds?.some((g) => g.toHexString() === profile.gym.id))} />
       }
-    />
+      />
+    </>
   );
+}
+
+/** Structured data so search engines can show the gym's rating, address and prices */
+function gymJsonLd(gym: Gym) {
+  const url = `${env.appUrl}/gyms/${gym.slug}`;
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "ExerciseGym",
+    "@id": url,
+    url,
+    name: gym.name,
+    description: gym.description,
+    image: [...new Set([gym.coverImage, ...gym.images].filter(Boolean))].slice(0, 5),
+    address: { "@type": "PostalAddress", streetAddress: gym.address.street, addressLocality: gym.address.city, addressRegion: gym.address.area, addressCountry: gym.country },
+    geo: { "@type": "GeoCoordinates", latitude: gym.location.lat, longitude: gym.location.lng },
+    currenciesAccepted: gym.currency,
+    openingHoursSpecification: gym.hours.is24Hours
+      ? { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], opens: "00:00", closes: "23:59" }
+      : { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], opens: gym.hours.open, closes: gym.hours.close },
+    makesOffer: (["dayPass", "weekPass", "monthPass"] as const)
+      .filter((key) => gym.pricing[key] > 0)
+      .map((key) => ({ "@type": "Offer", name: { dayPass: "Day pass", weekPass: "Week pass", monthPass: "Month pass" }[key], price: gym.pricing[key], priceCurrency: gym.currency, url })),
+    ...(gym.totalReviews > 0 ? { aggregateRating: { "@type": "AggregateRating", ratingValue: gym.rating, reviewCount: gym.totalReviews, bestRating: 5 } } : {}),
+  };
+  // Escape "<" so text from a listing can't close the script tag
+  return JSON.stringify(data).replace(/</g, "\\u003c");
 }

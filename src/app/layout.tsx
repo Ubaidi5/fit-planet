@@ -2,7 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
 import "@/styles/globals.css";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
+import { env } from "@/server/env";
 import { LocaleProvider } from "@/lib/i18n/LocaleProvider";
 import { getRegion } from "@/lib/i18n/server";
 import { ToastProvider } from "@/components/notifications/ToastProvider";
@@ -18,23 +19,17 @@ const jetbrains = JetBrains_Mono({
   subsets: ["latin", "latin-ext", "cyrillic"],
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "Fit Planet · One pass for every gym on the planet",
-    template: "%s · Fit Planet",
-  },
-  description:
-    "Fit Planet is your fitness passport. Find gyms in any city, see how busy they are, book day passes in local currency and walk in with a QR code. Gym owners get bookings, capacity and payouts in one studio.",
-  keywords: [
-    "gym",
-    "fitness",
-    "workout",
-    "gym booking",
-    "day pass",
-    "gym membership",
-    "fitness app",
-  ],
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const [t, region] = await Promise.all([getTranslations("seo"), getRegion()]);
+  return {
+    metadataBase: new URL(env.appUrl),
+    title: { default: t("title"), template: "%s · Fit Planet" },
+    description: t("description"),
+    applicationName: "Fit Planet",
+    openGraph: { type: "website", siteName: "Fit Planet", locale: region.locale.replace("-", "_"), title: t("title"), description: t("description") },
+    twitter: { card: "summary_large_image", title: t("title"), description: t("description") },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#eef0ec",

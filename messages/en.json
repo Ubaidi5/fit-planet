@@ -2191,5 +2191,9 @@
     "deleting": "Deleting…",
     "deleteForever": "Delete forever",
     "keepAccount": "Keep my account"
+  },
+  "seo": {
+    "title": "Fit Planet · One pass for every gym on the planet",
+    "description": "Find gyms in any city, see how busy they are, book day, week or month passes in local currency and walk in with a QR code. Gym owners get bookings and check-ins in one studio."
   }
 }

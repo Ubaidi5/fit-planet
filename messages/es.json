@@ -2191,5 +2191,9 @@
     "deleting": "Eliminando…",
     "deleteForever": "Eliminar para siempre",
     "keepAccount": "Mantener mi cuenta"
+  },
+  "seo": {
+    "title": "Fit Planet · Un pase para todos los gimnasios del planeta",
+    "description": "Encuentra gimnasios en cualquier ciudad, mira cuánta gente hay, reserva pases de día, semana o mes en moneda local y entra con un código QR. Los dueños gestionan reservas y accesos en un solo estudio."
   }
 }

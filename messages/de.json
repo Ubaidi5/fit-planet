@@ -2191,5 +2191,9 @@
     "deleting": "Wird gelöscht…",
     "deleteForever": "Endgültig löschen",
     "keepAccount": "Konto behalten"
+  },
+  "seo": {
+    "title": "Fit Planet · Ein Pass für jedes Gym der Welt",
+    "description": "Finde Gyms in jeder Stadt, sieh, wie voll sie sind, buche Tages-, Wochen- oder Monatspässe in lokaler Währung und check per QR-Code ein. Gym-Inhaber verwalten Buchungen und Check-ins in einem Studio."
   }
 }

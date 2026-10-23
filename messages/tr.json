@@ -2191,5 +2191,9 @@
     "deleting": "Siliniyor…",
     "deleteForever": "Kalıcı olarak sil",
     "keepAccount": "Hesabımı koru"
+  },
+  "seo": {
+    "title": "Fit Planet · Dünyadaki her salon için tek pas",
+    "description": "Her şehirde salon bul, ne kadar kalabalık olduğunu gör, yerel para biriminde günlük, haftalık ya da aylık pas al ve QR kodla gir. Salon sahipleri rezervasyonları ve girişleri tek bir stüdyoda yönetir."
   }
 }

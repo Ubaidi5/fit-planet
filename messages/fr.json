@@ -2191,5 +2191,9 @@
     "deleting": "Suppression…",
     "deleteForever": "Supprimer définitivement",
     "keepAccount": "Garder mon compte"
+  },
+  "seo": {
+    "title": "Fit Planet · Un pass pour toutes les salles de la planète",
+    "description": "Trouvez des salles dans n'importe quelle ville, voyez leur affluence, réservez des pass jour, semaine ou mois en devise locale et entrez avec un QR code. Les gérants suivent réservations et entrées dans un seul espace."
   }
 }
