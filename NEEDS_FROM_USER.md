@@ -48,11 +48,10 @@ Service accounts > Generate new private key, as `FIREBASE_SERVICE_ACCOUNT`
   `checkout.session.completed`, `checkout.session.async_payment_succeeded`,
   `checkout.session.expired`, `checkout.session.async_payment_failed`, `charge.refunded`.
   Its signing secret goes in `STRIPE_WEBHOOK_SECRET`.
-- **Heads up:** Stripe does not onboard businesses registered in Pakistan. If that
-  applies, tell me which provider you can use (e.g. Safepay, PayFast, Paddle,
-  Lemon Squeezy) and I will add one file in `src/server/services/payments/`;
-  nothing else changes. Until then the mock provider and pay-at-desk keep the
-  booking flow working.
+- **Heads up:** Stripe does not onboard businesses in Pakistan. The practical route
+  for an unregistered founder is a US LLC (Stripe Atlas) or a UK Ltd; see
+  [docs/PAYMENTS.md](docs/PAYMENTS.md) for the comparison. Until then, pay-at-desk
+  and the mock checkout keep the booking flow working.
 
 ## 4. Sign-in providers
 
