@@ -4,7 +4,7 @@
 set -euo pipefail
 
 DOMAIN="${1:?domain required}"
-EMAIL="${2:?email for Let's Encrypt required}"
+EMAIL="${2:?email for the HTTPS certificate required}"
 DEPLOY_USER="${SUDO_USER:-ubuntu}"
 APP_DIR=/var/www/fitplanet
 
@@ -38,7 +38,12 @@ certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos -m "$EMAIL" --redirec
 # Start pm2 on boot for the deploy user
 env PATH="$PATH:/usr/bin" pm2 startup systemd -u "$DEPLOY_USER" --hp "/home/$DEPLOY_USER"
 
+# Hourly jobs: pass reminders and releasing abandoned checkouts (needs CRON_SECRET in .env)
+CRON_LINE='15 * * * * secret=$(grep -E "^CRON_SECRET=" /var/www/fitplanet/shared/.env | cut -d= -f2-) && curl -fsS -m 60 -X POST -H "Authorization: Bearer $secret" http://127.0.0.1:3000/api/cron/hourly >/dev/null'
+( crontab -u "$DEPLOY_USER" -l 2>/dev/null | grep -v "/api/cron/hourly" ; echo "$CRON_LINE" ) | crontab -u "$DEPLOY_USER" -
+
 echo
 echo "Done. Next:"
 echo "  1. Fill $APP_DIR/shared/.env (copy from .env.example). Set STORAGE_LOCAL_DIR=$APP_DIR/shared/uploads"
+echo "     and CRON_SECRET=\$(openssl rand -hex 24)"
 echo "  2. Add the GitHub secrets listed in NEEDS_FROM_USER.md and push to main."

@@ -12,7 +12,8 @@ import { ownerStats } from "@/server/modules/analytics";
 import { listPublishedGyms, getPublicGymProfile, gymsManagedBy } from "@/server/modules/gyms";
 import { upsertReview } from "@/server/modules/reviews";
 import { listNotifications } from "@/server/modules/notifications";
-import { todayIn } from "@/lib/dates";
+import { sendPassReminders, releaseAbandonedCheckouts } from "@/server/modules/reminders";
+import { addDays, todayIn } from "@/lib/dates";
 
 async function main() {
   const users = await collections.users();
@@ -58,6 +59,26 @@ async function main() {
   assert(ownerFeed.some((n) => n.type === "booking.new"), "owner notified of booking");
   const mine = await listUserBookings(member._id);
   assert(mine.some((b) => b.isActive), "member has an active pass");
+
+  // Evening-before reminder: pick a moment today, 17:00 or later in the gym's timezone
+  const ahead = await createBooking({ user: member, gymId: home._id, passType: "day", startDate: addDays(today, 1), paymentMethod: "desk" });
+  const hourIn = (d: Date) => Number(new Intl.DateTimeFormat("en-GB", { timeZone: home.timezone, hour: "2-digit", hourCycle: "h23" }).format(d));
+  let evening = new Date();
+  while (hourIn(evening) < 17) evening = new Date(evening.getTime() + 60 * 60 * 1000);
+  assert.equal(todayIn(home.timezone, evening), today, "evening is still today");
+  await sendPassReminders(evening);
+  const aheadDoc = await bookings.findOne({ _id: new (await import("mongodb")).ObjectId(ahead.bookingId) });
+  assert.deepEqual(aheadDoc?.remindersSent, ["start"], "start reminder recorded");
+  const memberFeed = await listNotifications(member._id);
+  assert(memberFeed.some((n) => n.type === "pass.expiring" && n.title.includes("starts tomorrow")), "member reminded");
+  const before = memberFeed.filter((n) => n.type === "pass.expiring").length;
+  await sendPassReminders(evening);
+  assert.equal((await listNotifications(member._id)).filter((n) => n.type === "pass.expiring").length, before, "reminder not repeated");
+
+  const stale = await createBooking({ user: member, gymId: home._id, passType: "day", startDate: today, paymentMethod: "online" });
+  await releaseAbandonedCheckouts(new Date(Date.now() + 3 * 60 * 60 * 1000));
+  const staleDoc = await bookings.findOne({ _id: new (await import("mongodb")).ObjectId(stale.bookingId) });
+  assert.equal(staleDoc?.status, "cancelled", "abandoned checkout released");
 
   console.log("✓ smoke test passed", { todayBookings: stats.todayBookings, occupancy: stats.occupancy, ownerNotifications: ownerFeed.length });
   await (await getMongoClient()).close();

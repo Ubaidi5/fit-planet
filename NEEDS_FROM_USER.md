@@ -76,7 +76,9 @@ works (Amazon SES, Resend, Postmark, Brevo, Gmail app password):
    `sudo bash deploy/setup-server.sh yourdomain.com you@email.com`.
    It installs Node 22, pm2, nginx and an HTTPS certificate.
 3. Fill `/var/www/fitplanet/shared/.env` from `.env.example`, with
-   `STORAGE_LOCAL_DIR=/var/www/fitplanet/shared/uploads`.
+   `STORAGE_LOCAL_DIR=/var/www/fitplanet/shared/uploads` and a random
+   `CRON_SECRET` (`openssl rand -hex 24`). The setup script already installed
+   the hourly cron that sends pass reminders.
 
 ## 7. GitHub Actions (Settings > Secrets and variables > Actions)
 

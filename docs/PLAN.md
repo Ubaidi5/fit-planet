@@ -54,7 +54,7 @@ the brief asks for without the operational cost of many deployables.
 - [x] Pass wallet: active passes with a real QR code, history, receipts
 - [x] Passport stamps earned from real check-ins
 - [x] Save gyms, leave reviews after a visit
-- [~] Notification feed + web push (booking confirmed done; pass-expiring reminder needs a scheduled job, not yet added)
+- [x] Notification feed + web push (booking confirmed, evening-before pass reminders via hourly cron)
 - [x] Profile: name, phone, home city, avatar upload, notification settings
 
 ### Gym owners (desktop rich, mobile shows the essentials)

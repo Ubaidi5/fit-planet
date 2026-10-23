@@ -104,6 +104,8 @@ export interface BookingDoc {
   createdAt: Date;
   confirmedAt?: Date;
   cancelledAt?: Date;
+  /** Reminders already sent for this booking, so the hourly job never repeats one */
+  remindersSent?: ("start" | "end")[];
 }
 
 export interface CheckinDoc {

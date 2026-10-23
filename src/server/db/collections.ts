@@ -51,6 +51,8 @@ export function ensureIndexes() {
         db.collection("bookings").createIndex({ userId: 1, createdAt: -1 }),
         db.collection("bookings").createIndex({ gymId: 1, createdAt: -1 }),
         db.collection("bookings").createIndex({ paymentRef: 1 }, { sparse: true }),
+        db.collection("bookings").createIndex({ status: 1, startDate: 1 }),
+        db.collection("bookings").createIndex({ status: 1, endDate: 1 }),
         db.collection("checkins").createIndex({ gymId: 1, at: -1 }),
         db.collection("checkins").createIndex({ userId: 1, at: -1 }),
         db.collection("reviews").createIndex({ gymId: 1, createdAt: -1 }),

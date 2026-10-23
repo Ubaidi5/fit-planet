@@ -74,6 +74,9 @@ export const env = {
     },
   },
 
+  /** Bearer token the server's cron sends to /api/cron/* */
+  cronSecret: read("CRON_SECRET"),
+
   /** Platform commission kept from each booking, as a fraction (0.1 = 10%) */
   platformFee: Number(read("PLATFORM_FEE") ?? "0.1"),
 } as const;
