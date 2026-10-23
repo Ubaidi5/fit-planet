@@ -216,7 +216,14 @@ export async function deletePost(userId: ObjectId, postId: ObjectId) {
 }
 
 export async function reportPost(userId: ObjectId, postId: ObjectId, reason: string) {
-  await (await collections.reports()).insertOne({ _id: new ObjectId(), postId, reporterId: userId, reason: reason.slice(0, 300), createdAt: new Date() });
+  const post = await (await collections.posts()).findOne({ _id: postId }, { projection: { userId: 1, visibility: 1 } });
+  if (!post || post.userId.equals(userId) || !(await canSee(userId, post))) throw new SocialError("postNotFound");
+  // One report per person per post, so a single account can't push a post up the queue
+  await (await collections.reports()).updateOne(
+    { postId, reporterId: userId },
+    { $set: { reason: reason.slice(0, 300), createdAt: new Date() }, $setOnInsert: { _id: new ObjectId() } },
+    { upsert: true },
+  );
 }
 
 export async function toggleLike(user: UserDoc, postId: ObjectId) {

@@ -38,7 +38,7 @@ const providers: Provider[] = [
       const parsed = credentialsSchema.safeParse(raw);
       if (!parsed.success) return null;
       // Checked here, not only in the form action, because the endpoint can be called directly
-      const allowed = await allowAll(["login-ip", await clientIp(), 30, 600], ["login-email", parsed.data.email, 10, 600]);
+      const allowed = await allowAll(["login-ip", await clientIp(), 30, 600], ["login-email", parsed.data.email.trim().toLowerCase(), 10, 600]);
       if (!allowed) throw new RateLimited();
       const users = await collections.users();
       const user = await users.findOne({ email: parsed.data.email });

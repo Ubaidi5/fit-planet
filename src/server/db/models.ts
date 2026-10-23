@@ -115,6 +115,8 @@ export interface BookingDoc {
   paymentProvider?: string;
   /** Checkout session / intent id at the provider */
   paymentRef?: string;
+  /** Session refunded because it was paid after the booking had been released */
+  lateRefundRef?: string;
   guest: { name: string; email?: string | null; phone?: string | null };
   checkinCount: number;
   lastCheckinAt?: Date;

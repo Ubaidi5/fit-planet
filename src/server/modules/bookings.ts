@@ -8,7 +8,7 @@ import type { BookingView } from "@/lib/types";
 import { addDays, daysBetween, formatDate, isIsoDate, todayIn } from "@/lib/dates";
 import { passMeta, type PassType } from "@/lib/passes";
 import { env, features } from "@/server/env";
-import { payments, paymentProvider } from "@/server/services/payments";
+import { payments, paymentProvider, type PaymentProvider } from "@/server/services/payments";
 import { email } from "@/server/services/email";
 import { bookingConfirmedEmail } from "@/server/services/email/templates";
 import { translatorFor } from "@/server/i18n";
@@ -227,6 +227,29 @@ export async function confirmOnlinePayment(bookingId: ObjectId, providerRef?: st
   const gym = await gyms.findOne({ _id: updated.gymId });
   if (gym) await onBookingConfirmed(updated, gym);
   return true;
+}
+
+/**
+ * Money arrived for a booking that was already released (or cancelled) while
+ * the member sat on the payment page. Nothing was issued for it, so give the
+ * money back instead of keeping it. Runs once per payment: the booking keeps
+ * the reference of the refunded session.
+ */
+export async function refundOrphanedPayment(provider: PaymentProvider, bookingId: ObjectId, providerRef: string) {
+  const bookings = await collections.bookings();
+  const claimed = await bookings.findOneAndUpdate(
+    { _id: bookingId, status: "cancelled", paymentStatus: { $ne: "paid" }, lateRefundRef: { $exists: false } },
+    { $set: { lateRefundRef: providerRef } },
+  );
+  if (!claimed) return;
+  try {
+    await provider.refund(providerRef);
+    await bookings.updateOne({ _id: bookingId }, { $set: { paymentStatus: "refunded" } });
+  } catch (error) {
+    // Let the provider retry the webhook, and the next attempt try again
+    await bookings.updateOne({ _id: bookingId }, { $unset: { lateRefundRef: "" } });
+    throw error;
+  }
 }
 
 export async function markPaymentFailed(bookingId: ObjectId) {

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { paymentProvider } from "@/server/services/payments";
 import { toObjectId } from "@/server/db/collections";
 import { collections } from "@/server/db/collections";
-import { confirmOnlinePayment, markPaymentFailed } from "@/server/modules/bookings";
+import { confirmOnlinePayment, markPaymentFailed, refundOrphanedPayment } from "@/server/modules/bookings";
 
 /**
  * Payment webhooks: /api/webhooks/payments/stripe (and future providers).
@@ -26,7 +26,7 @@ export async function POST(request: Request, ctx: { params: Promise<{ provider: 
   try {
     if (event.type === "payment.succeeded") {
       const id = toObjectId(event.reference);
-      if (id) await confirmOnlinePayment(id, event.providerRef);
+      if (id && !(await confirmOnlinePayment(id, event.providerRef))) await refundOrphanedPayment(provider, id, event.providerRef);
     } else if (event.type === "payment.failed") {
       const id = toObjectId(event.reference);
       if (id) await markPaymentFailed(id);

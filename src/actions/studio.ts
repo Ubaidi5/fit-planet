@@ -130,6 +130,8 @@ export async function createGymAction(input: GymInput): Promise<ActionResult<{ i
   if (!ctx) return fail("signInAgain");
   const parsed = gymSchema.safeParse(input);
   if (!parsed.success) return invalid(parsed.error);
+  // Real chains add a handful of locations, not dozens a day
+  if (!(await allow("create-gym", ctx.user._id.toHexString(), 5, 86_400))) return fail("tooManyAttempts");
 
   await allowedImages(ctx.user._id, parsed.data);
   const gyms = await collections.gyms();

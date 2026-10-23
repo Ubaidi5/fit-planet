@@ -20,7 +20,7 @@ export async function toggleSavedGymAction(gymId: string): Promise<ActionResult<
   const user = await getSessionUser();
   const id = toObjectId(gymId);
   if (!user) return fail("signInToSave");
-  if (!id) return fail("gymNotFound");
+  if (!id || !(await (await collections.gyms()).countDocuments({ _id: id, status: "published" }, { limit: 1 }))) return fail("gymNotFound");
   const saved = await toggleSavedGym(user._id, id);
   revalidatePath("/app/saved-gyms");
   return { ok: true, data: { saved } };
@@ -30,7 +30,12 @@ const profileSchema = z.object({
   name: z.string().trim().min(2, "name").max(80),
   phone: z.string().trim().max(24).optional(),
   homeCity: z.string().trim().max(60).optional(),
-  regionCode: z.string().trim().max(10).optional(),
+  regionCode: z
+    .string()
+    .trim()
+    .max(10)
+    .refine((code) => !code || Boolean(findRegion(code)), "region")
+    .optional(),
   image: z.string().trim().max(500).optional(),
 });
 
@@ -51,7 +56,7 @@ export async function updateProfileAction(_prev: ActionResult | null, formData: 
     { $set: { ...rest, ...(image !== undefined ? { image: image || null } : {}), updatedAt: new Date() } },
   );
   // The profile's region also drives the interface language on this device
-  if (rest.regionCode && findRegion(rest.regionCode)) {
+  if (rest.regionCode) {
     (await cookies()).set(REGION_COOKIE, rest.regionCode, { path: "/", maxAge: 60 * 60 * 24 * 365, sameSite: "lax" });
   }
   await updateSession({ user: { name: parsed.data.name, ...(image !== undefined ? { image: image || null } : {}) } });

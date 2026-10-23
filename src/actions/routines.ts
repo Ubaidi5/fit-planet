@@ -8,6 +8,10 @@ import { toObjectId } from "@/server/db/collections";
 import { getSessionUser } from "@/server/session";
 import { copyTemplate, deleteRoutine, logWorkout, RoutineError, saveRoutine, setFavorite } from "@/server/modules/routines";
 import { fail, invalid } from "./utils";
+import { allow } from "@/server/rate-limit";
+
+/** Generous for real training, but stops a script filling the database */
+const underLimit = (userId: { toHexString(): string }) => allow("routines", userId.toHexString(), 120, 3600);
 
 const itemSchema = z.object({
   exerciseId: z.string().min(1).max(20),
@@ -31,6 +35,7 @@ export async function saveRoutineAction(payload: RoutineInputPayload, id?: strin
   if (!user) return fail("signInAgain");
   const parsed = routineSchema.safeParse(payload);
   if (!parsed.success) return invalid(parsed.error, "checkRoutine");
+  if (!(await underLimit(user._id))) return fail("tooManyAttempts");
   const routineId = id ? toObjectId(id) : null;
   if (id && !routineId) return fail("routineNotFound");
   try {
@@ -46,6 +51,7 @@ export async function saveRoutineAction(payload: RoutineInputPayload, id?: strin
 export async function copyTemplateAction(templateId: string) {
   const user = await getSessionUser();
   if (!user) redirect("/login?next=%2Fapp%2Froutines");
+  if (!(await underLimit(user._id))) redirect("/app/routines");
   const id = await copyTemplate(user._id, templateId);
   revalidatePath("/app/routines");
   redirect(`/app/routines/${id.toHexString()}/edit?from=template`);
@@ -87,6 +93,7 @@ export async function finishWorkoutAction(payload: z.input<typeof workoutSchema>
   if (!user) return fail("signInAgain");
   const parsed = workoutSchema.safeParse(payload);
   if (!parsed.success) return fail("workoutUnreadable");
+  if (!(await underLimit(user._id))) return fail("tooManyAttempts");
   try {
     const id = await logWorkout(user._id, {
       routineId: toObjectId(parsed.data.routineId),

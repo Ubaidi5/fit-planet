@@ -17,6 +17,8 @@ export const stripeProvider: PaymentProvider = {
   async createCheckout(input) {
     const session = await stripe().checkout.sessions.create({
       mode: "payment",
+      // Stripe's shortest allowed window; the booking is held for longer (see reminders.ts), so a paid session always finds it
+      expires_at: Math.floor(Date.now() / 1000) + 31 * 60,
       client_reference_id: input.reference,
       customer_email: input.customerEmail ?? undefined,
       success_url: input.successUrl,

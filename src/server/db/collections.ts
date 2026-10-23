@@ -86,7 +86,7 @@ export function ensureIndexes() {
         db.collection("posts").createIndex({ visibility: 1, createdAt: -1 }),
         db.collection("likes").createIndex({ postId: 1, userId: 1 }, { unique: true }),
         db.collection("comments").createIndex({ postId: 1, createdAt: 1 }),
-        db.collection("reports").createIndex({ postId: 1 }),
+        db.collection("reports").createIndex({ postId: 1, reporterId: 1 }),
         db.collection("admin_log").createIndex({ at: -1 }),
         db.collection("staff_invites").createIndex({ tokenHash: 1 }, { unique: true }),
         db.collection("staff_invites").createIndex({ gymId: 1, email: 1 }),

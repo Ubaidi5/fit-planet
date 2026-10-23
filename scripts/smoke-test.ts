@@ -6,7 +6,8 @@
 import assert from "node:assert/strict";
 import { collections } from "@/server/db/collections";
 import { getMongoClient } from "@/server/db/client";
-import { createBooking, confirmOnlinePayment, listUserBookings } from "@/server/modules/bookings";
+import { createBooking, confirmOnlinePayment, listUserBookings, refundOrphanedPayment } from "@/server/modules/bookings";
+import { mockProvider } from "@/server/services/payments/mock";
 import { checkInByCode } from "@/server/modules/checkins";
 import { ownerStats } from "@/server/modules/analytics";
 import { listPublishedGyms, getPublicGymProfile, gymsManagedBy } from "@/server/modules/gyms";
@@ -14,7 +15,7 @@ import { upsertReview } from "@/server/modules/reviews";
 import { listNotifications } from "@/server/modules/notifications";
 import { sendPassReminders, releaseAbandonedCheckouts } from "@/server/modules/reminders";
 import { copyTemplate, getRoutine, lastWeights, logWorkout } from "@/server/modules/routines";
-import { addComment, ensureHandle, feed, follow, shareWorkout, toggleLike, updateSocialProfile } from "@/server/modules/social";
+import { addComment, ensureHandle, feed, follow, reportPost, shareWorkout, toggleLike, updateSocialProfile } from "@/server/modules/social";
 import { addDays, todayIn } from "@/lib/dates";
 import { createHash, randomBytes } from "node:crypto";
 import { registerWithPassword } from "@/server/modules/users";
@@ -87,6 +88,14 @@ async function main() {
   await releaseAbandonedCheckouts(new Date(Date.now() + 3 * 60 * 60 * 1000));
   const staleDoc = await bookings.findOne({ _id: new (await import("mongodb")).ObjectId(stale.bookingId) });
   assert.equal(staleDoc?.status, "cancelled", "abandoned checkout released");
+  // Paid after release: no pass was issued, so the money goes back exactly once
+  let refunds = 0;
+  const counting = { ...mockProvider, refund: async () => void refunds++ };
+  assert.equal(await confirmOnlinePayment(staleDoc!._id, "late_session"), false, "released booking isn't revived");
+  await refundOrphanedPayment(counting, staleDoc!._id, "late_session");
+  await refundOrphanedPayment(counting, staleDoc!._id, "late_session");
+  assert.equal(refunds, 1, "late payment refunded once");
+  assert.equal((await bookings.findOne({ _id: staleDoc!._id }))?.paymentStatus, "refunded", "booking shows the refund");
 
   // Routines: copy a template, log a workout, prefill from it next time
   const routineId = await copyTemplate(member._id, "tpl-push");
@@ -114,6 +123,11 @@ async function main() {
   const liked = await toggleLike(owner, postId);
   assert.equal(liked.liked, true, "like recorded");
   await addComment(owner, postId, "Nice work");
+  await reportPost(owner._id, postId, "spam");
+  await reportPost(owner._id, postId, "still spam");
+  assert.equal(await (await collections.reports()).countDocuments({ postId, reporterId: owner._id }), 1, "one report per person");
+  await assert.rejects(reportPost(member._id, postId, "mine"), /postNotFound/, "can't report your own post");
+  await (await collections.reports()).deleteMany({ postId });
   const memberNotes = await listNotifications(member._id, 50, "US");
   assert(memberNotes.some((n) => n.type === "social.follow") && memberNotes.some((n) => n.type === "social.comment"), "member notified of follow and comment");
   const stranger = await (await collections.users()).findOne({ _id: { $nin: [member._id, owner._id] } });
