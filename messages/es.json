@@ -18,7 +18,9 @@
     "listYourGym": "Publica tu gimnasio",
     "memberSince": "Miembro desde {date}",
     "browseGyms": "Ver todos los gimnasios",
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "appLabel": "App",
+    "tabsLabel": "Pestañas de la app"
   },
   "site": {
     "findGyms": "Buscar gimnasios",
@@ -28,7 +30,9 @@
     "studioLogin": "Acceso a Studio",
     "logIn": "Iniciar sesión",
     "getStarted": "Empezar",
-    "ownGym": "¿Tienes un gimnasio? Acceso a Studio"
+    "ownGym": "¿Tienes un gimnasio? Acceso a Studio",
+    "mainNav": "Menú principal",
+    "mobileNav": "Menú móvil"
   },
   "footer": {
     "members": "Miembros",
@@ -82,12 +86,19 @@
       "busy": "Lleno",
       "moderate": "Moderado",
       "quiet": "Tranquilo"
-    }
+    },
+    "fromShort": "Desde"
   },
   "orbit": {
     "eyebrow": "Orbit · explorar cerca",
     "title": "Gimnasios a tu alrededor, <accent>no una lista</accent>",
-    "lead": "Los gimnasios cercanos quedan más cerca del centro. Cada anillo muestra lo lleno que está ahora, para que veas de un vistazo el más tranquilo."
+    "lead": "Los gimnasios cercanos quedan más cerca del centro. Cada anillo muestra lo lleno que está ahora, para que veas de un vistazo el más tranquilo.",
+    "ui": {
+      "chooseCity": "Elige una ciudad",
+      "you": "Tú",
+      "node": "{gym}, {pct} % lleno, a {distance}",
+      "viewGym": "Ver gimnasio"
+    }
   },
   "passportSection": {
     "eyebrow": "Tu pasaporte",
@@ -176,7 +187,8 @@
       "search": {
         "title": "Busca un gimnasio",
         "text": "Elige una ciudad o usa tu ubicación. Filtra por precio, servicios, valoración y afluencia en vivo.",
-        "meta": "{cities} ciudades · {gyms} gimnasios"
+        "meta": "{cities} ciudades · {gyms} gimnasios",
+        "metaSoon": "Nuevas ciudades cada mes"
       },
       "choose": {
         "title": "Elige tu pase",
@@ -240,8 +252,9 @@
     }
   },
   "stories": {
-    "eyebrow": "Historias piloto",
-    "title": "Los primeros miembros y gimnasios, <accent>con sus palabras</accent>"
+    "eyebrow": "Opiniones de miembros",
+    "title": "Contado por quienes <accent>entrenaron allí</accent>",
+    "at": "{gym}, {city}"
   },
   "cta": {
     "title": "Tu pasaporte está a <accent>un toque</accent>",
@@ -304,7 +317,9 @@
         "weekly": "Reservas semanales",
         "checkinsToday": "Entradas de hoy",
         "capacityNow": "Afluencia actual",
-        "booked": "Nuevo pase de día reservado"
+        "booked": "Nuevo pase de día reservado",
+        "hoursSample": "06:00 a 23:00",
+        "distanceSample": "1,2 km"
       }
     },
     "form": {
@@ -1701,6 +1716,364 @@
     },
     "meta": {
       "description": "Gestiona tu gimnasio con Fit Planet: reservas, entradas, precios e ingresos en un solo lugar."
+    }
+  },
+  "heroWallet": {
+    "today": "Hoy",
+    "crowd": {
+      "busy": "Lleno ahora",
+      "moderate": "Concurrido ahora",
+      "quiet": "Tranquilo ahora"
+    },
+    "opens": "{gym} · abre a las {time}",
+    "open24": "{gym} · abierto 24/7"
+  },
+  "region": {
+    "current": "Región: {name}, {language}",
+    "choose": "Elige tu región",
+    "heading": "Región · Idioma"
+  },
+  "feedback": {
+    "errors": {
+      "accountNotFound": "No se encontró la cuenta.",
+      "addExercise": "Añade al menos un ejercicio.",
+      "addPhotoFirst": "Añade al menos una foto antes de publicar.",
+      "alreadyCheckedIn": "Ya se registró la entrada.",
+      "badCredentials": "El correo y la contraseña no coinciden.",
+      "badRequest": "Algo no cuadra en esta solicitud. Inténtalo de nuevo.",
+      "bookingCrashed": "Algo salió mal al reservar. No se te ha cobrado.",
+      "bookingFailed": "No se pudo crear la reserva. Inténtalo de nuevo.",
+      "bookingNotFound": "No se encontró la reserva.",
+      "bookingUnpaid": "Esta reserva nunca se pagó.",
+      "bookingWasCancelled": "Esta reserva se canceló.",
+      "cancelDeadline": "Los pases se pueden cancelar hasta el día antes de empezar.",
+      "cancelFailed": "No se pudo cancelar esta reserva. Inténtalo de nuevo.",
+      "cannotCancel": "Esta reserva no se puede cancelar.",
+      "cannotDeleteComment": "No puedes eliminar este comentario.",
+      "cannotFollowSelf": "No puedes seguirte a ti mismo.",
+      "checkFields": "Revisa los campos marcados.",
+      "checkPrices": "Revisa los precios.",
+      "checkRoutine": "Revisa la rutina e inténtalo de nuevo.",
+      "checkedInToday": "Ya registró la entrada hoy.",
+      "chooseFile": "Elige un archivo para subir.",
+      "commentNotFound": "No se encontró el comentario.",
+      "completeSet": "Completa al menos una serie antes de terminar.",
+      "dayPassUsed": "Este pase de día ya se usó.",
+      "emailTaken": "Ya existe una cuenta con este correo. Prueba a iniciar sesión.",
+      "emailUsesOtherSignIn": "Este correo ya inicia sesión con Google o con un enlace por correo. Usa ese método y luego añade una contraseña en Seguridad.",
+      "emptyPost": "Escribe algo o añade una foto.",
+      "enterCode": "Introduce un código de pase.",
+      "fileTooBig": "Los archivos pueden pesar hasta {mb} MB.",
+      "gymNotBooking": "Este gimnasio no acepta reservas ahora mismo.",
+      "gymNotFound": "No se encontró el gimnasio.",
+      "handleFailed": "No se pudo crear un nombre de usuario. Inténtalo de nuevo.",
+      "handleRules": "Los nombres de usuario tienen de 3 a 24 letras, números, puntos o guiones bajos.",
+      "handleTaken": "Ese nombre de usuario ya está en uso.",
+      "imageType": "Usa una imagen JPG, PNG o WebP.",
+      "linkFailed": "No pudimos enviar el enlace. Inténtalo de nuevo.",
+      "listingSuspended": "Esta ficha está suspendida. Contacta con soporte.",
+      "mediaType": "Usa un archivo JPG, PNG, WebP o MP4.",
+      "noDeskPayment": "No se puede pagar en recepción.",
+      "noSuchPass": "No hay ningún pase con ese código.",
+      "onlyConfirmedCancel": "Solo se pueden cancelar reservas confirmadas.",
+      "ownGymReview": "No puedes valorar tu propio gimnasio.",
+      "ownerOnly": "Solo el propietario del gimnasio puede hacer eso.",
+      "passExpired": "Este pase caducó el {date}.",
+      "passNotOnSale": "Este pase no está a la venta en este gimnasio.",
+      "passNotStarted": "Este pase empieza el {date}.",
+      "personNotFound": "No se encontró a la persona.",
+      "photoNotAllowed": "Esa foto no se puede adjuntar.",
+      "pickStartDate": "Elige una fecha de inicio válida.",
+      "postNotFound": "No se encontró la publicación.",
+      "registerFailed": "No pudimos crear tu cuenta. Inténtalo de nuevo.",
+      "replyLength": "Escribe una respuesta de 2 a 1000 caracteres.",
+      "resetExpired": "Este enlace ha caducado. Pide uno nuevo.",
+      "reviewNeedsBooking": "Reserva primero un pase aquí y luego cuenta qué tal fue.",
+      "reviewNotFound": "No se encontró la opinión.",
+      "routineGone": "Esa rutina ya no está disponible.",
+      "routineLimit": "Puedes guardar hasta 100 rutinas. Elimina una para añadir otra.",
+      "routineNotFound": "No se encontró la rutina.",
+      "signInAgain": "Vuelve a iniciar sesión.",
+      "signInFailed": "No se pudo iniciar sesión. Inténtalo de nuevo.",
+      "signInStudio": "Inicia sesión primero en tu estudio.",
+      "signInToBook": "Inicia sesión para reservar un pase.",
+      "signInToReview": "Inicia sesión para dejar una opinión.",
+      "signInToSave": "Inicia sesión para guardar gimnasios.",
+      "soldOut": "Los pases de día para esa fecha están agotados. Prueba otro día.",
+      "startPassed": "La fecha de inicio ya pasó en la zona horaria del gimnasio.",
+      "templateNotFound": "No se encontró la plantilla.",
+      "tooFarAhead": "Los pases se pueden reservar con hasta {days} días de antelación.",
+      "uploadFailed": "No se pudo subir. Inténtalo de nuevo.",
+      "validEmail": "Introduce un correo válido.",
+      "workoutNotFound": "No se encontró el entrenamiento.",
+      "workoutUnreadable": "No se pudo leer este entrenamiento. Inténtalo de nuevo.",
+      "writeComment": "Escribe primero un comentario.",
+      "wrongPassword": "Tu contraseña actual no es correcta.",
+      "tooManyAttempts": "Demasiados intentos. Espera unos minutos y vuelve a intentarlo."
+    },
+    "fields": {
+      "addExercise": "Añade al menos un ejercicio",
+      "area": "Añade el barrio",
+      "atLeastOne": "Al menos 1",
+      "city": "Añade la ciudad",
+      "comment": "Cuéntale a la gente un poco más",
+      "country": "Elige un país",
+      "currency": "Elige una moneda",
+      "dayPass": "Fija un precio para el pase de día",
+      "description": "Escribe al menos una o dos frases",
+      "email": "Introduce un correo válido",
+      "guestName": "Introduce el nombre para el pase",
+      "gymName": "Añade el nombre de tu gimnasio",
+      "headline": "Añade un titular corto",
+      "name": "Dinos tu nombre",
+      "password": "Introduce tu contraseña",
+      "passwordLength": "Usa al menos 8 caracteres",
+      "passwordsMatch": "Las contraseñas no coinciden",
+      "routineName": "Ponle un nombre",
+      "startDate": "Elige una fecha de inicio",
+      "street": "Añade la dirección",
+      "target": "Añade un objetivo",
+      "time": "Usa HH:MM",
+      "tooLong": "Es demasiado largo",
+      "tooShort": "Es demasiado corto",
+      "invalid": "Revisa este campo"
+    },
+    "done": {
+      "bookingCancelled": "Reserva cancelada.",
+      "cancelledMemberTold": "Reserva cancelada y se avisó al miembro.",
+      "changesSaved": "Cambios guardados.",
+      "markedPaid": "Marcado como pagado.",
+      "passwordAdded": "Contraseña añadida. Ya puedes iniciar sesión con ella.",
+      "passwordChanged": "Contraseña cambiada.",
+      "pricesUpdated": "Precios actualizados. Las nuevas reservas ya los usan.",
+      "profileSaved": "Perfil guardado.",
+      "published": "Ya estás en línea. Los miembros pueden reservar.",
+      "replyPosted": "Respuesta publicada.",
+      "reportThanks": "Gracias, lo revisaremos.",
+      "resetSent": "Si existe una cuenta con ese correo, el enlace va de camino.",
+      "reviewLive": "¡Gracias! Tu opinión ya está publicada.",
+      "saved": "Guardado.",
+      "savedToRoutines": "Guardado en tus rutinas",
+      "socialSaved": "Perfil social guardado.",
+      "unpublished": "Ficha oculta en las búsquedas."
+    }
+  },
+  "notify": {
+    "someone": "Alguien",
+    "yourPost": "tu publicación",
+    "theGym": "El gimnasio",
+    "range": "del {from} al {to}",
+    "bookingNew": {
+      "title": "Nuevo {pass, select, day {pase de día} week {pase semanal} month {pase mensual} other {pase}} en {gym}",
+      "body": "{guest} reservó para {dates} · {price}, {paid, select, desk {paga en recepción} other {pagado en línea}}."
+    },
+    "bookingConfirmed": {
+      "title": "Reserva confirmada",
+      "body": "{pass, select, day {Pase de día} week {Pase semanal} month {Pase mensual} other {Pase}} en {gym} para {dates}. Muestra tu código QR en recepción."
+    },
+    "bookingCancelledByMember": {
+      "title": "Reserva cancelada",
+      "body": "{guest} canceló un {pass, select, day {pase de día} week {pase semanal} month {pase mensual} other {pase}} para el {startDate}."
+    },
+    "bookingCancelledByGym": {
+      "title": "Se canceló tu reserva",
+      "body": "{gym} canceló tu {pass, select, day {pase de día} week {pase semanal} month {pase mensual} other {pase}} del {startDate}.{refunded, select, yes { Te devolveremos el importe completo.} other {}}"
+    },
+    "passStarts": {
+      "title": "Tu {pass, select, day {pase de día} week {pase semanal} month {pase mensual} other {pase}} empieza mañana",
+      "body": "{gym} te espera. Muestra el código QR en recepción."
+    },
+    "passEnds": {
+      "title": "Tu {pass, select, day {pase de día} week {pase semanal} month {pase mensual} other {pase}} termina mañana",
+      "body": "Mañana es tu último día en {gym}. Reserva otro pase cuando quieras desde la página del gimnasio."
+    },
+    "reviewNew": {
+      "title": "Nueva opinión de {rating} estrellas",
+      "body": "{name} valoró {gym}: «{title}»"
+    },
+    "reviewReply": {
+      "title": "{gym} respondió a tu opinión",
+      "body": "{text}"
+    },
+    "socialLike": {
+      "title": "A {name} le gusta tu publicación",
+      "body": "{text}"
+    },
+    "socialComment": {
+      "title": "{name} comentó",
+      "body": "{text}"
+    },
+    "socialFollow": {
+      "title": "{name} te sigue",
+      "body": "Síguele también para ver vuestros entrenamientos."
+    },
+    "checkin": {
+      "title": "Entrada registrada en {gym}",
+      "body": "Que tengas un buen entrenamiento."
+    },
+    "checkinStamp": {
+      "title": "Nuevo sello: {gym}",
+      "body": "Tu pasaporte acaba de recibir un sello de {city}. Que tengas un buen entrenamiento."
+    },
+    "studioReady": {
+      "title": "Tu estudio está listo",
+      "body": "{gym} se guardó como borrador. Publícalo desde Perfil del gimnasio cuando te guste cómo queda."
+    }
+  },
+  "email": {
+    "dir": "ltr",
+    "footer": "Recibes este correo porque tienes una cuenta de Fit Planet.",
+    "range": "del {from} al {to}",
+    "magic": {
+      "subject": "Tu enlace de acceso a Fit Planet",
+      "heading": "Inicia sesión en Fit Planet",
+      "preheader": "Toca para iniciar sesión. El enlace caduca en 24 horas.",
+      "body": "Toca el botón de abajo para iniciar sesión. El enlace caduca en 24 horas y solo se puede usar una vez. Si no lo pediste, puedes ignorar este correo.",
+      "cta": "Iniciar sesión"
+    },
+    "reset": {
+      "subject": "Restablece tu contraseña de Fit Planet",
+      "heading": "Restablece tu contraseña",
+      "preheader": "Elige una contraseña nueva. El enlace caduca en 1 hora.",
+      "body": "Alguien pidió restablecer la contraseña de esta cuenta. Si fuiste tú, elige una nueva abajo. El enlace caduca en 1 hora.",
+      "cta": "Elegir una contraseña nueva"
+    },
+    "booking": {
+      "subject": "Tu {pass, select, day {pase de día} week {pase semanal} month {pase mensual} other {pase}} en {gym}",
+      "heading": "Reserva confirmada",
+      "intro": "Hola, {name}: tu {pass, select, day {pase de día} week {pase semanal} month {pase mensual} other {pase}} en {gym} está confirmado.",
+      "preheader": "Válido {dates}. Muestra el código QR en recepción.",
+      "valid": "Válido",
+      "code": "Código del pase",
+      "total": "Total",
+      "payAtDesk": "{price} (pago en recepción)",
+      "showQr": "Muestra el código QR en recepción:",
+      "cta": "Abrir mi pase"
+    }
+  },
+  "exerciseInfo": {
+    "ex001": {
+      "description": "El rey de los ejercicios de pecho. Un movimiento compuesto que desarrolla masa y fuerza en todo el pecho.",
+      "s1": "Túmbate en un banco plano con los pies bien apoyados en el suelo",
+      "s2": "Agarra la barra algo más abierta que el ancho de hombros",
+      "s3": "Saca la barra del soporte y bájala a la mitad del pecho",
+      "s4": "Empuja la barra de vuelta a la posición inicial",
+      "s5": "Mantén la espalda ligeramente arqueada y las escápulas juntas",
+      "t1": "No hagas rebotar la barra en el pecho",
+      "t2": "Mantén las muñecas rectas",
+      "t3": "Empuja con los talones para ganar estabilidad"
+    },
+    "ex002": {
+      "description": "Trabaja la parte superior del pecho para un aspecto más lleno y definido.",
+      "s1": "Inclina el banco entre 30 y 45 grados",
+      "s2": "Sujeta las mancuernas a la altura de los hombros, palmas hacia delante",
+      "s3": "Empuja las mancuernas hasta extender los brazos",
+      "s4": "Baja con control a la posición inicial"
+    },
+    "ex003": {
+      "description": "Un ejercicio básico con peso corporal para pecho, hombros y tríceps.",
+      "s1": "Empieza en plancha con las manos al ancho de hombros",
+      "s2": "Baja hasta que el pecho casi toque el suelo",
+      "s3": "Empuja de vuelta a la posición inicial",
+      "s4": "Mantén el cuerpo recto durante todo el movimiento"
+    },
+    "ex004": {
+      "description": "El ejercicio de espalda definitivo para ganar amplitud y fuerza.",
+      "s1": "Cuélgate de la barra con las manos algo más abiertas que los hombros",
+      "s2": "Sube hasta que la barbilla pase la barra",
+      "s3": "Baja con control hasta estirar los brazos por completo",
+      "s4": "Evita balancearte o usar impulso"
+    },
+    "ex005": {
+      "description": "Un movimiento compuesto que da grosor y fuerza a la espalda.",
+      "s1": "Pies al ancho de hombros, inclínate desde la cadera",
+      "s2": "Agarra la barra con las manos al ancho de hombros",
+      "s3": "Tira de la barra hacia la parte baja del pecho o alta del abdomen",
+      "s4": "Baja con control y mantén la espalda recta"
+    },
+    "ex006": {
+      "description": "Un ejercicio en máquina ideal para principiantes para ensanchar la espalda.",
+      "s1": "Siéntate en la polea alta y agarra la barra con agarre amplio",
+      "s2": "Tira de la barra hasta la parte alta del pecho",
+      "s3": "Junta las escápulas abajo",
+      "s4": "Vuelve con control a la posición inicial"
+    },
+    "ex007": {
+      "description": "El movimiento compuesto principal para unos hombros fuertes.",
+      "s1": "De pie con los pies al ancho de hombros",
+      "s2": "Sujeta la barra a la altura de los hombros",
+      "s3": "Empuja la barra por encima de la cabeza hasta extender los brazos",
+      "s4": "Baja con control a la posición inicial"
+    },
+    "ex008": {
+      "description": "Ejercicio de aislamiento para el deltoides lateral, para hombros más anchos.",
+      "s1": "De pie con las mancuernas a los lados",
+      "s2": "Eleva los brazos hacia los lados hasta quedar paralelos al suelo",
+      "s3": "Mantén los codos ligeramente flexionados",
+      "s4": "Baja con control"
+    },
+    "ex009": {
+      "description": "El rey de los ejercicios de pierna. Desarrolla masa en todo el tren inferior.",
+      "s1": "Coloca la barra sobre la parte alta de la espalda",
+      "s2": "De pie con los pies al ancho de hombros",
+      "s3": "Baja hasta que los muslos queden paralelos al suelo",
+      "s4": "Empuja con los talones para volver a subir"
+    },
+    "ex010": {
+      "description": "Trabaja isquiotibiales y glúteos con una bisagra de cadera.",
+      "s1": "Sujeta la barra con agarre al ancho de hombros",
+      "s2": "Flexiona la cadera llevándola hacia atrás",
+      "s3": "Baja la barra pegada a las piernas hasta notar el estiramiento",
+      "s4": "Lleva la cadera hacia delante para volver"
+    },
+    "ex011": {
+      "description": "Ejercicio de pierna en máquina, seguro para principiantes.",
+      "s1": "Siéntate en la prensa con los pies al ancho de hombros en la plataforma",
+      "s2": "Baja el peso flexionando las rodillas a 90 grados",
+      "s3": "Empuja con los pies para extender las piernas",
+      "s4": "No bloquees las rodillas arriba"
+    },
+    "ex012": {
+      "description": "El clásico para ganar volumen en los bíceps.",
+      "s1": "De pie, pies al ancho de hombros, barra con agarre supino",
+      "s2": "Sube la barra hasta la altura de los hombros",
+      "s3": "Mantén los codos fijos a los lados",
+      "s4": "Baja con control"
+    },
+    "ex013": {
+      "description": "Ejercicio en polea que aísla los tríceps.",
+      "s1": "De pie frente a la polea con cuerda",
+      "s2": "Mantén los codos pegados al cuerpo",
+      "s3": "Empuja la cuerda hacia abajo hasta extender los brazos",
+      "s4": "Vuelve con control"
+    },
+    "ex014": {
+      "description": "Ejercicio isométrico de core que mejora la estabilidad.",
+      "s1": "Empieza en plancha sobre los antebrazos",
+      "s2": "Mantén el cuerpo en línea recta de la cabeza a los talones",
+      "s3": "Activa el core y aguanta la posición",
+      "s4": "Respira con calma durante todo el ejercicio"
+    },
+    "ex015": {
+      "description": "Ejercicio de abdomen con carga para progresar poco a poco.",
+      "s1": "Arrodíllate frente a la polea con cuerda",
+      "s2": "Sujeta la cuerda detrás de la cabeza",
+      "s3": "Encógete llevando los codos hacia las rodillas",
+      "s4": "Vuelve con control"
+    },
+    "ex016": {
+      "description": "Cardio clásico para la resistencia y el gasto calórico.",
+      "s1": "Empieza caminando para calentar",
+      "s2": "Aumenta el ritmo poco a poco hasta correr",
+      "s3": "Mantén un ritmo constante el tiempo que quieras",
+      "s4": "Termina caminando despacio"
+    },
+    "ex017": {
+      "description": "Cardio de cuerpo completo que cuida las articulaciones.",
+      "s1": "Siéntate en el remo con los pies sujetos",
+      "s2": "Agarra el maneral y empuja primero con las piernas",
+      "s3": "Luego tira del maneral hacia el pecho",
+      "s4": "Invierte el movimiento para volver"
     }
   }
 }

@@ -3,7 +3,6 @@ import type { ObjectId } from "mongodb";
 import { collections } from "@/server/db/collections";
 import type { BookingDoc, GymDoc } from "@/server/db/models";
 import { addDays, todayIn } from "@/lib/dates";
-import { passMeta } from "@/lib/passes";
 import { notify } from "./notifications";
 
 /** Reminders go out from this local hour onward, so nobody is woken at night */
@@ -79,21 +78,12 @@ function reminderKind(booking: BookingDoc, tomorrow: string): "start" | "end" | 
 }
 
 function remind(userId: ObjectId, booking: BookingDoc, gymName: string, kind: "start" | "end") {
-  const pass = passMeta[booking.passType].label.toLowerCase();
-  const link = `/app/passes/${booking._id.toHexString()}`;
-  return kind === "start"
-    ? notify(userId, {
-        type: "pass.expiring",
-        title: `Your ${pass} starts tomorrow`,
-        body: `${gymName} is expecting you. Show the QR code at the desk.`,
-        link,
-      })
-    : notify(userId, {
-        type: "pass.expiring",
-        title: `Your ${pass} ends tomorrow`,
-        body: `Tomorrow is your last day at ${gymName}. Book another pass any time from the gym page.`,
-        link,
-      });
+  return notify(userId, {
+    type: "pass.expiring",
+    key: kind === "start" ? "passStarts" : "passEnds",
+    params: { pass: booking.passType, gym: gymName },
+    link: `/app/passes/${booking._id.toHexString()}`,
+  });
 }
 
 /** Releases online bookings whose checkout was abandoned */

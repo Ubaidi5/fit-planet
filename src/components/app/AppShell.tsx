@@ -91,7 +91,7 @@ export function AppShell({ user, unread, children }: { user: ShellUser; unread: 
           <Logo href="/app/dashboard" />
 
           <nav
-            aria-label="App"
+            aria-label={t("appLabel")}
             className="hidden items-center gap-0.5 rounded-full bg-gray-900/[0.04] p-1 lg:flex"
           >
             {primaryNav.map((item) => {
@@ -220,7 +220,7 @@ export function AppShell({ user, unread, children }: { user: ShellUser; unread: 
 
       {/* Mobile tab bar */}
       <nav
-        aria-label="App tabs"
+        aria-label={t("tabsLabel")}
         className="glass fixed inset-x-3 bottom-3 z-50 flex items-center justify-around rounded-full border border-gray-900/[0.06] p-1.5 shadow-lift pb-[max(0.375rem,env(safe-area-inset-bottom))] lg:hidden"
       >
         {tabNav.map((item) => {

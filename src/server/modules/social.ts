@@ -1,3 +1,4 @@
+import { AppError } from "@/server/errors";
 import "server-only";
 import { ObjectId, type Filter } from "mongodb";
 import { collections } from "@/server/db/collections";
@@ -6,7 +7,7 @@ import type { CommentView, PersonView, PostView } from "@/lib/types";
 import { initials } from "@/lib/initials";
 import { notify } from "./notifications";
 
-export class SocialError extends Error {}
+export class SocialError extends AppError {}
 
 export const defaultSocialPrefs: SocialPrefs = { visibility: "public", shareCheckins: false };
 
@@ -42,12 +43,12 @@ export async function ensureHandle(user: UserDoc): Promise<string> {
       if ((error as { code?: number }).code !== 11000) throw error; // duplicate handle: try another
     }
   }
-  throw new SocialError("Couldn't create a username. Try again.");
+  throw new SocialError("handleFailed");
 }
 
 export async function updateSocialProfile(userId: ObjectId, input: { handle: string; bio: string; visibility: SocialPrefs["visibility"]; shareCheckins: boolean }) {
   const handle = input.handle.trim().toLowerCase().replace(/^@/, "");
-  if (!HANDLE_RE.test(handle)) throw new SocialError("Usernames are 3 to 24 letters, numbers, dots or underscores.");
+  if (!HANDLE_RE.test(handle)) throw new SocialError("handleRules");
   const users = await collections.users();
   try {
     await users.updateOne(
@@ -55,7 +56,7 @@ export async function updateSocialProfile(userId: ObjectId, input: { handle: str
       { $set: { handle, bio: input.bio.trim().slice(0, 160), social: { visibility: input.visibility, shareCheckins: input.shareCheckins }, updatedAt: new Date() } },
     );
   } catch (error) {
-    if ((error as { code?: number }).code === 11000) throw new SocialError("That username is taken.");
+    if ((error as { code?: number }).code === 11000) throw new SocialError("handleTaken");
     throw error;
   }
   // Older posts follow the new visibility, so going private hides past activity too
@@ -157,15 +158,15 @@ async function insertPost(user: UserDoc, post: Omit<PostDoc, "_id" | "userId" | 
 
 export async function createTextPost(user: UserDoc, input: { text: string; imageUrl?: string }) {
   const text = input.text.trim();
-  if (!text && !input.imageUrl) throw new SocialError("Write something or add a photo.");
+  if (!text && !input.imageUrl) throw new SocialError("emptyPost");
   // Only images we stored ourselves can be attached
-  if (input.imageUrl && !input.imageUrl.includes(`/posts/${user._id.toHexString()}/`)) throw new SocialError("That photo can't be attached.");
+  if (input.imageUrl && !input.imageUrl.includes(`/posts/${user._id.toHexString()}/`)) throw new SocialError("photoNotAllowed");
   return insertPost(user, { kind: "text", text: text.slice(0, 1000), imageUrl: input.imageUrl });
 }
 
 export async function shareWorkout(user: UserDoc, workoutId: ObjectId, text: string) {
   const workout = await (await collections.workouts()).findOne({ _id: workoutId, userId: user._id });
-  if (!workout) throw new SocialError("Workout not found.");
+  if (!workout) throw new SocialError("workoutNotFound");
   const existing = await (await collections.posts()).findOne({ userId: user._id, "workout.id": workoutId }, { projection: { _id: 1 } });
   if (existing) return existing._id;
   return insertPost(user, {
@@ -184,7 +185,7 @@ export async function shareWorkout(user: UserDoc, workoutId: ObjectId, text: str
 
 export async function shareRoutine(user: UserDoc, routineId: ObjectId, text: string) {
   const routine = await (await collections.routines()).findOne({ _id: routineId, userId: user._id });
-  if (!routine) throw new SocialError("Routine not found.");
+  if (!routine) throw new SocialError("routineNotFound");
   return insertPost(user, {
     kind: "routine",
     text: text.trim().slice(0, 1000),
@@ -217,7 +218,7 @@ export async function reportPost(userId: ObjectId, postId: ObjectId, reason: str
 export async function toggleLike(user: UserDoc, postId: ObjectId) {
   const posts = await collections.posts();
   const post = await posts.findOne({ _id: postId });
-  if (!post || !(await canSee(user._id, post))) throw new SocialError("Post not found.");
+  if (!post || !(await canSee(user._id, post))) throw new SocialError("postNotFound");
   const likes = await collections.likes();
   const removed = await likes.deleteOne({ postId, userId: user._id });
   if (removed.deletedCount) {
@@ -234,8 +235,8 @@ export async function toggleLike(user: UserDoc, postId: ObjectId) {
   if (!post.userId.equals(user._id)) {
     await notify(post.userId, {
       type: "social.like",
-      title: `${user.name || "Someone"} liked your post`,
-      body: post.text?.slice(0, 80) || postSubject(post),
+      key: "socialLike",
+      params: { name: user.name || "", text: post.text?.slice(0, 80) || postSubject(post) },
       link: `/app/social/post/${postId.toHexString()}`,
       silent: true,
     });
@@ -245,9 +246,9 @@ export async function toggleLike(user: UserDoc, postId: ObjectId) {
 
 function postSubject(post: PostDoc) {
   if (post.workout) return post.workout.routineName;
-  if (post.checkin) return `Check-in at ${post.checkin.gymName}`;
+  if (post.checkin) return post.checkin.gymName;
   if (post.routine) return post.routine.name;
-  return "Your post";
+  return "";
 }
 
 export async function getPost(viewerId: ObjectId, postId: ObjectId) {
@@ -272,10 +273,10 @@ export async function listComments(viewerId: ObjectId, postId: ObjectId): Promis
 
 export async function addComment(user: UserDoc, postId: ObjectId, text: string) {
   const clean = text.trim();
-  if (!clean) throw new SocialError("Write a comment first.");
+  if (!clean) throw new SocialError("writeComment");
   const posts = await collections.posts();
   const post = await posts.findOne({ _id: postId });
-  if (!post || !(await canSee(user._id, post))) throw new SocialError("Post not found.");
+  if (!post || !(await canSee(user._id, post))) throw new SocialError("postNotFound");
   await ensureHandle(user);
   const doc = { _id: new ObjectId(), postId, userId: user._id, text: clean.slice(0, 500), createdAt: new Date() };
   await (await collections.comments()).insertOne(doc);
@@ -283,8 +284,8 @@ export async function addComment(user: UserDoc, postId: ObjectId, text: string) 
   if (!post.userId.equals(user._id)) {
     await notify(post.userId, {
       type: "social.comment",
-      title: `${user.name || "Someone"} commented`,
-      body: clean.slice(0, 100),
+      key: "socialComment",
+      params: { name: user.name || "", text: clean.slice(0, 100) },
       link: `/app/social/post/${postId.toHexString()}`,
     });
   }
@@ -297,15 +298,15 @@ export async function deleteComment(userId: ObjectId, commentId: ObjectId) {
   if (!comment) return;
   // Authors can delete their comments; post owners can remove comments on their posts
   const post = await (await collections.posts()).findOne({ _id: comment.postId }, { projection: { userId: 1 } });
-  if (!comment.userId.equals(userId) && !post?.userId.equals(userId)) throw new SocialError("You can't delete this comment.");
+  if (!comment.userId.equals(userId) && !post?.userId.equals(userId)) throw new SocialError("cannotDeleteComment");
   await comments.deleteOne({ _id: commentId });
   await (await collections.posts()).updateOne({ _id: comment.postId }, { $inc: { commentCount: -1 } });
 }
 
 export async function follow(user: UserDoc, targetId: ObjectId) {
-  if (user._id.equals(targetId)) throw new SocialError("You can't follow yourself.");
+  if (user._id.equals(targetId)) throw new SocialError("cannotFollowSelf");
   const target = await (await collections.users()).findOne({ _id: targetId }, { projection: { _id: 1 } });
-  if (!target) throw new SocialError("Person not found.");
+  if (!target) throw new SocialError("personNotFound");
   await ensureHandle(user);
   try {
     await (await collections.follows()).insertOne({ _id: new ObjectId(), followerId: user._id, followeeId: targetId, createdAt: new Date() });
@@ -315,8 +316,8 @@ export async function follow(user: UserDoc, targetId: ObjectId) {
   }
   await notify(targetId, {
     type: "social.follow",
-    title: `${user.name || "Someone"} followed you`,
-    body: "Follow back to see each other's workouts.",
+    key: "socialFollow",
+    params: { name: user.name || "" },
     link: user.handle ? `/app/u/${user.handle}` : "/app/social/people",
   });
 }

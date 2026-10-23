@@ -5,11 +5,24 @@ import { MrzLine } from "@/components/passport/MrzLine";
 import { PassWallet } from "@/components/passport/PassWallet";
 import { Accent } from "@/components/sections/SectionHeading";
 import { cityCode } from "@/lib/data/cities";
-import { gymCities } from "@/lib/data/mock-gyms";
-import { heroStats, platformStats } from "@/lib/data/mock-platform";
+import type { Gym } from "@/lib/types";
+import type { PlatformStats } from "@/server/modules/platform";
 
-const Hero = async () => {
+/** Median time from opening the app to a confirmed pass */
+const BOOKING_SECONDS = 45;
+
+const Hero = async ({ stats, cities, gyms }: { stats: PlatformStats; cities: string[]; gyms: Gym[] }) => {
   const t = await getTranslations("hero");
+  const heroStats = [
+    ...(stats.gyms > 0
+      ? [
+          { key: "gyms", value: String(stats.gyms) },
+          { key: "cities", value: String(stats.cities.length) },
+          { key: "currencies", value: String(stats.currencies) },
+        ]
+      : []),
+    { key: "speed", value: `${BOOKING_SECONDS}s` },
+  ];
   return (
     <section className="relative isolate overflow-hidden">
       {/* Ambient background */}
@@ -28,20 +41,22 @@ const Hero = async () => {
             <MrzLine text="Fit Planet Passport Every City" className="animate-fade-up" />
           </div>
 
-          <Link
-            href="/gyms"
-            className="group mt-6 inline-flex animate-fade-up items-center gap-2.5 rounded-full border border-gray-900/[0.07] bg-surface/80 py-1.5 ps-1.5 pe-3 text-[13px] font-medium text-gray-700 shadow-soft backdrop-blur [animation-delay:60ms]"
-          >
-            <span className="flex items-center gap-1.5 rounded-full bg-ink px-2 py-0.5 font-mono text-[11px] tracking-[0.1em] text-volt">
-              <span className="relative flex size-1.5">
-                <span className="absolute inset-0 animate-pulse-ring rounded-full bg-volt" />
-                <span className="relative size-1.5 rounded-full bg-volt" />
+          {stats.gyms > 0 && (
+            <Link
+              href="/gyms"
+              className="group mt-6 inline-flex animate-fade-up items-center gap-2.5 rounded-full border border-gray-900/[0.07] bg-surface/80 py-1.5 ps-1.5 pe-3 text-[13px] font-medium text-gray-700 shadow-soft backdrop-blur [animation-delay:60ms]"
+            >
+              <span className="flex items-center gap-1.5 rounded-full bg-ink px-2 py-0.5 font-mono text-[11px] tracking-[0.1em] text-volt">
+                <span className="relative flex size-1.5">
+                  <span className="absolute inset-0 animate-pulse-ring rounded-full bg-volt" />
+                  <span className="relative size-1.5 rounded-full bg-volt" />
+                </span>
+                {t("liveBadge")}
               </span>
-              {t("liveBadge")}
-            </span>
-            {t("live", { gyms: platformStats.partnerGyms, cities: platformStats.cities.length })}
-            <HiArrowRight className="size-3.5 text-gray-400 transition-transform duration-300 group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
-          </Link>
+              {t("live", { gyms: stats.gyms, cities: stats.cities.length })}
+              <HiArrowRight className="size-3.5 text-gray-400 transition-transform duration-300 group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
+            </Link>
+          )}
 
           <h1 className="mt-6 animate-fade-up text-[2.75rem] leading-[0.98] font-bold tracking-[-0.05em] text-ink [animation-delay:120ms] text-balance-safe sm:text-[4.25rem] lg:text-[5rem]">
             {t.rich("title", { accent: (chunks) => <Accent>{chunks}</Accent> })}
@@ -68,7 +83,7 @@ const Hero = async () => {
                 className="h-12 cursor-pointer appearance-none rounded-full bg-gray-100 ps-9 pe-4 font-mono text-[13px] font-medium tracking-[0.08em] text-ink focus:outline-none"
               >
                 <option value="">{t("all")}</option>
-                {gymCities.map((city) => (
+                {cities.map((city) => (
                   <option key={city} value={city}>
                     {cityCode(city)}
                   </option>
@@ -97,7 +112,7 @@ const Hero = async () => {
           </form>
 
           <div className="mt-4 flex animate-fade-up flex-wrap items-center justify-center gap-2 [animation-delay:300ms] lg:justify-start">
-            {gymCities.slice(0, 5).map((city) => (
+            {cities.slice(0, 5).map((city) => (
               <Link
                 key={city}
                 href={`/gyms?city=${encodeURIComponent(city)}`}
@@ -115,7 +130,7 @@ const Hero = async () => {
           <dl className="mx-auto mt-12 grid max-w-xl animate-fade-up grid-cols-2 gap-y-6 border-t border-dashed border-gray-900/15 pt-6 [animation-delay:380ms] sm:grid-cols-4 lg:mx-0">
             {heroStats.map((stat, index) => (
               <div
-                key={stat.label}
+                key={stat.key}
                 className={`flex flex-col ${index > 0 ? "sm:border-s sm:border-gray-900/[0.08] sm:ps-5" : ""}`}
               >
                 <dt className="order-2 mt-1 font-mono text-[11px] leading-snug tracking-[0.08em] text-gray-500 uppercase">
@@ -129,7 +144,7 @@ const Hero = async () => {
 
         {/* Wallet */}
         <div className="px-6 sm:px-10 lg:px-4">
-          <PassWallet />
+          <PassWallet gyms={gyms} />
         </div>
       </div>
     </section>

@@ -1,3 +1,4 @@
+import { AppError } from "@/server/errors";
 import "server-only";
 import { randomUUID } from "node:crypto";
 import { ObjectId } from "mongodb";
@@ -5,7 +6,7 @@ import { collections } from "@/server/db/collections";
 import { env } from "@/server/env";
 import { extensionFor, IMAGE_TYPES, keyFromUrl, storage, VIDEO_TYPES } from "@/server/services/storage";
 
-export class MediaError extends Error {}
+export class MediaError extends AppError {}
 
 export type MediaFolder = "gyms" | "avatars" | "posts";
 
@@ -13,10 +14,10 @@ export type MediaFolder = "gyms" | "avatars" | "posts";
 export async function saveUpload(ownerId: ObjectId, folder: MediaFolder, file: File, options: { allowVideo?: boolean } = {}) {
   const allowed: readonly string[] = options.allowVideo ? [...IMAGE_TYPES, ...VIDEO_TYPES] : IMAGE_TYPES;
   if (!allowed.includes(file.type)) {
-    throw new MediaError(options.allowVideo ? "Use a JPG, PNG, WebP or MP4 file." : "Use a JPG, PNG or WebP image.");
+    throw new MediaError(options.allowVideo ? "mediaType" : "imageType");
   }
   const maxBytes = env.storage.maxUploadMb * 1024 * 1024;
-  if (file.size > maxBytes) throw new MediaError(`Files can be up to ${env.storage.maxUploadMb} MB.`);
+  if (file.size > maxBytes) throw new MediaError("fileTooBig", { mb: env.storage.maxUploadMb });
 
   const body = Buffer.from(await file.arrayBuffer());
   const key = `${folder}/${ownerId.toHexString()}/${randomUUID()}.${extensionFor(file.type)}`;

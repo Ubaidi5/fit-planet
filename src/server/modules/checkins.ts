@@ -11,7 +11,8 @@ import { maybeShareCheckin } from "./social";
 
 export type CheckinOutcome =
   | { ok: true; booking: BookingView; firstVisit: boolean; collectPayment: boolean }
-  | { ok: false; reason: string; booking?: BookingView };
+  /** reason is a key under "feedback.errors" */
+  | { ok: false; reason: string; values?: Record<string, string>; booking?: BookingView };
 
 /**
  * Validates a pass code at the front desk and records the visit.
@@ -26,28 +27,27 @@ export async function checkInByCode(params: {
   const bookings = await collections.bookings();
   const code = normalizePassCode(params.code);
   const doc = await bookings.findOne({ code });
-  if (!doc) return { ok: false, reason: "No pass with that code." };
+  if (!doc) return { ok: false, reason: "noSuchPass" };
 
   const gym = await (await collections.gyms()).findOne({ _id: doc.gymId });
-  if (!gym) return { ok: false, reason: "No pass with that code." };
+  if (!gym) return { ok: false, reason: "noSuchPass" };
+  // Another gym's pass looks the same as a wrong code, so codes can't be used to read other gyms' bookings
+  if (!params.gymIds.some((id) => id.equals(doc.gymId))) return { ok: false, reason: "noSuchPass" };
   const view = toBookingView(doc, gym);
 
-  if (!params.gymIds.some((id) => id.equals(doc.gymId))) {
-    return { ok: false, reason: `This pass is for ${gym.name}, not your gym.`, booking: view };
-  }
-  if (doc.status === "pending") return { ok: false, reason: "This booking was never paid.", booking: view };
-  if (doc.status === "cancelled" || doc.status === "refunded") return { ok: false, reason: "This booking was cancelled.", booking: view };
+  if (doc.status === "pending") return { ok: false, reason: "bookingUnpaid", booking: view };
+  if (doc.status === "cancelled" || doc.status === "refunded") return { ok: false, reason: "bookingWasCancelled", booking: view };
 
   const today = todayIn(gym.timezone);
-  if (doc.startDate > today) return { ok: false, reason: `This pass starts on ${doc.startDate}.`, booking: view };
-  if (doc.endDate < today) return { ok: false, reason: `This pass expired on ${doc.endDate}.`, booking: view };
+  if (doc.startDate > today) return { ok: false, reason: "passNotStarted", values: { date: doc.startDate }, booking: view };
+  if (doc.endDate < today) return { ok: false, reason: "passExpired", values: { date: doc.endDate }, booking: view };
 
   const checkins = await collections.checkins();
   const lastToday = doc.lastCheckinAt && todayIn(gym.timezone, doc.lastCheckinAt) === today;
   if (lastToday) {
     return {
       ok: false,
-      reason: doc.passType === "day" ? "This day pass has already been used." : "Already checked in today.",
+      reason: doc.passType === "day" ? "dayPassUsed" : "checkedInToday",
       booking: view,
     };
   }
@@ -59,7 +59,7 @@ export async function checkInByCode(params: {
     { $inc: { checkinCount: 1 }, $set: { lastCheckinAt: now } },
     { returnDocument: "after" },
   );
-  if (!updated) return { ok: false, reason: "Already checked in.", booking: view };
+  if (!updated) return { ok: false, reason: "alreadyCheckedIn", booking: view };
 
   await checkins.insertOne({
     _id: new ObjectId(),
@@ -74,8 +74,8 @@ export async function checkInByCode(params: {
   const firstVisit = (await checkins.countDocuments({ userId: doc.userId, gymId: doc.gymId })) === 1;
   await notify(doc.userId, {
     type: "checkin",
-    title: firstVisit ? `New stamp: ${gym.name}` : `Checked in at ${gym.name}`,
-    body: firstVisit ? `Your passport just got a ${gym.address.city} stamp. Have a great session.` : "Have a great session.",
+    key: firstVisit ? "checkinStamp" : "checkin",
+    params: { gym: gym.name, city: gym.address.city },
     link: "/app/checkins",
     silent: true,
   });

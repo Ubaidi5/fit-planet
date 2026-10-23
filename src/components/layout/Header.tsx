@@ -54,7 +54,7 @@ const Header: React.FC = () => {
         <Logo />
 
         {/* Desktop navigation */}
-        <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Main">
+        <nav className="hidden items-center gap-0.5 lg:flex" aria-label={t("mainNav")}>
           {navLinks.map((link) => {
             const isActive = link.href === pathname;
             return (
@@ -139,7 +139,7 @@ const Header: React.FC = () => {
             : "invisible scale-95 opacity-0",
         )}
       >
-        <nav className="flex flex-col" aria-label="Mobile">
+        <nav className="flex flex-col" aria-label={t("mobileNav")}>
           {navLinks.map((link, index) => (
             <Link
               key={link.href}

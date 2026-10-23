@@ -47,7 +47,7 @@ async function MemberVisual() {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-xs text-gray-500">{t("dayPass")}</p>
-            <p className="text-lg font-semibold tracking-tight text-ink">FitZone Karachi</p>
+            <p className="text-lg font-semibold tracking-tight text-ink">Urban Iron Berlin</p>
           </div>
           <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-600/15">
             {t("active")}
@@ -59,8 +59,8 @@ async function MemberVisual() {
           </div>
           <div className="space-y-2 text-sm">
             <p className="text-gray-500">{t("validToday")}</p>
-            <p className="font-semibold text-ink">06:00 to 23:00</p>
-            <p className="text-gray-500">Clifton · 1.2 km</p>
+            <p className="font-semibold text-ink">{t("hoursSample")}</p>
+            <p className="text-gray-500">Mitte · {t("distanceSample")}</p>
           </div>
         </div>
       </div>

@@ -5,6 +5,8 @@ import { auth } from "@/lib/auth";
 import { collections, toObjectId } from "@/server/db/collections";
 import type { GymDoc, UserDoc } from "@/server/db/models";
 import { gymsManagedBy } from "@/server/modules/gyms";
+import { cookies } from "next/headers";
+import { findRegion, REGION_COOKIE } from "@/lib/i18n/regions";
 
 /** The signed-in user's database record, read once per request */
 export const getSessionUser = cache(async (): Promise<UserDoc | null> => {
@@ -12,8 +14,20 @@ export const getSessionUser = cache(async (): Promise<UserDoc | null> => {
   const id = toObjectId(session?.user?.id);
   if (!id) return null;
   const users = await collections.users();
-  return users.findOne({ _id: id });
+  const user = await users.findOne({ _id: id });
+  if (user) await rememberRegion(user);
+  return user;
 });
+
+/** Keeps the account's region in step with the switcher, so pushes and emails use the same language */
+async function rememberRegion(user: UserDoc) {
+  // Only an explicit choice counts; a browser-language guess shouldn't overwrite the saved one
+  const region = findRegion((await cookies()).get(REGION_COOKIE)?.value);
+  if (!region || user.regionCode === region.code) return;
+  user.regionCode = region.code;
+  const users = await collections.users();
+  await users.updateOne({ _id: user._id }, { $set: { regionCode: region.code } });
+}
 
 /** For pages: sends signed-out visitors to the login page and back afterwards */
 export async function requireUser(returnTo: string): Promise<UserDoc> {

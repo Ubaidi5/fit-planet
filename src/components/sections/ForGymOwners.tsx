@@ -11,7 +11,7 @@ import {
   HiOutlineTag,
 } from "react-icons/hi2";
 import { Reveal } from "@/components/motion/Reveal";
-import { ownerPreview } from "@/lib/data/mock-platform";
+import { getRegion } from "@/lib/i18n/server";
 import { Accent, SectionHeading } from "./SectionHeading";
 
 const benefits = [
@@ -24,8 +24,27 @@ const benefits = [
 ];
 
 
+/** Illustrative studio dashboard; the numbers are a sample, not live data */
+const ownerPreview = {
+  gymName: "Northside Strength",
+  initials: "NS",
+  checkInsToday: 42,
+  capacity: { current: 32, max: 50 },
+  weeklyBookings: [38, 52, 44, 68, 61, 79, 88],
+  weeklyGrowth: 12,
+  recentCheckIns: [
+    { name: "Lena M.", minutesAgo: 2, pass: "day" },
+    { name: "Omar K.", minutesAgo: 5, pass: "month" },
+    { name: "Sara D.", minutesAgo: 12, pass: "week" },
+  ],
+} as const;
+
+/** A believable day's takings in currencies where 1,240 would look odd */
+const revenueIn: Record<string, number> = { TRY: 42_000, AED: 4_600, SAR: 4_700, JPY: 185_000, PKR: 345_000, INR: 104_000 };
+
 const ForGymOwners = async () => {
-  const t = await getTranslations("owners");
+  const [t, tp, region] = await Promise.all([getTranslations("owners"), getTranslations("passes.name"), getRegion()]);
+  const minutesAgo = new Intl.RelativeTimeFormat(region.locale, { numeric: "auto", style: "short" });
   const days = t("days").split(",");
   const maxBookings = Math.max(...ownerPreview.weeklyBookings);
   const capacityPct = Math.round(
@@ -91,7 +110,7 @@ const ForGymOwners = async () => {
               <div className="flex items-center justify-between border-b border-gray-900/[0.06] pb-4">
                 <div className="flex items-center gap-3">
                   <span className="flex size-10 items-center justify-center rounded-xl bg-ink text-sm font-bold text-volt">
-                    FZ
+                    {ownerPreview.initials}
                   </span>
                   <div>
                     <p className="font-semibold text-ink">{ownerPreview.gymName}</p>
@@ -109,12 +128,12 @@ const ForGymOwners = async () => {
                   { label: t("preview.checkins"), value: ownerPreview.checkInsToday },
                   {
                     label: t("preview.revenue"),
-                    value: new Intl.NumberFormat("en", {
+                    value: new Intl.NumberFormat(region.locale, {
                       style: "currency",
-                      currency: "PKR",
+                      currency: region.currency,
                       currencyDisplay: "narrowSymbol",
                       notation: "compact",
-                    }).format(ownerPreview.revenueToday),
+                    }).format(revenueIn[region.currency] ?? 1_240),
                   },
                   { label: t("preview.inGym"), value: `${capacityPct}%` },
                 ].map((stat) => (
@@ -168,11 +187,11 @@ const ForGymOwners = async () => {
                       </span>
                       <div>
                         <p className="text-sm font-medium text-ink">{checkin.name}</p>
-                        <p className="text-[11px] text-gray-500">{checkin.time}</p>
+                        <p className="text-[11px] text-gray-500">{minutesAgo.format(-checkin.minutesAgo, "minute")}</p>
                       </div>
                     </div>
                     <span className="rounded-full bg-volt-soft px-2.5 py-1 text-[11px] font-semibold text-emerald-800">
-                      {checkin.pass}
+                      {tp(checkin.pass)}
                     </span>
                   </div>
                 ))}

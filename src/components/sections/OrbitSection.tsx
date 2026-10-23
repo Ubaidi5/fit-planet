@@ -1,9 +1,10 @@
 import { getTranslations } from "next-intl/server";
 import { OrbitExplorer } from "@/components/orbit/OrbitExplorer";
-import { mockGyms } from "@/lib/data/mock-gyms";
+import type { Gym } from "@/lib/types";
 import { Accent, SectionHeading } from "./SectionHeading";
 
-export default async function OrbitSection() {
+export default async function OrbitSection({ gyms, initialCity }: { gyms: Gym[]; initialCity?: string }) {
+  if (gyms.length === 0) return null;
   const t = await getTranslations("orbit");
   return (
     <section id="orbit" className="relative scroll-mt-24 overflow-hidden py-24 lg:py-32">
@@ -14,7 +15,7 @@ export default async function OrbitSection() {
           description={t("lead")}
         />
         <div className="mt-12 sm:mt-14">
-          <OrbitExplorer gyms={mockGyms} initialCity="Karachi" />
+          <OrbitExplorer gyms={gyms} initialCity={initialCity} />
         </div>
       </div>
     </section>

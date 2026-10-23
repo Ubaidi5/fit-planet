@@ -13,6 +13,8 @@ import { getMongoClient } from "@/server/db/client";
 import { collections } from "@/server/db/collections";
 import { email } from "@/server/services/email";
 import { magicLinkEmail } from "@/server/services/email/templates";
+import { getRegion } from "@/lib/i18n/server";
+import { translatorFor } from "@/server/i18n";
 
 const credentialsSchema = z.object({
   email: z.email().transform((value) => value.toLowerCase()),
@@ -71,7 +73,8 @@ if (features.magicLink) {
       from: env.email.from,
       maxAge: 24 * 60 * 60,
       async sendVerificationRequest({ identifier, url }) {
-        await email().send(magicLinkEmail(identifier, url));
+        const { t } = await translatorFor((await getRegion()).code, "email");
+        await email().send(magicLinkEmail(identifier, url, t));
       },
     }),
   );

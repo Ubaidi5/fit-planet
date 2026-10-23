@@ -128,7 +128,9 @@ async function main() {
           const passType = (["day", "day", "day", "week", "month"] as const)[(day + i + 40) % 5];
           const start = addDays(today, day);
           const span = passType === "day" ? 1 : passType === "week" ? 7 : 30;
-          const created = new Date(`${addDays(start, -1)}T10:00:00Z`);
+          // Booked the day before, or a little while ago for passes that start later
+          const dayBefore = new Date(`${addDays(start, -1)}T10:00:00Z`);
+          const created = dayBefore.getTime() < Date.now() ? dayBefore : new Date(Date.now() - (day * 3 + i + 1) * 3_600_000);
           docs.push({
             _id: new ObjectId(),
             code: generatePassCode(),

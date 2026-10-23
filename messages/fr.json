@@ -18,7 +18,9 @@
     "listYourGym": "Inscrire votre salle",
     "memberSince": "Membre depuis {date}",
     "browseGyms": "Voir toutes les salles",
-    "signOut": "Se déconnecter"
+    "signOut": "Se déconnecter",
+    "appLabel": "Application",
+    "tabsLabel": "Onglets de l’application"
   },
   "site": {
     "findGyms": "Trouver une salle",
@@ -28,7 +30,9 @@
     "studioLogin": "Connexion Studio",
     "logIn": "Se connecter",
     "getStarted": "Commencer",
-    "ownGym": "Vous gérez une salle ? Connexion Studio"
+    "ownGym": "Vous gérez une salle ? Connexion Studio",
+    "mainNav": "Menu principal",
+    "mobileNav": "Menu mobile"
   },
   "footer": {
     "members": "Membres",
@@ -82,12 +86,19 @@
       "busy": "Chargé",
       "moderate": "Modéré",
       "quiet": "Calme"
-    }
+    },
+    "fromShort": "Dès"
   },
   "orbit": {
     "eyebrow": "Orbit · explorer à proximité",
     "title": "Les salles autour de vous, <accent>pas une liste</accent>",
-    "lead": "Les salles proches se rapprochent du centre. Chaque anneau indique le remplissage actuel, pour repérer d'un coup d'œil la plus calme."
+    "lead": "Les salles proches se rapprochent du centre. Chaque anneau indique le remplissage actuel, pour repérer d'un coup d'œil la plus calme.",
+    "ui": {
+      "chooseCity": "Choisir une ville",
+      "you": "Vous",
+      "node": "{gym}, rempli à {pct} %, à {distance}",
+      "viewGym": "Voir la salle"
+    }
   },
   "passportSection": {
     "eyebrow": "Votre passeport",
@@ -176,7 +187,8 @@
       "search": {
         "title": "Cherchez une salle",
         "text": "Choisissez une ville ou utilisez votre position. Filtrez par prix, équipements, note et affluence en direct.",
-        "meta": "{cities} villes · {gyms} salles"
+        "meta": "{cities} villes · {gyms} salles",
+        "metaSoon": "De nouvelles villes chaque mois"
       },
       "choose": {
         "title": "Choisissez votre pass",
@@ -240,8 +252,9 @@
     }
   },
   "stories": {
-    "eyebrow": "Témoignages pilotes",
-    "title": "Les premiers membres et salles, <accent>avec leurs mots</accent>"
+    "eyebrow": "Avis des membres",
+    "title": "Directement de celles et ceux <accent>qui s’y sont entraînés</accent>",
+    "at": "{gym}, {city}"
   },
   "cta": {
     "title": "Votre passeport est à <accent>un geste</accent>",
@@ -304,7 +317,9 @@
         "weekly": "Réservations de la semaine",
         "checkinsToday": "Entrées du jour",
         "capacityNow": "Affluence actuelle",
-        "booked": "Nouveau pass jour réservé"
+        "booked": "Nouveau pass jour réservé",
+        "hoursSample": "06:00 à 23:00",
+        "distanceSample": "1,2 km"
       }
     },
     "form": {
@@ -1701,6 +1716,364 @@
     },
     "meta": {
       "description": "Gérez votre salle avec Fit Planet : réservations, entrées, tarifs et revenus au même endroit."
+    }
+  },
+  "heroWallet": {
+    "today": "Aujourd’hui",
+    "crowd": {
+      "busy": "Bondé en ce moment",
+      "moderate": "Fréquenté en ce moment",
+      "quiet": "Calme en ce moment"
+    },
+    "opens": "{gym} · ouvre à {time}",
+    "open24": "{gym} · ouvert 24 h/24, 7 j/7"
+  },
+  "region": {
+    "current": "Région : {name}, {language}",
+    "choose": "Choisir votre région",
+    "heading": "Région · Langue"
+  },
+  "feedback": {
+    "errors": {
+      "accountNotFound": "Compte introuvable.",
+      "addExercise": "Ajoutez au moins un exercice.",
+      "addPhotoFirst": "Ajoutez au moins une photo avant la mise en ligne.",
+      "alreadyCheckedIn": "Déjà enregistré.",
+      "badCredentials": "Cet e-mail et ce mot de passe ne correspondent pas.",
+      "badRequest": "Quelque chose ne va pas dans cette demande. Veuillez réessayer.",
+      "bookingCrashed": "Un problème est survenu pendant la réservation. Vous n’avez pas été débité.",
+      "bookingFailed": "Impossible de créer la réservation. Veuillez réessayer.",
+      "bookingNotFound": "Réservation introuvable.",
+      "bookingUnpaid": "Cette réservation n’a jamais été payée.",
+      "bookingWasCancelled": "Cette réservation a été annulée.",
+      "cancelDeadline": "Les pass peuvent être annulés jusqu’à la veille de leur début.",
+      "cancelFailed": "Impossible d’annuler cette réservation. Veuillez réessayer.",
+      "cannotCancel": "Cette réservation ne peut pas être annulée.",
+      "cannotDeleteComment": "Vous ne pouvez pas supprimer ce commentaire.",
+      "cannotFollowSelf": "Vous ne pouvez pas vous suivre vous-même.",
+      "checkFields": "Vérifiez les champs en surbrillance.",
+      "checkPrices": "Vérifiez les prix.",
+      "checkRoutine": "Vérifiez la routine et réessayez.",
+      "checkedInToday": "Déjà enregistré aujourd’hui.",
+      "chooseFile": "Choisissez un fichier à importer.",
+      "commentNotFound": "Commentaire introuvable.",
+      "completeSet": "Terminez au moins une série avant de finir.",
+      "dayPassUsed": "Ce pass journée a déjà été utilisé.",
+      "emailTaken": "Un compte existe déjà avec cet e-mail. Essayez de vous connecter.",
+      "emailUsesOtherSignIn": "Cet e-mail se connecte déjà avec Google ou un lien par e-mail. Utilisez cette méthode, puis ajoutez un mot de passe dans Sécurité.",
+      "emptyPost": "Écrivez quelque chose ou ajoutez une photo.",
+      "enterCode": "Saisissez un code de pass.",
+      "fileTooBig": "Les fichiers peuvent faire jusqu’à {mb} Mo.",
+      "gymNotBooking": "Cette salle ne prend pas de réservations pour le moment.",
+      "gymNotFound": "Salle introuvable.",
+      "handleFailed": "Impossible de créer un nom d’utilisateur. Réessayez.",
+      "handleRules": "Les noms d’utilisateur font 3 à 24 caractères : lettres, chiffres, points ou tirets bas.",
+      "handleTaken": "Ce nom d’utilisateur est déjà pris.",
+      "imageType": "Utilisez une image JPG, PNG ou WebP.",
+      "linkFailed": "Impossible d’envoyer le lien. Veuillez réessayer.",
+      "listingSuspended": "Cette fiche est suspendue. Contactez l’assistance.",
+      "mediaType": "Utilisez un fichier JPG, PNG, WebP ou MP4.",
+      "noDeskPayment": "Le paiement à l’accueil n’est pas disponible.",
+      "noSuchPass": "Aucun pass avec ce code.",
+      "onlyConfirmedCancel": "Seules les réservations confirmées peuvent être annulées.",
+      "ownGymReview": "Vous ne pouvez pas évaluer votre propre salle.",
+      "ownerOnly": "Seul le propriétaire de la salle peut faire cela.",
+      "passExpired": "Ce pass a expiré le {date}.",
+      "passNotOnSale": "Ce pass n’est pas proposé dans cette salle.",
+      "passNotStarted": "Ce pass commence le {date}.",
+      "personNotFound": "Personne introuvable.",
+      "photoNotAllowed": "Cette photo ne peut pas être jointe.",
+      "pickStartDate": "Choisissez une date de début valide.",
+      "postNotFound": "Publication introuvable.",
+      "registerFailed": "Impossible de créer votre compte. Veuillez réessayer.",
+      "replyLength": "Écrivez une réponse de 2 à 1000 caractères.",
+      "resetExpired": "Ce lien a expiré. Demandez-en un nouveau.",
+      "reviewNeedsBooking": "Réservez d’abord un pass ici, puis racontez comment ça s’est passé.",
+      "reviewNotFound": "Avis introuvable.",
+      "routineGone": "Cette routine n’est plus disponible.",
+      "routineLimit": "Vous pouvez garder jusqu’à 100 routines. Supprimez-en une pour en ajouter une autre.",
+      "routineNotFound": "Routine introuvable.",
+      "signInAgain": "Veuillez vous reconnecter.",
+      "signInFailed": "La connexion a échoué. Veuillez réessayer.",
+      "signInStudio": "Connectez-vous d’abord à votre studio.",
+      "signInToBook": "Connectez-vous pour réserver un pass.",
+      "signInToReview": "Connectez-vous pour laisser un avis.",
+      "signInToSave": "Connectez-vous pour enregistrer des salles.",
+      "soldOut": "Les pass journée sont épuisés pour cette date. Essayez un autre jour.",
+      "startPassed": "La date de début est déjà passée dans le fuseau horaire de la salle.",
+      "templateNotFound": "Modèle introuvable.",
+      "tooFarAhead": "Les pass peuvent être réservés jusqu’à {days} jours à l’avance.",
+      "uploadFailed": "L’import a échoué. Veuillez réessayer.",
+      "validEmail": "Saisissez un e-mail valide.",
+      "workoutNotFound": "Séance introuvable.",
+      "workoutUnreadable": "Impossible de lire cette séance. Réessayez.",
+      "writeComment": "Écrivez d’abord un commentaire.",
+      "wrongPassword": "Votre mot de passe actuel n’est pas correct.",
+      "tooManyAttempts": "Trop de tentatives. Patientez quelques minutes et réessayez."
+    },
+    "fields": {
+      "addExercise": "Ajoutez au moins un exercice",
+      "area": "Indiquez le quartier",
+      "atLeastOne": "Au moins 1",
+      "city": "Indiquez la ville",
+      "comment": "Dites-en un peu plus",
+      "country": "Choisissez un pays",
+      "currency": "Choisissez une devise",
+      "dayPass": "Fixez un prix pour le pass journée",
+      "description": "Écrivez au moins une ou deux phrases",
+      "email": "Saisissez un e-mail valide",
+      "guestName": "Saisissez le nom pour le pass",
+      "gymName": "Indiquez le nom de votre salle",
+      "headline": "Ajoutez un titre court",
+      "name": "Indiquez votre nom",
+      "password": "Saisissez votre mot de passe",
+      "passwordLength": "Au moins 8 caractères",
+      "passwordsMatch": "Les mots de passe ne correspondent pas",
+      "routineName": "Donnez-lui un nom",
+      "startDate": "Choisissez une date de début",
+      "street": "Indiquez l’adresse",
+      "target": "Ajoutez un objectif",
+      "time": "Format HH:MM",
+      "tooLong": "C’est trop long",
+      "tooShort": "C’est trop court",
+      "invalid": "Vérifiez ce champ"
+    },
+    "done": {
+      "bookingCancelled": "Réservation annulée.",
+      "cancelledMemberTold": "Réservation annulée, le membre a été prévenu.",
+      "changesSaved": "Modifications enregistrées.",
+      "markedPaid": "Marqué comme payé.",
+      "passwordAdded": "Mot de passe ajouté. Vous pouvez maintenant vous connecter avec.",
+      "passwordChanged": "Mot de passe modifié.",
+      "pricesUpdated": "Prix mis à jour. Les nouvelles réservations les utilisent tout de suite.",
+      "profileSaved": "Profil enregistré.",
+      "published": "Vous êtes en ligne. Les membres peuvent réserver.",
+      "replyPosted": "Réponse publiée.",
+      "reportThanks": "Merci, nous allons regarder.",
+      "resetSent": "Si un compte existe avec cet e-mail, un lien est en route.",
+      "reviewLive": "Merci ! Votre avis est en ligne.",
+      "saved": "Enregistré.",
+      "savedToRoutines": "Enregistré dans vos routines",
+      "socialSaved": "Profil social enregistré.",
+      "unpublished": "Fiche masquée de la recherche."
+    }
+  },
+  "notify": {
+    "someone": "Quelqu’un",
+    "yourPost": "votre publication",
+    "theGym": "La salle",
+    "range": "du {from} au {to}",
+    "bookingNew": {
+      "title": "Nouveau {pass, select, day {pass journée} week {pass semaine} month {pass mensuel} other {pass}} chez {gym}",
+      "body": "{guest} a réservé pour {dates} · {price}, {paid, select, desk {paie à l’accueil} other {payé en ligne}}."
+    },
+    "bookingConfirmed": {
+      "title": "Votre réservation est confirmée",
+      "body": "{pass, select, day {Pass journée} week {Pass semaine} month {Pass mensuel} other {Pass}} chez {gym} pour {dates}. Montrez votre QR code à l’accueil."
+    },
+    "bookingCancelledByMember": {
+      "title": "Réservation annulée",
+      "body": "{guest} a annulé un {pass, select, day {pass journée} week {pass semaine} month {pass mensuel} other {pass}} pour le {startDate}."
+    },
+    "bookingCancelledByGym": {
+      "title": "Votre réservation a été annulée",
+      "body": "{gym} a annulé votre {pass, select, day {pass journée} week {pass semaine} month {pass mensuel} other {pass}} du {startDate}.{refunded, select, yes { Un remboursement complet est en route.} other {}}"
+    },
+    "passStarts": {
+      "title": "Votre {pass, select, day {pass journée} week {pass semaine} month {pass mensuel} other {pass}} commence demain",
+      "body": "{gym} vous attend. Montrez le QR code à l’accueil."
+    },
+    "passEnds": {
+      "title": "Votre {pass, select, day {pass journée} week {pass semaine} month {pass mensuel} other {pass}} se termine demain",
+      "body": "Demain est votre dernier jour chez {gym}. Réservez un autre pass quand vous voulez depuis la page de la salle."
+    },
+    "reviewNew": {
+      "title": "Nouvel avis {rating} étoiles",
+      "body": "{name} a évalué {gym} : « {title} »"
+    },
+    "reviewReply": {
+      "title": "{gym} a répondu à votre avis",
+      "body": "{text}"
+    },
+    "socialLike": {
+      "title": "{name} aime votre publication",
+      "body": "{text}"
+    },
+    "socialComment": {
+      "title": "{name} a commenté",
+      "body": "{text}"
+    },
+    "socialFollow": {
+      "title": "{name} vous suit",
+      "body": "Suivez en retour pour voir vos séances respectives."
+    },
+    "checkin": {
+      "title": "Enregistré chez {gym}",
+      "body": "Bonne séance."
+    },
+    "checkinStamp": {
+      "title": "Nouveau tampon : {gym}",
+      "body": "Votre passeport vient de recevoir un tampon de {city}. Bonne séance."
+    },
+    "studioReady": {
+      "title": "Votre studio est prêt",
+      "body": "{gym} est enregistré comme brouillon. Publiez-le depuis Profil de la salle quand tout vous convient."
+    }
+  },
+  "email": {
+    "dir": "ltr",
+    "footer": "Vous recevez cet e-mail car vous avez un compte Fit Planet.",
+    "range": "du {from} au {to}",
+    "magic": {
+      "subject": "Votre lien de connexion Fit Planet",
+      "heading": "Connexion à Fit Planet",
+      "preheader": "Touchez pour vous connecter. Le lien expire dans 24 heures.",
+      "body": "Touchez le bouton ci-dessous pour vous connecter. Le lien expire dans 24 heures et ne fonctionne qu’une fois. Si vous ne l’avez pas demandé, ignorez cet e-mail.",
+      "cta": "Se connecter"
+    },
+    "reset": {
+      "subject": "Réinitialisez votre mot de passe Fit Planet",
+      "heading": "Réinitialiser votre mot de passe",
+      "preheader": "Choisissez un nouveau mot de passe. Le lien expire dans 1 heure.",
+      "body": "Quelqu’un a demandé à réinitialiser le mot de passe de ce compte. Si c’était vous, choisissez-en un nouveau ci-dessous. Le lien expire dans 1 heure.",
+      "cta": "Choisir un nouveau mot de passe"
+    },
+    "booking": {
+      "subject": "Votre {pass, select, day {pass journée} week {pass semaine} month {pass mensuel} other {pass}} chez {gym}",
+      "heading": "Votre réservation est confirmée",
+      "intro": "Bonjour {name}, votre {pass, select, day {pass journée} week {pass semaine} month {pass mensuel} other {pass}} chez {gym} est confirmé.",
+      "preheader": "Valable {dates}. Montrez le QR code à l’accueil.",
+      "valid": "Valable",
+      "code": "Code du pass",
+      "total": "Total",
+      "payAtDesk": "{price} (à payer à l’accueil)",
+      "showQr": "Montrez le QR code à l’accueil :",
+      "cta": "Ouvrir mon pass"
+    }
+  },
+  "exerciseInfo": {
+    "ex001": {
+      "description": "Le roi des exercices pour les pectoraux. Un mouvement polyarticulaire qui développe la masse et la force de toute la poitrine.",
+      "s1": "Allongez-vous sur un banc plat, les pieds bien au sol",
+      "s2": "Saisissez la barre un peu plus large que la largeur des épaules",
+      "s3": "Décrochez la barre et descendez-la au milieu de la poitrine",
+      "s4": "Poussez la barre jusqu’à la position de départ",
+      "s5": "Gardez le dos légèrement cambré et les omoplates serrées",
+      "t1": "Ne faites pas rebondir la barre sur la poitrine",
+      "t2": "Gardez les poignets droits",
+      "t3": "Poussez dans les talons pour plus de stabilité"
+    },
+    "ex002": {
+      "description": "Cible le haut des pectoraux pour un rendu plus plein et plus dessiné.",
+      "s1": "Inclinez le banc entre 30 et 45 degrés",
+      "s2": "Tenez les haltères à hauteur d’épaules, paumes vers l’avant",
+      "s3": "Poussez les haltères jusqu’à bras tendus",
+      "s4": "Redescendez en contrôle jusqu’à la position de départ"
+    },
+    "ex003": {
+      "description": "Un exercice au poids du corps essentiel pour les pectoraux, les épaules et les triceps.",
+      "s1": "Commencez en planche, mains à largeur d’épaules",
+      "s2": "Descendez jusqu’à ce que la poitrine frôle le sol",
+      "s3": "Remontez jusqu’à la position de départ",
+      "s4": "Gardez le corps bien aligné tout du long"
+    },
+    "ex004": {
+      "description": "L’exercice dos par excellence pour gagner en largeur et en force.",
+      "s1": "Suspendez-vous à la barre, mains un peu plus larges que les épaules",
+      "s2": "Tirez jusqu’à passer le menton au-dessus de la barre",
+      "s3": "Redescendez en contrôle jusqu’à bras tendus",
+      "s4": "Évitez de vous balancer ou de prendre de l’élan"
+    },
+    "ex005": {
+      "description": "Un mouvement polyarticulaire qui épaissit et renforce le dos.",
+      "s1": "Pieds à largeur d’épaules, penchez-vous depuis les hanches",
+      "s2": "Saisissez la barre, mains à largeur d’épaules",
+      "s3": "Tirez la barre vers le bas de la poitrine ou le haut du ventre",
+      "s4": "Redescendez en contrôle, dos bien plat"
+    },
+    "ex006": {
+      "description": "Un exercice guidé idéal pour les débutants afin d’élargir le dos.",
+      "s1": "Asseyez-vous au tirage vertical, prise large sur la barre",
+      "s2": "Tirez la barre vers le haut de la poitrine",
+      "s3": "Serrez les omoplates en bas du mouvement",
+      "s4": "Revenez en contrôle à la position de départ"
+    },
+    "ex007": {
+      "description": "Le mouvement de base pour des épaules fortes.",
+      "s1": "Debout, pieds à largeur d’épaules",
+      "s2": "Tenez la barre à hauteur d’épaules",
+      "s3": "Poussez la barre au-dessus de la tête jusqu’à bras tendus",
+      "s4": "Redescendez en contrôle jusqu’à la position de départ"
+    },
+    "ex008": {
+      "description": "Exercice d’isolation qui cible les deltoïdes latéraux pour élargir les épaules.",
+      "s1": "Debout, haltères le long du corps",
+      "s2": "Levez les bras sur les côtés jusqu’à l’horizontale",
+      "s3": "Gardez les coudes légèrement fléchis",
+      "s4": "Redescendez en contrôle"
+    },
+    "ex009": {
+      "description": "Le roi des exercices pour les jambes. Développe la masse de tout le bas du corps.",
+      "s1": "Placez la barre sur le haut du dos",
+      "s2": "Debout, pieds à largeur d’épaules",
+      "s3": "Descendez jusqu’à ce que les cuisses soient parallèles au sol",
+      "s4": "Poussez dans les talons pour remonter"
+    },
+    "ex010": {
+      "description": "Cible les ischios et les fessiers grâce à une flexion de hanches.",
+      "s1": "Tenez la barre, mains à largeur d’épaules",
+      "s2": "Fléchissez les hanches en les poussant vers l’arrière",
+      "s3": "Descendez la barre le long des jambes jusqu’à sentir l’étirement des ischios",
+      "s4": "Poussez les hanches vers l’avant pour revenir"
+    },
+    "ex011": {
+      "description": "Exercice guidé pour les jambes, sûr pour les débutants.",
+      "s1": "Installez-vous à la presse, pieds à largeur d’épaules sur la plateforme",
+      "s2": "Descendez la charge en pliant les genoux à 90 degrés",
+      "s3": "Poussez avec les pieds pour tendre les jambes",
+      "s4": "Ne verrouillez pas les genoux en haut"
+    },
+    "ex012": {
+      "description": "Le classique pour développer les biceps.",
+      "s1": "Debout, pieds à largeur d’épaules, barre en supination",
+      "s2": "Montez la barre jusqu’à hauteur d’épaules",
+      "s3": "Gardez les coudes fixes le long du corps",
+      "s4": "Redescendez en contrôle"
+    },
+    "ex013": {
+      "description": "Exercice à la poulie qui isole les triceps.",
+      "s1": "Face à la poulie, avec une corde",
+      "s2": "Gardez les coudes le long du corps",
+      "s3": "Poussez la corde vers le bas jusqu’à bras tendus",
+      "s4": "Revenez en contrôle"
+    },
+    "ex014": {
+      "description": "Exercice isométrique de gainage qui renforce la stabilité.",
+      "s1": "Commencez en planche sur les avant-bras",
+      "s2": "Gardez le corps aligné de la tête aux talons",
+      "s3": "Contractez les abdos et tenez la position",
+      "s4": "Respirez calmement tout du long"
+    },
+    "ex015": {
+      "description": "Exercice d’abdos lesté pour progresser régulièrement.",
+      "s1": "À genoux face à la poulie, avec une corde",
+      "s2": "Tenez la corde derrière la tête",
+      "s3": "Enroulez le buste en amenant les coudes vers les genoux",
+      "s4": "Revenez en contrôle"
+    },
+    "ex016": {
+      "description": "Le cardio classique pour l’endurance et la dépense calorique.",
+      "s1": "Commencez par une marche d’échauffement",
+      "s2": "Augmentez progressivement jusqu’à courir",
+      "s3": "Gardez un rythme régulier pendant la durée voulue",
+      "s4": "Terminez par une marche lente"
+    },
+    "ex017": {
+      "description": "Un cardio complet qui ménage les articulations.",
+      "s1": "Asseyez-vous sur le rameur, pieds sanglés",
+      "s2": "Saisissez la poignée et poussez d’abord avec les jambes",
+      "s3": "Puis tirez la poignée vers la poitrine",
+      "s4": "Inversez le mouvement pour revenir"
     }
   }
 }

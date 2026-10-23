@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { ObjectId } from "mongodb";
 import { z } from "zod";
 import type { ActionResult, BookingView } from "@/lib/types";
@@ -13,9 +14,11 @@ import { checkInByCode, type CheckinOutcome } from "@/server/modules/checkins";
 import { replyToReview, ReviewError } from "@/server/modules/reviews";
 import { deleteUpload } from "@/server/modules/media";
 import { notify } from "@/server/modules/notifications";
-import { fieldErrors } from "./utils";
+import { done, fail, invalid } from "./utils";
+import { getRegion } from "@/lib/i18n/server";
+import { formatDate } from "@/lib/dates";
 
-const time = z.string().regex(/^([01]\d|2[0-4]):[0-5]\d$/, "Use HH:MM");
+const time = z.string().regex(/^([01]\d|2[0-4]):[0-5]\d$/, "time");
 const money = z.coerce.number().min(0).max(10_000_000);
 
 const hoursSchema = z.array(
@@ -23,21 +26,21 @@ const hoursSchema = z.array(
 );
 
 const gymSchema = z.object({
-  name: z.string().trim().min(2, "Add your gym's name").max(80),
-  description: z.string().trim().min(20, "Write at least a sentence or two").max(300),
+  name: z.string().trim().min(2, "gymName").max(80),
+  description: z.string().trim().min(20, "description").max(300),
   longDescription: z.string().trim().max(4000).optional(),
-  street: z.string().trim().min(2, "Add the street address").max(120),
-  area: z.string().trim().min(2, "Add the neighbourhood").max(80),
-  city: z.string().trim().min(2, "Add the city").max(60),
-  country: z.string().trim().length(2, "Pick a country").toUpperCase(),
-  currency: z.string().trim().length(3, "Pick a currency").toUpperCase(),
+  street: z.string().trim().min(2, "street").max(120),
+  area: z.string().trim().min(2, "area").max(80),
+  city: z.string().trim().min(2, "city").max(60),
+  country: z.string().trim().length(2, "country").toUpperCase(),
+  currency: z.string().trim().length(3, "currency").toUpperCase(),
   timezone: z.string().trim().min(3).max(60),
   lat: z.coerce.number().min(-90).max(90),
   lng: z.coerce.number().min(-180).max(180),
-  dayPass: money.refine((v) => v > 0, "Set a day pass price"),
+  dayPass: money.refine((v) => v > 0, "dayPass"),
   weekPass: money,
   monthPass: money,
-  capacity: z.coerce.number().int().min(1, "At least 1").max(5000),
+  capacity: z.coerce.number().int().min(1, "atLeastOne").max(5000),
   dailyDayPassLimit: z.coerce.number().int().min(0).max(5000).optional(),
   is24Hours: z.boolean(),
   open: time,
@@ -105,9 +108,9 @@ async function ownerOrError(): Promise<{ user: UserDoc; gyms: GymDoc[] } | null>
 /** Onboarding: creates the owner's first (or another) gym as a draft */
 export async function createGymAction(input: GymInput): Promise<ActionResult<{ id: string; slug: string }>> {
   const ctx = await ownerOrError();
-  if (!ctx) return { ok: false, error: "Please sign in again." };
+  if (!ctx) return fail("signInAgain");
   const parsed = gymSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: "Some details need another look.", fieldErrors: fieldErrors(parsed.error) };
+  if (!parsed.success) return invalid(parsed.error);
 
   const gyms = await collections.gyms();
   const now = new Date();
@@ -129,8 +132,8 @@ export async function createGymAction(input: GymInput): Promise<ActionResult<{ i
   await (await collections.users()).updateOne({ _id: ctx.user._id }, { $addToSet: { roles: "owner" } });
   await notify(ctx.user._id, {
     type: "system",
-    title: "Your studio is ready",
-    body: `${doc.name} is saved as a draft. Publish it from Gym profile when you're happy with it.`,
+    key: "studioReady",
+    params: { gym: doc.name },
     link: "/studio/profile",
     silent: true,
   });
@@ -142,9 +145,9 @@ export async function updateGymAction(gymId: string, input: GymInput): Promise<A
   const ctx = await ownerOrError();
   const id = toObjectId(gymId);
   const gym = ctx?.gyms.find((g) => id && g._id.equals(id) && g.ownerId.equals(ctx.user._id));
-  if (!ctx || !gym) return { ok: false, error: "Only the owner can edit this gym." };
+  if (!ctx || !gym) return fail("ownerOnly");
   const parsed = gymSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: "Some details need another look.", fieldErrors: fieldErrors(parsed.error) };
+  if (!parsed.success) return invalid(parsed.error);
 
   const fields = gymFields(parsed.data);
   const slug = parsed.data.name !== gym.name || parsed.data.city !== gym.address.city ? await uniqueSlug(parsed.data.name, parsed.data.city, gym._id) : gym.slug;
@@ -157,76 +160,82 @@ export async function updateGymAction(gymId: string, input: GymInput): Promise<A
   revalidatePath("/studio", "layout");
   revalidatePath(`/gyms/${slug}`);
   revalidatePath("/gyms");
-  return { ok: true, message: "Changes saved." };
+  return done("changesSaved");
 }
 
 export async function setGymStatusAction(gymId: string, status: "draft" | "published"): Promise<ActionResult> {
   const ctx = await ownerOrError();
   const id = toObjectId(gymId);
   const gym = ctx?.gyms.find((g) => id && g._id.equals(id) && g.ownerId.equals(ctx.user._id));
-  if (!ctx || !gym) return { ok: false, error: "Only the owner can publish this gym." };
-  if (gym.status === "suspended") return { ok: false, error: "This listing is suspended. Contact support." };
+  if (!ctx || !gym) return fail("ownerOnly");
+  if (gym.status === "suspended") return fail("listingSuspended");
   if (status === "published" && gym.images.length === 0) {
-    return { ok: false, error: "Add at least one photo before going live." };
+    return fail("addPhotoFirst");
   }
   await (await collections.gyms()).updateOne({ _id: gym._id }, { $set: { status, updatedAt: new Date() } });
   revalidatePath("/studio", "layout");
   revalidatePath("/gyms");
   revalidatePath(`/gyms/${gym.slug}`);
-  return { ok: true, message: status === "published" ? "You're live. Members can book you now." : "Listing hidden from search." };
+  return done(status === "published" ? "published" : "unpublished");
 }
 
 export async function checkInAction(code: string, method: "qr" | "code" = "code"): Promise<CheckinOutcome> {
   const ctx = await ownerOrError();
-  if (!ctx || ctx.gyms.length === 0) return { ok: false, reason: "Sign in to your studio first." };
-  if (!code.trim()) return { ok: false, reason: "Enter a pass code." };
+  const t = await getTranslations("feedback.errors");
+  if (!ctx || ctx.gyms.length === 0) return { ok: false, reason: t("signInStudio") };
+  if (!code.trim()) return { ok: false, reason: t("enterCode") };
   const result = await checkInByCode({ code, gymIds: ctx.gyms.map((g) => g._id), staffUserId: ctx.user._id, method });
-  if (result.ok) revalidatePath("/studio/dashboard");
-  return result;
+  if (result.ok) {
+    revalidatePath("/studio/dashboard");
+    return result;
+  }
+  const region = await getRegion();
+  const values = result.values?.date ? { date: formatDate(result.values.date, region.locale) } : undefined;
+  return { ...result, reason: t(result.reason, values) };
 }
 
 export async function markDeskPaidAction(bookingId: string): Promise<ActionResult> {
   const ctx = await ownerOrError();
   const id = toObjectId(bookingId);
-  if (!ctx || !id) return { ok: false, error: "Booking not found." };
+  if (!ctx || !id) return fail("bookingNotFound");
   try {
     await markDeskPaid(ctx.gyms.map((g) => g._id), id);
   } catch (error) {
-    if (error instanceof BookingError) return { ok: false, error: error.message };
+    if (error instanceof BookingError) return fail(error.key, error.values);
     throw error;
   }
   revalidatePath("/studio/bookings");
-  return { ok: true, message: "Marked as paid." };
+  return done("markedPaid");
 }
 
 export async function ownerCancelBookingAction(bookingId: string): Promise<ActionResult> {
   const ctx = await ownerOrError();
   const id = toObjectId(bookingId);
-  if (!ctx || !id) return { ok: false, error: "Booking not found." };
+  if (!ctx || !id) return fail("bookingNotFound");
   try {
     await cancelBookingByOwner(ctx.gyms.map((g) => g._id), id);
   } catch (error) {
-    if (error instanceof BookingError) return { ok: false, error: error.message };
+    if (error instanceof BookingError) return fail(error.key, error.values);
     console.error("[studio] cancel failed", error);
-    return { ok: false, error: "Couldn't cancel this booking." };
+    return fail("cancelFailed");
   }
   revalidatePath("/studio/bookings");
-  return { ok: true, message: "Booking cancelled and the member was told." };
+  return done("cancelledMemberTold");
 }
 
 export async function replyReviewAction(reviewId: string, text: string): Promise<ActionResult> {
   const ctx = await ownerOrError();
   const id = toObjectId(reviewId);
-  if (!ctx || !id) return { ok: false, error: "Review not found." };
-  if (text.trim().length < 2 || text.length > 1000) return { ok: false, error: "Write a reply between 2 and 1000 characters." };
+  if (!ctx || !id) return fail("reviewNotFound");
+  if (text.trim().length < 2 || text.length > 1000) return fail("replyLength");
   try {
     await replyToReview(ctx.gyms.map((g) => g._id), id, text);
   } catch (error) {
-    if (error instanceof ReviewError) return { ok: false, error: error.message };
+    if (error instanceof ReviewError) return fail(error.key, error.values);
     throw error;
   }
   revalidatePath("/studio/reviews");
-  return { ok: true, message: "Reply posted." };
+  return done("replyPosted");
 }
 
 const csvCell = (value: unknown) => {
@@ -237,7 +246,7 @@ const csvCell = (value: unknown) => {
 /** Bookings as CSV for spreadsheets */
 export async function exportBookingsCsvAction(): Promise<ActionResult<{ csv: string; filename: string }>> {
   const ctx = await ownerOrError();
-  if (!ctx || ctx.gyms.length === 0) return { ok: false, error: "Please sign in again." };
+  if (!ctx || ctx.gyms.length === 0) return fail("signInAgain");
   const rows: BookingView[] = await listGymBookings({ gymIds: ctx.gyms.map((g) => g._id), status: "all", limit: 5000 });
   const header = ["Code", "Member", "Email", "Phone", "Gym", "Pass", "Start", "End", "Amount", "Currency", "Status", "Payment", "Paid", "Check-ins", "Booked at"];
   const lines = rows.map((b) =>
@@ -249,7 +258,7 @@ export async function exportBookingsCsvAction(): Promise<ActionResult<{ csv: str
 }
 
 const pricingSchema = z.object({
-  dayPass: money.refine((v) => v > 0, "Set a day pass price"),
+  dayPass: money.refine((v) => v > 0, "dayPass"),
   weekPass: money,
   monthPass: money,
   dailyDayPassLimit: z.coerce.number().int().min(0).max(5000).optional(),
@@ -260,9 +269,9 @@ export async function updatePricingAction(gymId: string, input: z.input<typeof p
   const ctx = await ownerOrError();
   const id = toObjectId(gymId);
   const gym = ctx?.gyms.find((g) => id && g._id.equals(id) && g.ownerId.equals(ctx.user._id));
-  if (!ctx || !gym) return { ok: false, error: "Only the owner can change prices." };
+  if (!ctx || !gym) return fail("ownerOnly");
   const parsed = pricingSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: "Check the prices.", fieldErrors: fieldErrors(parsed.error) };
+  if (!parsed.success) return invalid(parsed.error, "checkPrices");
   const { dayPass, weekPass, monthPass, dailyDayPassLimit } = parsed.data;
   await (await collections.gyms()).updateOne(
     { _id: gym._id },
@@ -278,5 +287,5 @@ export async function updatePricingAction(gymId: string, input: z.input<typeof p
   );
   revalidatePath("/studio", "layout");
   revalidatePath(`/gyms/${gym.slug}`);
-  return { ok: true, message: "Prices updated. New bookings use them right away." };
+  return done("pricesUpdated");
 }

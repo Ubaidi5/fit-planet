@@ -18,7 +18,9 @@
     "listYourGym": "Salonunu ekle",
     "memberSince": "{date} tarihinden beri üye",
     "browseGyms": "Tüm salonlara göz at",
-    "signOut": "Çıkış yap"
+    "signOut": "Çıkış yap",
+    "appLabel": "Uygulama",
+    "tabsLabel": "Uygulama sekmeleri"
   },
   "site": {
     "findGyms": "Salon bul",
@@ -28,7 +30,9 @@
     "studioLogin": "Stüdyo girişi",
     "logIn": "Giriş yap",
     "getStarted": "Başla",
-    "ownGym": "Salonun mu var? Stüdyo girişi"
+    "ownGym": "Salonun mu var? Stüdyo girişi",
+    "mainNav": "Ana menü",
+    "mobileNav": "Mobil menü"
   },
   "footer": {
     "members": "Üyeler",
@@ -82,12 +86,19 @@
       "busy": "Yoğun",
       "moderate": "Orta",
       "quiet": "Sakin"
-    }
+    },
+    "fromShort": "Başlangıç"
   },
   "orbit": {
     "eyebrow": "Orbit · yakındakileri keşfet",
     "title": "Etrafındaki salonlar, <accent>liste hâlinde değil</accent>",
-    "lead": "Yakın salonlar merkeze daha yakın durur. Her halka salonun şu anki doluluğunu gösterir, böylece sakin olanı hemen bulursun."
+    "lead": "Yakın salonlar merkeze daha yakın durur. Her halka salonun şu anki doluluğunu gösterir, böylece sakin olanı hemen bulursun.",
+    "ui": {
+      "chooseCity": "Şehir seç",
+      "you": "Sen",
+      "node": "{gym}, %{pct} dolu, {distance} uzakta",
+      "viewGym": "Salonu gör"
+    }
   },
   "passportSection": {
     "eyebrow": "Pasaportun",
@@ -176,7 +187,8 @@
       "search": {
         "title": "Salon ara",
         "text": "Bir şehir seç ya da konumunu kullan. Fiyat, olanaklar, puan ve anlık yoğunluğa göre filtrele.",
-        "meta": "{cities} şehir · {gyms} salon"
+        "meta": "{cities} şehir · {gyms} salon",
+        "metaSoon": "Her ay yeni şehirler"
       },
       "choose": {
         "title": "Pasonu seç",
@@ -240,8 +252,9 @@
     }
   },
   "stories": {
-    "eyebrow": "Pilot hikâyeleri",
-    "title": "İlk üyeler ve salonlar, <accent>kendi sözleriyle</accent>"
+    "eyebrow": "Üye yorumları",
+    "title": "Orada <accent>antrenman yapanların</accent> ağzından",
+    "at": "{gym}, {city}"
   },
   "cta": {
     "title": "Pasaportun <accent>bir dokunuş</accent> uzağında",
@@ -304,7 +317,9 @@
         "weekly": "Haftalık rezervasyonlar",
         "checkinsToday": "Bugünkü girişler",
         "capacityNow": "Şu anki doluluk",
-        "booked": "Yeni günlük paso alındı"
+        "booked": "Yeni günlük paso alındı",
+        "hoursSample": "06:00 - 23:00",
+        "distanceSample": "1,2 km"
       }
     },
     "form": {
@@ -1701,6 +1716,364 @@
     },
     "meta": {
       "description": "Salonunu Fit Planet ile yönet: rezervasyonlar, girişler, fiyatlar ve gelir tek yerde."
+    }
+  },
+  "heroWallet": {
+    "today": "Bugün",
+    "crowd": {
+      "busy": "Şu an kalabalık",
+      "moderate": "Şu an orta yoğunlukta",
+      "quiet": "Şu an sakin"
+    },
+    "opens": "{gym} · açılış {time}",
+    "open24": "{gym} · 7/24 açık"
+  },
+  "region": {
+    "current": "Bölge: {name}, {language}",
+    "choose": "Bölgeni seç",
+    "heading": "Bölge · Dil"
+  },
+  "feedback": {
+    "errors": {
+      "accountNotFound": "Hesap bulunamadı.",
+      "addExercise": "En az bir egzersiz ekle.",
+      "addPhotoFirst": "Yayına almadan önce en az bir fotoğraf ekle.",
+      "alreadyCheckedIn": "Giriş zaten yapıldı.",
+      "badCredentials": "E-posta ve şifre eşleşmiyor.",
+      "badRequest": "Bu istekte bir sorun var. Lütfen tekrar dene.",
+      "bookingCrashed": "Rezervasyon sırasında bir sorun oluştu. Senden ücret alınmadı.",
+      "bookingFailed": "Rezervasyon oluşturulamadı. Lütfen tekrar dene.",
+      "bookingNotFound": "Rezervasyon bulunamadı.",
+      "bookingUnpaid": "Bu rezervasyon hiç ödenmedi.",
+      "bookingWasCancelled": "Bu rezervasyon iptal edildi.",
+      "cancelDeadline": "Kartlar, başlangıçtan bir gün öncesine kadar iptal edilebilir.",
+      "cancelFailed": "Bu rezervasyon iptal edilemedi. Lütfen tekrar dene.",
+      "cannotCancel": "Bu rezervasyon iptal edilemez.",
+      "cannotDeleteComment": "Bu yorumu silemezsin.",
+      "cannotFollowSelf": "Kendini takip edemezsin.",
+      "checkFields": "İşaretli alanları kontrol et.",
+      "checkPrices": "Fiyatları kontrol et.",
+      "checkRoutine": "Rutini kontrol edip tekrar dene.",
+      "checkedInToday": "Bugün giriş zaten yapıldı.",
+      "chooseFile": "Yüklemek için bir dosya seç.",
+      "commentNotFound": "Yorum bulunamadı.",
+      "completeSet": "Bitirmeden önce en az bir seti tamamla.",
+      "dayPassUsed": "Bu günlük kart zaten kullanıldı.",
+      "emailTaken": "Bu e-postayla bir hesap zaten var. Giriş yapmayı dene.",
+      "emailUsesOtherSignIn": "Bu e-posta zaten Google veya e-posta bağlantısıyla giriş yapıyor. Onu kullan, sonra Güvenlik bölümünden şifre ekle.",
+      "emptyPost": "Bir şeyler yaz ya da fotoğraf ekle.",
+      "enterCode": "Bir kart kodu gir.",
+      "fileTooBig": "Dosyalar en fazla {mb} MB olabilir.",
+      "gymNotBooking": "Bu salon şu an rezervasyon almıyor.",
+      "gymNotFound": "Salon bulunamadı.",
+      "handleFailed": "Kullanıcı adı oluşturulamadı. Tekrar dene.",
+      "handleRules": "Kullanıcı adları 3-24 karakterdir: harf, rakam, nokta veya alt çizgi.",
+      "handleTaken": "Bu kullanıcı adı alınmış.",
+      "imageType": "JPG, PNG veya WebP görsel kullan.",
+      "linkFailed": "Bağlantı gönderilemedi. Lütfen tekrar dene.",
+      "listingSuspended": "Bu ilan askıya alındı. Destek ekibiyle iletişime geç.",
+      "mediaType": "JPG, PNG, WebP veya MP4 dosyası kullan.",
+      "noDeskPayment": "Resepsiyonda ödeme kullanılamıyor.",
+      "noSuchPass": "Bu koda sahip bir kart yok.",
+      "onlyConfirmedCancel": "Yalnızca onaylanmış rezervasyonlar iptal edilebilir.",
+      "ownGymReview": "Kendi salonunu değerlendiremezsin.",
+      "ownerOnly": "Bunu yalnızca salon sahibi yapabilir.",
+      "passExpired": "Bu kartın süresi {date} tarihinde doldu.",
+      "passNotOnSale": "Bu kart bu salonda satılmıyor.",
+      "passNotStarted": "Bu kart {date} tarihinde başlıyor.",
+      "personNotFound": "Kişi bulunamadı.",
+      "photoNotAllowed": "Bu fotoğraf eklenemez.",
+      "pickStartDate": "Geçerli bir başlangıç tarihi seç.",
+      "postNotFound": "Gönderi bulunamadı.",
+      "registerFailed": "Hesabın oluşturulamadı. Lütfen tekrar dene.",
+      "replyLength": "2 ile 1000 karakter arasında bir yanıt yaz.",
+      "resetExpired": "Bu bağlantının süresi doldu. Yenisini iste.",
+      "reviewNeedsBooking": "Önce burada bir kart al, sonra nasıl geçtiğini paylaş.",
+      "reviewNotFound": "Yorum bulunamadı.",
+      "routineGone": "Bu rutin artık mevcut değil.",
+      "routineLimit": "En fazla 100 rutin tutabilirsin. Yenisini eklemek için birini sil.",
+      "routineNotFound": "Rutin bulunamadı.",
+      "signInAgain": "Lütfen tekrar giriş yap.",
+      "signInFailed": "Giriş başarısız. Lütfen tekrar dene.",
+      "signInStudio": "Önce stüdyona giriş yap.",
+      "signInToBook": "Kart almak için giriş yap.",
+      "signInToReview": "Yorum bırakmak için giriş yap.",
+      "signInToSave": "Salonları kaydetmek için giriş yap.",
+      "soldOut": "O tarih için günlük kartlar tükendi. Başka bir gün dene.",
+      "startPassed": "Başlangıç tarihi salonun saat diliminde çoktan geçti.",
+      "templateNotFound": "Şablon bulunamadı.",
+      "tooFarAhead": "Kartlar en fazla {days} gün önceden alınabilir.",
+      "uploadFailed": "Yükleme başarısız. Lütfen tekrar dene.",
+      "validEmail": "Geçerli bir e-posta gir.",
+      "workoutNotFound": "Antrenman bulunamadı.",
+      "workoutUnreadable": "Bu antrenman okunamadı. Tekrar dene.",
+      "writeComment": "Önce bir yorum yaz.",
+      "wrongPassword": "Mevcut şifren doğru değil.",
+      "tooManyAttempts": "Çok fazla deneme. Birkaç dakika bekleyip tekrar dene."
+    },
+    "fields": {
+      "addExercise": "En az bir egzersiz ekle",
+      "area": "Semti ekle",
+      "atLeastOne": "En az 1",
+      "city": "Şehri ekle",
+      "comment": "Biraz daha anlat",
+      "country": "Bir ülke seç",
+      "currency": "Bir para birimi seç",
+      "dayPass": "Günlük kart fiyatı belirle",
+      "description": "En az bir iki cümle yaz",
+      "email": "Geçerli bir e-posta gir",
+      "guestName": "Kart üzerindeki adı gir",
+      "gymName": "Salonunun adını ekle",
+      "headline": "Kısa bir başlık ekle",
+      "name": "Adını yaz",
+      "password": "Şifreni gir",
+      "passwordLength": "En az 8 karakter kullan",
+      "passwordsMatch": "Şifreler eşleşmiyor",
+      "routineName": "Bir ad ver",
+      "startDate": "Bir başlangıç tarihi seç",
+      "street": "Sokak adresini ekle",
+      "target": "Bir hedef ekle",
+      "time": "SS:DD biçiminde yaz",
+      "tooLong": "Bu çok uzun",
+      "tooShort": "Bu çok kısa",
+      "invalid": "Bu alanı kontrol et"
+    },
+    "done": {
+      "bookingCancelled": "Rezervasyon iptal edildi.",
+      "cancelledMemberTold": "Rezervasyon iptal edildi ve üyeye bildirildi.",
+      "changesSaved": "Değişiklikler kaydedildi.",
+      "markedPaid": "Ödendi olarak işaretlendi.",
+      "passwordAdded": "Şifre eklendi. Artık bununla giriş yapabilirsin.",
+      "passwordChanged": "Şifre değiştirildi.",
+      "pricesUpdated": "Fiyatlar güncellendi. Yeni rezervasyonlar hemen bunları kullanır.",
+      "profileSaved": "Profil kaydedildi.",
+      "published": "Yayındasın. Üyeler artık rezervasyon yapabilir.",
+      "replyPosted": "Yanıt yayınlandı.",
+      "reportThanks": "Teşekkürler, inceleyeceğiz.",
+      "resetSent": "Bu e-postaya ait bir hesap varsa sıfırlama bağlantısı yolda.",
+      "reviewLive": "Teşekkürler! Yorumun yayında.",
+      "saved": "Kaydedildi.",
+      "savedToRoutines": "Rutinlerine kaydedildi",
+      "socialSaved": "Sosyal profil kaydedildi.",
+      "unpublished": "İlan aramalardan gizlendi."
+    }
+  },
+  "notify": {
+    "someone": "Biri",
+    "yourPost": "gönderin",
+    "theGym": "Salon",
+    "range": "{from} - {to}",
+    "bookingNew": {
+      "title": "Yeni {pass, select, day {günlük kart} week {haftalık kart} month {aylık kart} other {kart}} · {gym}",
+      "body": "{guest}, {dates} için rezervasyon yaptı · {price}, {paid, select, desk {resepsiyonda ödeyecek} other {online ödendi}}."
+    },
+    "bookingConfirmed": {
+      "title": "Rezervasyonun tamam",
+      "body": "{gym} · {pass, select, day {Günlük kart} week {Haftalık kart} month {Aylık kart} other {Kart}}, {dates}. QR kodunu resepsiyonda göster."
+    },
+    "bookingCancelledByMember": {
+      "title": "Rezervasyon iptal edildi",
+      "body": "{guest}, {startDate} tarihli {pass, select, day {günlük kartı} week {haftalık kartı} month {aylık kartı} other {kartı}} iptal etti."
+    },
+    "bookingCancelledByGym": {
+      "title": "Rezervasyonun iptal edildi",
+      "body": "{gym}, {startDate} tarihli {pass, select, day {günlük kartını} week {haftalık kartını} month {aylık kartını} other {kartını}} iptal etti.{refunded, select, yes { Ücretin tamamı iade ediliyor.} other {}}"
+    },
+    "passStarts": {
+      "title": "{pass, select, day {Günlük kartın} week {Haftalık kartın} month {Aylık kartın} other {Kartın}} yarın başlıyor",
+      "body": "{gym} seni bekliyor. QR kodunu resepsiyonda göster."
+    },
+    "passEnds": {
+      "title": "{pass, select, day {Günlük kartın} week {Haftalık kartın} month {Aylık kartın} other {Kartın}} yarın bitiyor",
+      "body": "Yarın {gym} için son günün. Salon sayfasından istediğin zaman yeni kart alabilirsin."
+    },
+    "reviewNew": {
+      "title": "Yeni {rating} yıldızlı yorum",
+      "body": "{name}, {gym} hakkında yazdı: “{title}”"
+    },
+    "reviewReply": {
+      "title": "{gym} yorumuna yanıt verdi",
+      "body": "{text}"
+    },
+    "socialLike": {
+      "title": "{name} gönderini beğendi",
+      "body": "{text}"
+    },
+    "socialComment": {
+      "title": "{name} yorum yaptı",
+      "body": "{text}"
+    },
+    "socialFollow": {
+      "title": "{name} seni takip etti",
+      "body": "Birbirinizin antrenmanlarını görmek için sen de takip et."
+    },
+    "checkin": {
+      "title": "Giriş yapıldı · {gym}",
+      "body": "İyi antrenmanlar."
+    },
+    "checkinStamp": {
+      "title": "Yeni damga: {gym}",
+      "body": "Pasaportuna {city} damgası eklendi. İyi antrenmanlar."
+    },
+    "studioReady": {
+      "title": "Stüdyon hazır",
+      "body": "{gym} taslak olarak kaydedildi. Hazır olduğunda Salon profili bölümünden yayınla."
+    }
+  },
+  "email": {
+    "dir": "ltr",
+    "footer": "Bu e-postayı Fit Planet hesabın olduğu için alıyorsun.",
+    "range": "{from} - {to}",
+    "magic": {
+      "subject": "Fit Planet giriş bağlantın",
+      "heading": "Fit Planet'e giriş yap",
+      "preheader": "Giriş için dokun. Bağlantı 24 saat geçerli.",
+      "body": "Giriş yapmak için aşağıdaki düğmeye dokun. Bağlantı 24 saat geçerlidir ve bir kez kullanılabilir. Sen istemediysen bu e-postayı yok sayabilirsin.",
+      "cta": "Giriş yap"
+    },
+    "reset": {
+      "subject": "Fit Planet şifreni sıfırla",
+      "heading": "Şifreni sıfırla",
+      "preheader": "Yeni bir şifre seç. Bağlantı 1 saat geçerli.",
+      "body": "Bu hesabın şifresini sıfırlama isteği geldi. Bu sen idiysen aşağıdan yeni bir şifre seç. Bağlantı 1 saat geçerlidir.",
+      "cta": "Yeni şifre seç"
+    },
+    "booking": {
+      "subject": "{gym} · {pass, select, day {günlük kartın} week {haftalık kartın} month {aylık kartın} other {kartın}}",
+      "heading": "Rezervasyonun tamam",
+      "intro": "Merhaba {name}, {gym} için {pass, select, day {günlük kartın} week {haftalık kartın} month {aylık kartın} other {kartın}} onaylandı.",
+      "preheader": "Geçerlilik: {dates}. QR kodunu resepsiyonda göster.",
+      "valid": "Geçerlilik",
+      "code": "Kart kodu",
+      "total": "Toplam",
+      "payAtDesk": "{price} (resepsiyonda ödenecek)",
+      "showQr": "QR kodunu resepsiyonda göster:",
+      "cta": "Kartımı aç"
+    }
+  },
+  "exerciseInfo": {
+    "ex001": {
+      "description": "Göğüs egzersizlerinin kralı. Tüm göğüste kütle ve güç kazandıran çok eklemli bir hareket.",
+      "s1": "Ayakların yere sağlam basacak şekilde düz sehpaya uzan",
+      "s2": "Barı omuz genişliğinden biraz geniş kavra",
+      "s3": "Barı sehpadan al ve göğsünün ortasına indir",
+      "s4": "Barı başlangıç pozisyonuna geri it",
+      "s5": "Sırtını hafif kavisli, kürek kemiklerini geride tut",
+      "t1": "Barı göğsünden sektirme",
+      "t2": "Bileklerini düz tut",
+      "t3": "Denge için topuklarından güç al"
+    },
+    "ex002": {
+      "description": "Daha dolgun ve belirgin bir görünüm için üst göğsü çalıştırır.",
+      "s1": "Sehpayı 30-45 derece eğime ayarla",
+      "s2": "Dambılları omuz hizasında, avuçlar öne bakacak şekilde tut",
+      "s3": "Kollar uzanana kadar dambılları yukarı it",
+      "s4": "Kontrollü şekilde başlangıç pozisyonuna indir"
+    },
+    "ex003": {
+      "description": "Göğüs, omuz ve arka kol için temel bir vücut ağırlığı egzersizi.",
+      "s1": "Eller omuz genişliğinde, plank pozisyonunda başla",
+      "s2": "Göğsün neredeyse yere değene kadar alçal",
+      "s3": "Başlangıç pozisyonuna geri it",
+      "s4": "Vücudunu baştan sona düz bir çizgide tut"
+    },
+    "ex004": {
+      "description": "Genişlik ve güç için en etkili sırt egzersizi.",
+      "s1": "Eller omuz genişliğinden biraz açık, bara asıl",
+      "s2": "Çenen barın üstüne çıkana kadar kendini çek",
+      "s3": "Kollar tamamen uzanana kadar kontrollü in",
+      "s4": "Sallanmaktan ve ivme kullanmaktan kaçın"
+    },
+    "ex005": {
+      "description": "Sırta kalınlık ve güç kazandıran çok eklemli bir hareket.",
+      "s1": "Ayaklar omuz genişliğinde, kalçadan öne eğil",
+      "s2": "Barı eller omuz genişliğinde olacak şekilde kavra",
+      "s3": "Barı göğsün altına ya da karnın üstüne çek",
+      "s4": "Sırtını düz tutarak kontrollü indir"
+    },
+    "ex006": {
+      "description": "Yeni başlayanlar için kanat kaslarını genişleten makine egzersizi.",
+      "s1": "Lat pulldown makinesine otur, barı geniş kavra",
+      "s2": "Barı üst göğsüne doğru çek",
+      "s3": "Aşağıda kürek kemiklerini sık",
+      "s4": "Kontrollü şekilde başlangıca dön"
+    },
+    "ex007": {
+      "description": "Omuz gücü için temel çok eklemli hareket.",
+      "s1": "Ayaklar omuz genişliğinde dur",
+      "s2": "Barı omuz hizasında tut",
+      "s3": "Kollar tamamen uzanana kadar barı başının üstüne it",
+      "s4": "Kontrollü şekilde başlangıç pozisyonuna indir"
+    },
+    "ex008": {
+      "description": "Omuz genişliği için yan deltoidleri hedefleyen izolasyon egzersizi.",
+      "s1": "Dambıllar yanlarında olacak şekilde dur",
+      "s2": "Kollarını yere paralel olana kadar yana kaldır",
+      "s3": "Dirseklerini hafif bükük tut",
+      "s4": "Kontrollü indir"
+    },
+    "ex009": {
+      "description": "Bacak egzersizlerinin kralı. Tüm alt vücutta kütle kazandırır.",
+      "s1": "Barı sırtının üst kısmına yerleştir",
+      "s2": "Ayaklar omuz genişliğinde dur",
+      "s3": "Uyluklar yere paralel olana kadar çömel",
+      "s4": "Topuklarından iterek yeniden kalk"
+    },
+    "ex010": {
+      "description": "Kalça menteşe hareketiyle arka bacak ve kalçayı çalıştırır.",
+      "s1": "Barı omuz genişliğinde kavra",
+      "s2": "Kalçanı geriye iterek öne eğil",
+      "s3": "Arka bacakta gerilme hissedene kadar barı bacakların boyunca indir",
+      "s4": "Kalçanı öne iterek başlangıca dön"
+    },
+    "ex011": {
+      "description": "Yeni başlayanlar için güvenli makine bacak egzersizi.",
+      "s1": "Leg press makinesine otur, ayaklar platformda omuz genişliğinde",
+      "s2": "Dizlerini 90 dereceye kadar bükerek ağırlığı indir",
+      "s3": "Ayaklarınla iterek bacaklarını uzat",
+      "s4": "Yukarıda dizlerini kilitleme"
+    },
+    "ex012": {
+      "description": "Ön kol kası için klasik hacim egzersizi.",
+      "s1": "Ayaklar omuz genişliğinde, barı alttan kavra",
+      "s2": "Barı omuz hizasına kadar kaldır",
+      "s3": "Dirseklerini yanlarında sabit tut",
+      "s4": "Kontrollü indir"
+    },
+    "ex013": {
+      "description": "Arka kolu izole eden kablo egzersizi.",
+      "s1": "Halat aparatlı kablo makinesine dön",
+      "s2": "Dirseklerini yanlarında tut",
+      "s3": "Kollar tamamen uzanana kadar halatı aşağı it",
+      "s4": "Kontrollü geri dön"
+    },
+    "ex014": {
+      "description": "Dengeyi geliştiren izometrik karın egzersizi.",
+      "s1": "Önkol plank pozisyonunda başla",
+      "s2": "Vücudunu baştan topuklara düz bir çizgide tut",
+      "s3": "Karnını sık ve pozisyonu koru",
+      "s4": "Boyunca düzenli nefes al"
+    },
+    "ex015": {
+      "description": "Kademeli ilerleme için ağırlıklı karın egzersizi.",
+      "s1": "Halat aparatlı kablo makinesinin önünde diz çök",
+      "s2": "Halatı başının arkasında tut",
+      "s3": "Dirseklerini dizlerine doğru getirerek kıvrıl",
+      "s4": "Kontrollü geri dön"
+    },
+    "ex016": {
+      "description": "Dayanıklılık ve kalori yakımı için klasik kardiyo.",
+      "s1": "Isınma yürüyüşüyle başla",
+      "s2": "Hızını yavaş yavaş koşu temposuna çıkar",
+      "s3": "İstediğin süre boyunca sabit tempoyu koru",
+      "s4": "Yavaş yürüyüşle soğu"
+    },
+    "ex017": {
+      "description": "Eklemleri yormayan tüm vücut kardiyosu.",
+      "s1": "Kürek makinesine otur, ayaklarını bağla",
+      "s2": "Kolu kavra, önce bacaklarınla it",
+      "s3": "Sonra kolu göğsüne çek",
+      "s4": "Hareketi tersine çevirerek geri dön"
     }
   }
 }

@@ -7,12 +7,18 @@ import { Reveal } from "@/components/motion/Reveal";
 import { CrowdCurve } from "@/components/pulse/CrowdCurve";
 import { cn } from "@/lib/utils";
 import { cityCode } from "@/lib/data/cities";
-import { mockGyms } from "@/lib/data/mock-gyms";
+import type { Gym } from "@/lib/types";
 import { Accent, SectionHeading } from "./SectionHeading";
 
-const featured = ["marina-box-dubai", "fitzone-karachi", "southbank-strength-london"]
-  .map((slug) => mockGyms.find((g) => g.slug === slug))
-  .filter((g): g is (typeof mockGyms)[number] => Boolean(g));
+/** Up to three gyms from different cities */
+function featuredGyms(gyms: Gym[]) {
+  const picked: Gym[] = [];
+  for (const gym of gyms) {
+    if (!picked.some((g) => g.address.city === gym.address.city)) picked.push(gym);
+    if (picked.length === 3) break;
+  }
+  return picked;
+}
 
 const points = [
   { icon: HiOutlineChartBar, key: "live" },
@@ -20,8 +26,9 @@ const points = [
   { icon: HiOutlineBellAlert, key: "alerts" },
 ];
 
-export default function PulseSection() {
+export default function PulseSection({ gyms }: { gyms: Gym[] }) {
   const t = useTranslations("pulse");
+  const featured = featuredGyms(gyms);
   const [active, setActive] = useState(featured[0]?.slug);
   const gym = featured.find((g) => g.slug === active) ?? featured[0];
   if (!gym) return null;

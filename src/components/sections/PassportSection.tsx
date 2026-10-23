@@ -3,15 +3,17 @@ import { HiOutlineGift, HiOutlineGlobeAlt, HiOutlineTrophy } from "react-icons/h
 import { Reveal } from "@/components/motion/Reveal";
 import { MrzLine } from "@/components/passport/MrzLine";
 import { Stamp } from "@/components/passport/Stamp";
+import { formatDate } from "@/lib/dates";
+import { getRegion } from "@/lib/i18n/server";
 import { Accent, SectionHeading } from "./SectionHeading";
 
 const stamps = [
-  { code: "KHI", label: "Karachi", date: "02 AUG", tone: "teal", shape: "circle", rotate: -10 },
-  { code: "DXB", label: "Dubai", date: "19 AUG", tone: "ochre", shape: "rect", rotate: 6 },
-  { code: "BER", label: "Berlin", date: "03 SEP", tone: "magenta", shape: "dashed", rotate: -4 },
-  { code: "LIS", label: "Lisbon", date: "07 SEP", tone: "violet", shape: "circle", rotate: 12 },
-  { code: "LON", label: "London", date: "15 SEP", tone: "teal", shape: "rect", rotate: -7 },
-  { code: "TYO", label: "Tokyo", date: "28 SEP", tone: "magenta", shape: "circle", rotate: 8 },
+  { code: "NYC", label: "New York", date: "2026-08-02", tone: "teal", shape: "circle", rotate: -10 },
+  { code: "DXB", label: "Dubai", date: "2026-08-19", tone: "ochre", shape: "rect", rotate: 6 },
+  { code: "BER", label: "Berlin", date: "2026-09-03", tone: "magenta", shape: "dashed", rotate: -4 },
+  { code: "IST", label: "Istanbul", date: "2026-09-07", tone: "violet", shape: "circle", rotate: 12 },
+  { code: "LON", label: "London", date: "2026-09-15", tone: "teal", shape: "rect", rotate: -7 },
+  { code: "SYD", label: "Sydney", date: "2026-09-28", tone: "magenta", shape: "circle", rotate: 8 },
 ] as const;
 
 const perks = [
@@ -27,7 +29,8 @@ const holderStats = [
 ];
 
 export default async function PassportSection() {
-  const t = await getTranslations("passportSection");
+  const [t, region] = await Promise.all([getTranslations("passportSection"), getRegion()]);
+  const stampDate = (date: string) => formatDate(date, region.locale, { day: "2-digit", month: "short" }).toLocaleUpperCase(region.locale);
   return (
     <section id="passport" className="scroll-mt-24 py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -48,7 +51,7 @@ export default async function PassportSection() {
               <div className="mt-6 grid grid-cols-3 place-items-center gap-y-6">
                 {stamps.map((stamp, index) => (
                   <Reveal key={stamp.code} delay={200 + index * 90}>
-                    <Stamp {...stamp} size="sm" className="sm:scale-125" />
+                    <Stamp {...stamp} date={stampDate(stamp.date)} size="sm" className="sm:scale-125" />
                   </Reveal>
                 ))}
               </div>
@@ -65,14 +68,14 @@ export default async function PassportSection() {
               </div>
               <div className="mt-6 flex items-center gap-4">
                 <span className="relative flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-ink text-2xl font-semibold text-volt">
-                  HS
+                  LH
                   <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1.5 bg-holo" />
                 </span>
                 <div className="min-w-0 font-mono text-[11px] tracking-[0.1em] text-gray-400 uppercase">
                   <p>{t("holder")}</p>
-                  <p className="mt-0.5 truncate font-sans text-xl font-semibold tracking-[-0.02em] text-ink normal-case">Hira Siddiqui</p>
+                  <p className="mt-0.5 truncate font-sans text-xl font-semibold tracking-[-0.02em] text-ink normal-case">Lena Hoffmann</p>
                   <p className="mt-2">{t("memberSince")}</p>
-                  <p className="mt-0.5 text-ink">MAR 2026</p>
+                  <p className="mt-0.5 text-ink">{formatDate("2026-03-01", region.locale, { month: "short", year: "numeric" }).toLocaleUpperCase(region.locale)}</p>
                 </div>
               </div>
               <dl className="mt-8 grid grid-cols-3 divide-x divide-dashed divide-gray-900/15 rounded-2xl border border-dashed border-gray-900/15 rtl:divide-x-reverse">
@@ -84,8 +87,8 @@ export default async function PassportSection() {
                 ))}
               </dl>
               <div className="mt-auto space-y-1 overflow-hidden pt-8" dir="ltr">
-                <MrzLine text="Siddiqui Hira FP0042 PK" className="text-[11px] text-gray-500 sm:text-[12px]" />
-                <MrzLine text="Stamps KHI DXB BER LIS LON TYO" className="text-[11px] text-gray-500 sm:text-[12px]" />
+                <MrzLine text="Hoffmann Lena FP0042 DE" className="text-[11px] text-gray-500 sm:text-[12px]" />
+                <MrzLine text="Stamps NYC DXB BER IST LON SYD" className="text-[11px] text-gray-500 sm:text-[12px]" />
               </div>
             </div>
           </div>

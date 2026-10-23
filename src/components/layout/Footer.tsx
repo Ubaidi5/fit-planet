@@ -2,9 +2,11 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { FaFacebookF, FaInstagram, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { Logo } from "@/components/brand/Logo";
-import { platformStats } from "@/lib/data/mock-platform";
+import { platformSnapshot } from "@/server/modules/platform";
 
-const footerLinks: { title: string; links: { href: string; label: string; city?: string }[] }[] = [
+type FooterGroup = { title: string; links: { href: string; label: string; city?: string }[] };
+
+const footerLinks: FooterGroup[] = [
   {
     title: "members",
     links: [
@@ -22,15 +24,6 @@ const footerLinks: { title: string; links: { href: string; label: string; city?:
       { href: "/studio/login", label: "studioLogin" },
     ],
   },
-  {
-    title: "explore",
-    links: [
-      { href: "/#orbit", label: "exploreNearby" },
-      { href: "/#stories", label: "stories" },
-      { href: "/gyms?city=Tokyo", label: "gymsIn", city: "Tokyo" },
-      { href: "/gyms?city=Berlin", label: "gymsIn", city: "Berlin" },
-    ],
-  },
 ];
 
 const socialLinks = [
@@ -41,7 +34,15 @@ const socialLinks = [
 ];
 
 const Footer = async () => {
-  const t = await getTranslations("footer");
+  const [t, { stats }] = await Promise.all([getTranslations("footer"), platformSnapshot()]);
+  const explore: FooterGroup = {
+    title: "explore",
+    links: [
+      ...(stats.gyms > 0 ? [{ href: "/#orbit", label: "exploreNearby" }] : []),
+      ...stats.cities.slice(0, 3).map((city) => ({ href: `/gyms?city=${encodeURIComponent(city)}`, label: "gymsIn", city })),
+    ],
+  };
+  const groups = explore.links.length > 0 ? [...footerLinks, explore] : footerLinks;
   return (
     <footer className="px-3 pb-3 sm:px-4 sm:pb-4">
       <div className="relative mx-auto max-w-7xl overflow-hidden rounded-4xl border border-gray-900/[0.06] bg-surface">
@@ -68,7 +69,7 @@ const Footer = async () => {
           </div>
 
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
-            {footerLinks.map((group) => (
+            {groups.map((group) => (
               <div key={t(group.title)}>
                 <h3 className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-gray-400">
                   {t(group.title)}
@@ -100,13 +101,15 @@ const Footer = async () => {
 
         <div className="flex flex-col items-center justify-between gap-3 border-t border-gray-900/[0.06] px-6 py-6 text-sm text-gray-500 sm:flex-row sm:px-10 lg:px-14">
           <p>{t("copyright", { year: new Date().getFullYear() })}</p>
-          <p className="flex items-center gap-2">
-            <span className="relative flex size-2">
-              <span className="absolute inset-0 animate-pulse-ring rounded-full bg-emerald-500" />
-              <span className="relative size-2 rounded-full bg-emerald-500" />
-            </span>
-            {t("liveIn", { count: platformStats.cities.length })}
-          </p>
+          {stats.cities.length > 0 && (
+            <p className="flex items-center gap-2">
+              <span className="relative flex size-2">
+                <span className="absolute inset-0 animate-pulse-ring rounded-full bg-emerald-500" />
+                <span className="relative size-2 rounded-full bg-emerald-500" />
+              </span>
+              {t("liveIn", { count: stats.cities.length })}
+            </p>
+          )}
         </div>
       </div>
     </footer>

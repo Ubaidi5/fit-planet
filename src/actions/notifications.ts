@@ -5,18 +5,19 @@ import type { ActionResult, NotificationView } from "@/lib/types";
 import { toObjectId } from "@/server/db/collections";
 import { getSessionUser } from "@/server/session";
 import { listNotifications, markRead, registerPushToken, removePushToken, unreadCount } from "@/server/modules/notifications";
+import { fail } from "./utils";
 
 export async function registerPushTokenAction(token: string, userAgent?: string): Promise<ActionResult> {
   const user = await getSessionUser();
-  if (!user) return { ok: false, error: "Not signed in." };
-  if (!token || token.length > 4096) return { ok: false, error: "Invalid token." };
+  if (!user) return fail("signInAgain");
+  if (!token || token.length > 4096) return fail("badRequest");
   await registerPushToken(user._id, token, userAgent?.slice(0, 300));
   return { ok: true };
 }
 
 export async function removePushTokenAction(token: string): Promise<ActionResult> {
   const user = await getSessionUser();
-  if (!user) return { ok: false, error: "Not signed in." };
+  if (!user) return fail("signInAgain");
   await removePushToken(user._id, token);
   return { ok: true };
 }
@@ -31,7 +32,7 @@ export async function notificationFeedAction(): Promise<{ unread: number; items:
 
 export async function markNotificationsReadAction(ids: string[] | "all"): Promise<ActionResult> {
   const user = await getSessionUser();
-  if (!user) return { ok: false, error: "Not signed in." };
+  if (!user) return fail("signInAgain");
   const parsed = ids === "all" ? "all" : ids.map(toObjectId).filter((id): id is NonNullable<typeof id> => id !== null);
   await markRead(user._id, parsed);
   revalidatePath("/app/notifications");

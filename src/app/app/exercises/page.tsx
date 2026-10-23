@@ -24,6 +24,9 @@ const selectClass =
 export default function ExerciseLibraryPage() {
   const t = useTranslations("library");
   const tr = useTranslations("training");
+  const ti = useTranslations("exerciseInfo");
+  // Catalogue text is translated; anything without a key keeps the English source
+  const info = (id: string, key: string, fallback: string) => (ti.has(`${id}.${key}`) ? ti(`${id}.${key}`) : fallback);
   const [query, setQuery] = useState("");
   const [muscle, setMuscle] = useState<MuscleGroup | "all">("all");
   const [equipment, setEquipment] = useState<Equipment | "all">("all");
@@ -157,17 +160,16 @@ export default function ExerciseLibraryPage() {
                         </span>
                       ))}
                     </div>
-                    {/* Descriptions and steps are English-only content for now */}
-                    <p className="text-[15px] leading-relaxed text-gray-700" lang="en">
-                      {e.description}
+                    <p className="text-[15px] leading-relaxed text-gray-700">
+                      {info(e.id, "description", e.description)}
                     </p>
                     <div>
                       <p className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">{t("how")}</p>
-                      <ol className="mt-2 space-y-2" lang="en">
+                      <ol className="mt-2 space-y-2">
                         {e.instructions.map((step, i) => (
                           <li key={i} className="flex gap-3 text-sm text-gray-700">
                             <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-canvas font-mono text-[11px] font-semibold text-gray-500">{i + 1}</span>
-                            <span className="pt-0.5">{step}</span>
+                            <span className="pt-0.5">{info(e.id, `s${i + 1}`, step)}</span>
                           </li>
                         ))}
                       </ol>
@@ -175,9 +177,9 @@ export default function ExerciseLibraryPage() {
                     {e.tips && e.tips.length > 0 && (
                       <div className="rounded-2xl bg-volt-soft/70 p-4">
                         <p className="font-mono text-[11px] tracking-[0.14em] text-emerald-800 uppercase">{t("tips")}</p>
-                        <ul className="mt-2 space-y-1.5 text-sm text-emerald-900" lang="en">
+                        <ul className="mt-2 space-y-1.5 text-sm text-emerald-900">
                           {e.tips.map((tip, i) => (
-                            <li key={i}>{tip}</li>
+                            <li key={i}>{info(e.id, `t${i + 1}`, tip)}</li>
                           ))}
                         </ul>
                       </div>

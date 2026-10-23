@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-type StampTone = "teal" | "magenta" | "ochre" | "violet";
+export type StampTone = "teal" | "magenta" | "ochre" | "violet";
 type StampShape = "circle" | "rect" | "dashed";
 
 interface StampProps {

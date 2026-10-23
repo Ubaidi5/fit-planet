@@ -8,7 +8,7 @@ import {
   HiOutlineTicket,
 } from "react-icons/hi2";
 import { Reveal } from "@/components/motion/Reveal";
-import { platformStats } from "@/lib/data/mock-platform";
+import type { PlatformStats } from "@/server/modules/platform";
 import { Accent, SectionHeading } from "./SectionHeading";
 
 const steps = [
@@ -18,7 +18,7 @@ const steps = [
   { key: "train", icon: HiOutlineQrCode },
 ];
 
-const HowItWorks = async () => {
+const HowItWorks = async ({ stats }: { stats: PlatformStats }) => {
   const t = await getTranslations("how");
   return (
     <section id="how-it-works" className="relative py-24 lg:py-32">
@@ -74,7 +74,9 @@ const HowItWorks = async () => {
                     {t(`steps.${step.key}.text`)}
                   </p>
                   <p className="mt-4 inline-flex rounded-full bg-canvas px-3 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-900/[0.05]">
-                    {t(`steps.${step.key}.meta`, { cities: platformStats.cities.length, gyms: platformStats.partnerGyms })}
+                    {step.key === "search" && stats.gyms === 0
+                      ? t("steps.search.metaSoon")
+                      : t(`steps.${step.key}.meta`, { cities: stats.cities.length, gyms: stats.gyms })}
                   </p>
                 </div>
               </Reveal>

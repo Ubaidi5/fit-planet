@@ -22,6 +22,8 @@ import {
   unfollow,
   updateSocialProfile,
 } from "@/server/modules/social";
+import { done, fail } from "./utils";
+import { AppError } from "@/server/errors";
 
 type Handler<T> = () => Promise<ActionResult<T>>;
 
@@ -30,20 +32,20 @@ async function run<T>(fn: Handler<T>): Promise<ActionResult<T>> {
   try {
     return await fn();
   } catch (error) {
-    if (error instanceof SocialError || error instanceof RoutineError) return { ok: false, error: error.message };
+    if (error instanceof AppError) return fail(error.key, error.values);
     throw error;
   }
 }
 
 async function requireMember() {
   const user = await getSessionUser();
-  if (!user) throw new SocialError("Please sign in again.");
+  if (!user) throw new SocialError("signInAgain");
   return user;
 }
 
-function idOrThrow(id: string, what = "Post") {
+function idOrThrow(id: string, what: "postNotFound" | "workoutNotFound" | "routineNotFound" | "commentNotFound" | "personNotFound" = "postNotFound") {
   const oid = toObjectId(id);
-  if (!oid) throw new SocialError(`${what} not found.`);
+  if (!oid) throw new SocialError(what);
   return oid;
 }
 
@@ -59,7 +61,7 @@ export async function createPostAction(input: { text: string; imageUrl?: string 
 export async function shareWorkoutAction(workoutId: string, text: string): Promise<ActionResult<{ postId: string }>> {
   return run(async () => {
     const user = await requireMember();
-    const postId = await shareWorkout(user, idOrThrow(workoutId, "Workout"), String(text ?? ""));
+    const postId = await shareWorkout(user, idOrThrow(workoutId, "workoutNotFound"), String(text ?? ""));
     revalidatePath("/app/social");
     return { ok: true, data: { postId: postId.toHexString() } };
   });
@@ -68,7 +70,7 @@ export async function shareWorkoutAction(workoutId: string, text: string): Promi
 export async function shareRoutineAction(routineId: string, text: string): Promise<ActionResult<{ postId: string }>> {
   return run(async () => {
     const user = await requireMember();
-    const postId = await shareRoutine(user, idOrThrow(routineId, "Routine"), String(text ?? ""));
+    const postId = await shareRoutine(user, idOrThrow(routineId, "routineNotFound"), String(text ?? ""));
     revalidatePath("/app/social");
     return { ok: true, data: { postId: postId.toHexString() } };
   });
@@ -79,7 +81,7 @@ export async function saveRoutineFromPostAction(postId: string): Promise<ActionR
     const user = await requireMember();
     const routineId = await copyRoutineFromPost(user._id, idOrThrow(postId));
     revalidatePath("/app/routines");
-    return { ok: true, data: { routineId: routineId.toHexString() }, message: "Saved to your routines" };
+    return done("savedToRoutines", undefined, { data: { routineId: routineId.toHexString() } });
   });
 }
 
@@ -96,7 +98,7 @@ export async function reportPostAction(postId: string, reason: string): Promise<
   return run(async () => {
     const user = await requireMember();
     await reportPost(user._id, idOrThrow(postId), String(reason ?? ""));
-    return { ok: true, message: "Thanks, we'll take a look." };
+    return done("reportThanks");
   });
 }
 
@@ -126,7 +128,7 @@ export async function addCommentAction(postId: string, text: string): Promise<Ac
 export async function deleteCommentAction(commentId: string): Promise<ActionResult> {
   return run(async () => {
     const user = await requireMember();
-    await deleteComment(user._id, idOrThrow(commentId, "Comment"));
+    await deleteComment(user._id, idOrThrow(commentId, "commentNotFound"));
     return { ok: true };
   });
 }
@@ -134,7 +136,7 @@ export async function deleteCommentAction(commentId: string): Promise<ActionResu
 export async function followAction(userId: string, on: boolean): Promise<ActionResult> {
   return run(async () => {
     const user = await requireMember();
-    const target = idOrThrow(userId, "Person");
+    const target = idOrThrow(userId, "personNotFound");
     if (on) await follow(user, target);
     else await unfollow(user._id, target);
     revalidatePath("/app/social", "layout");
@@ -146,7 +148,7 @@ export async function loadMoreFeedAction(mode: "following" | "discover", before:
   return run(async () => {
     const user = await requireMember();
     const date = new Date(before);
-    if (Number.isNaN(date.getTime())) throw new SocialError("Bad cursor.");
+    if (Number.isNaN(date.getTime())) throw new SocialError("badRequest");
     return { ok: true, data: await feed(user._id, mode === "discover" ? "discover" : "following", date) };
   });
 }
@@ -162,9 +164,9 @@ export async function updateSocialProfileAction(input: z.input<typeof socialProf
   return run(async () => {
     const user = await requireMember();
     const parsed = socialProfileSchema.safeParse(input);
-    if (!parsed.success) throw new SocialError("Usernames are 3 to 24 characters.");
+    if (!parsed.success) throw new SocialError("handleRules");
     await updateSocialProfile(user._id, parsed.data);
     revalidatePath("/app/social", "layout");
-    return { ok: true, message: "Social profile saved." };
+    return done("socialSaved");
   });
 }

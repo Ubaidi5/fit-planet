@@ -1,3 +1,4 @@
+import { AppError } from "@/server/errors";
 import "server-only";
 import { ObjectId } from "mongodb";
 import { collections } from "@/server/db/collections";
@@ -5,7 +6,7 @@ import type { RoutineDoc, RoutineItemDoc, WorkoutDoc } from "@/server/db/models"
 import type { RoutineView, WorkoutView } from "@/lib/types";
 import { exerciseById, isTimed, routineTemplates } from "@/lib/data/exercises";
 
-export class RoutineError extends Error {}
+export class RoutineError extends AppError {}
 
 export function toRoutineView(doc: RoutineDoc): RoutineView {
   return {
@@ -54,7 +55,7 @@ export interface RoutineInput {
 
 function cleanItems(items: RoutineItemDoc[]) {
   const valid = items.filter((i) => exerciseById.has(i.exerciseId));
-  if (valid.length === 0) throw new RoutineError("Add at least one exercise.");
+  if (valid.length === 0) throw new RoutineError("addExercise");
   return valid;
 }
 
@@ -67,11 +68,11 @@ export async function saveRoutine(userId: ObjectId, input: RoutineInput, id?: Ob
       { _id: id, userId },
       { $set: { name: input.name, category: input.category, notes: input.notes, items, updatedAt: now } },
     );
-    if (res.matchedCount === 0) throw new RoutineError("Routine not found.");
+    if (res.matchedCount === 0) throw new RoutineError("routineNotFound");
     return id;
   }
   const count = await routines.countDocuments({ userId });
-  if (count >= 100) throw new RoutineError("You can keep up to 100 routines. Delete one to add another.");
+  if (count >= 100) throw new RoutineError("routineLimit");
   const doc: RoutineDoc = {
     _id: new ObjectId(),
     userId,
@@ -90,7 +91,7 @@ export async function saveRoutine(userId: ObjectId, input: RoutineInput, id?: Ob
 
 export async function copyTemplate(userId: ObjectId, templateId: string) {
   const template = routineTemplates.find((t) => t.id === templateId);
-  if (!template) throw new RoutineError("Template not found.");
+  if (!template) throw new RoutineError("templateNotFound");
   return saveRoutine(userId, { name: template.name, category: template.category, notes: template.notes, items: template.items });
 }
 
@@ -112,7 +113,7 @@ export interface WorkoutInput {
 export async function logWorkout(userId: ObjectId, input: WorkoutInput) {
   const routines = await collections.routines();
   const routine = input.routineId ? await routines.findOne({ _id: input.routineId, userId }) : null;
-  if (input.routineId && !routine) throw new RoutineError("Routine not found.");
+  if (input.routineId && !routine) throw new RoutineError("routineNotFound");
 
   const exercises = input.exercises.filter((e) => exerciseById.has(e.exerciseId));
   let volumeKg = 0;
@@ -124,7 +125,7 @@ export async function logWorkout(userId: ObjectId, input: WorkoutInput) {
       if (!isTimed(e.exerciseId) && set.weight) volumeKg += set.reps * set.weight;
     }
   }
-  if (setsDone === 0) throw new RoutineError("Complete at least one set before finishing.");
+  if (setsDone === 0) throw new RoutineError("completeSet");
 
   const now = new Date();
   // Clamp to something sane in case the device clock or a stale draft is off
@@ -178,10 +179,10 @@ export async function lastWeights(userId: ObjectId, exerciseIds: string[]) {
 /** Copies a routine someone shared to the feed into the viewer's own routines */
 export async function copyRoutineFromPost(userId: ObjectId, postId: ObjectId) {
   const post = await (await collections.posts()).findOne({ _id: postId, kind: "routine" });
-  if (!post?.routine) throw new RoutineError("That routine is no longer available.");
+  if (!post?.routine) throw new RoutineError("routineGone");
   if (post.visibility !== "public" && !post.userId.equals(userId)) {
     const follows = await (await collections.follows()).findOne({ followerId: userId, followeeId: post.userId });
-    if (!follows) throw new RoutineError("That routine is no longer available.");
+    if (!follows) throw new RoutineError("routineGone");
   }
   return saveRoutine(userId, { name: post.routine.name, category: post.routine.category, items: post.routine.items });
 }

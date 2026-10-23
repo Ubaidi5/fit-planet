@@ -163,12 +163,22 @@ export interface NotificationDoc {
   _id: ObjectId;
   userId: ObjectId;
   type: NotificationType;
+  /** Message key under "notify" in messages/*.json; rendered in the reader's language */
+  key?: string;
+  params?: NotificationParams;
+  /** English snapshot, used for older records without a key */
   title: string;
   body: string;
   link?: string;
   read: boolean;
   createdAt: Date;
 }
+
+/**
+ * Values for a notification message. By convention "startDate"/"endDate" are
+ * YYYY-MM-DD, "amount" goes with "currency", and an empty "name" reads as "Someone".
+ */
+export type NotificationParams = Record<string, string | number>;
 
 export interface PushTokenDoc {
   _id: ObjectId;

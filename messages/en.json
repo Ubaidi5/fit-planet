@@ -18,7 +18,9 @@
     "listYourGym": "List your gym",
     "memberSince": "Member since {date}",
     "browseGyms": "Browse all gyms",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "appLabel": "App",
+    "tabsLabel": "App tabs"
   },
   "site": {
     "findGyms": "Find gyms",
@@ -28,7 +30,9 @@
     "studioLogin": "Studio login",
     "logIn": "Log in",
     "getStarted": "Get started",
-    "ownGym": "Own a gym? Studio login"
+    "ownGym": "Own a gym? Studio login",
+    "mainNav": "Main",
+    "mobileNav": "Mobile"
   },
   "footer": {
     "members": "Members",
@@ -82,12 +86,19 @@
       "busy": "Busy",
       "moderate": "Moderate",
       "quiet": "Quiet"
-    }
+    },
+    "fromShort": "From"
   },
   "orbit": {
     "eyebrow": "Orbit · explore nearby",
     "title": "Gyms around you, <accent>not in a list</accent>",
-    "lead": "Closer gyms sit nearer the centre. Each ring fills with how busy it is right now, so the quiet one is easy to spot."
+    "lead": "Closer gyms sit nearer the centre. Each ring fills with how busy it is right now, so the quiet one is easy to spot.",
+    "ui": {
+      "chooseCity": "Choose a city",
+      "you": "You",
+      "node": "{gym}, {pct}% full, {distance} away",
+      "viewGym": "View gym"
+    }
   },
   "passportSection": {
     "eyebrow": "Your passport",
@@ -176,7 +187,8 @@
       "search": {
         "title": "Search for gyms",
         "text": "Pick a city or use your location. Filter by price, amenities, rating and how busy it is right now.",
-        "meta": "{cities} cities · {gyms} gyms"
+        "meta": "{cities} cities · {gyms} gyms",
+        "metaSoon": "New cities every month"
       },
       "choose": {
         "title": "Choose your pass",
@@ -240,8 +252,9 @@
     }
   },
   "stories": {
-    "eyebrow": "Pilot stories",
-    "title": "Early members and gyms, <accent>in their words</accent>"
+    "eyebrow": "Member reviews",
+    "title": "Straight from the people <accent>who trained there</accent>",
+    "at": "{gym}, {city}"
   },
   "cta": {
     "title": "Your passport is <accent>one tap</accent> away",
@@ -304,7 +317,9 @@
         "weekly": "Weekly bookings",
         "checkinsToday": "Check-ins today",
         "capacityNow": "Capacity now",
-        "booked": "New day pass booked"
+        "booked": "New day pass booked",
+        "hoursSample": "06:00 to 23:00",
+        "distanceSample": "1.2 km"
       }
     },
     "form": {
@@ -1701,6 +1716,364 @@
     },
     "meta": {
       "description": "Run your gym on Fit Planet: bookings, check-ins, pricing and revenue in one place."
+    }
+  },
+  "heroWallet": {
+    "today": "Today",
+    "crowd": {
+      "busy": "Busy right now",
+      "moderate": "Steady right now",
+      "quiet": "Quiet right now"
+    },
+    "opens": "{gym} · opens {time}",
+    "open24": "{gym} · open 24/7"
+  },
+  "region": {
+    "current": "Region: {name}, {language}",
+    "choose": "Choose your region",
+    "heading": "Region · Language"
+  },
+  "feedback": {
+    "errors": {
+      "accountNotFound": "Account not found.",
+      "addExercise": "Add at least one exercise.",
+      "addPhotoFirst": "Add at least one photo before going live.",
+      "alreadyCheckedIn": "Already checked in.",
+      "badCredentials": "That email and password don't match.",
+      "badRequest": "Something about that request wasn't right. Please try again.",
+      "bookingCrashed": "Something went wrong while booking. You haven't been charged.",
+      "bookingFailed": "Couldn't create the booking. Please try again.",
+      "bookingNotFound": "Booking not found.",
+      "bookingUnpaid": "This booking was never paid.",
+      "bookingWasCancelled": "This booking was cancelled.",
+      "cancelDeadline": "Passes can be cancelled until the day before they start.",
+      "cancelFailed": "Couldn't cancel this booking. Please try again.",
+      "cannotCancel": "This booking can't be cancelled.",
+      "cannotDeleteComment": "You can't delete this comment.",
+      "cannotFollowSelf": "You can't follow yourself.",
+      "checkFields": "Check the highlighted fields.",
+      "checkPrices": "Check the prices.",
+      "checkRoutine": "Check the routine and try again.",
+      "checkedInToday": "Already checked in today.",
+      "chooseFile": "Choose a file to upload.",
+      "commentNotFound": "Comment not found.",
+      "completeSet": "Complete at least one set before finishing.",
+      "dayPassUsed": "This day pass has already been used.",
+      "emailTaken": "An account with this email already exists. Try signing in.",
+      "emailUsesOtherSignIn": "This email already signs in with Google or an email link. Use that, then add a password in Security.",
+      "emptyPost": "Write something or add a photo.",
+      "enterCode": "Enter a pass code.",
+      "fileTooBig": "Files can be up to {mb} MB.",
+      "gymNotBooking": "This gym isn't taking bookings right now.",
+      "gymNotFound": "Gym not found.",
+      "handleFailed": "Couldn't create a username. Try again.",
+      "handleRules": "Usernames are 3 to 24 letters, numbers, dots or underscores.",
+      "handleTaken": "That username is taken.",
+      "imageType": "Use a JPG, PNG or WebP image.",
+      "linkFailed": "We couldn't send the link. Please try again.",
+      "listingSuspended": "This listing is suspended. Contact support.",
+      "mediaType": "Use a JPG, PNG, WebP or MP4 file.",
+      "noDeskPayment": "Paying at the desk isn't available.",
+      "noSuchPass": "No pass with that code.",
+      "onlyConfirmedCancel": "Only confirmed bookings can be cancelled.",
+      "ownGymReview": "You can't review your own gym.",
+      "ownerOnly": "Only the gym's owner can do that.",
+      "passExpired": "This pass expired on {date}.",
+      "passNotOnSale": "This pass isn't on sale at this gym.",
+      "passNotStarted": "This pass starts on {date}.",
+      "personNotFound": "Person not found.",
+      "photoNotAllowed": "That photo can't be attached.",
+      "pickStartDate": "Pick a valid start date.",
+      "postNotFound": "Post not found.",
+      "registerFailed": "We couldn't create your account. Please try again.",
+      "replyLength": "Write a reply between 2 and 1000 characters.",
+      "resetExpired": "This reset link has expired. Ask for a new one.",
+      "reviewNeedsBooking": "Book a pass here first, then share how it went.",
+      "reviewNotFound": "Review not found.",
+      "routineGone": "That routine is no longer available.",
+      "routineLimit": "You can keep up to 100 routines. Delete one to add another.",
+      "routineNotFound": "Routine not found.",
+      "signInAgain": "Please sign in again.",
+      "signInFailed": "Sign-in failed. Please try again.",
+      "signInStudio": "Sign in to your studio first.",
+      "signInToBook": "Sign in to book a pass.",
+      "signInToReview": "Sign in to leave a review.",
+      "signInToSave": "Sign in to save gyms.",
+      "soldOut": "Day passes for that date are sold out. Try another day.",
+      "startPassed": "The start date has already passed in the gym's timezone.",
+      "templateNotFound": "Template not found.",
+      "tooFarAhead": "Passes can be booked up to {days} days ahead.",
+      "uploadFailed": "Upload failed. Please try again.",
+      "validEmail": "Enter a valid email.",
+      "workoutNotFound": "Workout not found.",
+      "workoutUnreadable": "Couldn't read this workout. Try again.",
+      "writeComment": "Write a comment first.",
+      "wrongPassword": "Your current password isn't right.",
+      "tooManyAttempts": "Too many attempts. Wait a few minutes and try again."
+    },
+    "fields": {
+      "addExercise": "Add at least one exercise",
+      "area": "Add the neighbourhood",
+      "atLeastOne": "At least 1",
+      "city": "Add the city",
+      "comment": "Tell people a bit more",
+      "country": "Pick a country",
+      "currency": "Pick a currency",
+      "dayPass": "Set a day pass price",
+      "description": "Write at least a sentence or two",
+      "email": "Enter a valid email",
+      "guestName": "Enter the name for the pass",
+      "gymName": "Add your gym's name",
+      "headline": "Add a short headline",
+      "name": "Tell us your name",
+      "password": "Enter your password",
+      "passwordLength": "Use at least 8 characters",
+      "passwordsMatch": "Passwords don't match",
+      "routineName": "Give it a name",
+      "startDate": "Pick a start date",
+      "street": "Add the street address",
+      "target": "Add a target",
+      "time": "Use HH:MM",
+      "tooLong": "That's too long",
+      "tooShort": "That's too short",
+      "invalid": "Check this field"
+    },
+    "done": {
+      "bookingCancelled": "Booking cancelled.",
+      "cancelledMemberTold": "Booking cancelled and the member was told.",
+      "changesSaved": "Changes saved.",
+      "markedPaid": "Marked as paid.",
+      "passwordAdded": "Password added. You can now sign in with it.",
+      "passwordChanged": "Password changed.",
+      "pricesUpdated": "Prices updated. New bookings use them right away.",
+      "profileSaved": "Profile saved.",
+      "published": "You're live. Members can book you now.",
+      "replyPosted": "Reply posted.",
+      "reportThanks": "Thanks, we'll take a look.",
+      "resetSent": "If that email has an account, a reset link is on its way.",
+      "reviewLive": "Thanks! Your review is live.",
+      "saved": "Saved.",
+      "savedToRoutines": "Saved to your routines",
+      "socialSaved": "Social profile saved.",
+      "unpublished": "Listing hidden from search."
+    }
+  },
+  "notify": {
+    "someone": "Someone",
+    "yourPost": "your post",
+    "theGym": "The gym",
+    "range": "{from} to {to}",
+    "bookingNew": {
+      "title": "New {pass, select, day {day pass} week {week pass} month {month pass} other {pass}} at {gym}",
+      "body": "{guest} booked for {dates} · {price}, {paid, select, desk {pays at the desk} other {paid online}}."
+    },
+    "bookingConfirmed": {
+      "title": "You're booked in",
+      "body": "{pass, select, day {Day pass} week {Week pass} month {Month pass} other {Pass}} at {gym} for {dates}. Show your QR code at the desk."
+    },
+    "bookingCancelledByMember": {
+      "title": "Booking cancelled",
+      "body": "{guest} cancelled a {pass, select, day {day pass} week {week pass} month {month pass} other {pass}} for {startDate}."
+    },
+    "bookingCancelledByGym": {
+      "title": "Your booking was cancelled",
+      "body": "{gym} cancelled your {pass, select, day {day pass} week {week pass} month {month pass} other {pass}} for {startDate}.{refunded, select, yes { A full refund is on its way.} other {}}"
+    },
+    "passStarts": {
+      "title": "Your {pass, select, day {day pass} week {week pass} month {month pass} other {pass}} starts tomorrow",
+      "body": "{gym} is expecting you. Show the QR code at the desk."
+    },
+    "passEnds": {
+      "title": "Your {pass, select, day {day pass} week {week pass} month {month pass} other {pass}} ends tomorrow",
+      "body": "Tomorrow is your last day at {gym}. Book another pass any time from the gym page."
+    },
+    "reviewNew": {
+      "title": "New {rating}-star review",
+      "body": "{name} reviewed {gym}: “{title}”"
+    },
+    "reviewReply": {
+      "title": "{gym} replied to your review",
+      "body": "{text}"
+    },
+    "socialLike": {
+      "title": "{name} liked your post",
+      "body": "{text}"
+    },
+    "socialComment": {
+      "title": "{name} commented",
+      "body": "{text}"
+    },
+    "socialFollow": {
+      "title": "{name} followed you",
+      "body": "Follow back to see each other's workouts."
+    },
+    "checkin": {
+      "title": "Checked in at {gym}",
+      "body": "Have a great session."
+    },
+    "checkinStamp": {
+      "title": "New stamp: {gym}",
+      "body": "Your passport just got a {city} stamp. Have a great session."
+    },
+    "studioReady": {
+      "title": "Your studio is ready",
+      "body": "{gym} is saved as a draft. Publish it from Gym profile when you're happy with it."
+    }
+  },
+  "email": {
+    "dir": "ltr",
+    "footer": "You are receiving this because you have a Fit Planet account.",
+    "range": "{from} to {to}",
+    "magic": {
+      "subject": "Your Fit Planet sign-in link",
+      "heading": "Sign in to Fit Planet",
+      "preheader": "Tap to sign in. The link expires in 24 hours.",
+      "body": "Tap the button below to sign in. The link expires in 24 hours and can be used once. If you didn't ask for it, you can ignore this email.",
+      "cta": "Sign in"
+    },
+    "reset": {
+      "subject": "Reset your Fit Planet password",
+      "heading": "Reset your password",
+      "preheader": "Choose a new password. The link expires in 1 hour.",
+      "body": "Someone asked to reset the password for this account. If it was you, choose a new one below. The link expires in 1 hour.",
+      "cta": "Choose a new password"
+    },
+    "booking": {
+      "subject": "Your {pass, select, day {day pass} week {week pass} month {month pass} other {pass}} at {gym}",
+      "heading": "You're booked in",
+      "intro": "Hi {name}, your {pass, select, day {day pass} week {week pass} month {month pass} other {pass}} at {gym} is confirmed.",
+      "preheader": "Valid {dates}. Show the QR code at the desk.",
+      "valid": "Valid",
+      "code": "Pass code",
+      "total": "Total",
+      "payAtDesk": "{price} (pay at the desk)",
+      "showQr": "Show the QR code at the desk:",
+      "cta": "Open my pass"
+    }
+  },
+  "exerciseInfo": {
+    "ex001": {
+      "description": "The king of chest exercises. A compound movement that builds overall chest mass and strength.",
+      "s1": "Lie on a flat bench with your feet firmly on the ground",
+      "s2": "Grip the barbell slightly wider than shoulder width",
+      "s3": "Unrack the bar and lower it to your mid-chest",
+      "s4": "Press the bar back up to the starting position",
+      "s5": "Keep your back slightly arched and shoulder blades retracted",
+      "t1": "Don't bounce the bar off your chest",
+      "t2": "Keep your wrists straight",
+      "t3": "Drive through your heels for stability"
+    },
+    "ex002": {
+      "description": "Targets the upper chest for a fuller, more defined look.",
+      "s1": "Set bench to 30-45 degree incline",
+      "s2": "Hold dumbbells at shoulder level with palms facing forward",
+      "s3": "Press dumbbells up until arms are extended",
+      "s4": "Lower with control to starting position"
+    },
+    "ex003": {
+      "description": "A fundamental bodyweight exercise for chest, shoulders, and triceps.",
+      "s1": "Start in a plank position with hands shoulder-width apart",
+      "s2": "Lower your body until chest nearly touches the floor",
+      "s3": "Push back up to starting position",
+      "s4": "Keep your body in a straight line throughout"
+    },
+    "ex004": {
+      "description": "The ultimate back exercise for building width and strength.",
+      "s1": "Hang from bar with hands slightly wider than shoulder-width",
+      "s2": "Pull yourself up until chin is above the bar",
+      "s3": "Lower with control to full arm extension",
+      "s4": "Avoid swinging or using momentum"
+    },
+    "ex005": {
+      "description": "A compound movement that builds back thickness and strength.",
+      "s1": "Stand with feet shoulder-width apart, bend at hips",
+      "s2": "Grip barbell with hands shoulder-width apart",
+      "s3": "Pull bar to lower chest/upper abdomen",
+      "s4": "Lower with control, keep back flat"
+    },
+    "ex006": {
+      "description": "A machine-based exercise great for beginners to build lat width.",
+      "s1": "Sit at lat pulldown machine, grab bar with wide grip",
+      "s2": "Pull bar down to upper chest",
+      "s3": "Squeeze shoulder blades together at bottom",
+      "s4": "Return with control to starting position"
+    },
+    "ex007": {
+      "description": "The primary compound movement for building shoulder strength.",
+      "s1": "Stand with feet shoulder-width apart",
+      "s2": "Hold barbell at shoulder height",
+      "s3": "Press bar overhead until arms are fully extended",
+      "s4": "Lower with control to starting position"
+    },
+    "ex008": {
+      "description": "Isolation exercise that targets the side deltoids for width.",
+      "s1": "Stand with dumbbells at your sides",
+      "s2": "Raise arms out to the sides until parallel to floor",
+      "s3": "Keep slight bend in elbows",
+      "s4": "Lower with control"
+    },
+    "ex009": {
+      "description": "The king of leg exercises. Builds overall lower body mass.",
+      "s1": "Position barbell on upper back",
+      "s2": "Stand with feet shoulder-width apart",
+      "s3": "Squat down until thighs are parallel to floor",
+      "s4": "Drive through heels to stand back up"
+    },
+    "ex010": {
+      "description": "Targets hamstrings and glutes with a hip-hinge movement.",
+      "s1": "Hold barbell with shoulder-width grip",
+      "s2": "Hinge at hips, pushing them back",
+      "s3": "Lower bar along legs until you feel hamstring stretch",
+      "s4": "Drive hips forward to return to start"
+    },
+    "ex011": {
+      "description": "Machine-based leg exercise safe for beginners.",
+      "s1": "Sit in leg press machine with feet shoulder-width on platform",
+      "s2": "Lower the weight by bending knees to 90 degrees",
+      "s3": "Press through feet to extend legs",
+      "s4": "Don't lock out knees at the top"
+    },
+    "ex012": {
+      "description": "Classic bicep builder for arm mass.",
+      "s1": "Stand with feet shoulder-width, hold barbell with underhand grip",
+      "s2": "Curl bar up to shoulder level",
+      "s3": "Keep elbows stationary at your sides",
+      "s4": "Lower with control"
+    },
+    "ex013": {
+      "description": "Cable exercise that isolates the triceps.",
+      "s1": "Stand facing cable machine with rope attachment",
+      "s2": "Keep elbows at your sides",
+      "s3": "Push rope down until arms are fully extended",
+      "s4": "Return with control"
+    },
+    "ex014": {
+      "description": "Isometric core exercise that builds stability.",
+      "s1": "Start in forearm plank position",
+      "s2": "Keep body in straight line from head to heels",
+      "s3": "Engage core and hold position",
+      "s4": "Breathe steadily throughout"
+    },
+    "ex015": {
+      "description": "Weighted ab exercise for progressive overload.",
+      "s1": "Kneel in front of cable machine with rope attachment",
+      "s2": "Hold rope behind head",
+      "s3": "Crunch down, bringing elbows toward knees",
+      "s4": "Return with control"
+    },
+    "ex016": {
+      "description": "Classic cardio for endurance and calorie burn.",
+      "s1": "Start with warm-up walk",
+      "s2": "Gradually increase speed to running pace",
+      "s3": "Maintain steady pace for desired duration",
+      "s4": "Cool down with slow walk"
+    },
+    "ex017": {
+      "description": "Full-body cardio that's easy on the joints.",
+      "s1": "Sit on rower with feet strapped in",
+      "s2": "Grab handle, push with legs first",
+      "s3": "Then pull handle to chest",
+      "s4": "Reverse motion to return"
     }
   }
 }

@@ -1,3 +1,4 @@
+import { AppError } from "@/server/errors";
 import "server-only";
 import { ObjectId } from "mongodb";
 import { collections } from "@/server/db/collections";
@@ -5,7 +6,7 @@ import type { ReviewDoc, UserDoc } from "@/server/db/models";
 import { notify } from "./notifications";
 import { refreshRating, toReview } from "./gyms";
 
-export class ReviewError extends Error {}
+export class ReviewError extends AppError {}
 
 export interface ReviewInput {
   rating: number;
@@ -23,11 +24,11 @@ export async function upsertReview(user: UserDoc, gymId: ObjectId, input: Review
     collections.gyms(),
   ]);
   const gym = await gyms.findOne({ _id: gymId }, { projection: { ownerId: 1, name: 1, slug: 1 } });
-  if (!gym) throw new ReviewError("Gym not found.");
-  if (gym.ownerId.equals(user._id)) throw new ReviewError("You can't review your own gym.");
+  if (!gym) throw new ReviewError("gymNotFound");
+  if (gym.ownerId.equals(user._id)) throw new ReviewError("ownGymReview");
 
   const booked = await bookings.findOne({ userId: user._id, gymId, status: { $in: ["confirmed", "expired"] } }, { projection: { _id: 1 } });
-  if (!booked) throw new ReviewError("Book a pass here first, then share how it went.");
+  if (!booked) throw new ReviewError("reviewNeedsBooking");
   const visited = await checkins.findOne({ userId: user._id, gymId }, { projection: { _id: 1 } });
 
   const existing = await reviews.findOne({ gymId, userId: user._id });
@@ -46,8 +47,8 @@ export async function upsertReview(user: UserDoc, gymId: ObjectId, input: Review
     await reviews.insertOne({ _id: new ObjectId(), gymId, userId: user._id, helpful: 0, createdAt: new Date(), ...fields });
     await notify(gym.ownerId, {
       type: "review.new",
-      title: `New ${input.rating}-star review`,
-      body: `${fields.authorName} reviewed ${gym.name}: "${fields.title}"`,
+      key: "reviewNew",
+      params: { rating: input.rating, name: fields.authorName, gym: gym.name, title: fields.title },
       link: "/studio/reviews",
     });
   }
@@ -61,13 +62,13 @@ export async function replyToReview(gymIds: ObjectId[], reviewId: ObjectId, text
     { $set: { reply: { text: text.trim(), at: new Date() } } },
     { returnDocument: "after" },
   );
-  if (!review) throw new ReviewError("Review not found.");
+  if (!review) throw new ReviewError("reviewNotFound");
   if (review.userId) {
     const gym = await (await collections.gyms()).findOne({ _id: review.gymId }, { projection: { name: 1, slug: 1 } });
     await notify(review.userId, {
       type: "review.reply",
-      title: `${gym?.name ?? "The gym"} replied to your review`,
-      body: text.slice(0, 140),
+      key: "reviewReply",
+      params: { gym: gym?.name ?? "", text: text.slice(0, 140) },
       link: gym ? `/gyms/${gym.slug}?tab=reviews` : undefined,
       silent: true,
     });

@@ -1,3 +1,4 @@
+import { AppError } from "@/server/errors";
 import "server-only";
 import { randomInt } from "node:crypto";
 import { MongoServerError, ObjectId, type Filter } from "mongodb";
@@ -10,12 +11,13 @@ import { env } from "@/server/env";
 import { payments, paymentProvider } from "@/server/services/payments";
 import { email } from "@/server/services/email";
 import { bookingConfirmedEmail } from "@/server/services/email/templates";
+import { translatorFor } from "@/server/i18n";
 import { notify } from "./notifications";
 
 /** How far ahead a pass can be booked */
 export const MAX_DAYS_AHEAD = 60;
 
-export class BookingError extends Error {}
+export class BookingError extends AppError {}
 
 const CODE_ALPHABET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
 
@@ -104,21 +106,21 @@ export interface CreateBookingResult {
 export async function createBooking(input: CreateBookingInput): Promise<CreateBookingResult> {
   const gyms = await collections.gyms();
   const gym = await gyms.findOne({ _id: input.gymId });
-  if (!gym || gym.status !== "published") throw new BookingError("This gym isn't taking bookings right now.");
+  if (!gym || gym.status !== "published") throw new BookingError("gymNotBooking");
 
   const today = todayIn(gym.timezone);
-  if (!isIsoDate(input.startDate)) throw new BookingError("Pick a valid start date.");
+  if (!isIsoDate(input.startDate)) throw new BookingError("pickStartDate");
   const ahead = daysBetween(today, input.startDate);
-  if (ahead < 0) throw new BookingError("The start date has already passed in the gym's timezone.");
-  if (ahead > MAX_DAYS_AHEAD) throw new BookingError(`Passes can be booked up to ${MAX_DAYS_AHEAD} days ahead.`);
+  if (ahead < 0) throw new BookingError("startPassed");
+  if (ahead > MAX_DAYS_AHEAD) throw new BookingError("tooFarAhead", { days: MAX_DAYS_AHEAD });
 
   if (input.paymentMethod === "desk" && !env.payments.allowPayAtDesk) {
-    throw new BookingError("Paying at the desk isn't available.");
+    throw new BookingError("noDeskPayment");
   }
 
   const meta = passMeta[input.passType];
   const amount = gym.pricing[meta.pricingKey];
-  if (!amount || amount <= 0) throw new BookingError("This pass isn't on sale at this gym.");
+  if (!amount || amount <= 0) throw new BookingError("passNotOnSale");
 
   const bookings = await collections.bookings();
 
@@ -130,7 +132,7 @@ export async function createBooking(input: CreateBookingInput): Promise<CreateBo
       startDate: input.startDate,
       status: { $in: ["pending", "confirmed"] },
     });
-    if (sold >= gym.capacity.dailyDayPassLimit) throw new BookingError("Day passes for that date are sold out. Try another day.");
+    if (sold >= gym.capacity.dailyDayPassLimit) throw new BookingError("soldOut");
   }
 
   const now = new Date();
@@ -166,7 +168,7 @@ export async function createBooking(input: CreateBookingInput): Promise<CreateBo
       if (!(error instanceof MongoServerError && error.code === 11000)) throw error;
     }
   }
-  if (!booking) throw new BookingError("Couldn't create the booking. Please try again.");
+  if (!booking) throw new BookingError("bookingFailed");
 
   if (input.paymentMethod === "desk") {
     await onBookingConfirmed(booking, gym);
@@ -231,23 +233,28 @@ export async function markPaymentFailed(bookingId: ObjectId) {
 
 /** Side effects of a new confirmed booking: owner alert, member alert, receipt email */
 async function onBookingConfirmed(booking: BookingDoc, gym: GymDoc) {
-  const meta = passMeta[booking.passType];
-  const price = formatMoney(booking.amount, booking.currency);
-  const dates =
-    meta.days > 1 ? `${formatDate(booking.startDate)} to ${formatDate(booking.endDate)}` : formatDate(booking.startDate, "en", { weekday: "short", day: "numeric", month: "short" });
-  const paidNote = booking.paymentMethod === "desk" ? "pays at the desk" : "paid online";
+  const params = {
+    pass: booking.passType,
+    gym: gym.name,
+    guest: booking.guest.name,
+    startDate: booking.startDate,
+    endDate: booking.endDate,
+    amount: booking.amount,
+    currency: booking.currency,
+    paid: booking.paymentMethod === "desk" ? "desk" : "online",
+  };
 
   await Promise.all([
     notify(booking.ownerId, {
       type: "booking.new",
-      title: `New ${meta.label.toLowerCase()} at ${gym.name}`,
-      body: `${booking.guest.name} booked for ${dates} · ${price}, ${paidNote}.`,
+      key: "bookingNew",
+      params,
       link: `/studio/bookings?focus=${booking._id.toHexString()}`,
     }),
     notify(booking.userId, {
       type: "booking.confirmed",
-      title: "You're booked in",
-      body: `${meta.label} at ${gym.name} for ${dates}. Show your QR code at the desk.`,
+      key: "bookingConfirmed",
+      params,
       link: `/app/passes/${booking._id.toHexString()}`,
       silent: true,
     }),
@@ -255,16 +262,27 @@ async function onBookingConfirmed(booking: BookingDoc, gym: GymDoc) {
 
   if (booking.guest.email) {
     try {
+      const member = await (await collections.users()).findOne({ _id: booking.userId }, { projection: { regionCode: 1 } });
+      const { t, region } = await translatorFor(member?.regionCode, "email");
+      const price = formatMoney(booking.amount, booking.currency, region.locale);
+      const dates =
+        booking.endDate !== booking.startDate
+          ? t("range", { from: formatDate(booking.startDate, region.locale), to: formatDate(booking.endDate, region.locale) })
+          : formatDate(booking.startDate, region.locale, { weekday: "short", day: "numeric", month: "short" });
       await email().send(
-        bookingConfirmedEmail(booking.guest.email, {
-          name: booking.guest.name,
-          gymName: gym.name,
-          passLabel: meta.label,
-          dates,
-          code: booking.code,
-          amount: booking.paymentMethod === "desk" ? `${price} (pay at the desk)` : price,
-          url: `${env.appUrl}/app/passes/${booking._id.toHexString()}`,
-        }),
+        bookingConfirmedEmail(
+          booking.guest.email,
+          {
+            name: booking.guest.name,
+            gymName: gym.name,
+            pass: booking.passType,
+            dates,
+            code: booking.code,
+            amount: booking.paymentMethod === "desk" ? t("booking.payAtDesk", { price }) : price,
+            url: `${env.appUrl}/app/passes/${booking._id.toHexString()}`,
+          },
+          t,
+        ),
       );
     } catch (error) {
       console.error("[booking] receipt email failed", error);
@@ -296,17 +314,17 @@ export async function getUserBooking(userId: ObjectId, bookingId: ObjectId) {
 export async function cancelBookingByMember(userId: ObjectId, bookingId: ObjectId) {
   const bookings = await collections.bookings();
   const doc = await bookings.findOne({ _id: bookingId, userId });
-  if (!doc) throw new BookingError("Booking not found.");
+  if (!doc) throw new BookingError("bookingNotFound");
   const gym = await (await collections.gyms()).findOne({ _id: doc.gymId });
-  if (!gym) throw new BookingError("Gym not found.");
+  if (!gym) throw new BookingError("gymNotFound");
 
   if (doc.status === "pending") {
     await bookings.updateOne({ _id: doc._id }, { $set: { status: "cancelled", cancelledAt: new Date() } });
     return;
   }
-  if (doc.status !== "confirmed") throw new BookingError("This booking can't be cancelled.");
+  if (doc.status !== "confirmed") throw new BookingError("cannotCancel");
   if (doc.checkinCount > 0 || doc.startDate <= todayIn(gym.timezone)) {
-    throw new BookingError("Passes can be cancelled until the day before they start.");
+    throw new BookingError("cancelDeadline");
   }
 
   let refunded = false;
@@ -320,8 +338,8 @@ export async function cancelBookingByMember(userId: ObjectId, bookingId: ObjectI
   );
   await notify(doc.ownerId, {
     type: "booking.cancelled",
-    title: "Booking cancelled",
-    body: `${doc.guest.name} cancelled a ${passMeta[doc.passType].label.toLowerCase()} for ${formatDate(doc.startDate)}.`,
+    key: "bookingCancelledByMember",
+    params: { guest: doc.guest.name, pass: doc.passType, startDate: doc.startDate },
     link: `/studio/bookings?focus=${doc._id.toHexString()}`,
   });
 }
@@ -363,14 +381,14 @@ export async function markDeskPaid(gymIds: ObjectId[], bookingId: ObjectId) {
     { _id: bookingId, gymId: { $in: gymIds }, paymentMethod: "desk", status: "confirmed" },
     { $set: { paymentStatus: "paid" } },
   );
-  if (result.matchedCount === 0) throw new BookingError("Booking not found.");
+  if (result.matchedCount === 0) throw new BookingError("bookingNotFound");
 }
 
 /** Owner cancels a booking, refunding online payments */
 export async function cancelBookingByOwner(gymIds: ObjectId[], bookingId: ObjectId) {
   const bookings = await collections.bookings();
   const doc = await bookings.findOne({ _id: bookingId, gymId: { $in: gymIds } });
-  if (!doc || doc.status !== "confirmed") throw new BookingError("Only confirmed bookings can be cancelled.");
+  if (!doc || doc.status !== "confirmed") throw new BookingError("onlyConfirmedCancel");
   let refunded = false;
   if (doc.paymentStatus === "paid" && doc.paymentMethod === "online" && doc.paymentProvider && doc.paymentRef) {
     await paymentProvider(doc.paymentProvider)?.refund(doc.paymentRef);
@@ -383,8 +401,8 @@ export async function cancelBookingByOwner(gymIds: ObjectId[], bookingId: Object
   const gym = await (await collections.gyms()).findOne({ _id: doc.gymId }, { projection: { name: 1 } });
   await notify(doc.userId, {
     type: "booking.cancelled",
-    title: "Your booking was cancelled",
-    body: `${gym?.name ?? "The gym"} cancelled your ${passMeta[doc.passType].label.toLowerCase()} for ${formatDate(doc.startDate)}.${refunded ? " A full refund is on its way." : ""}`,
+    key: "bookingCancelledByGym",
+    params: { gym: gym?.name ?? "", pass: doc.passType, startDate: doc.startDate, refunded: refunded ? "yes" : "no" },
     link: `/app/passes/${doc._id.toHexString()}`,
   });
 }

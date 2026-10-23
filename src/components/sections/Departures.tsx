@@ -7,24 +7,30 @@ import { HiArrowUpRight } from "react-icons/hi2";
 import { Reveal } from "@/components/motion/Reveal";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { countryName, localTimeIn } from "@/lib/i18n/format";
-import { cityMeta } from "@/lib/data/cities";
-import { gymCities, mockGyms } from "@/lib/data/mock-gyms";
+import { cityCode } from "@/lib/data/cities";
+import type { Gym } from "@/lib/types";
 
-const rows = gymCities.map((city) => {
-  const gyms = mockGyms.filter((g) => g.address.city === city);
-  const load =
-    gyms.reduce((sum, g) => sum + g.capacity.current, 0) /
-    gyms.reduce((sum, g) => sum + g.capacity.max, 0);
-  const cheapest = gyms.reduce((min, g) => (g.pricing.dayPass < min.pricing.dayPass ? g : min), gyms[0]);
-  return {
-    city,
-    meta: cityMeta[city],
-    gyms: gyms.length,
-    from: cheapest.pricing.dayPass,
-    currency: cheapest.currency,
-    load: Math.round(load * 100),
-  };
-});
+/** One board row per city, at most this many */
+const MAX_ROWS = 7;
+
+function boardRows(gyms: Gym[], cities: string[]) {
+  return cities.slice(0, MAX_ROWS).map((city) => {
+    const inCity = gyms.filter((g) => g.address.city === city);
+    const current = inCity.reduce((sum, g) => sum + g.capacity.current, 0);
+    const max = inCity.reduce((sum, g) => sum + g.capacity.max, 0);
+    const cheapest = inCity.reduce((min, g) => (g.pricing.dayPass < min.pricing.dayPass ? g : min), inCity[0]);
+    return {
+      city,
+      code: cityCode(city),
+      country: cheapest.country,
+      timezone: cheapest.timezone,
+      gyms: inCity.length,
+      from: cheapest.pricing.dayPass,
+      currency: cheapest.currency,
+      load: max > 0 ? Math.round((current / max) * 100) : 0,
+    };
+  });
+}
 
 function status(load: number) {
   if (load >= 75) return { label: "busy", className: "bg-stamp-magenta/20 text-[oklch(0.8_0.12_5)]" };
@@ -50,16 +56,19 @@ function FlapCode({ code }: { code: string }) {
   );
 }
 
-export default function Departures() {
+export default function Departures({ gyms, cities }: { gyms: Gym[]; cities: string[] }) {
   const { region, money } = useLocale();
   const t = useTranslations("departures");
   const [now, setNow] = useState<Date | null>(null);
+  const rows = boardRows(gyms, cities);
 
   useEffect(() => {
     setNow(new Date());
     const timer = window.setInterval(() => setNow(new Date()), 30_000);
     return () => window.clearInterval(timer);
   }, []);
+
+  if (rows.length === 0) return null;
 
   return (
     <section className="px-3 py-6 sm:px-4">
@@ -102,21 +111,21 @@ export default function Departures() {
                     href={`/gyms?city=${encodeURIComponent(row.city)}`}
                     className="group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 border-b border-white/10 py-4 transition-colors hover:bg-white/[0.03] md:grid-cols-[7rem_minmax(0,1fr)_6rem_5rem_7rem_7rem_2.5rem] md:gap-4"
                   >
-                    <FlapCode code={row.meta?.code ?? row.city.slice(0, 3).toUpperCase()} />
+                    <FlapCode code={row.code} />
                     <span className="min-w-0">
                       <span className="block truncate text-[17px] font-medium">{row.city}</span>
                       <span className="block truncate text-[13px] text-white/50">
-                        {row.meta ? countryName(row.meta.country, region.locale) : ""}
+                        {countryName(row.country, region.locale)}
                       </span>
                     </span>
                     <span className="font-mono text-sm text-white/80 tabular-nums max-md:col-start-3 max-md:row-start-1 max-md:text-end">
-                      {now && row.meta ? localTimeIn(row.meta.timezone, region.locale, now) : "--:--"}
+                      {now ? localTimeIn(row.timezone, region.locale, now) : "--:--"}
                     </span>
                     <span className="font-mono text-sm text-white/70 tabular-nums max-md:hidden">
                       {String(row.gyms).padStart(2, "0")}
                     </span>
                     <span className="font-mono text-sm text-white tabular-nums max-md:col-span-2 max-md:col-start-1">
-                      <span className="text-white/40 md:hidden">From </span>
+                      <span className="text-white/40 md:hidden">{t("fromShort")} </span>
                       {money(row.from, row.currency)}
                     </span>
                     <span className="max-md:col-start-3 max-md:justify-self-end">
