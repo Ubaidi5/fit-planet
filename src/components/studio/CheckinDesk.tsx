@@ -111,7 +111,7 @@ export function CheckinDesk() {
   const booking = result?.booking;
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-start">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-start">
       <div className="space-y-4">
         {/* Camera */}
         <div className="relative aspect-square overflow-hidden rounded-[2rem] bg-ink shadow-lift sm:aspect-[4/3]">

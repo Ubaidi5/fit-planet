@@ -30,7 +30,7 @@ export default async function StudioReviewsPage({ searchParams }: { searchParams
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
       <PageHeader eyebrow={t("eyebrow")} title={t("title")} description={unanswered > 0 ? t("waiting", { count: unanswered }) : t("allAnswered")} />
 
-      <div className="grid gap-6 lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start">
         <aside className="space-y-4 lg:sticky lg:top-6">
           <section className="rounded-[1.75rem] bg-surface p-5 shadow-soft ring-1 ring-gray-900/[0.06]">
             <div className="flex items-end gap-3">
@@ -66,7 +66,7 @@ export default async function StudioReviewsPage({ searchParams }: { searchParams
               </dl>
             )}
           </section>
-          <nav className="flex gap-1 lg:flex-col">
+          <nav className="grid grid-cols-2 gap-1.5 lg:flex lg:flex-col lg:gap-1">
             {[
               ["", t("filters.all"), all.length],
               ["unanswered", t("filters.unanswered"), unanswered],
@@ -76,7 +76,7 @@ export default async function StudioReviewsPage({ searchParams }: { searchParams
                 key={label}
                 href={value ? `?filter=${value}` : "?"}
                 className={cn(
-                  "flex h-10 flex-1 items-center justify-between gap-2 rounded-full px-4 text-sm font-medium lg:flex-none",
+                  "flex h-10 min-w-0 items-center justify-between gap-2 rounded-full px-4 text-sm font-medium",
                   (filter ?? "") === value ? "bg-ink text-white" : "text-gray-600 hover:bg-gray-900/5",
                 )}
               >

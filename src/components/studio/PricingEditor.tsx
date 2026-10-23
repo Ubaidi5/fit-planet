@@ -47,7 +47,7 @@ export function PricingEditor({ gymId, currency, initial, sales }: Props) {
 
   return (
     <div className="space-y-4">
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-3">
         {rows.map((row) => {
           const value = values[row.key];
           const perDay = row.days > 1 && value > 0 ? value / row.days : null;

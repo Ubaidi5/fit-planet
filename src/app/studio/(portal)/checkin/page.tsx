@@ -43,7 +43,7 @@ export default async function CheckinPage() {
         <form action={leaveGymAction} className="mt-10 flex flex-col items-start gap-2 border-t border-gray-900/[0.06] pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-gray-500">{tt("staffOf", { gym: gym.name })}</p>
           <input type="hidden" name="gymId" value={gym._id.toHexString()} />
-          <button type="submit" className="h-9 cursor-pointer rounded-full px-3.5 text-[13px] font-semibold text-red-600 transition-colors hover:bg-red-50">
+          <button type="submit" className="-ms-3.5 h-9 cursor-pointer rounded-full px-3.5 text-[13px] font-semibold text-red-600 transition-colors hover:bg-red-50 sm:ms-0">
             {tt("leave")}
           </button>
         </form>

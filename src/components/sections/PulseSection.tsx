@@ -36,7 +36,7 @@ export default function PulseSection({ gyms }: { gyms: Gym[] }) {
 
   return (
     <section className="py-24 lg:py-32">
-      <div className="mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20 lg:px-8">
+      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] items-center gap-14 px-4 sm:px-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-20 lg:px-8">
         <div>
           <SectionHeading
             align="left"
