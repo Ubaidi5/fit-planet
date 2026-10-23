@@ -24,7 +24,11 @@ export type NotificationKey =
   | "socialFollow"
   | "checkin"
   | "checkinStamp"
-  | "studioReady";
+  | "studioReady"
+  | "gymVerified"
+  | "gymSuspended"
+  | "gymRestored"
+  | "postRemoved";
 
 export interface NotifyInput {
   type: NotificationType;

@@ -1934,6 +1934,22 @@
     "studioReady": {
       "title": "Tu estudio está listo",
       "body": "{gym} se guardó como borrador. Publícalo desde Perfil del gimnasio cuando te guste cómo queda."
+    },
+    "gymVerified": {
+      "title": "{gym} está verificado",
+      "body": "Los miembros ya ven una insignia de verificado en tu ficha."
+    },
+    "gymSuspended": {
+      "title": "{gym} está suspendido",
+      "body": "Tu ficha está oculta mientras la revisamos. Responde a nuestro correo o contacta con soporte para resolverlo."
+    },
+    "gymRestored": {
+      "title": "{gym} ha vuelto",
+      "body": "Tu ficha se ha restaurado como borrador. Revísala y vuelve a publicarla desde el perfil del gimnasio."
+    },
+    "postRemoved": {
+      "title": "Se ha eliminado una de tus publicaciones",
+      "body": "Incumplía nuestras normas de la comunidad tras las denuncias de otros miembros."
     }
   },
   "email": {

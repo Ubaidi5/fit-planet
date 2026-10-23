@@ -1934,6 +1934,22 @@
     "studioReady": {
       "title": "Stüdyon hazır",
       "body": "{gym} taslak olarak kaydedildi. Hazır olduğunda Salon profili bölümünden yayınla."
+    },
+    "gymVerified": {
+      "title": "{gym} doğrulandı",
+      "body": "Üyeler artık ilanında doğrulanmış rozetini görüyor."
+    },
+    "gymSuspended": {
+      "title": "{gym} askıya alındı",
+      "body": "İnceleme sürerken ilanın gizlendi. Çözmek için e-postamızı yanıtla ya da destekle iletişime geç."
+    },
+    "gymRestored": {
+      "title": "{gym} geri döndü",
+      "body": "İlanın taslak olarak geri yüklendi. Kontrol et ve salon profilinden yeniden yayınla."
+    },
+    "postRemoved": {
+      "title": "Bir gönderin kaldırıldı",
+      "body": "Üyelerin şikâyetleri sonrası topluluk kurallarımızı ihlal ettiği görüldü."
     }
   },
   "email": {

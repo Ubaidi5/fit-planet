@@ -92,6 +92,12 @@ export const env = {
     jurisdiction: read("LEGAL_JURISDICTION"),
   },
 
+  /** Accounts with these emails get the admin console at /admin */
+  adminEmails: (read("ADMIN_EMAILS") ?? "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean),
+
   /** Bearer token the server's cron sends to /api/cron/* */
   cronSecret: read("CRON_SECRET"),
 

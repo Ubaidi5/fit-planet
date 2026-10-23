@@ -1934,6 +1934,22 @@
     "studioReady": {
       "title": "Dein Studio ist bereit",
       "body": "{gym} ist als Entwurf gespeichert. Veröffentliche es unter Studioprofil, wenn alles passt."
+    },
+    "gymVerified": {
+      "title": "{gym} ist verifiziert",
+      "body": "Mitglieder sehen jetzt ein Verifiziert-Abzeichen bei deinem Eintrag."
+    },
+    "gymSuspended": {
+      "title": "{gym} ist gesperrt",
+      "body": "Dein Eintrag ist ausgeblendet, während wir ihn prüfen. Antworte auf unsere E-Mail oder kontaktiere den Support, um das zu klären."
+    },
+    "gymRestored": {
+      "title": "{gym} ist zurück",
+      "body": "Dein Eintrag wurde als Entwurf wiederhergestellt. Prüfe ihn und veröffentliche ihn erneut im Gym-Profil."
+    },
+    "postRemoved": {
+      "title": "Ein Beitrag von dir wurde entfernt",
+      "body": "Er hat nach Meldungen von Mitgliedern gegen unsere Community-Richtlinien verstoßen."
     }
   },
   "email": {

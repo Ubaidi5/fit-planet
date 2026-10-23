@@ -124,3 +124,8 @@ and the sign-up form. They read the business details from these keys:
 Germany requires a real name, postal address and email on the imprint before
 launch. The texts are written in plain English as a solid starting point;
 have a lawyer check them for the EU, UAE and Türkiye before going live.
+
+## 10. Admin console
+
+Set `ADMIN_EMAILS` in the server's `.env` to your own email (comma-separated for
+more people), sign in with that account and open `/admin`.

@@ -27,6 +27,8 @@ export interface UserDoc {
   passwordUnverified?: boolean;
   /** Sessions signed in before this moment are no longer accepted */
   sessionsValidFrom?: Date;
+  /** Set by an admin; a suspended account can't sign in */
+  suspendedAt?: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -289,4 +291,14 @@ export interface ReportDoc {
   reporterId: ObjectId;
   reason: string;
   createdAt: Date;
+}
+
+export interface AdminLogDoc {
+  _id: ObjectId;
+  adminId: ObjectId;
+  action: string;
+  targetType: "gym" | "user" | "post";
+  targetId: ObjectId;
+  note?: string;
+  at: Date;
 }

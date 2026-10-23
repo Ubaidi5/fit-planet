@@ -28,6 +28,16 @@ keep in mind when changing it.
   can't be used to look up other gyms' bookings. Check-ins are rate limited
   per owner.
 
+## Admin console
+
+- `/admin` opens only for accounts listed in `ADMIN_EMAILS` (or with the admin
+  role); everyone else gets a 404. Every page and action re-checks this.
+- Admins verify, feature, suspend and restore gyms, remove reported posts and
+  suspend accounts. A suspended account is signed out everywhere and can't sign
+  in with a password, an email link, Google or Facebook.
+- Every admin action is written to the `admin_log` collection and shown on the
+  console's front page.
+
 ## Payments
 
 - Stripe webhooks are signature-checked.

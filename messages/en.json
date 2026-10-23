@@ -1934,6 +1934,22 @@
     "studioReady": {
       "title": "Your studio is ready",
       "body": "{gym} is saved as a draft. Publish it from Gym profile when you're happy with it."
+    },
+    "gymVerified": {
+      "title": "{gym} is verified",
+      "body": "Members now see a verified badge on your listing."
+    },
+    "gymSuspended": {
+      "title": "{gym} is suspended",
+      "body": "Your listing is hidden while we review it. Reply to our email or contact support to sort it out."
+    },
+    "gymRestored": {
+      "title": "{gym} is back",
+      "body": "Your listing is restored as a draft. Check it and publish it again from Gym profile."
+    },
+    "postRemoved": {
+      "title": "A post of yours was removed",
+      "body": "It broke our community guidelines after members reported it."
     }
   },
   "email": {

@@ -1934,6 +1934,22 @@
     "studioReady": {
       "title": "Votre studio est prêt",
       "body": "{gym} est enregistré comme brouillon. Publiez-le depuis Profil de la salle quand tout vous convient."
+    },
+    "gymVerified": {
+      "title": "{gym} est vérifiée",
+      "body": "Les membres voient désormais un badge vérifié sur votre fiche."
+    },
+    "gymSuspended": {
+      "title": "{gym} est suspendue",
+      "body": "Votre fiche est masquée pendant notre vérification. Répondez à notre e-mail ou contactez le support pour régler la situation."
+    },
+    "gymRestored": {
+      "title": "{gym} est de retour",
+      "body": "Votre fiche est restaurée en brouillon. Vérifiez-la et republiez-la depuis le profil de la salle."
+    },
+    "postRemoved": {
+      "title": "Une de vos publications a été supprimée",
+      "body": "Elle enfreignait nos règles de la communauté après des signalements de membres."
     }
   },
   "email": {

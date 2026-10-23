@@ -42,7 +42,7 @@ const providers: Provider[] = [
       if (!allowed) throw new RateLimited();
       const users = await collections.users();
       const user = await users.findOne({ email: parsed.data.email });
-      if (!user?.passwordHash) return null;
+      if (!user?.passwordHash || user.suspendedAt) return null;
       const ok = await bcrypt.compare(parsed.data.password, user.passwordHash);
       if (!ok) return null;
       return { id: user._id.toHexString(), name: user.name, email: user.email, image: user.image };
@@ -105,9 +105,14 @@ const config: NextAuthConfig = {
     error: "/login",
   },
   callbacks: {
-    async signIn({ account, profile }) {
+    async signIn({ user, account, profile }) {
       // Linking by email is only safe when Google has verified that email
       if (account?.provider === "google" && profile?.email_verified !== true) return false;
+      // Suspended accounts can't come back in through a link or Google/Facebook either
+      if (user.email) {
+        const existing = await (await collections.users()).findOne({ email: user.email.toLowerCase() }, { projection: { suspendedAt: 1 } });
+        if (existing?.suspendedAt) return false;
+      }
       return true;
     },
     async jwt({ token, user, trigger, session }) {

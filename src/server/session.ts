@@ -1,6 +1,6 @@
 import "server-only";
 import { cache } from "react";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { auth, updateSession } from "@/lib/auth";
 import type { ObjectId } from "mongodb";
 import { collections, toObjectId } from "@/server/db/collections";
@@ -8,6 +8,7 @@ import type { GymDoc, UserDoc } from "@/server/db/models";
 import { gymsManagedBy } from "@/server/modules/gyms";
 import { cookies } from "next/headers";
 import { findRegion, REGION_COOKIE } from "@/lib/i18n/regions";
+import { env } from "@/server/env";
 
 /** The signed-in user's database record, read once per request */
 export const getSessionUser = cache(async (): Promise<UserDoc | null> => {
@@ -20,6 +21,7 @@ export const getSessionUser = cache(async (): Promise<UserDoc | null> => {
   // Signed out remotely (password change or "sign out other devices")
   const authAt = (session as { authAt?: number } | null)?.authAt ?? 0;
   if (user.sessionsValidFrom && authAt < user.sessionsValidFrom.getTime()) return null;
+  if (user.suspendedAt) return null;
   await rememberRegion(user);
   return user;
 });
@@ -45,6 +47,20 @@ async function rememberRegion(user: UserDoc) {
 export async function requireUser(returnTo: string): Promise<UserDoc> {
   const user = await getSessionUser();
   if (!user) redirect(`/login?next=${encodeURIComponent(returnTo)}`);
+  return user;
+}
+
+/** Platform staff: the admin role, or an email listed in ADMIN_EMAILS */
+export function isAdmin(user: UserDoc | null): user is UserDoc {
+  if (!user) return false;
+  return Boolean(user.roles?.includes("admin") || (user.email && env.adminEmails.includes(user.email.toLowerCase())));
+}
+
+/** For admin pages and actions: anyone else gets a plain 404, so the console doesn't advertise itself */
+export async function requireAdmin(): Promise<UserDoc> {
+  const user = await getSessionUser();
+  if (!user) redirect("/login?next=/admin");
+  if (!isAdmin(user)) notFound();
   return user;
 }
 
