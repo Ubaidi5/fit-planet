@@ -48,7 +48,7 @@ jobs:
           cp -r .next/standalone/. release/
           mkdir -p release/.next
           cp -r .next/static release/.next/static
-          cp -r public release/public
+          if [ -d public ]; then cp -r public release/public; fi
           cp deploy/fitplanet.service release/
           tar -czf release.tgz -C release .
 

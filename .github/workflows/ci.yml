@@ -32,7 +32,7 @@ jobs:
       - name: Start the standalone server on Bun
         run: |
           cp -r .next/static .next/standalone/.next/static
-          cp -r public .next/standalone/public
+          if [ -d public ]; then cp -r public .next/standalone/public; fi
           cd .next/standalone
           PORT=3100 HOSTNAME=127.0.0.1 AUTH_SECRET=ci-only-secret bun server.js > server.log 2>&1 &
           for i in $(seq 1 30); do
