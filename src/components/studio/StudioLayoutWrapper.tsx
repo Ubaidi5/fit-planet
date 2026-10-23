@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -32,10 +33,10 @@ export interface StudioUser {
 }
 
 const tabs = [
-  { href: "/studio/dashboard", label: "Today", icon: HiOutlineChartBarSquare },
-  { href: "/studio/bookings", label: "Bookings", icon: HiOutlineCalendarDays },
-  { href: "/studio/checkin", label: "Scan", icon: HiOutlineQrCode, primary: true },
-  { href: "/studio/notifications", label: "Alerts", icon: HiOutlineBell },
+  { href: "/studio/dashboard", label: "today", icon: HiOutlineChartBarSquare },
+  { href: "/studio/bookings", label: "bookings", icon: HiOutlineCalendarDays },
+  { href: "/studio/checkin", label: "scan", icon: HiOutlineQrCode, primary: true },
+  { href: "/studio/notifications", label: "alerts", icon: HiOutlineBell },
 ] as const;
 
 export function StudioLayoutWrapper({
@@ -51,6 +52,7 @@ export function StudioLayoutWrapper({
   unread: number;
   gymCount: number;
 }) {
+  const t = useTranslations("studio.nav");
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -80,7 +82,7 @@ export function StudioLayoutWrapper({
             type="button"
             onClick={() => setMobileOpen(true)}
             className="flex size-10 items-center justify-center rounded-full text-gray-700 hover:bg-gray-900/5"
-            aria-label="Open navigation"
+            aria-label={t("open")}
           >
             <HiOutlineBars3 className="size-5" />
           </button>
@@ -88,7 +90,7 @@ export function StudioLayoutWrapper({
           <Link
             href="/studio/notifications"
             className="relative flex size-10 items-center justify-center rounded-full text-gray-700 hover:bg-gray-900/5"
-            aria-label={unread > 0 ? `Notifications, ${unread} unread` : "Notifications"}
+            aria-label={unread > 0 ? t("notificationsUnread", { count: unread }) : t("notifications")}
           >
             <HiOutlineBell className="size-5" />
             {unread > 0 && <span className="absolute top-2 end-2.5 size-2 rounded-full bg-red-500 ring-2 ring-surface" />}
@@ -104,9 +106,9 @@ export function StudioLayoutWrapper({
               className="flex items-center justify-between gap-3 rounded-3xl bg-stamp-ochre/10 px-4 py-3 text-sm text-stamp-ochre ring-1 ring-stamp-ochre/20 sm:px-5"
             >
               <span>
-                <span className="font-semibold">{gym.name} is a draft.</span> Members can&apos;t find it until you publish.
+                {t.rich("draftBanner", { name: gym.name, b: (chunks) => <span className="font-semibold">{chunks}</span> })}
               </span>
-              <span className="shrink-0 font-semibold underline underline-offset-4">Publish</span>
+              <span className="shrink-0 font-semibold underline underline-offset-4">{t("publish")}</span>
             </Link>
           </div>
         )}
@@ -115,7 +117,7 @@ export function StudioLayoutWrapper({
 
       {/* Mobile tab bar: the four things owners do on their phone */}
       <nav
-        aria-label="Studio tabs"
+        aria-label={t("tabsAria")}
         className="glass fixed inset-x-3 bottom-3 z-30 flex items-center justify-around rounded-full border border-gray-900/[0.06] p-1.5 shadow-lift pb-[max(0.375rem,env(safe-area-inset-bottom))] lg:hidden"
       >
         {tabs.map((tab) => {
@@ -132,7 +134,7 @@ export function StudioLayoutWrapper({
                 <span className={cn("flex size-11 items-center justify-center rounded-full shadow-soft", active ? "bg-volt text-ink" : "bg-ink text-volt")}>
                   <Icon className="size-5.5" />
                 </span>
-                <span className="sr-only">{tab.label}</span>
+                <span className="sr-only">{t(`tabs.${tab.label}`)}</span>
               </Link>
             );
           }
@@ -147,7 +149,7 @@ export function StudioLayoutWrapper({
               )}
             >
               <Icon className={cn("size-5", active && "text-volt")} />
-              {tab.label}
+              {t(`tabs.${tab.label}`)}
               {tab.href === "/studio/notifications" && unread > 0 && (
                 <span className="absolute top-1.5 start-[calc(50%_+_4px)] flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-semibold text-white">
                   {unread > 9 ? "9+" : unread}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -22,6 +23,9 @@ import { uploadImageAction } from "@/actions/media";
 import { Input } from "@/components/ui/Input";
 import { FormAlert } from "@/components/auth/FormBits";
 import { useToast } from "@/components/notifications/ToastProvider";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { weekdayName } from "@/lib/i18n/format";
+import { tagLabel } from "@/lib/i18n/tags";
 
 export type { GymFormValues };
 
@@ -39,6 +43,8 @@ function Section({ title, hint, children, id }: { title: string; hint?: string; 
 }
 
 function Chips({ options, value, onChange }: { options: string[]; value: string[]; onChange: (v: string[]) => void }) {
+  const t = useTranslations("studio.editor");
+  const tt = useTranslations("tags");
   const [custom, setCustom] = useState("");
   const all = [...new Set([...options, ...value])];
   const toggle = (item: string) => onChange(value.includes(item) ? value.filter((v) => v !== item) : [...value, item]);
@@ -58,7 +64,7 @@ function Chips({ options, value, onChange }: { options: string[]; value: string[
             )}
           >
             {on && <HiCheck className="size-3.5 text-volt" />}
-            {item}
+            {tagLabel(tt, item)}
           </button>
         );
       })}
@@ -71,8 +77,8 @@ function Chips({ options, value, onChange }: { options: string[]; value: string[
         }}
         className="inline-flex h-9 items-center rounded-full ps-3.5 pe-1 ring-1 ring-dashed ring-gray-900/20"
       >
-        <input value={custom} onChange={(e) => setCustom(e.target.value)} placeholder="Add your own" className="w-28 bg-transparent text-sm placeholder:text-gray-400 focus:outline-none" />
-        <button type="submit" aria-label="Add" className="flex size-7 cursor-pointer items-center justify-center rounded-full text-gray-500 hover:bg-gray-900/5">
+        <input value={custom} onChange={(e) => setCustom(e.target.value)} placeholder={t("addOwn")} className="w-28 bg-transparent text-sm placeholder:text-gray-400 focus:outline-none" />
+        <button type="submit" aria-label={t("add")} className="flex size-7 cursor-pointer items-center justify-center rounded-full text-gray-500 hover:bg-gray-900/5">
           <HiOutlinePlus className="size-4" />
         </button>
       </form>
@@ -93,6 +99,9 @@ function TimeInput({ value, onChange, ...rest }: { value: string; onChange: (v: 
 }
 
 export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit"; gymId?: string; initial: GymFormValues }) {
+  const t = useTranslations("studio.editor");
+  const tp = useTranslations("passes");
+  const { region } = useLocale();
   const [values, setValues] = useState<GymFormValues>(initial);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
@@ -136,23 +145,23 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
       const result = await uploadImageAction(data);
       setUploading((n) => n - 1);
       if (result.ok) setValues((v) => ({ ...v, images: [...v.images, result.data.url], coverImage: v.coverImage || result.data.url }));
-      else toast.error(`Couldn't upload ${file.name}`, result.error);
+      else toast.error(t("uploadFailed", { name: file.name }), result.error);
     }
     if (fileRef.current) fileRef.current.value = "";
   };
 
   const locate = () => {
-    if (!navigator.geolocation) return toast.error("Location isn't available in this browser");
+    if (!navigator.geolocation) return toast.error(t("noLocation"));
     setLocating(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setValues((v) => ({ ...v, lat: Number(pos.coords.latitude.toFixed(6)), lng: Number(pos.coords.longitude.toFixed(6)) }));
         setLocating(false);
-        toast.success("Location set", "Members will see accurate distance and directions.");
+        toast.success(t("locationSet"), t("locationSetText"));
       },
       () => {
         setLocating(false);
-        toast.error("Couldn't get your location", "Check location permission, or skip this for now.");
+        toast.error(t("locationFailed"), t("locationFailedText"));
       },
       { enableHighAccuracy: true, timeout: 10_000 },
     );
@@ -181,10 +190,10 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
         return;
       }
       if (mode === "onboarding") {
-        toast.success("Your studio is ready", "Review your listing, then publish when you're happy.");
+        toast.success(t("ready"), t("readyText"));
         router.push("/studio/profile?welcome=1");
       } else {
-        toast.success(result.message ?? "Saved");
+        toast.success(result.message ?? t("saved"));
         router.refresh();
       }
     });
@@ -192,11 +201,11 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
   const err = (key: string) => errors[key];
 
   const basics = (
-    <Section id="basics" title="The basics" hint="This is what members see first.">
-      <Input label="Gym name" value={values.name} onChange={(e) => set("name", e.target.value)} placeholder="Iron Paradise Gym" error={err("name")} maxLength={80} />
+    <Section id="basics" title={t("basics.title")} hint={t("basics.hint")}>
+      <Input label={t("basics.name")} value={values.name} onChange={(e) => set("name", e.target.value)} placeholder={t("basics.namePlaceholder")} error={err("name")} maxLength={80} />
       <div>
         <label className={label} htmlFor="gym-desc">
-          Short description
+          {t("basics.description")}
         </label>
         <textarea
           id="gym-desc"
@@ -204,7 +213,7 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
           maxLength={300}
           value={values.description}
           onChange={(e) => set("description", e.target.value)}
-          placeholder="What makes your gym worth the trip? Equipment, vibe, who it's for."
+          placeholder={t("basics.descriptionPlaceholder")}
           className={cn("block w-full rounded-xl border border-gray-200 bg-surface px-4 py-3 text-[15px] placeholder:text-gray-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 focus:outline-none", err("description") && "border-red-500")}
         />
         <div className="mt-1 flex justify-between text-xs">
@@ -214,7 +223,7 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
       </div>
       <div>
         <label className={label} htmlFor="gym-long">
-          Full story <span className="font-normal text-gray-400">(optional)</span>
+          {t("basics.story")} <span className="font-normal text-gray-400">{t("optional")}</span>
         </label>
         <textarea
           id="gym-long"
@@ -222,7 +231,7 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
           maxLength={4000}
           value={values.longDescription ?? ""}
           onChange={(e) => set("longDescription", e.target.value)}
-          placeholder="History, size, coaches, what a first visit looks like..."
+          placeholder={t("basics.storyPlaceholder")}
           className="block w-full rounded-xl border border-gray-200 bg-surface px-4 py-3 text-[15px] placeholder:text-gray-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 focus:outline-none"
         />
       </div>
@@ -230,10 +239,10 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
   );
 
   const location = (
-    <Section id="location" title="Location" hint="Prices are charged in your currency; hours follow your timezone.">
+    <Section id="location" title={t("location.title")} hint={t("location.hint")}>
       <div>
         <label className={label} htmlFor="gym-country">
-          Country
+          {t("location.country")}
         </label>
         <select
           id="gym-country"
@@ -252,13 +261,13 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
         </select>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Input label="City" value={values.city} onChange={(e) => set("city", e.target.value)} placeholder="Karachi" error={err("city")} />
-        <Input label="Neighbourhood" value={values.area} onChange={(e) => set("area", e.target.value)} placeholder="Clifton" error={err("area")} />
+        <Input label={t("location.city")} value={values.city} onChange={(e) => set("city", e.target.value)} error={err("city")} />
+        <Input label={t("location.area")} value={values.area} onChange={(e) => set("area", e.target.value)} error={err("area")} />
       </div>
-      <Input label="Street address" value={values.street} onChange={(e) => set("street", e.target.value)} placeholder="Plot 12, Block 5" error={err("street")} />
+      <Input label={t("location.street")} value={values.street} onChange={(e) => set("street", e.target.value)} error={err("street")} />
       <div className="flex flex-col gap-3 rounded-2xl bg-canvas p-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <p className="text-sm font-medium text-ink">Map pin</p>
+          <p className="text-sm font-medium text-ink">{t("location.pin")}</p>
           <p className="font-mono text-xs text-gray-500" dir="ltr">
             {Number(values.lat).toFixed(4)}, {Number(values.lng).toFixed(4)}
           </p>
@@ -270,13 +279,13 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
           className="inline-flex h-10 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full bg-surface px-4 text-sm font-semibold text-ink shadow-soft ring-1 ring-gray-900/[0.06] disabled:opacity-60"
         >
           <HiOutlineMapPin className="size-4" />
-          {locating ? "Locating..." : "I'm at the gym, use my location"}
+          {locating ? t("location.locating") : t("location.useMine")}
         </button>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className={label} htmlFor="gym-currency">
-            Currency
+            {t("location.currency")}
           </label>
           <input
             id="gym-currency"
@@ -287,7 +296,7 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
         </div>
         <div>
           <label className={label} htmlFor="gym-tz">
-            Timezone
+            {t("location.timezone")}
           </label>
           <select
             id="gym-tz"
@@ -306,10 +315,10 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
     </Section>
   );
 
-  const priceField = (key: "dayPass" | "weekPass" | "monthPass", title: string, hint: string) => (
+  const priceField = (key: "dayPass" | "weekPass" | "monthPass", type: "day" | "week" | "month") => (
     <div>
       <label className={label} htmlFor={`price-${key}`}>
-        {title}
+        {tp(`name.${type}`)}
       </label>
       <div className={cn("flex h-12 items-center rounded-xl border border-gray-200 bg-surface focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/15", err(key) && "border-red-500")}>
         <span className="ps-4 pe-2 text-sm font-medium text-gray-500">{currencySymbol}</span>
@@ -324,26 +333,26 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
           className="h-full min-w-0 flex-1 bg-transparent pe-4 text-[15px] tabular-nums focus:outline-none"
         />
       </div>
-      <p className={cn("mt-1.5 text-xs", err(key) ? "text-red-600" : "text-gray-500")}>{err(key) ?? hint}</p>
+      <p className={cn("mt-1.5 text-xs", err(key) ? "text-red-600" : "text-gray-500")}>{err(key) ?? t(`pricing.note.${type}`)}</p>
     </div>
   );
 
   const pricing = (
-    <Section id="pricing" title="Passes and pricing" hint="Leave week or month at 0 if you only sell day passes.">
+    <Section id="pricing" title={t("pricing.title")} hint={t("pricing.hint")}>
       <div className="grid gap-4 sm:grid-cols-3">
-        {priceField("dayPass", "Day pass", "Single entry, one day")}
-        {priceField("weekPass", "Week pass", "7 days, once a day")}
-        {priceField("monthPass", "Month pass", "30 days, once a day")}
+        {priceField("dayPass", "day")}
+        {priceField("weekPass", "week")}
+        {priceField("monthPass", "month")}
       </div>
     </Section>
   );
 
   const hours = (
-    <Section id="hours" title="Hours and capacity">
+    <Section id="hours" title={t("hours.title")}>
       <label className="flex cursor-pointer items-center justify-between gap-4 rounded-2xl bg-canvas p-4">
         <span>
-          <span className="block text-sm font-medium text-ink">Open 24/7</span>
-          <span className="block text-xs text-gray-500">Members can check in any time</span>
+          <span className="block text-sm font-medium text-ink">{t("hours.open247")}</span>
+          <span className="block text-xs text-gray-500">{t("hours.open247Hint")}</span>
         </span>
         <input type="checkbox" checked={values.is24Hours} onChange={(e) => set("is24Hours", e.target.checked)} className="peer sr-only" />
         <span className="relative h-7 w-12 shrink-0 rounded-full bg-gray-300 transition-colors peer-checked:bg-emerald-600 after:absolute after:top-1 after:start-1 after:size-5 after:rounded-full after:bg-white after:shadow after:transition-transform peer-checked:after:translate-x-5 rtl:peer-checked:after:-translate-x-5" />
@@ -352,11 +361,11 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
         <ul className="divide-y divide-gray-900/[0.06] rounded-2xl ring-1 ring-gray-900/[0.06]">
           {values.operatingHours.map((row, i) => (
             <li key={row.day} className="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3">
-              <span className="w-24 text-sm font-medium text-ink">{row.day}</span>
+              <span className="w-24 text-sm font-medium text-ink">{weekdayName(row.day, region.locale)}</span>
               <div className="flex flex-1 items-center gap-2">
-                <TimeInput aria-label={`${row.day} opens`} value={row.open} disabled={row.isClosed} onChange={(v) => set("operatingHours", values.operatingHours.map((r, j) => (j === i ? { ...r, open: v } : r)))} />
-                <span className="text-gray-400">to</span>
-                <TimeInput aria-label={`${row.day} closes`} value={row.close} disabled={row.isClosed} onChange={(v) => set("operatingHours", values.operatingHours.map((r, j) => (j === i ? { ...r, close: v } : r)))} />
+                <TimeInput aria-label={t("hours.opens", { day: weekdayName(row.day, region.locale) })} value={row.open} disabled={row.isClosed} onChange={(v) => set("operatingHours", values.operatingHours.map((r, j) => (j === i ? { ...r, open: v } : r)))} />
+                <span className="text-gray-400">{t("hours.to")}</span>
+                <TimeInput aria-label={t("hours.closes", { day: weekdayName(row.day, region.locale) })} value={row.close} disabled={row.isClosed} onChange={(v) => set("operatingHours", values.operatingHours.map((r, j) => (j === i ? { ...r, close: v } : r)))} />
               </div>
               <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600">
                 <input
@@ -365,7 +374,7 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
                   onChange={(e) => set("operatingHours", values.operatingHours.map((r, j) => (j === i ? { ...r, isClosed: e.target.checked } : r)))}
                   className="size-4 accent-ink"
                 />
-                Closed
+                {t("hours.closed")}
               </label>
             </li>
           ))}
@@ -377,26 +386,26 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
           onClick={() => set("operatingHours", values.operatingHours.map((r) => ({ ...r, open: values.operatingHours[0].open, close: values.operatingHours[0].close })))}
           className="cursor-pointer text-sm font-semibold text-emerald-700"
         >
-          Copy Monday to every day
+          {t("hours.copy", { day: weekdayName(values.operatingHours[0].day, region.locale) })}
         </button>
       )}
       <div className="grid gap-4 sm:grid-cols-2">
-        <Input label="Max people at once" type="number" inputMode="numeric" min={1} value={values.capacity as number} onChange={(e) => set("capacity", Number(e.target.value))} error={err("capacity")} hint="Used for the live crowd meter" />
+        <Input label={t("hours.capacity")} type="number" inputMode="numeric" min={1} value={values.capacity as number} onChange={(e) => set("capacity", Number(e.target.value))} error={err("capacity")} hint={t("hours.capacityHint")} />
         <Input
-          label="Day passes per day (optional)"
+          label={t("hours.limit")}
           type="number"
           inputMode="numeric"
           min={0}
           value={(values.dailyDayPassLimit ?? "") as number | string}
           onChange={(e) => set("dailyDayPassLimit", e.target.value === "" ? "" : (Number(e.target.value) as never))}
-          hint="Stops selling day passes once reached"
+          hint={t("hours.limitHint")}
         />
       </div>
     </Section>
   );
 
   const photos = (
-    <Section id="photos" title="Photos" hint="Bright, wide shots of the floor work best. The starred photo is your cover.">
+    <Section id="photos" title={t("photos.title")} hint={t("photos.hint")}>
       <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" multiple className="hidden" onChange={(e) => upload(e.target.files)} />
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {values.images.map((url) => {
@@ -408,16 +417,16 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
                 <button
                   type="button"
                   onClick={() => set("coverImage", url)}
-                  aria-label={cover ? "Cover photo" : "Make cover photo"}
+                  aria-label={cover ? t("photos.coverAria") : t("photos.makeCover")}
                   className={cn("flex h-8 cursor-pointer items-center gap-1 rounded-full px-2.5 text-xs font-semibold backdrop-blur", cover ? "bg-volt text-ink" : "bg-surface/90 text-gray-700")}
                 >
                   {cover ? <HiStar className="size-3.5" /> : <HiOutlineStar className="size-3.5" />}
-                  {cover ? "Cover" : "Set cover"}
+                  {cover ? t("photos.cover") : t("photos.setCover")}
                 </button>
                 <button
                   type="button"
                   onClick={() => setValues((v) => ({ ...v, images: v.images.filter((u) => u !== url), coverImage: v.coverImage === url ? "" : v.coverImage }))}
-                  aria-label="Remove photo"
+                  aria-label={t("photos.remove")}
                   className="flex size-8 cursor-pointer items-center justify-center rounded-full bg-surface/90 text-red-600 backdrop-blur"
                 >
                   <HiOutlineTrash className="size-4" />
@@ -435,47 +444,47 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
           className="flex aspect-[4/3] cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-gray-900/15 text-sm font-medium text-gray-600 transition-colors hover:border-emerald-500 hover:text-emerald-700"
         >
           <HiOutlinePhoto className="size-7" />
-          Add photos
+          {t("photos.add")}
         </button>
       </div>
     </Section>
   );
 
   const amenities = (
-    <Section id="amenities" title="Amenities and equipment">
+    <Section id="amenities" title={t("amenities.title")}>
       <div>
-        <p className={label}>Amenities</p>
+        <p className={label}>{t("amenities.amenities")}</p>
         <Chips options={AMENITIES} value={values.amenities} onChange={(v) => set("amenities", v)} />
       </div>
       <div>
-        <p className={label}>Training styles</p>
+        <p className={label}>{t("amenities.styles")}</p>
         <Chips options={EQUIPMENT} value={values.equipmentTypes} onChange={(v) => set("equipmentTypes", v)} />
       </div>
     </Section>
   );
 
   const contact = (
-    <Section id="contact" title="Contact and house rules" hint="Optional, but members trust gyms that fill this in.">
+    <Section id="contact" title={t("contact.title")} hint={t("contact.hint")}>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Input label="Phone" type="tel" value={values.phone ?? ""} onChange={(e) => set("phone", e.target.value)} />
-        <Input label="Email" type="email" value={values.email ?? ""} onChange={(e) => set("email", e.target.value)} error={err("email")} />
-        <Input label="Website" type="url" value={values.website ?? ""} onChange={(e) => set("website", e.target.value)} placeholder="https://" error={err("website")} />
-        <Input label="Instagram" value={values.instagram ?? ""} onChange={(e) => set("instagram", e.target.value)} placeholder="@yourgym" />
+        <Input label={t("contact.phone")} type="tel" value={values.phone ?? ""} onChange={(e) => set("phone", e.target.value)} />
+        <Input label={t("contact.email")} type="email" value={values.email ?? ""} onChange={(e) => set("email", e.target.value)} error={err("email")} />
+        <Input label={t("contact.website")} type="url" value={values.website ?? ""} onChange={(e) => set("website", e.target.value)} placeholder="https://" error={err("website")} />
+        <Input label="Instagram" value={values.instagram ?? ""} onChange={(e) => set("instagram", e.target.value)} placeholder={t("contact.instagramPlaceholder")} />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Input label="Cancellation policy" value={values.cancellation ?? ""} onChange={(e) => set("cancellation", e.target.value)} placeholder="Full refund until the day before" />
-        <Input label="Guests" value={values.guestPolicy ?? ""} onChange={(e) => set("guestPolicy", e.target.value)} placeholder="Guests need their own pass" />
-        <Input label="Dress code" value={values.dresscode ?? ""} onChange={(e) => set("dresscode", e.target.value)} placeholder="Clean indoor shoes" />
-        <Input label="Age" value={values.ageRestriction ?? ""} onChange={(e) => set("ageRestriction", e.target.value)} placeholder="16 and over" />
+        <Input label={t("contact.cancellation")} value={values.cancellation ?? ""} onChange={(e) => set("cancellation", e.target.value)} placeholder={t("contact.cancellationPlaceholder")} />
+        <Input label={t("contact.guests")} value={values.guestPolicy ?? ""} onChange={(e) => set("guestPolicy", e.target.value)} placeholder={t("contact.guestsPlaceholder")} />
+        <Input label={t("contact.dresscode")} value={values.dresscode ?? ""} onChange={(e) => set("dresscode", e.target.value)} placeholder={t("contact.dresscodePlaceholder")} />
+        <Input label={t("contact.age")} value={values.ageRestriction ?? ""} onChange={(e) => set("ageRestriction", e.target.value)} placeholder={t("contact.agePlaceholder")} />
       </div>
     </Section>
   );
 
   const steps = [
-    { title: "Basics", body: basics },
-    { title: "Location", body: location },
-    { title: "Pricing", body: (<div className="space-y-5">{pricing}{hours}</div>) },
-    { title: "Photos", body: (<div className="space-y-5">{photos}{amenities}</div>) },
+    { title: t("steps.basics"), body: basics },
+    { title: t("steps.location"), body: location },
+    { title: t("steps.pricing"), body: (<div className="space-y-5">{pricing}{hours}</div>) },
+    { title: t("steps.photos"), body: (<div className="space-y-5">{photos}{amenities}</div>) },
   ];
 
   if (mode === "onboarding") {
@@ -507,7 +516,7 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
               className="inline-flex h-12 cursor-pointer items-center gap-2 rounded-full px-4 text-sm font-semibold text-gray-600 hover:bg-gray-900/5 disabled:invisible"
             >
               <HiArrowLeft className="size-4 rtl:rotate-180" />
-              Back
+              {t("back")}
             </button>
             <button
               type="button"
@@ -515,7 +524,7 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
               onClick={() => (last ? save() : setStep((s) => s + 1))}
               className="inline-flex h-12 cursor-pointer items-center gap-2 rounded-full bg-ink px-6 text-sm font-semibold text-white hover:bg-gray-800 disabled:opacity-60"
             >
-              {last ? (pending ? "Creating..." : "Create my studio") : "Continue"}
+              {last ? (pending ? t("creating") : t("create")) : t("continue")}
               {!last && <HiArrowRight className="size-4 rtl:rotate-180" />}
             </button>
           </div>
@@ -544,7 +553,7 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
             onClick={() => setValues(initial)}
             className="h-11 cursor-pointer rounded-full px-4 text-sm font-semibold text-gray-600 hover:bg-gray-900/5 lg:h-12"
           >
-            Discard
+            {t("discard")}
           </button>
           <button
             type="button"
@@ -552,7 +561,7 @@ export function GymEditor({ mode, gymId, initial }: { mode: "onboarding" | "edit
             disabled={pending || uploading > 0}
             className="h-11 flex-1 cursor-pointer rounded-full bg-ink px-6 text-sm font-semibold text-white hover:bg-gray-800 disabled:opacity-60 lg:h-12 lg:flex-none"
           >
-            {pending ? "Saving..." : "Save changes"}
+            {pending ? t("saving") : t("save")}
           </button>
         </div>
       </div>

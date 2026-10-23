@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -12,7 +13,6 @@ import {
 import { cn } from "@/lib/utils";
 import { checkInAction, markDeskPaidAction } from "@/actions/studio";
 import type { CheckinOutcome } from "@/server/modules/checkins";
-import { passMeta } from "@/lib/passes";
 import { formatDate } from "@/lib/dates";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 
@@ -36,7 +36,9 @@ export function CheckinDesk() {
   const [pending, startTransition] = useTransition();
   const [paid, setPaid] = useState(false);
   const router = useRouter();
-  const { money } = useLocale();
+  const t = useTranslations("studio.desk");
+  const tp = useTranslations("passes");
+  const { money, region } = useLocale();
 
   const submit = useCallback(
     (value: string, method: "qr" | "code") => {
@@ -132,7 +134,7 @@ export function CheckinDesk() {
                 onClick={stopCamera}
                 className="absolute bottom-4 start-1/2 h-10 -translate-x-1/2 cursor-pointer rounded-full bg-surface/90 px-4 text-sm font-semibold text-ink backdrop-blur rtl:translate-x-1/2"
               >
-                Stop camera
+                {t("stop")}
               </button>
             </>
           ) : (
@@ -140,23 +142,23 @@ export function CheckinDesk() {
               {camera === "denied" || camera === "unsupported" ? (
                 <>
                   <HiOutlineVideoCameraSlash className="size-10 text-white/60" />
-                  <p className="mt-3 font-semibold">{camera === "denied" ? "Camera access was blocked" : "No camera available"}</p>
-                  <p className="mt-1 max-w-xs text-sm text-white/60">Allow camera access in your browser settings, or type the pass code below.</p>
+                  <p className="mt-3 font-semibold">{camera === "denied" ? t("blocked") : t("noCamera")}</p>
+                  <p className="mt-1 max-w-xs text-sm text-white/60">{t("allow")}</p>
                 </>
               ) : (
                 <>
                   <span className="flex size-16 items-center justify-center rounded-3xl bg-volt text-ink">
                     <HiOutlineCamera className="size-7" />
                   </span>
-                  <p className="mt-4 text-lg font-semibold">Scan a member&apos;s pass</p>
-                  <p className="mt-1 max-w-xs text-sm text-white/60">Point the camera at the QR code on their phone.</p>
+                  <p className="mt-4 text-lg font-semibold">{t("scanTitle")}</p>
+                  <p className="mt-1 max-w-xs text-sm text-white/60">{t("scanText")}</p>
                   <button
                     type="button"
                     onClick={startCamera}
                     disabled={camera === "starting"}
                     className="mt-5 h-12 cursor-pointer rounded-full bg-volt px-6 text-sm font-semibold text-ink transition-[filter] hover:brightness-95 disabled:opacity-60"
                   >
-                    {camera === "starting" ? "Starting camera..." : "Start scanning"}
+                    {camera === "starting" ? t("starting") : t("start")}
                   </button>
                 </>
               )}
@@ -174,7 +176,7 @@ export function CheckinDesk() {
         >
           <label className="flex min-w-0 flex-1 items-center gap-2 ps-3">
             <HiOutlineKey className="size-4.5 shrink-0 text-gray-400" />
-            <span className="sr-only">Pass code</span>
+            <span className="sr-only">{t("code")}</span>
             <input
               value={code}
               onChange={(e) => setCode(e.target.value.toUpperCase())}
@@ -187,7 +189,7 @@ export function CheckinDesk() {
             />
           </label>
           <button type="submit" disabled={pending || !code.trim()} className="h-11 shrink-0 cursor-pointer rounded-full bg-ink px-5 text-sm font-semibold text-white disabled:opacity-40">
-            {pending ? "Checking..." : "Check in"}
+            {pending ? t("checking") : t("checkIn")}
           </button>
         </form>
       </div>
@@ -196,7 +198,7 @@ export function CheckinDesk() {
       <div aria-live="polite" className="lg:sticky lg:top-6">
         {!result ? (
           <div className="rounded-[2rem] border-2 border-dashed border-gray-900/10 p-6 text-center text-sm text-gray-500">
-            Scan results show up here, with what to collect if the member pays at the desk.
+            {t("placeholder")}
           </div>
         ) : (
           <div
@@ -206,8 +208,8 @@ export function CheckinDesk() {
             <div className={cn("flex items-center gap-3 px-5 py-4", result.ok ? "bg-emerald-600 text-white" : "bg-red-600 text-white")}>
               {result.ok ? <HiCheckCircle className="size-7 shrink-0" /> : <HiXCircle className="size-7 shrink-0" />}
               <div className="min-w-0">
-                <p className="text-lg font-semibold">{result.ok ? "Checked in" : "Not valid"}</p>
-                <p className="truncate text-sm text-white/80">{result.ok ? (result.firstVisit ? "First visit. Say welcome!" : "Welcome back") : result.reason}</p>
+                <p className="text-lg font-semibold">{result.ok ? t("checkedIn") : t("notValid")}</p>
+                <p className="truncate text-sm text-white/80">{result.ok ? (result.firstVisit ? t("firstVisit") : t("welcomeBack")) : result.reason}</p>
               </div>
             </div>
             {booking && (
@@ -218,28 +220,28 @@ export function CheckinDesk() {
                 </div>
                 <dl className="grid grid-cols-2 gap-3 text-sm">
                   <div className="rounded-2xl bg-canvas px-3 py-2.5">
-                    <dt className="text-xs text-gray-500">Pass</dt>
-                    <dd className="font-semibold text-ink">{passMeta[booking.passType].label}</dd>
+                    <dt className="text-xs text-gray-500">{t("pass")}</dt>
+                    <dd className="font-semibold text-ink">{tp(`name.${booking.passType}`)}</dd>
                   </div>
                   <div className="rounded-2xl bg-canvas px-3 py-2.5">
-                    <dt className="text-xs text-gray-500">Valid</dt>
+                    <dt className="text-xs text-gray-500">{t("valid")}</dt>
                     <dd className="font-semibold text-ink">
-                      {booking.startDate === booking.endDate ? formatDate(booking.startDate) : `${formatDate(booking.startDate)} to ${formatDate(booking.endDate)}`}
+                      {booking.startDate === booking.endDate ? formatDate(booking.startDate, region.locale) : t("range", { from: formatDate(booking.startDate, region.locale), to: formatDate(booking.endDate, region.locale) })}
                     </dd>
                   </div>
                   <div className="rounded-2xl bg-canvas px-3 py-2.5">
-                    <dt className="text-xs text-gray-500">Visits</dt>
+                    <dt className="text-xs text-gray-500">{t("visits")}</dt>
                     <dd className="font-semibold text-ink tabular-nums">{booking.checkinCount}</dd>
                   </div>
                   <div className="rounded-2xl bg-canvas px-3 py-2.5">
-                    <dt className="text-xs text-gray-500">Payment</dt>
-                    <dd className="font-semibold text-ink">{booking.paymentStatus === "paid" || paid ? "Paid" : "At desk"}</dd>
+                    <dt className="text-xs text-gray-500">{t("payment")}</dt>
+                    <dd className="font-semibold text-ink">{booking.paymentStatus === "paid" || paid ? t("paid") : t("atDesk")}</dd>
                   </div>
                 </dl>
                 {result.ok && result.collectPayment && !paid && (
                   <div className="rounded-2xl bg-stamp-ochre/10 p-4 ring-1 ring-stamp-ochre/20">
-                    <p className="text-sm font-semibold text-stamp-ochre">Collect {money(booking.amount, booking.currency)}</p>
-                    <p className="mt-0.5 text-sm text-stamp-ochre/80">This member chose to pay at the desk.</p>
+                    <p className="text-sm font-semibold text-stamp-ochre">{t("collect", { amount: money(booking.amount, booking.currency) })}</p>
+                    <p className="mt-0.5 text-sm text-stamp-ochre/80">{t("collectHint")}</p>
                     <button
                       type="button"
                       onClick={() =>
@@ -250,7 +252,7 @@ export function CheckinDesk() {
                       }
                       className="mt-3 h-10 cursor-pointer rounded-full bg-ink px-4 text-sm font-semibold text-white"
                     >
-                      Mark as paid
+                      {t("markPaid")}
                     </button>
                   </div>
                 )}

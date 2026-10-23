@@ -1304,5 +1304,403 @@
     "empty": "No exercises match these filters.",
     "how": "How to",
     "tips": "Tips"
+  },
+  "studio": {
+    "nav": {
+      "aria": "Studio navigation",
+      "dashboard": "Dashboard",
+      "checkin": "Check-in desk",
+      "bookings": "Bookings",
+      "notifications": "Notifications",
+      "passes": "Passes & pricing",
+      "reviews": "Reviews",
+      "financial": "Revenue",
+      "profile": "Gym profile",
+      "scan": "Scan",
+      "groups": {
+        "overview": "Overview",
+        "grow": "Grow",
+        "business": "Business"
+      },
+      "close": "Close navigation",
+      "open": "Open navigation",
+      "live": "Live",
+      "draft": "Draft",
+      "viewListing": "View public listing",
+      "viewListingHint": "See what members see",
+      "memberApp": "Member app",
+      "signOut": "Sign out",
+      "expand": "Expand sidebar",
+      "collapse": "Collapse sidebar",
+      "collapseShort": "Collapse",
+      "notificationsUnread": "Notifications, {count} unread",
+      "draftBanner": "<b>{name} is a draft.</b> Members can't find it until you publish.",
+      "publish": "Publish",
+      "tabsAria": "Studio tabs",
+      "tabs": {
+        "today": "Today",
+        "bookings": "Bookings",
+        "scan": "Scan",
+        "alerts": "Alerts"
+      }
+    },
+    "pages": {
+      "inbox": "Inbox",
+      "notifications": "Notifications",
+      "pushTitle": "Never miss a booking",
+      "pushBody": "Turn on push and this device alerts you the moment a member books a pass.",
+      "passes": "Passes & pricing",
+      "passesHint": "Prices are in {currency}. Changes apply to new bookings only.",
+      "members": "Members",
+      "bookings": "Bookings",
+      "bookingsShown": "{count, plural, one {# booking} other {# bookings}} shown",
+      "frontDesk": "Front desk",
+      "checkin": "Check-in",
+      "checkinHint": "Scan the QR on a member's pass or type its code.",
+      "recentCheckins": "Today and earlier",
+      "method": {
+        "qr": "QR",
+        "code": "Code",
+        "manual": "Manual"
+      },
+      "yourListing": "Your listing",
+      "profile": "Gym profile",
+      "profileHint": "Everything members see on your page.",
+      "welcome": "Welcome to Fit Planet Studio. Add a few photos, then publish to start taking bookings.",
+      "ownerOnly": "Only the gym owner can edit the listing.",
+      "check": {
+        "name": "Name and description",
+        "photo": "At least one photo",
+        "price": "Day pass price",
+        "address": "Address"
+      }
+    },
+    "onboarding": {
+      "meta": "Add your gym",
+      "time": "About 5 minutes",
+      "eyebrow": "List your gym · Free",
+      "titleNamed": "Let's put {name}'s gym on the map",
+      "title": "Let's put your gym on the map",
+      "lead": "You can change everything later. Nothing goes live until you publish."
+    },
+    "pricing": {
+      "saved": "Saved",
+      "failed": "Couldn't save prices",
+      "onSale": "On sale",
+      "off": "Off",
+      "priceAria": "{pass} price",
+      "note": {
+        "day": "Single entry on one day",
+        "week": "7 days, one entry a day",
+        "month": "30 days, one entry a day"
+      },
+      "cheaper": "{percent}% cheaper per day than a day pass",
+      "sold": "Sold, 30 days",
+      "limit": "Daily day-pass limit",
+      "limitHint": "Stop selling day passes once this many are booked for a date. 0 means no limit.",
+      "saving": "Saving...",
+      "save": "Save prices"
+    },
+    "publish": {
+      "live": "Live on Fit Planet",
+      "suspended": "Suspended",
+      "draft": "Draft",
+      "liveText": "Members can find and book you",
+      "hiddenText": "Your listing is hidden",
+      "preview": "Preview",
+      "saved": "Saved",
+      "failed": "Couldn't update",
+      "saving": "Saving...",
+      "unpublish": "Unpublish",
+      "publish": "Publish"
+    },
+    "reply": {
+      "edit": "Edit reply",
+      "reply": "Reply publicly",
+      "placeholder": "Thank them, or explain what you're doing about it. Everyone can see this.",
+      "cancel": "Cancel",
+      "posted": "Reply posted",
+      "failed": "Couldn't post reply",
+      "posting": "Posting...",
+      "post": "Post reply"
+    },
+    "charts": {
+      "hourTitle": "{hour} · {value} avg check-ins",
+      "busiest": "Busiest around <b>{hour}</b>",
+      "full": "full",
+      "revenueAria": "Revenue for the last 30 days",
+      "barTitle": "{date}: {amount} · {count, plural, one {# booking} other {# bookings}}",
+      "today": "Today"
+    },
+    "revenue": {
+      "eyebrow": "Business",
+      "title": "Revenue",
+      "currency": "All amounts in {currency}.",
+      "kpi": {
+        "revenue": "Revenue, 30 days",
+        "revenuePrev": "{amount} the 30 days before",
+        "firstMonth": "First month on Fit Planet",
+        "bookings": "Bookings, 30 days",
+        "average": "{amount} average",
+        "collect": "Still to collect",
+        "collectHint": "Pay-at-desk bookings",
+        "fee": "Platform fee",
+        "feeHint": "On online payments"
+      },
+      "daily": "Daily revenue",
+      "byType": "By pass type",
+      "sold": "{count} sold",
+      "payouts": "Online payouts",
+      "payoutsText": "{amount} paid online recently. Online payments settle to the Fit Planet account, and your share (less {fee}%) is paid out by bank transfer.",
+      "transactions": "Transactions",
+      "desk": "Desk",
+      "online": "Online",
+      "none": "No transactions yet."
+    },
+    "reviews": {
+      "eyebrow": "Reputation",
+      "title": "Reviews",
+      "waiting": "{count} waiting for a reply",
+      "allAnswered": "Every review has a reply. Nice.",
+      "filters": {
+        "all": "All reviews",
+        "unanswered": "Needs a reply",
+        "low": "3 stars or less"
+      },
+      "none": "No reviews here yet.",
+      "verified": "Verified visit",
+      "yourReply": "Your reply"
+    },
+    "dashboard": {
+      "greeting": {
+        "morning": "Good morning, {name}",
+        "afternoon": "Good afternoon, {name}",
+        "evening": "Good evening, {name}"
+      },
+      "greetingPlain": {
+        "morning": "Good morning",
+        "afternoon": "Good afternoon",
+        "evening": "Good evening"
+      },
+      "title": "Today",
+      "checkIn": "Check in a member",
+      "live": "Live",
+      "inGym": "people in the gym now",
+      "kpi": {
+        "bookings": "Bookings today",
+        "upcoming": "{count} upcoming",
+        "revenue": "Revenue today",
+        "revenue30": "{amount} in 30 days",
+        "checkins": "Check-ins today",
+        "active": "{count, plural, one {# active pass} other {# active passes}}"
+      },
+      "unpaid": "<b>{count, plural, one {# pay-at-desk booking} other {# pay-at-desk bookings}}</b> still to collect.",
+      "pushTitle": "Get a ping for every booking",
+      "pushBodyPhone": "Turn on notifications and this phone buzzes the moment a member books a pass.",
+      "pushBody": "Turn on notifications and we'll alert this device the moment a member books.",
+      "revenue30": "Revenue · last 30 days",
+      "trend": "{trend}% vs previous 30 days",
+      "passMix": "Pass mix · 30 days",
+      "bookingsWord": "{count, plural, one {booking} other {bookings}}",
+      "latest": "Latest bookings",
+      "viewAll": "View all",
+      "noBookings": "No bookings yet. Share your listing to get the first one.",
+      "cols": {
+        "member": "Member",
+        "pass": "Pass",
+        "starts": "Starts",
+        "payment": "Payment",
+        "amount": "Amount"
+      },
+      "status": {
+        "cancelled": "Cancelled",
+        "refunded": "Refunded",
+        "paid": "Paid",
+        "desk": "At desk"
+      },
+      "recentCheckins": "Recent check-ins",
+      "scan": "Scan",
+      "noCheckins": "No one has checked in yet.",
+      "peak": "Peak hours",
+      "peakHint": "Average check-ins per hour, last 30 days"
+    },
+    "bookings": {
+      "range": "{from} to {to}",
+      "done": "Done",
+      "failed": "Something went wrong",
+      "exportFailed": "Export failed",
+      "actions": "Booking actions",
+      "markPaid": "Mark as paid",
+      "cancelRefund": "Cancel and refund",
+      "cancel": "Cancel booking",
+      "tabs": {
+        "all": "All",
+        "active": "Active",
+        "upcoming": "Upcoming",
+        "past": "Past",
+        "cancelled": "Cancelled"
+      },
+      "search": "Name, phone or code",
+      "passType": "Pass type",
+      "allPasses": "All passes",
+      "export": "Export CSV",
+      "empty": "No bookings match these filters.",
+      "status": {
+        "cancelled": "Cancelled",
+        "refunded": "Refunded",
+        "used": "Used",
+        "active": "Active",
+        "upcoming": "Upcoming"
+      },
+      "collect": "Collect at desk",
+      "cols": {
+        "member": "Member",
+        "pass": "Pass",
+        "validity": "Validity",
+        "status": "Status",
+        "payment": "Payment",
+        "visits": "Visits",
+        "amount": "Amount"
+      },
+      "atDesk": "At desk",
+      "online": "Online",
+      "paid": "Paid",
+      "due": "Due"
+    },
+    "desk": {
+      "stop": "Stop camera",
+      "blocked": "Camera access was blocked",
+      "noCamera": "No camera available",
+      "allow": "Allow camera access in your browser settings, or type the pass code below.",
+      "scanTitle": "Scan a member's pass",
+      "scanText": "Point the camera at the QR code on their phone.",
+      "starting": "Starting camera...",
+      "start": "Start scanning",
+      "code": "Pass code",
+      "checking": "Checking...",
+      "checkIn": "Check in",
+      "placeholder": "Scan results show up here, with what to collect if the member pays at the desk.",
+      "checkedIn": "Checked in",
+      "notValid": "Not valid",
+      "firstVisit": "First visit. Say welcome!",
+      "welcomeBack": "Welcome back",
+      "pass": "Pass",
+      "valid": "Valid",
+      "range": "{from} to {to}",
+      "visits": "Visits",
+      "payment": "Payment",
+      "paid": "Paid",
+      "atDesk": "At desk",
+      "collect": "Collect {amount}",
+      "collectHint": "This member chose to pay at the desk.",
+      "markPaid": "Mark as paid"
+    },
+    "editor": {
+      "addOwn": "Add your own",
+      "add": "Add",
+      "optional": "(optional)",
+      "uploadFailed": "Couldn't upload {name}",
+      "noLocation": "Location isn't available in this browser",
+      "locationSet": "Location set",
+      "locationSetText": "Members will see accurate distance and directions.",
+      "locationFailed": "Couldn't get your location",
+      "locationFailedText": "Check location permission, or skip this for now.",
+      "ready": "Your studio is ready",
+      "readyText": "Review your listing, then publish when you're happy.",
+      "saved": "Saved",
+      "basics": {
+        "title": "The basics",
+        "hint": "This is what members see first.",
+        "name": "Gym name",
+        "namePlaceholder": "Iron Paradise Gym",
+        "description": "Short description",
+        "descriptionPlaceholder": "What makes your gym worth the trip? Equipment, vibe, who it's for.",
+        "story": "Full story",
+        "storyPlaceholder": "History, size, coaches, what a first visit looks like..."
+      },
+      "location": {
+        "title": "Location",
+        "hint": "Prices are charged in your currency; hours follow your timezone.",
+        "country": "Country",
+        "city": "City",
+        "area": "Neighbourhood",
+        "street": "Street address",
+        "pin": "Map pin",
+        "locating": "Locating...",
+        "useMine": "I'm at the gym, use my location",
+        "currency": "Currency",
+        "timezone": "Timezone"
+      },
+      "pricing": {
+        "title": "Passes and pricing",
+        "hint": "Leave week or month at 0 if you only sell day passes.",
+        "note": {
+          "day": "Single entry, one day",
+          "week": "7 days, once a day",
+          "month": "30 days, once a day"
+        }
+      },
+      "hours": {
+        "title": "Hours and capacity",
+        "open247": "Open 24/7",
+        "open247Hint": "Members can check in any time",
+        "opens": "{day} opens",
+        "to": "to",
+        "closes": "{day} closes",
+        "closed": "Closed",
+        "copy": "Copy {day} to every day",
+        "capacity": "Max people at once",
+        "capacityHint": "Used for the live crowd meter",
+        "limit": "Day passes per day (optional)",
+        "limitHint": "Stops selling day passes once reached"
+      },
+      "photos": {
+        "title": "Photos",
+        "hint": "Bright, wide shots of the floor work best. The starred photo is your cover.",
+        "coverAria": "Cover photo",
+        "makeCover": "Make cover photo",
+        "cover": "Cover",
+        "setCover": "Set cover",
+        "remove": "Remove photo",
+        "add": "Add photos"
+      },
+      "amenities": {
+        "title": "Amenities and equipment",
+        "amenities": "Amenities",
+        "styles": "Training styles"
+      },
+      "contact": {
+        "title": "Contact and house rules",
+        "hint": "Optional, but members trust gyms that fill this in.",
+        "phone": "Phone",
+        "email": "Email",
+        "website": "Website",
+        "instagramPlaceholder": "@yourgym",
+        "cancellation": "Cancellation policy",
+        "cancellationPlaceholder": "Full refund until the day before",
+        "guests": "Guests",
+        "guestsPlaceholder": "Guests need their own pass",
+        "dresscode": "Dress code",
+        "dresscodePlaceholder": "Clean indoor shoes",
+        "age": "Age",
+        "agePlaceholder": "16 and over"
+      },
+      "steps": {
+        "basics": "Basics",
+        "location": "Location",
+        "pricing": "Pricing",
+        "photos": "Photos"
+      },
+      "back": "Back",
+      "creating": "Creating...",
+      "create": "Create my studio",
+      "continue": "Continue",
+      "discard": "Discard",
+      "saving": "Saving...",
+      "save": "Save changes"
+    },
+    "meta": {
+      "description": "Run your gym on Fit Planet: bookings, check-ins, pricing and revenue in one place."
+    }
   }
 }

@@ -1,7 +1,9 @@
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 /** Average check-ins by hour as a heat strip, to spot peak hours at a glance */
 export function HourlyStrip({ hourly, currentHour }: { hourly: number[]; currentHour: number }) {
+  const t = useTranslations("studio.charts");
   const max = Math.max(0.1, ...hourly);
   const peak = hourly.indexOf(Math.max(...hourly));
   return (
@@ -12,7 +14,7 @@ export function HourlyStrip({ hourly, currentHour }: { hourly: number[]; current
           return (
             <div
               key={hour}
-              title={`${String(hour).padStart(2, "0")}:00 · ${value} avg check-ins`}
+              title={t("hourTitle", { hour: `${String(hour).padStart(2, "0")}:00`, value })}
               className={cn("h-12 rounded-[4px]", hour === currentHour && "ring-2 ring-ink ring-offset-1 ring-offset-surface")}
               style={{ backgroundColor: value === 0 ? "var(--color-gray-100)" : `color-mix(in oklch, var(--color-emerald-500) ${Math.round(20 + level * 80)}%, var(--color-surface))` }}
             />
@@ -28,7 +30,7 @@ export function HourlyStrip({ hourly, currentHour }: { hourly: number[]; current
       </div>
       {hourly.some((v) => v > 0) && (
         <p className="mt-3 text-sm text-gray-600">
-          Busiest around <span className="font-semibold text-ink">{String(peak).padStart(2, "0")}:00</span>
+          {t.rich("busiest", { hour: `${String(peak).padStart(2, "0")}:00`, b: (chunks) => <span className="font-semibold text-ink">{chunks}</span> })}
         </p>
       )}
     </div>

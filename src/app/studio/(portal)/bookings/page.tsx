@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { requireOwner } from "@/server/session";
@@ -6,7 +7,9 @@ import { PageHeader } from "@/components/studio/PageHeader";
 import { BookingsTable } from "@/components/studio/BookingsTable";
 import { isPassType } from "@/lib/passes";
 
-export const metadata: Metadata = { title: "Bookings" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getTranslations("studio.nav"))("bookings") };
+}
 
 const STATUSES = ["active", "upcoming", "past", "cancelled", "all"] as const;
 
@@ -22,10 +25,11 @@ export default async function StudioBookingsPage({ searchParams }: { searchParam
     limit: 300,
   };
   const bookings = await listGymBookings(filter);
+  const t = await getTranslations("studio.pages");
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-      <PageHeader eyebrow="Members" title="Bookings" description={`${bookings.length} ${bookings.length === 1 ? "booking" : "bookings"} shown`} />
+      <PageHeader eyebrow={t("members")} title={t("bookings")} description={t("bookingsShown", { count: bookings.length })} />
       <Suspense>
         <BookingsTable bookings={bookings} focusId={params.focus} />
       </Suspense>

@@ -1304,5 +1304,403 @@
     "empty": "Keine Übungen passen zu diesen Filtern.",
     "how": "So geht's",
     "tips": "Tipps"
+  },
+  "studio": {
+    "nav": {
+      "aria": "Studio-Navigation",
+      "dashboard": "Dashboard",
+      "checkin": "Check-in",
+      "bookings": "Buchungen",
+      "notifications": "Benachrichtigungen",
+      "passes": "Pässe & Preise",
+      "reviews": "Bewertungen",
+      "financial": "Umsatz",
+      "profile": "Studioprofil",
+      "scan": "Scan",
+      "groups": {
+        "overview": "Übersicht",
+        "grow": "Wachstum",
+        "business": "Geschäft"
+      },
+      "close": "Navigation schließen",
+      "open": "Navigation öffnen",
+      "live": "Live",
+      "draft": "Entwurf",
+      "viewListing": "Öffentliches Profil ansehen",
+      "viewListingHint": "So sehen Mitglieder dein Studio",
+      "memberApp": "Mitglieder-App",
+      "signOut": "Abmelden",
+      "expand": "Seitenleiste ausklappen",
+      "collapse": "Seitenleiste einklappen",
+      "collapseShort": "Einklappen",
+      "notificationsUnread": "Benachrichtigungen, {count} ungelesen",
+      "draftBanner": "<b>{name} ist ein Entwurf.</b> Mitglieder finden dein Studio erst, wenn du es veröffentlichst.",
+      "publish": "Veröffentlichen",
+      "tabsAria": "Studio-Tabs",
+      "tabs": {
+        "today": "Heute",
+        "bookings": "Buchungen",
+        "scan": "Scan",
+        "alerts": "Hinweise"
+      }
+    },
+    "pages": {
+      "inbox": "Posteingang",
+      "notifications": "Benachrichtigungen",
+      "pushTitle": "Verpasse keine Buchung",
+      "pushBody": "Aktiviere Push und dieses Gerät meldet sich, sobald ein Mitglied einen Pass bucht.",
+      "passes": "Pässe & Preise",
+      "passesHint": "Preise in {currency}. Änderungen gelten nur für neue Buchungen.",
+      "members": "Mitglieder",
+      "bookings": "Buchungen",
+      "bookingsShown": "{count, plural, one {# Buchung} other {# Buchungen}} angezeigt",
+      "frontDesk": "Empfang",
+      "checkin": "Check-in",
+      "checkinHint": "Scanne den QR-Code auf dem Pass eines Mitglieds oder gib den Code ein.",
+      "recentCheckins": "Heute und früher",
+      "method": {
+        "qr": "QR",
+        "code": "Code",
+        "manual": "Manuell"
+      },
+      "yourListing": "Dein Profil",
+      "profile": "Studioprofil",
+      "profileHint": "Alles, was Mitglieder auf deiner Seite sehen.",
+      "welcome": "Willkommen bei Fit Planet Studio. Füge ein paar Fotos hinzu und veröffentliche dann, um Buchungen zu erhalten.",
+      "ownerOnly": "Nur der Inhaber des Studios kann das Profil bearbeiten.",
+      "check": {
+        "name": "Name und Beschreibung",
+        "photo": "Mindestens ein Foto",
+        "price": "Preis für den Tagespass",
+        "address": "Adresse"
+      }
+    },
+    "onboarding": {
+      "meta": "Studio eintragen",
+      "time": "Etwa 5 Minuten",
+      "eyebrow": "Studio eintragen · Kostenlos",
+      "titleNamed": "Bringen wir das Studio von {name} auf die Karte",
+      "title": "Bringen wir dein Studio auf die Karte",
+      "lead": "Du kannst später alles ändern. Nichts ist sichtbar, bevor du veröffentlichst."
+    },
+    "pricing": {
+      "saved": "Gespeichert",
+      "failed": "Preise konnten nicht gespeichert werden",
+      "onSale": "Im Verkauf",
+      "off": "Aus",
+      "priceAria": "Preis für {pass}",
+      "note": {
+        "day": "Ein Eintritt an einem Tag",
+        "week": "7 Tage, ein Eintritt pro Tag",
+        "month": "30 Tage, ein Eintritt pro Tag"
+      },
+      "cheaper": "{percent} % günstiger pro Tag als ein Tagespass",
+      "sold": "Verkauft, 30 Tage",
+      "limit": "Tageslimit für Tagespässe",
+      "limitHint": "Verkauf von Tagespässen stoppen, sobald so viele für ein Datum gebucht sind. 0 bedeutet kein Limit.",
+      "saving": "Wird gespeichert...",
+      "save": "Preise speichern"
+    },
+    "publish": {
+      "live": "Live auf Fit Planet",
+      "suspended": "Gesperrt",
+      "draft": "Entwurf",
+      "liveText": "Mitglieder können dich finden und buchen",
+      "hiddenText": "Dein Profil ist verborgen",
+      "preview": "Vorschau",
+      "saved": "Gespeichert",
+      "failed": "Aktualisierung fehlgeschlagen",
+      "saving": "Wird gespeichert...",
+      "unpublish": "Verbergen",
+      "publish": "Veröffentlichen"
+    },
+    "reply": {
+      "edit": "Antwort bearbeiten",
+      "reply": "Öffentlich antworten",
+      "placeholder": "Bedanke dich oder erkläre, was du dagegen tust. Alle können das sehen.",
+      "cancel": "Abbrechen",
+      "posted": "Antwort veröffentlicht",
+      "failed": "Antwort konnte nicht veröffentlicht werden",
+      "posting": "Wird veröffentlicht...",
+      "post": "Antwort veröffentlichen"
+    },
+    "charts": {
+      "hourTitle": "{hour} · {value} Check-ins im Schnitt",
+      "busiest": "Am vollsten gegen <b>{hour}</b>",
+      "full": "voll",
+      "revenueAria": "Umsatz der letzten 30 Tage",
+      "barTitle": "{date}: {amount} · {count, plural, one {# Buchung} other {# Buchungen}}",
+      "today": "Heute"
+    },
+    "revenue": {
+      "eyebrow": "Geschäft",
+      "title": "Umsatz",
+      "currency": "Alle Beträge in {currency}.",
+      "kpi": {
+        "revenue": "Umsatz, 30 Tage",
+        "revenuePrev": "{amount} in den 30 Tagen davor",
+        "firstMonth": "Erster Monat auf Fit Planet",
+        "bookings": "Buchungen, 30 Tage",
+        "average": "{amount} im Schnitt",
+        "collect": "Noch zu kassieren",
+        "collectHint": "Zahlung am Empfang",
+        "fee": "Plattformgebühr",
+        "feeHint": "Auf Online-Zahlungen"
+      },
+      "daily": "Täglicher Umsatz",
+      "byType": "Nach Passart",
+      "sold": "{count} verkauft",
+      "payouts": "Online-Auszahlungen",
+      "payoutsText": "{amount} wurden kürzlich online bezahlt. Online-Zahlungen gehen auf das Fit-Planet-Konto, dein Anteil (abzüglich {fee} %) wird per Banküberweisung ausgezahlt.",
+      "transactions": "Transaktionen",
+      "desk": "Empfang",
+      "online": "Online",
+      "none": "Noch keine Transaktionen."
+    },
+    "reviews": {
+      "eyebrow": "Ruf",
+      "title": "Bewertungen",
+      "waiting": "{count} warten auf eine Antwort",
+      "allAnswered": "Jede Bewertung hat eine Antwort. Super.",
+      "filters": {
+        "all": "Alle Bewertungen",
+        "unanswered": "Braucht eine Antwort",
+        "low": "3 Sterne oder weniger"
+      },
+      "none": "Hier gibt es noch keine Bewertungen.",
+      "verified": "Bestätigter Besuch",
+      "yourReply": "Deine Antwort"
+    },
+    "dashboard": {
+      "greeting": {
+        "morning": "Guten Morgen, {name}",
+        "afternoon": "Guten Tag, {name}",
+        "evening": "Guten Abend, {name}"
+      },
+      "greetingPlain": {
+        "morning": "Guten Morgen",
+        "afternoon": "Guten Tag",
+        "evening": "Guten Abend"
+      },
+      "title": "Heute",
+      "checkIn": "Mitglied einchecken",
+      "live": "Live",
+      "inGym": "Personen gerade im Studio",
+      "kpi": {
+        "bookings": "Buchungen heute",
+        "upcoming": "{count} anstehend",
+        "revenue": "Umsatz heute",
+        "revenue30": "{amount} in 30 Tagen",
+        "checkins": "Check-ins heute",
+        "active": "{count, plural, one {# aktiver Pass} other {# aktive Pässe}}"
+      },
+      "unpaid": "<b>{count, plural, one {# Buchung mit Zahlung am Empfang} other {# Buchungen mit Zahlung am Empfang}}</b> noch zu kassieren.",
+      "pushTitle": "Erhalte eine Meldung bei jeder Buchung",
+      "pushBodyPhone": "Aktiviere Benachrichtigungen und dieses Handy meldet sich, sobald ein Mitglied einen Pass bucht.",
+      "pushBody": "Aktiviere Benachrichtigungen und wir informieren dieses Gerät, sobald ein Mitglied bucht.",
+      "revenue30": "Umsatz · letzte 30 Tage",
+      "trend": "{trend} % gegenüber den 30 Tagen davor",
+      "passMix": "Pass-Mix · 30 Tage",
+      "bookingsWord": "{count, plural, one {Buchung} other {Buchungen}}",
+      "latest": "Neueste Buchungen",
+      "viewAll": "Alle ansehen",
+      "noBookings": "Noch keine Buchungen. Teile dein Profil, um die erste zu bekommen.",
+      "cols": {
+        "member": "Mitglied",
+        "pass": "Pass",
+        "starts": "Beginn",
+        "payment": "Zahlung",
+        "amount": "Betrag"
+      },
+      "status": {
+        "cancelled": "Storniert",
+        "refunded": "Erstattet",
+        "paid": "Bezahlt",
+        "desk": "Am Empfang"
+      },
+      "recentCheckins": "Letzte Check-ins",
+      "scan": "Scannen",
+      "noCheckins": "Noch niemand hat eingecheckt.",
+      "peak": "Stoßzeiten",
+      "peakHint": "Check-ins pro Stunde im Schnitt, letzte 30 Tage"
+    },
+    "bookings": {
+      "range": "{from} bis {to}",
+      "done": "Erledigt",
+      "failed": "Etwas ist schiefgelaufen",
+      "exportFailed": "Export fehlgeschlagen",
+      "actions": "Buchungsaktionen",
+      "markPaid": "Als bezahlt markieren",
+      "cancelRefund": "Stornieren und erstatten",
+      "cancel": "Buchung stornieren",
+      "tabs": {
+        "all": "Alle",
+        "active": "Aktiv",
+        "upcoming": "Anstehend",
+        "past": "Vergangen",
+        "cancelled": "Storniert"
+      },
+      "search": "Name, Telefon oder Code",
+      "passType": "Passart",
+      "allPasses": "Alle Pässe",
+      "export": "CSV exportieren",
+      "empty": "Keine Buchungen passen zu diesen Filtern.",
+      "status": {
+        "cancelled": "Storniert",
+        "refunded": "Erstattet",
+        "used": "Genutzt",
+        "active": "Aktiv",
+        "upcoming": "Anstehend"
+      },
+      "collect": "Am Empfang kassieren",
+      "cols": {
+        "member": "Mitglied",
+        "pass": "Pass",
+        "validity": "Gültigkeit",
+        "status": "Status",
+        "payment": "Zahlung",
+        "visits": "Besuche",
+        "amount": "Betrag"
+      },
+      "atDesk": "Am Empfang",
+      "online": "Online",
+      "paid": "Bezahlt",
+      "due": "Offen"
+    },
+    "desk": {
+      "stop": "Kamera stoppen",
+      "blocked": "Kamerazugriff wurde blockiert",
+      "noCamera": "Keine Kamera verfügbar",
+      "allow": "Erlaube den Kamerazugriff in den Browsereinstellungen oder gib den Code unten ein.",
+      "scanTitle": "Pass eines Mitglieds scannen",
+      "scanText": "Richte die Kamera auf den QR-Code auf dem Handy.",
+      "starting": "Kamera startet...",
+      "start": "Scannen starten",
+      "code": "Passcode",
+      "checking": "Wird geprüft...",
+      "checkIn": "Einchecken",
+      "placeholder": "Hier erscheinen die Scan-Ergebnisse, inklusive was zu kassieren ist, wenn das Mitglied am Empfang zahlt.",
+      "checkedIn": "Eingecheckt",
+      "notValid": "Nicht gültig",
+      "firstVisit": "Erster Besuch. Sag Hallo!",
+      "welcomeBack": "Willkommen zurück",
+      "pass": "Pass",
+      "valid": "Gültig",
+      "range": "{from} bis {to}",
+      "visits": "Besuche",
+      "payment": "Zahlung",
+      "paid": "Bezahlt",
+      "atDesk": "Am Empfang",
+      "collect": "{amount} kassieren",
+      "collectHint": "Dieses Mitglied zahlt am Empfang.",
+      "markPaid": "Als bezahlt markieren"
+    },
+    "editor": {
+      "addOwn": "Eigenes hinzufügen",
+      "add": "Hinzufügen",
+      "optional": "(optional)",
+      "uploadFailed": "{name} konnte nicht hochgeladen werden",
+      "noLocation": "Standort ist in diesem Browser nicht verfügbar",
+      "locationSet": "Standort gesetzt",
+      "locationSetText": "Mitglieder sehen genaue Entfernungen und Wegbeschreibungen.",
+      "locationFailed": "Standort konnte nicht ermittelt werden",
+      "locationFailedText": "Prüfe die Standortberechtigung oder überspringe das vorerst.",
+      "ready": "Dein Studio ist bereit",
+      "readyText": "Prüfe dein Profil und veröffentliche es, wenn du zufrieden bist.",
+      "saved": "Gespeichert",
+      "basics": {
+        "title": "Die Grundlagen",
+        "hint": "Das sehen Mitglieder zuerst.",
+        "name": "Name des Studios",
+        "namePlaceholder": "Iron Paradise Gym",
+        "description": "Kurzbeschreibung",
+        "descriptionPlaceholder": "Was macht dein Studio besonders? Geräte, Atmosphäre, für wen es ist.",
+        "story": "Ausführliche Beschreibung",
+        "storyPlaceholder": "Geschichte, Größe, Trainer, wie ein erster Besuch abläuft..."
+      },
+      "location": {
+        "title": "Standort",
+        "hint": "Preise werden in deiner Währung berechnet, Öffnungszeiten folgen deiner Zeitzone.",
+        "country": "Land",
+        "city": "Stadt",
+        "area": "Stadtteil",
+        "street": "Straße und Hausnummer",
+        "pin": "Kartenpin",
+        "locating": "Standort wird ermittelt...",
+        "useMine": "Ich bin im Studio, meinen Standort verwenden",
+        "currency": "Währung",
+        "timezone": "Zeitzone"
+      },
+      "pricing": {
+        "title": "Pässe und Preise",
+        "hint": "Lass Woche oder Monat auf 0, wenn du nur Tagespässe verkaufst.",
+        "note": {
+          "day": "Ein Eintritt, ein Tag",
+          "week": "7 Tage, einmal täglich",
+          "month": "30 Tage, einmal täglich"
+        }
+      },
+      "hours": {
+        "title": "Öffnungszeiten und Kapazität",
+        "open247": "Rund um die Uhr geöffnet",
+        "open247Hint": "Mitglieder können jederzeit einchecken",
+        "opens": "{day} öffnet",
+        "to": "bis",
+        "closes": "{day} schließt",
+        "closed": "Geschlossen",
+        "copy": "{day} auf alle Tage übertragen",
+        "capacity": "Maximale Personen gleichzeitig",
+        "capacityHint": "Für die Live-Auslastung",
+        "limit": "Tagespässe pro Tag (optional)",
+        "limitHint": "Stoppt den Verkauf von Tagespässen, sobald erreicht"
+      },
+      "photos": {
+        "title": "Fotos",
+        "hint": "Helle, weite Aufnahmen der Trainingsfläche wirken am besten. Das markierte Foto ist dein Titelbild.",
+        "coverAria": "Titelbild",
+        "makeCover": "Als Titelbild festlegen",
+        "cover": "Titelbild",
+        "setCover": "Als Titel",
+        "remove": "Foto entfernen",
+        "add": "Fotos hinzufügen"
+      },
+      "amenities": {
+        "title": "Ausstattung und Geräte",
+        "amenities": "Ausstattung",
+        "styles": "Trainingsarten"
+      },
+      "contact": {
+        "title": "Kontakt und Hausregeln",
+        "hint": "Optional, aber Mitglieder vertrauen Studios, die das ausfüllen.",
+        "phone": "Telefon",
+        "email": "E-Mail",
+        "website": "Website",
+        "instagramPlaceholder": "@deinstudio",
+        "cancellation": "Stornierungsbedingungen",
+        "cancellationPlaceholder": "Volle Erstattung bis zum Vortag",
+        "guests": "Gäste",
+        "guestsPlaceholder": "Gäste brauchen einen eigenen Pass",
+        "dresscode": "Kleiderordnung",
+        "dresscodePlaceholder": "Saubere Hallenschuhe",
+        "age": "Alter",
+        "agePlaceholder": "Ab 16 Jahren"
+      },
+      "steps": {
+        "basics": "Grundlagen",
+        "location": "Standort",
+        "pricing": "Preise",
+        "photos": "Fotos"
+      },
+      "back": "Zurück",
+      "creating": "Wird erstellt...",
+      "create": "Mein Studio erstellen",
+      "continue": "Weiter",
+      "discard": "Verwerfen",
+      "saving": "Wird gespeichert...",
+      "save": "Änderungen speichern"
+    },
+    "meta": {
+      "description": "Führe dein Studio mit Fit Planet: Buchungen, Check-ins, Preise und Umsatz an einem Ort."
+    }
   }
 }

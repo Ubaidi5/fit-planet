@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -24,7 +25,7 @@ import { signOutAction } from "@/actions/auth";
 type IconType = React.ComponentType<{ className?: string }>;
 
 interface ModuleLink {
-  title: string;
+  key: string;
   href: string;
   icon: IconType;
   badge?: string;
@@ -32,26 +33,26 @@ interface ModuleLink {
 
 const moduleGroups: { label: string; items: ModuleLink[] }[] = [
   {
-    label: "Overview",
+    label: "overview",
     items: [
-      { title: "Dashboard", href: "/studio/dashboard", icon: HiOutlineChartBarSquare },
-      { title: "Check-in desk", href: "/studio/checkin", icon: HiOutlineQrCode, badge: "Scan" },
-      { title: "Bookings", href: "/studio/bookings", icon: HiOutlineCalendarDays },
-      { title: "Notifications", href: "/studio/notifications", icon: HiOutlineBell },
+      { key: "dashboard", href: "/studio/dashboard", icon: HiOutlineChartBarSquare },
+      { key: "checkin", href: "/studio/checkin", icon: HiOutlineQrCode, badge: "scan" },
+      { key: "bookings", href: "/studio/bookings", icon: HiOutlineCalendarDays },
+      { key: "notifications", href: "/studio/notifications", icon: HiOutlineBell },
     ],
   },
   {
-    label: "Grow",
+    label: "grow",
     items: [
-      { title: "Passes & pricing", href: "/studio/passes", icon: HiOutlineReceiptPercent },
-      { title: "Reviews", href: "/studio/reviews", icon: HiOutlineStar },
+      { key: "passes", href: "/studio/passes", icon: HiOutlineReceiptPercent },
+      { key: "reviews", href: "/studio/reviews", icon: HiOutlineStar },
     ],
   },
   {
-    label: "Business",
+    label: "business",
     items: [
-      { title: "Revenue", href: "/studio/financial", icon: HiOutlineCurrencyDollar },
-      { title: "Gym profile", href: "/studio/profile", icon: HiOutlineBuildingOffice2 },
+      { key: "financial", href: "/studio/financial", icon: HiOutlineCurrencyDollar },
+      { key: "profile", href: "/studio/profile", icon: HiOutlineBuildingOffice2 },
     ],
   },
 ];
@@ -76,6 +77,7 @@ export function StudioSidebar({
   mobileOpen,
   onCloseMobile,
 }: StudioSidebarProps) {
+  const t = useTranslations("studio.nav");
   const pathname = usePathname();
   // The mobile drawer always shows the full sidebar
   const collapsed = isCollapsed && !mobileOpen;
@@ -96,17 +98,17 @@ export function StudioSidebar({
 
       <aside
         className={cn(
-          "fixed top-3 bottom-3 left-3 z-50 flex flex-col rounded-4xl border border-gray-900/[0.06] bg-surface shadow-soft transition-all duration-500 ease-out-expo",
+          "fixed top-3 bottom-3 start-3 z-50 flex flex-col rounded-4xl border border-gray-900/[0.06] bg-surface shadow-soft transition-all duration-500 ease-out-expo",
           "w-[17rem] lg:translate-x-0",
-          mobileOpen ? "translate-x-0 shadow-lift" : "-translate-x-[calc(100%_+_1rem)]",
+          mobileOpen ? "translate-x-0 shadow-lift" : "-translate-x-[calc(100%_+_1rem)] max-lg:rtl:translate-x-[calc(100%_+_1rem)]",
           collapsed ? "lg:w-[4.5rem]" : "lg:w-[16.5rem]",
         )}
-        aria-label="Studio navigation"
+        aria-label={t("aria")}
       >
         {/* Header */}
         <div className={cn("flex h-18 items-center px-4", collapsed ? "justify-center" : "justify-between")}>
           {collapsed ? (
-            <Link href="/studio/dashboard" aria-label="Studio dashboard">
+            <Link href="/studio/dashboard" aria-label={t("dashboard")}>
               <LogoMark />
             </Link>
           ) : (
@@ -116,7 +118,7 @@ export function StudioSidebar({
             type="button"
             onClick={onCloseMobile}
             className="flex size-9 items-center justify-center rounded-full text-gray-500 hover:bg-gray-900/5 lg:hidden"
-            aria-label="Close navigation"
+            aria-label={t("close")}
           >
             <HiXMark className="size-5" />
           </button>
@@ -133,7 +135,7 @@ export function StudioSidebar({
               <p className="flex items-center gap-1.5 text-xs text-gray-500">
                 <span className={cn("size-1.5 rounded-full", gym.status === "published" ? "bg-emerald-500" : "bg-stamp-ochre")} />
                 <span className="truncate">
-                  {gym.status === "published" ? "Live" : "Draft"} · {gym.area}
+                  {gym.status === "published" ? t("live") : t("draft")} · {gym.area}
                 </span>
               </p>
             </div>
@@ -146,7 +148,7 @@ export function StudioSidebar({
             <div key={group.label}>
               {!collapsed ? (
                 <p className="mb-1.5 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-400">
-                  {group.label}
+                  {t(`groups.${group.label}`)}
                 </p>
               ) : (
                 <div className="mx-auto mb-2 h-px w-6 bg-gray-900/[0.08]" />
@@ -160,7 +162,7 @@ export function StudioSidebar({
                       key={module.href}
                       href={module.href}
                       aria-current={isActive ? "page" : undefined}
-                      title={collapsed ? module.title : undefined}
+                      title={collapsed ? t(module.key) : undefined}
                       className={cn(
                         "group relative flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition-all duration-300 ease-out-expo",
                         isActive
@@ -175,7 +177,7 @@ export function StudioSidebar({
                           isActive ? "text-volt" : "text-gray-400 group-hover:text-gray-700",
                         )}
                       />
-                      {!collapsed && <span className="flex-1 truncate">{module.title}</span>}
+                      {!collapsed && <span className="flex-1 truncate">{t(module.key)}</span>}
                       {!collapsed && module.badge && (
                         <span
                           className={cn(
@@ -184,7 +186,7 @@ export function StudioSidebar({
                           )}
                         >
                           <span className="size-1.5 animate-pulse rounded-full bg-current" />
-                          {module.badge}
+                          {t(module.badge)}
                         </span>
                       )}
                       {!collapsed && module.href === "/studio/notifications" && unread > 0 && (
@@ -211,10 +213,10 @@ export function StudioSidebar({
               className="group flex items-center justify-between rounded-2xl bg-volt-soft/80 px-3.5 py-3 text-sm transition-colors hover:bg-volt-soft"
             >
               <span>
-                <span className="block font-semibold text-ink">View public listing</span>
-                <span className="text-xs text-gray-600">See what members see</span>
+                <span className="block font-semibold text-ink">{t("viewListing")}</span>
+                <span className="text-xs text-gray-600">{t("viewListingHint")}</span>
               </span>
-              <HiOutlineArrowTopRightOnSquare className="size-4 text-gray-600 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              <HiOutlineArrowTopRightOnSquare className="size-4 text-gray-600 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 rtl:-scale-x-100" />
             </Link>
           )}
           {!collapsed && (
@@ -223,12 +225,12 @@ export function StudioSidebar({
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-ink">{user.name}</p>
                 <Link href="/app/dashboard" className="text-xs text-gray-500 hover:text-ink">
-                  Member app
+                  {t("memberApp")}
                 </Link>
               </div>
               <form action={signOutAction}>
                 <input type="hidden" name="next" value="/studio/login" />
-                <button type="submit" aria-label="Sign out" title="Sign out" className="flex size-8 cursor-pointer items-center justify-center rounded-full text-gray-400 hover:bg-gray-900/5 hover:text-ink">
+                <button type="submit" aria-label={t("signOut")} title={t("signOut")} className="flex size-8 cursor-pointer items-center justify-center rounded-full text-gray-400 hover:bg-gray-900/5 hover:text-ink">
                   <HiOutlineArrowRightOnRectangle className="size-4.5" />
                 </button>
               </form>
@@ -241,12 +243,12 @@ export function StudioSidebar({
               "hidden w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-900/[0.04] hover:text-ink lg:flex",
               collapsed && "justify-center px-0",
             )}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-label={collapsed ? t("expand") : t("collapse")}
           >
             <HiOutlineChevronDoubleLeft
               className={cn("size-5 transition-transform duration-500", collapsed && "rotate-180")}
             />
-            {!collapsed && "Collapse"}
+            {!collapsed && t("collapseShort")}
           </button>
         </div>
       </aside>

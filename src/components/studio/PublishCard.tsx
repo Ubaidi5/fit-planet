@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -9,6 +10,7 @@ import { setGymStatusAction } from "@/actions/studio";
 import { useToast } from "@/components/notifications/ToastProvider";
 
 export function PublishCard({ gymId, slug, status, checklist }: { gymId: string; slug: string; status: "draft" | "published" | "suspended"; checklist: { label: string; done: boolean }[] }) {
+  const t = useTranslations("studio.publish");
   const [pending, startTransition] = useTransition();
   const router = useRouter();
   const toast = useToast();
@@ -21,9 +23,9 @@ export function PublishCard({ gymId, slug, status, checklist }: { gymId: string;
         <div className="min-w-0">
           <p className={cn("flex items-center gap-2 font-mono text-[11px] tracking-[0.14em] uppercase", live ? "text-volt" : "text-stamp-ochre")}>
             <span className={cn("size-1.5 rounded-full", live ? "animate-pulse bg-volt" : "bg-stamp-ochre")} />
-            {live ? "Live on Fit Planet" : status === "suspended" ? "Suspended" : "Draft"}
+            {live ? t("live") : status === "suspended" ? t("suspended") : t("draft")}
           </p>
-          <p className="mt-1.5 text-lg font-semibold tracking-[-0.02em]">{live ? "Members can find and book you" : "Your listing is hidden"}</p>
+          <p className="mt-1.5 text-lg font-semibold tracking-[-0.02em]">{live ? t("liveText") : t("hiddenText")}</p>
           {!live && (
             <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
               {checklist.map((c) => (
@@ -41,8 +43,8 @@ export function PublishCard({ gymId, slug, status, checklist }: { gymId: string;
             target="_blank"
             className={cn("inline-flex h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold", live ? "bg-white/10 text-white hover:bg-white/15" : "text-gray-700 hover:bg-gray-900/5")}
           >
-            <HiOutlineArrowTopRightOnSquare className="size-4" />
-            Preview
+            <HiOutlineArrowTopRightOnSquare className="size-4 rtl:-scale-x-100" />
+            {t("preview")}
           </Link>
           <button
             type="button"
@@ -51,9 +53,9 @@ export function PublishCard({ gymId, slug, status, checklist }: { gymId: string;
               startTransition(async () => {
                 const result = await setGymStatusAction(gymId, live ? "draft" : "published");
                 if (result.ok) {
-                  toast.success(result.message ?? "Saved");
+                  toast.success(result.message ?? t("saved"));
                   router.refresh();
-                } else toast.error("Couldn't update", result.error);
+                } else toast.error(t("failed"), result.error);
               })
             }
             className={cn(
@@ -62,7 +64,7 @@ export function PublishCard({ gymId, slug, status, checklist }: { gymId: string;
             )}
           >
             {live ? <HiOutlineEyeSlash className="size-4" /> : <HiOutlineEye className="size-4" />}
-            {pending ? "Saving..." : live ? "Unpublish" : "Publish"}
+            {pending ? t("saving") : live ? t("unpublish") : t("publish")}
           </button>
         </div>
       </div>

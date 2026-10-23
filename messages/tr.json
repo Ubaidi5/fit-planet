@@ -1304,5 +1304,403 @@
     "empty": "Bu filtrelere uyan egzersiz yok.",
     "how": "Nasıl yapılır",
     "tips": "İpuçları"
+  },
+  "studio": {
+    "nav": {
+      "aria": "Stüdyo menüsü",
+      "dashboard": "Panel",
+      "checkin": "Giriş masası",
+      "bookings": "Rezervasyonlar",
+      "notifications": "Bildirimler",
+      "passes": "Pasolar ve fiyatlar",
+      "reviews": "Yorumlar",
+      "financial": "Gelir",
+      "profile": "Salon profili",
+      "scan": "Tara",
+      "groups": {
+        "overview": "Genel",
+        "grow": "Büyüme",
+        "business": "İşletme"
+      },
+      "close": "Menüyü kapat",
+      "open": "Menüyü aç",
+      "live": "Yayında",
+      "draft": "Taslak",
+      "viewListing": "Herkese açık sayfayı gör",
+      "viewListingHint": "Üyelerin gördüğü hâli",
+      "memberApp": "Üye uygulaması",
+      "signOut": "Çıkış yap",
+      "expand": "Kenar çubuğunu genişlet",
+      "collapse": "Kenar çubuğunu daralt",
+      "collapseShort": "Daralt",
+      "notificationsUnread": "Bildirimler, {count} okunmamış",
+      "draftBanner": "<b>{name} taslak durumda.</b> Yayınlayana kadar üyeler salonunu bulamaz.",
+      "publish": "Yayınla",
+      "tabsAria": "Stüdyo sekmeleri",
+      "tabs": {
+        "today": "Bugün",
+        "bookings": "Rezervasyon",
+        "scan": "Tara",
+        "alerts": "Uyarılar"
+      }
+    },
+    "pages": {
+      "inbox": "Gelen kutusu",
+      "notifications": "Bildirimler",
+      "pushTitle": "Hiçbir rezervasyonu kaçırma",
+      "pushBody": "Anlık bildirimleri aç, bir üye paso aldığı an bu cihaz seni uyarsın.",
+      "passes": "Pasolar ve fiyatlar",
+      "passesHint": "Fiyatlar {currency} cinsinden. Değişiklikler yalnızca yeni rezervasyonlara uygulanır.",
+      "members": "Üyeler",
+      "bookings": "Rezervasyonlar",
+      "bookingsShown": "{count} rezervasyon gösteriliyor",
+      "frontDesk": "Ön büro",
+      "checkin": "Giriş",
+      "checkinHint": "Üyenin pasosundaki QR'ı tara ya da kodunu yaz.",
+      "recentCheckins": "Bugün ve öncesi",
+      "method": {
+        "qr": "QR",
+        "code": "Kod",
+        "manual": "Manuel"
+      },
+      "yourListing": "İlanın",
+      "profile": "Salon profili",
+      "profileHint": "Üyelerin sayfanda gördüğü her şey.",
+      "welcome": "Fit Planet Studio'ya hoş geldin. Birkaç fotoğraf ekle, ardından rezervasyon almaya başlamak için yayınla.",
+      "ownerOnly": "İlanı yalnızca salon sahibi düzenleyebilir.",
+      "check": {
+        "name": "Ad ve açıklama",
+        "photo": "En az bir fotoğraf",
+        "price": "Günlük paso fiyatı",
+        "address": "Adres"
+      }
+    },
+    "onboarding": {
+      "meta": "Salonunu ekle",
+      "time": "Yaklaşık 5 dakika",
+      "eyebrow": "Salonunu ekle · Ücretsiz",
+      "titleNamed": "{name}, salonunu haritaya koyalım",
+      "title": "Salonunu haritaya koyalım",
+      "lead": "Her şeyi sonra değiştirebilirsin. Yayınlayana kadar hiçbir şey görünmez."
+    },
+    "pricing": {
+      "saved": "Kaydedildi",
+      "failed": "Fiyatlar kaydedilemedi",
+      "onSale": "Satışta",
+      "off": "Kapalı",
+      "priceAria": "{pass} fiyatı",
+      "note": {
+        "day": "Bir günde tek giriş",
+        "week": "7 gün, günde bir giriş",
+        "month": "30 gün, günde bir giriş"
+      },
+      "cheaper": "Günlük pasodan gün başına %{percent} daha ucuz",
+      "sold": "Satılan, 30 gün",
+      "limit": "Günlük paso limiti",
+      "limitHint": "Bir tarih için bu sayıya ulaşılınca günlük paso satışını durdur. 0 limitsiz demektir.",
+      "saving": "Kaydediliyor...",
+      "save": "Fiyatları kaydet"
+    },
+    "publish": {
+      "live": "Fit Planet'te yayında",
+      "suspended": "Askıya alındı",
+      "draft": "Taslak",
+      "liveText": "Üyeler seni bulup rezervasyon yapabilir",
+      "hiddenText": "İlanın gizli",
+      "preview": "Önizle",
+      "saved": "Kaydedildi",
+      "failed": "Güncellenemedi",
+      "saving": "Kaydediliyor...",
+      "unpublish": "Yayından kaldır",
+      "publish": "Yayınla"
+    },
+    "reply": {
+      "edit": "Yanıtı düzenle",
+      "reply": "Herkese açık yanıtla",
+      "placeholder": "Teşekkür et ya da bu konuda ne yaptığını açıkla. Herkes bunu görebilir.",
+      "cancel": "Vazgeç",
+      "posted": "Yanıt yayınlandı",
+      "failed": "Yanıt yayınlanamadı",
+      "posting": "Yayınlanıyor...",
+      "post": "Yanıtı yayınla"
+    },
+    "charts": {
+      "hourTitle": "{hour} · ortalama {value} giriş",
+      "busiest": "En yoğun saat: <b>{hour}</b>",
+      "full": "dolu",
+      "revenueAria": "Son 30 günün geliri",
+      "barTitle": "{date}: {amount} · {count} rezervasyon",
+      "today": "Bugün"
+    },
+    "revenue": {
+      "eyebrow": "İşletme",
+      "title": "Gelir",
+      "currency": "Tüm tutarlar {currency} cinsinden.",
+      "kpi": {
+        "revenue": "Gelir, 30 gün",
+        "revenuePrev": "Önceki 30 günde {amount}",
+        "firstMonth": "Fit Planet'te ilk ay",
+        "bookings": "Rezervasyon, 30 gün",
+        "average": "Ortalama {amount}",
+        "collect": "Tahsil edilecek",
+        "collectHint": "Kasada ödenecek rezervasyonlar",
+        "fee": "Platform ücreti",
+        "feeHint": "Online ödemelerde"
+      },
+      "daily": "Günlük gelir",
+      "byType": "Paso türüne göre",
+      "sold": "{count} satıldı",
+      "payouts": "Online ödemeler",
+      "payoutsText": "Son dönemde online {amount} ödendi. Online ödemeler Fit Planet hesabına yatar, payın (%{fee} düşülerek) banka havalesiyle ödenir.",
+      "transactions": "İşlemler",
+      "desk": "Kasa",
+      "online": "Online",
+      "none": "Henüz işlem yok."
+    },
+    "reviews": {
+      "eyebrow": "İtibar",
+      "title": "Yorumlar",
+      "waiting": "{count} yorum yanıt bekliyor",
+      "allAnswered": "Her yoruma yanıt verilmiş. Harika.",
+      "filters": {
+        "all": "Tüm yorumlar",
+        "unanswered": "Yanıt bekleyenler",
+        "low": "3 yıldız ve altı"
+      },
+      "none": "Burada henüz yorum yok.",
+      "verified": "Doğrulanmış ziyaret",
+      "yourReply": "Yanıtın"
+    },
+    "dashboard": {
+      "greeting": {
+        "morning": "Günaydın {name}",
+        "afternoon": "İyi günler {name}",
+        "evening": "İyi akşamlar {name}"
+      },
+      "greetingPlain": {
+        "morning": "Günaydın",
+        "afternoon": "İyi günler",
+        "evening": "İyi akşamlar"
+      },
+      "title": "Bugün",
+      "checkIn": "Üye girişi yap",
+      "live": "Canlı",
+      "inGym": "kişi şu an salonda",
+      "kpi": {
+        "bookings": "Bugünkü rezervasyonlar",
+        "upcoming": "{count} yaklaşan",
+        "revenue": "Bugünkü gelir",
+        "revenue30": "30 günde {amount}",
+        "checkins": "Bugünkü girişler",
+        "active": "{count} aktif paso"
+      },
+      "unpaid": "<b>Kasada ödenecek {count} rezervasyon</b> hâlâ tahsil edilmedi.",
+      "pushTitle": "Her rezervasyonda bildirim al",
+      "pushBodyPhone": "Bildirimleri aç, bir üye paso aldığı an bu telefon titresin.",
+      "pushBody": "Bildirimleri aç, bir üye rezervasyon yaptığı an bu cihazı uyaralım.",
+      "revenue30": "Gelir · son 30 gün",
+      "trend": "Önceki 30 güne göre %{trend}",
+      "passMix": "Paso dağılımı · 30 gün",
+      "bookingsWord": "rezervasyon",
+      "latest": "Son rezervasyonlar",
+      "viewAll": "Tümünü gör",
+      "noBookings": "Henüz rezervasyon yok. İlkini almak için ilanını paylaş.",
+      "cols": {
+        "member": "Üye",
+        "pass": "Paso",
+        "starts": "Başlangıç",
+        "payment": "Ödeme",
+        "amount": "Tutar"
+      },
+      "status": {
+        "cancelled": "İptal",
+        "refunded": "İade",
+        "paid": "Ödendi",
+        "desk": "Kasada"
+      },
+      "recentCheckins": "Son girişler",
+      "scan": "Tara",
+      "noCheckins": "Henüz kimse giriş yapmadı.",
+      "peak": "Yoğun saatler",
+      "peakHint": "Saat başına ortalama giriş, son 30 gün"
+    },
+    "bookings": {
+      "range": "{from} - {to}",
+      "done": "Tamam",
+      "failed": "Bir şeyler ters gitti",
+      "exportFailed": "Dışa aktarma başarısız",
+      "actions": "Rezervasyon işlemleri",
+      "markPaid": "Ödendi olarak işaretle",
+      "cancelRefund": "İptal et ve iade et",
+      "cancel": "Rezervasyonu iptal et",
+      "tabs": {
+        "all": "Tümü",
+        "active": "Aktif",
+        "upcoming": "Yaklaşan",
+        "past": "Geçmiş",
+        "cancelled": "İptal"
+      },
+      "search": "Ad, telefon veya kod",
+      "passType": "Paso türü",
+      "allPasses": "Tüm pasolar",
+      "export": "CSV indir",
+      "empty": "Bu filtrelere uyan rezervasyon yok.",
+      "status": {
+        "cancelled": "İptal",
+        "refunded": "İade",
+        "used": "Kullanıldı",
+        "active": "Aktif",
+        "upcoming": "Yaklaşan"
+      },
+      "collect": "Kasada tahsil et",
+      "cols": {
+        "member": "Üye",
+        "pass": "Paso",
+        "validity": "Geçerlilik",
+        "status": "Durum",
+        "payment": "Ödeme",
+        "visits": "Ziyaret",
+        "amount": "Tutar"
+      },
+      "atDesk": "Kasada",
+      "online": "Online",
+      "paid": "Ödendi",
+      "due": "Bekliyor"
+    },
+    "desk": {
+      "stop": "Kamerayı durdur",
+      "blocked": "Kamera erişimi engellendi",
+      "noCamera": "Kamera bulunamadı",
+      "allow": "Tarayıcı ayarlarından kamera erişimine izin ver ya da paso kodunu aşağıya yaz.",
+      "scanTitle": "Üyenin pasosunu tara",
+      "scanText": "Kamerayı telefonundaki QR koda tut.",
+      "starting": "Kamera açılıyor...",
+      "start": "Taramayı başlat",
+      "code": "Paso kodu",
+      "checking": "Kontrol ediliyor...",
+      "checkIn": "Giriş yap",
+      "placeholder": "Tarama sonuçları burada görünür; üye kasada ödüyorsa tahsil edilecek tutar da.",
+      "checkedIn": "Giriş yapıldı",
+      "notValid": "Geçersiz",
+      "firstVisit": "İlk ziyaret. Hoş geldin de!",
+      "welcomeBack": "Tekrar hoş geldin",
+      "pass": "Paso",
+      "valid": "Geçerlilik",
+      "range": "{from} - {to}",
+      "visits": "Ziyaret",
+      "payment": "Ödeme",
+      "paid": "Ödendi",
+      "atDesk": "Kasada",
+      "collect": "{amount} tahsil et",
+      "collectHint": "Bu üye kasada ödemeyi seçti.",
+      "markPaid": "Ödendi olarak işaretle"
+    },
+    "editor": {
+      "addOwn": "Kendin ekle",
+      "add": "Ekle",
+      "optional": "(isteğe bağlı)",
+      "uploadFailed": "{name} yüklenemedi",
+      "noLocation": "Bu tarayıcıda konum kullanılamıyor",
+      "locationSet": "Konum ayarlandı",
+      "locationSetText": "Üyeler doğru mesafe ve yol tarifi görecek.",
+      "locationFailed": "Konumun alınamadı",
+      "locationFailedText": "Konum iznini kontrol et ya da şimdilik bu adımı atla.",
+      "ready": "Stüdyon hazır",
+      "readyText": "İlanını gözden geçir, hazır olduğunda yayınla.",
+      "saved": "Kaydedildi",
+      "basics": {
+        "title": "Temel bilgiler",
+        "hint": "Üyelerin ilk gördüğü kısım.",
+        "name": "Salon adı",
+        "namePlaceholder": "Iron Paradise Gym",
+        "description": "Kısa açıklama",
+        "descriptionPlaceholder": "Salonunu gitmeye değer kılan ne? Ekipman, atmosfer, kimler için olduğu.",
+        "story": "Ayrıntılı tanıtım",
+        "storyPlaceholder": "Geçmişi, büyüklüğü, antrenörler, ilk ziyaretin nasıl geçtiği..."
+      },
+      "location": {
+        "title": "Konum",
+        "hint": "Fiyatlar senin para biriminde alınır, saatler saat dilimine göre gösterilir.",
+        "country": "Ülke",
+        "city": "Şehir",
+        "area": "Semt",
+        "street": "Açık adres",
+        "pin": "Harita konumu",
+        "locating": "Konum alınıyor...",
+        "useMine": "Salondayım, konumumu kullan",
+        "currency": "Para birimi",
+        "timezone": "Saat dilimi"
+      },
+      "pricing": {
+        "title": "Pasolar ve fiyatlar",
+        "hint": "Yalnızca günlük paso satıyorsan haftalık ve aylığı 0 bırak.",
+        "note": {
+          "day": "Tek giriş, bir gün",
+          "week": "7 gün, günde bir kez",
+          "month": "30 gün, günde bir kez"
+        }
+      },
+      "hours": {
+        "title": "Saatler ve kapasite",
+        "open247": "7/24 açık",
+        "open247Hint": "Üyeler her an giriş yapabilir",
+        "opens": "{day} açılış",
+        "to": "-",
+        "closes": "{day} kapanış",
+        "closed": "Kapalı",
+        "copy": "{day} saatlerini tüm günlere kopyala",
+        "capacity": "Aynı anda en fazla kişi",
+        "capacityHint": "Canlı yoğunluk göstergesi için kullanılır",
+        "limit": "Günlük paso sayısı (isteğe bağlı)",
+        "limitHint": "Bu sayıya ulaşılınca günlük paso satışı durur"
+      },
+      "photos": {
+        "title": "Fotoğraflar",
+        "hint": "Salonun aydınlık ve geniş açılı fotoğrafları en iyi sonucu verir. Yıldızlı fotoğraf kapak görselindir.",
+        "coverAria": "Kapak fotoğrafı",
+        "makeCover": "Kapak yap",
+        "cover": "Kapak",
+        "setCover": "Kapak yap",
+        "remove": "Fotoğrafı kaldır",
+        "add": "Fotoğraf ekle"
+      },
+      "amenities": {
+        "title": "Olanaklar ve ekipman",
+        "amenities": "Olanaklar",
+        "styles": "Antrenman türleri"
+      },
+      "contact": {
+        "title": "İletişim ve salon kuralları",
+        "hint": "İsteğe bağlı, ama üyeler bunu dolduran salonlara daha çok güvenir.",
+        "phone": "Telefon",
+        "email": "E-posta",
+        "website": "Web sitesi",
+        "instagramPlaceholder": "@salonun",
+        "cancellation": "İptal politikası",
+        "cancellationPlaceholder": "Bir gün öncesine kadar tam iade",
+        "guests": "Misafirler",
+        "guestsPlaceholder": "Misafirlerin kendi pasosu olmalı",
+        "dresscode": "Kıyafet kuralı",
+        "dresscodePlaceholder": "Temiz salon ayakkabısı",
+        "age": "Yaş",
+        "agePlaceholder": "16 yaş ve üzeri"
+      },
+      "steps": {
+        "basics": "Temel",
+        "location": "Konum",
+        "pricing": "Fiyatlar",
+        "photos": "Fotoğraflar"
+      },
+      "back": "Geri",
+      "creating": "Oluşturuluyor...",
+      "create": "Stüdyomu oluştur",
+      "continue": "Devam",
+      "discard": "Vazgeç",
+      "saving": "Kaydediliyor...",
+      "save": "Değişiklikleri kaydet"
+    },
+    "meta": {
+      "description": "Salonunu Fit Planet ile yönet: rezervasyonlar, girişler, fiyatlar ve gelir tek yerde."
+    }
   }
 }

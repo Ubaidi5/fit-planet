@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { HiCheckBadge, HiStar } from "react-icons/hi2";
 import { requireOwner } from "@/server/session";
@@ -5,15 +6,13 @@ import { listGymReviews } from "@/server/modules/reviews";
 import { PageHeader } from "@/components/studio/PageHeader";
 import { ReviewReply } from "@/components/studio/ReviewReply";
 import { cn } from "@/lib/utils";
+import { getRegion } from "@/lib/i18n/server";
 
-export const metadata: Metadata = { title: "Reviews" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getTranslations("studio.nav"))("reviews") };
+}
 
-const categories = [
-  ["cleanliness", "Cleanliness"],
-  ["equipment", "Equipment"],
-  ["staff", "Staff"],
-  ["value", "Value"],
-] as const;
+const categories = ["cleanliness", "equipment", "staff", "value"] as const;
 
 export default async function StudioReviewsPage({ searchParams }: { searchParams: Promise<{ filter?: string }> }) {
   const { gym, gyms } = await requireOwner("/studio/reviews");
@@ -23,11 +22,12 @@ export default async function StudioReviewsPage({ searchParams }: { searchParams
   const unanswered = all.filter((r) => !r.gymResponse).length;
   const distribution = [5, 4, 3, 2, 1].map((star) => ({ star, count: all.filter((r) => r.rating === star).length }));
   const breakdown = gym.ratingBreakdown;
-  const dateFmt = new Intl.DateTimeFormat("en", { day: "numeric", month: "short", year: "numeric" });
+  const [t, tr, region] = await Promise.all([getTranslations("studio.reviews"), getTranslations("reviews"), getRegion()]);
+  const dateFmt = new Intl.DateTimeFormat(region.locale, { day: "numeric", month: "short", year: "numeric" });
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-      <PageHeader eyebrow="Reputation" title="Reviews" description={unanswered > 0 ? `${unanswered} waiting for a reply` : "Every review has a reply. Nice."} />
+      <PageHeader eyebrow={t("eyebrow")} title={t("title")} description={unanswered > 0 ? t("waiting", { count: unanswered }) : t("allAnswered")} />
 
       <div className="grid gap-6 lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start">
         <aside className="space-y-4 lg:sticky lg:top-6">
@@ -40,7 +40,7 @@ export default async function StudioReviewsPage({ searchParams }: { searchParams
                     <HiStar key={s} className={cn("size-4", s <= Math.round(gym.rating) ? "text-stamp-ochre" : "text-gray-200")} />
                   ))}
                 </div>
-                <p className="text-xs text-gray-500">{gym.totalReviews} reviews</p>
+                <p className="text-xs text-gray-500">{tr("basedOn", { count: gym.totalReviews })}</p>
               </div>
             </div>
             <ul className="mt-5 space-y-1.5">
@@ -56,9 +56,9 @@ export default async function StudioReviewsPage({ searchParams }: { searchParams
             </ul>
             {breakdown && (
               <dl className="mt-5 grid grid-cols-2 gap-2 border-t border-gray-900/[0.06] pt-4">
-                {categories.map(([key, label]) => (
+                {categories.map((key) => (
                   <div key={key} className="rounded-2xl bg-canvas px-3 py-2">
-                    <dt className="text-xs text-gray-500">{label}</dt>
+                    <dt className="text-xs text-gray-500">{tr(`categories.${key}`)}</dt>
                     <dd className="font-semibold text-ink tabular-nums">{breakdown[key].toFixed(1)}</dd>
                   </div>
                 ))}
@@ -67,9 +67,9 @@ export default async function StudioReviewsPage({ searchParams }: { searchParams
           </section>
           <nav className="flex gap-1 lg:flex-col">
             {[
-              ["", "All reviews", all.length],
-              ["unanswered", "Needs a reply", unanswered],
-              ["low", "3 stars or less", all.filter((r) => r.rating <= 3).length],
+              ["", t("filters.all"), all.length],
+              ["unanswered", t("filters.unanswered"), unanswered],
+              ["low", t("filters.low"), all.filter((r) => r.rating <= 3).length],
             ].map(([value, label, count]) => (
               <a
                 key={label}
@@ -87,7 +87,7 @@ export default async function StudioReviewsPage({ searchParams }: { searchParams
         </aside>
 
         <ul className="space-y-3">
-          {reviews.length === 0 && <li className="rounded-[1.75rem] border-2 border-dashed border-gray-900/10 px-6 py-14 text-center text-sm text-gray-500">No reviews here yet.</li>}
+          {reviews.length === 0 && <li className="rounded-[1.75rem] border-2 border-dashed border-gray-900/10 px-6 py-14 text-center text-sm text-gray-500">{t("none")}</li>}
           {reviews.map((r) => (
             <li key={r.id} className="rounded-[1.75rem] bg-surface p-5 shadow-soft ring-1 ring-gray-900/[0.06] sm:p-6">
               <div className="flex items-start justify-between gap-3">
@@ -96,7 +96,7 @@ export default async function StudioReviewsPage({ searchParams }: { searchParams
                   <div className="min-w-0">
                     <p className="flex items-center gap-1.5 truncate font-semibold text-ink">
                       {r.userName}
-                      {r.isVerified && <HiCheckBadge className="size-4 shrink-0 text-emerald-600" aria-label="Verified visit" />}
+                      {r.isVerified && <HiCheckBadge className="size-4 shrink-0 text-emerald-600" aria-label={t("verified")} />}
                     </p>
                     <p className="text-xs text-gray-500">{dateFmt.format(new Date(r.date))}</p>
                   </div>
@@ -111,7 +111,7 @@ export default async function StudioReviewsPage({ searchParams }: { searchParams
               <p className="mt-1 text-[15px] leading-relaxed text-gray-600">{r.comment}</p>
               {r.gymResponse && (
                 <div className="mt-4 rounded-2xl bg-canvas p-4 text-sm">
-                  <p className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">Your reply</p>
+                  <p className="font-mono text-[10px] tracking-[0.14em] text-gray-400 uppercase">{t("yourReply")}</p>
                   <p className="mt-1 leading-relaxed text-gray-700">{r.gymResponse.response}</p>
                 </div>
               )}

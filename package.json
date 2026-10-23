@@ -13,7 +13,8 @@
     "typecheck": "bun --bun tsc --noEmit",
     "lint": "bun --bun eslint .",
     "db:seed": "bun --conditions=react-server scripts/seed.ts",
-    "test:smoke": "bun --conditions=react-server scripts/smoke-test.ts"
+    "test:smoke": "bun --conditions=react-server scripts/smoke-test.ts",
+    "i18n:check": "bun scripts/check-messages.ts"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.11.3",
@@ -49,6 +50,7 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "9",
     "eslint-config-next": "16.1.4",
+    "intl-messageformat": "11.2.15",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

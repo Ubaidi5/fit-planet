@@ -1,30 +1,24 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { HiOutlineArrowDownTray, HiOutlineEllipsisHorizontal, HiOutlineMagnifyingGlass } from "react-icons/hi2";
 import { cn } from "@/lib/utils";
 import type { BookingView } from "@/lib/types";
-import { passMeta } from "@/lib/passes";
 import { formatDate } from "@/lib/dates";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { exportBookingsCsvAction, markDeskPaidAction, ownerCancelBookingAction } from "@/actions/studio";
 import { useToast } from "@/components/notifications/ToastProvider";
 
-const statusTabs = [
-  ["all", "All"],
-  ["active", "Active"],
-  ["upcoming", "Upcoming"],
-  ["past", "Past"],
-  ["cancelled", "Cancelled"],
-] as const;
+const statusTabs = ["all", "active", "upcoming", "past", "cancelled"] as const;
 
 function statusBadge(b: BookingView) {
-  if (b.status === "cancelled") return { label: "Cancelled", cls: "bg-gray-900/[0.06] text-gray-500" };
-  if (b.status === "refunded") return { label: "Refunded", cls: "bg-gray-900/[0.06] text-gray-500" };
-  if (b.status === "expired") return { label: "Used", cls: "bg-gray-900/[0.06] text-gray-600" };
-  if (b.isActive) return { label: "Active", cls: "bg-emerald-50 text-emerald-700" };
-  return { label: "Upcoming", cls: "bg-stamp-violet/10 text-stamp-violet" };
+  if (b.status === "cancelled") return { label: "cancelled", cls: "bg-gray-900/[0.06] text-gray-500" };
+  if (b.status === "refunded") return { label: "refunded", cls: "bg-gray-900/[0.06] text-gray-500" };
+  if (b.status === "expired") return { label: "used", cls: "bg-gray-900/[0.06] text-gray-600" };
+  if (b.isActive) return { label: "active", cls: "bg-emerald-50 text-emerald-700" };
+  return { label: "upcoming", cls: "bg-stamp-violet/10 text-stamp-violet" };
 }
 
 export function BookingsTable({ bookings, focusId }: { bookings: BookingView[]; focusId?: string }) {
@@ -32,7 +26,11 @@ export function BookingsTable({ bookings, focusId }: { bookings: BookingView[]; 
   const pathname = usePathname();
   const params = useSearchParams();
   const toast = useToast();
-  const { money } = useLocale();
+  const t = useTranslations("studio.bookings");
+  const tp = useTranslations("passes");
+  const { money, region } = useLocale();
+  const range = (b: BookingView) =>
+    b.startDate === b.endDate ? formatDate(b.startDate, region.locale) : t("range", { from: formatDate(b.startDate, region.locale), to: formatDate(b.endDate, region.locale) });
   const [pending, startTransition] = useTransition();
   const [menu, setMenu] = useState<string | null>(null);
   const [q, setQ] = useState(params.get("q") ?? "");
@@ -52,15 +50,15 @@ export function BookingsTable({ bookings, focusId }: { bookings: BookingView[]; 
       const result = await fn();
       setMenu(null);
       if (result.ok) {
-        toast.success(result.message ?? "Done");
+        toast.success(result.message ?? t("done"));
         router.refresh();
-      } else toast.error("Something went wrong", result.error);
+      } else toast.error(t("failed"), result.error);
     });
 
   const exportCsv = () =>
     startTransition(async () => {
       const result = await exportBookingsCsvAction();
-      if (!result.ok) return toast.error("Export failed", result.error);
+      if (!result.ok) return toast.error(t("exportFailed"), result.error);
       const blob = new Blob([result.data.csv], { type: "text/csv;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const a = Object.assign(document.createElement("a"), { href: url, download: result.data.filename });
@@ -77,7 +75,7 @@ export function BookingsTable({ bookings, focusId }: { bookings: BookingView[]; 
         <button
           type="button"
           onClick={() => setMenu(menu === b.id ? null : b.id)}
-          aria-label="Booking actions"
+          aria-label={t("actions")}
           aria-expanded={menu === b.id}
           className="flex size-9 cursor-pointer items-center justify-center rounded-full text-gray-500 hover:bg-gray-900/5 hover:text-ink"
         >
@@ -87,7 +85,7 @@ export function BookingsTable({ bookings, focusId }: { bookings: BookingView[]; 
           <div className="absolute end-0 top-10 z-20 w-48 rounded-2xl bg-surface p-1.5 text-sm shadow-lift ring-1 ring-gray-900/[0.06]">
             {canPay && (
               <button type="button" disabled={pending} onClick={() => run(() => markDeskPaidAction(b.id))} className="w-full cursor-pointer rounded-xl px-3 py-2 text-start font-medium text-ink hover:bg-canvas">
-                Mark as paid
+                {t("markPaid")}
               </button>
             )}
             {canCancel && (
@@ -97,7 +95,7 @@ export function BookingsTable({ bookings, focusId }: { bookings: BookingView[]; 
                 onClick={() => run(() => ownerCancelBookingAction(b.id))}
                 className="w-full cursor-pointer rounded-xl px-3 py-2 text-start font-medium text-red-600 hover:bg-red-50"
               >
-                Cancel {b.paymentStatus === "paid" && b.paymentMethod === "online" ? "and refund" : "booking"}
+                {b.paymentStatus === "paid" && b.paymentMethod === "online" ? t("cancelRefund") : t("cancel")}
               </button>
             )}
           </div>
@@ -111,7 +109,7 @@ export function BookingsTable({ bookings, focusId }: { bookings: BookingView[]; 
       {/* Toolbar */}
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="-mx-4 flex gap-1 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0">
-          {statusTabs.map(([value, label]) => (
+          {statusTabs.map((value) => (
             <button
               key={value}
               type="button"
@@ -121,7 +119,7 @@ export function BookingsTable({ bookings, focusId }: { bookings: BookingView[]; 
                 status === value ? "bg-ink text-white" : "bg-surface text-gray-600 ring-1 ring-gray-900/[0.06] hover:text-ink",
               )}
             >
-              {label}
+              {t(`tabs.${value}`)}
             </button>
           ))}
         </div>
@@ -137,20 +135,20 @@ export function BookingsTable({ bookings, focusId }: { bookings: BookingView[]; 
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Name, phone or code"
+              placeholder={t("search")}
               className="h-full min-w-0 flex-1 bg-transparent pe-3 text-sm placeholder:text-gray-400 focus:outline-none"
             />
           </form>
           <select
             value={pass}
             onChange={(e) => setParam("pass", e.target.value)}
-            aria-label="Pass type"
+            aria-label={t("passType")}
             className="h-10 shrink-0 cursor-pointer rounded-full bg-surface px-3.5 text-sm ring-1 ring-gray-900/[0.08] focus:outline-none"
           >
-            <option value="">All passes</option>
-            <option value="day">Day</option>
-            <option value="week">Week</option>
-            <option value="month">Month</option>
+            <option value="">{t("allPasses")}</option>
+            <option value="day">{tp("short.day")}</option>
+            <option value="week">{tp("short.week")}</option>
+            <option value="month">{tp("short.month")}</option>
           </select>
           <button
             type="button"
@@ -159,13 +157,13 @@ export function BookingsTable({ bookings, focusId }: { bookings: BookingView[]; 
             className="hidden h-10 shrink-0 cursor-pointer items-center gap-2 rounded-full bg-surface px-4 text-sm font-medium text-ink ring-1 ring-gray-900/[0.08] hover:bg-white sm:inline-flex"
           >
             <HiOutlineArrowDownTray className="size-4" />
-            Export CSV
+            {t("export")}
           </button>
         </div>
       </div>
 
       {bookings.length === 0 ? (
-        <div className="mt-6 rounded-[1.75rem] border-2 border-dashed border-gray-900/10 px-6 py-14 text-center text-sm text-gray-500">No bookings match these filters.</div>
+        <div className="mt-6 rounded-[1.75rem] border-2 border-dashed border-gray-900/10 px-6 py-14 text-center text-sm text-gray-500">{t("empty")}</div>
       ) : (
         <>
           {/* Mobile cards: the essentials */}
@@ -181,17 +179,16 @@ export function BookingsTable({ bookings, focusId }: { bookings: BookingView[]; 
                     <div className="min-w-0">
                       <p className="truncate text-[15px] font-semibold text-ink">{b.guest.name}</p>
                       <p className="text-sm text-gray-500">
-                        {passMeta[b.passType].label} · {formatDate(b.startDate)}
-                        {b.startDate !== b.endDate && ` to ${formatDate(b.endDate)}`}
+                        {tp(`name.${b.passType}`)} · {range(b)}
                       </p>
                     </div>
                     <Actions b={b} />
                   </div>
                   <div className="mt-3 flex items-center justify-between gap-3">
                     <div className="flex flex-wrap gap-1.5">
-                      <span className={cn("rounded-full px-2 py-0.5 text-xs font-semibold", badge.cls)}>{badge.label}</span>
+                      <span className={cn("rounded-full px-2 py-0.5 text-xs font-semibold", badge.cls)}>{t(`status.${badge.label}`)}</span>
                       {b.paymentMethod === "desk" && b.paymentStatus !== "paid" && b.status === "confirmed" && (
-                        <span className="rounded-full bg-stamp-ochre/10 px-2 py-0.5 text-xs font-semibold text-stamp-ochre">Collect at desk</span>
+                        <span className="rounded-full bg-stamp-ochre/10 px-2 py-0.5 text-xs font-semibold text-stamp-ochre">{t("collect")}</span>
                       )}
                     </div>
                     <span className="font-semibold whitespace-nowrap text-ink tabular-nums">{money(b.amount, b.currency)}</span>
@@ -206,13 +203,13 @@ export function BookingsTable({ bookings, focusId }: { bookings: BookingView[]; 
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-900/[0.06] font-mono text-[10px] tracking-[0.12em] text-gray-400 uppercase">
-                  <th className="px-5 py-3 text-start font-medium">Member</th>
-                  <th className="px-3 py-3 text-start font-medium">Pass</th>
-                  <th className="px-3 py-3 text-start font-medium">Validity</th>
-                  <th className="px-3 py-3 text-start font-medium">Status</th>
-                  <th className="hidden px-3 py-3 text-start font-medium lg:table-cell">Payment</th>
-                  <th className="hidden px-3 py-3 text-center font-medium xl:table-cell">Visits</th>
-                  <th className="px-3 py-3 text-end font-medium">Amount</th>
+                  <th className="px-5 py-3 text-start font-medium">{t("cols.member")}</th>
+                  <th className="px-3 py-3 text-start font-medium">{t("cols.pass")}</th>
+                  <th className="px-3 py-3 text-start font-medium">{t("cols.validity")}</th>
+                  <th className="px-3 py-3 text-start font-medium">{t("cols.status")}</th>
+                  <th className="hidden px-3 py-3 text-start font-medium lg:table-cell">{t("cols.payment")}</th>
+                  <th className="hidden px-3 py-3 text-center font-medium xl:table-cell">{t("cols.visits")}</th>
+                  <th className="px-3 py-3 text-end font-medium">{t("cols.amount")}</th>
                   <th className="w-12 px-3 py-3" />
                 </tr>
               </thead>
@@ -228,20 +225,19 @@ export function BookingsTable({ bookings, focusId }: { bookings: BookingView[]; 
                         </p>
                       </td>
                       <td className="px-3 py-3">
-                        <p className="text-gray-800">{passMeta[b.passType].label}</p>
+                        <p className="text-gray-800">{tp(`name.${b.passType}`)}</p>
                         <p className="font-mono text-[11px] text-gray-400">{b.code}</p>
                       </td>
                       <td className="px-3 py-3 whitespace-nowrap text-gray-700">
-                        {formatDate(b.startDate)}
-                        {b.startDate !== b.endDate && ` to ${formatDate(b.endDate)}`}
+                        {range(b)}
                       </td>
                       <td className="px-3 py-3">
-                        <span className={cn("rounded-full px-2 py-0.5 text-xs font-semibold whitespace-nowrap", badge.cls)}>{badge.label}</span>
+                        <span className={cn("rounded-full px-2 py-0.5 text-xs font-semibold whitespace-nowrap", badge.cls)}>{t(`status.${badge.label}`)}</span>
                       </td>
                       <td className="hidden px-3 py-3 lg:table-cell">
-                        <span className="text-gray-700">{b.paymentMethod === "desk" ? "At desk" : "Online"}</span>
+                        <span className="text-gray-700">{b.paymentMethod === "desk" ? t("atDesk") : t("online")}</span>
                         <span className={cn("ms-1.5 text-xs font-semibold", b.paymentStatus === "paid" ? "text-emerald-700" : "text-stamp-ochre")}>
-                          {b.paymentStatus === "paid" ? "Paid" : b.paymentStatus === "refunded" ? "Refunded" : "Due"}
+                          {b.paymentStatus === "paid" ? t("paid") : b.paymentStatus === "refunded" ? t("status.refunded") : t("due")}
                         </span>
                       </td>
                       <td className="hidden px-3 py-3 text-center text-gray-700 tabular-nums xl:table-cell">{b.checkinCount}</td>
