@@ -16,6 +16,11 @@ import { sendPassReminders, releaseAbandonedCheckouts } from "@/server/modules/r
 import { copyTemplate, getRoutine, lastWeights, logWorkout } from "@/server/modules/routines";
 import { addComment, ensureHandle, feed, follow, shareWorkout, toggleLike, updateSocialProfile } from "@/server/modules/social";
 import { addDays, todayIn } from "@/lib/dates";
+import { createHash, randomBytes } from "node:crypto";
+import { registerWithPassword } from "@/server/modules/users";
+import { acceptInvite, inviteStaff } from "@/server/modules/team";
+import { setUserSuspended } from "@/server/modules/admin";
+import { deleteAccount, deletionBlocker, exportAccount } from "@/server/modules/privacy";
 
 async function main() {
   const users = await collections.users();
@@ -50,14 +55,15 @@ async function main() {
 
   const otherGym = gyms.find((g) => g.id !== home._id.toHexString())!;
   const wrong = await checkInByCode({ code: pending!.code, gymIds: [new (await import("mongodb")).ObjectId(otherGym.id)], staffUserId: owner._id, method: "code" });
-  assert(!wrong.ok && wrong.reason.includes("not your gym"), "wrong gym rejected");
+  // Another gym's code reads as unknown, so staff can't learn about other gyms' members
+  assert(!wrong.ok && wrong.reason === "noSuchPass" && !("booking" in wrong && wrong.booking), "wrong gym rejected without details");
 
   const stats = await ownerStats([home]);
   assert(stats.todayBookings >= 2 && stats.occupancy.current >= 1, "stats reflect new activity");
 
   await upsertReview(member, home._id, { rating: 5, title: "Great floor", comment: "Clean, friendly and not too busy.", categories: { cleanliness: 5, equipment: 4, staff: 5, value: 4 } });
 
-  const ownerFeed = await listNotifications(owner._id);
+  const ownerFeed = await listNotifications(owner._id, 50, "US");
   assert(ownerFeed.some((n) => n.type === "booking.new"), "owner notified of booking");
   const mine = await listUserBookings(member._id);
   assert(mine.some((b) => b.isActive), "member has an active pass");
@@ -71,11 +77,11 @@ async function main() {
   await sendPassReminders(evening);
   const aheadDoc = await bookings.findOne({ _id: new (await import("mongodb")).ObjectId(ahead.bookingId) });
   assert.deepEqual(aheadDoc?.remindersSent, ["start"], "start reminder recorded");
-  const memberFeed = await listNotifications(member._id);
+  const memberFeed = await listNotifications(member._id, 50, "US");
   assert(memberFeed.some((n) => n.type === "pass.expiring" && n.title.includes("starts tomorrow")), "member reminded");
   const before = memberFeed.filter((n) => n.type === "pass.expiring").length;
   await sendPassReminders(evening);
-  assert.equal((await listNotifications(member._id)).filter((n) => n.type === "pass.expiring").length, before, "reminder not repeated");
+  assert.equal((await listNotifications(member._id, 50, "US")).filter((n) => n.type === "pass.expiring").length, before, "reminder not repeated");
 
   const stale = await createBooking({ user: member, gymId: home._id, passType: "day", startDate: today, paymentMethod: "online" });
   await releaseAbandonedCheckouts(new Date(Date.now() + 3 * 60 * 60 * 1000));
@@ -108,7 +114,7 @@ async function main() {
   const liked = await toggleLike(owner, postId);
   assert.equal(liked.liked, true, "like recorded");
   await addComment(owner, postId, "Nice work");
-  const memberNotes = await listNotifications(member._id);
+  const memberNotes = await listNotifications(member._id, 50, "US");
   assert(memberNotes.some((n) => n.type === "social.follow") && memberNotes.some((n) => n.type === "social.comment"), "member notified of follow and comment");
   const stranger = await (await collections.users()).findOne({ _id: { $nin: [member._id, owner._id] } });
   await updateSocialProfile(member._id, { handle: memberFresh.handle!, bio: "", visibility: "followers", shareCheckins: false });
@@ -118,6 +124,42 @@ async function main() {
   }
   assert((await feed(owner._id, "following")).some((p) => p.id === postId.toHexString()), "follower still sees followers-only post");
   await updateSocialProfile(member._id, { handle: memberFresh.handle!, bio: "", visibility: "public", shareCheckins: false });
+
+  // Staff: an invite only works for the invited email, and staff manage the gym's desk afterwards
+  const staffEmail = `staff-${Date.now()}@fitplanet.dev`;
+  const staffUser = await registerWithPassword({ name: "Desk Staff", email: staffEmail, password: "fitplanet123" });
+  await inviteStaff(owner, home, staffEmail);
+  const invites = await collections.staffInvites();
+  const invite = await invites.findOne({ gymId: home._id, email: staffEmail });
+  assert(invite, "invite stored");
+  const token = "smoke-" + randomBytes(24).toString("base64url");
+  await invites.updateOne({ _id: invite._id }, { $set: { tokenHash: createHash("sha256").update(token).digest("hex") } });
+  await assert.rejects(acceptInvite(member, token), /inviteOtherEmail/, "invite refuses another account");
+  await acceptInvite(staffUser, token);
+  assert((await gymsManagedBy(staffUser._id)).some((g) => g._id.equals(home._id)), "staff manages the gym");
+  assert.equal(await invites.countDocuments({ _id: invite._id }), 0, "invite used up");
+  assert.equal(await deletionBlocker(staffUser._id), null, "staff can delete their account");
+  assert.equal(await deletionBlocker(owner._id), "runsGym", "owners can't delete while running a gym");
+
+  // Admin: suspending ends access and is logged
+  await setUserSuspended(owner, staffUser._id, true, "smoke");
+  assert((await users.findOne({ _id: staffUser._id }))?.suspendedAt, "suspended");
+  assert(await (await collections.adminLog()).findOne({ targetId: staffUser._id, action: "user.suspend" }), "suspension logged");
+  await assert.rejects(setUserSuspended(owner, owner._id, true), /cannotSuspendSelf/, "admins can't suspend themselves");
+  await setUserSuspended(owner, staffUser._id, false);
+
+  // Privacy: export leaves out secrets; deletion erases the account and its social traces
+  const exported = await exportAccount(member._id);
+  assert(!JSON.stringify(exported).includes("passwordHash"), "export has no password hash");
+  assert(exported.workouts.length > 0 && exported.social.posts.length > 0, "export includes training and posts");
+  await addComment(staffUser, postId, "See you at the desk");
+  await follow(staffUser, member._id);
+  await deleteAccount(staffUser._id);
+  assert.equal(await users.countDocuments({ _id: staffUser._id }), 0, "account erased");
+  assert.equal(await (await collections.comments()).countDocuments({ userId: staffUser._id }), 0, "comments erased");
+  assert.equal(await (await collections.follows()).countDocuments({ followerId: staffUser._id }), 0, "follows erased");
+  assert(!(await (await collections.gyms()).findOne({ _id: home._id }))?.staffIds?.some((id) => id.equals(staffUser._id)), "removed from gym staff");
+  await assert.rejects(deleteAccount(member._id), /deleteActivePass/, "active pass blocks deletion");
 
   console.log("✓ smoke test passed", { todayBookings: stats.todayBookings, occupancy: stats.occupancy, ownerNotifications: ownerFeed.length });
   await (await getMongoClient()).close();

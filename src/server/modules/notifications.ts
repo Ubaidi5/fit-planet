@@ -122,13 +122,14 @@ export async function notify(userId: ObjectId, input: NotifyInput) {
   }
 }
 
-export async function listNotifications(userId: ObjectId, limit = 50) {
+/** The feed in the viewer's language; scripts outside a request pass the region explicitly */
+export async function listNotifications(userId: ObjectId, limit = 50, regionCode?: string) {
   const notifications = await collections.notifications();
-  const [docs, viewer] = await Promise.all([
+  const [docs, viewerCode] = await Promise.all([
     notifications.find({ userId }).sort({ createdAt: -1 }).limit(limit).toArray(),
-    getRegion(),
+    regionCode ?? getRegion().then((r) => r.code),
   ]);
-  const { t, region } = await translatorFor(viewer.code, "notify");
+  const { t, region } = await translatorFor(viewerCode, "notify");
   return docs.map((doc) => toView(doc, t, region));
 }
 

@@ -12,6 +12,14 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
+    services:
+      # A throwaway database for the seed and the end-to-end smoke test
+      mongo:
+        image: mongo:7
+        ports: ["27017:27017"]
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 5s --health-timeout 5s --health-retries 12
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
@@ -22,6 +30,12 @@ jobs:
       - run: bun run typecheck
       - run: bun run lint
       - run: bun run i18n:check
+      - name: Seed and smoke test (bookings, check-ins, social, staff, admin, privacy)
+        run: bun run db:seed && bun run test:smoke
+        env:
+          DB_URI: mongodb://localhost:27017
+          DB_NAME: fitplanet_ci
+          APP_URL: http://localhost:3000
       - name: Build
         run: bun run build
         env:
