@@ -24,6 +24,18 @@ const securityHeaders = [
   ...(isProd ? [{ key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" }] : []),
 ];
 
+/**
+ * The image optimizer downloads remote images on the server, so only hosts we
+ * trust may be listed. Uploads on a bucket (R2/S3) come from STORAGE_PUBLIC_URL,
+ * never a wildcard like *.r2.dev that anyone can create a bucket under.
+ */
+function storageImagePattern() {
+  const base = process.env.STORAGE_PUBLIC_URL;
+  if (!base?.startsWith("https://")) return [];
+  const url = new URL(base);
+  return [{ protocol: "https" as const, hostname: url.hostname, pathname: `${url.pathname.replace(/\/$/, "")}/**` }];
+}
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactCompiler: true,
@@ -34,7 +46,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
       { protocol: "https", hostname: "*.fbcdn.net" },
-      { protocol: "https", hostname: "*.r2.dev" },
+      ...storageImagePattern(),
     ],
     // Uploaded media is served from /media by nginx (local storage)
     localPatterns: [{ pathname: "/media/**" }, { pathname: "/**" }],

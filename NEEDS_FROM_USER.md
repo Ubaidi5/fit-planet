@@ -103,7 +103,9 @@ Pushing to `main` builds the app on GitHub and ships it to the server
 Uploads are stored on the server disk at `/var/www/fitplanet/shared/uploads`
 and served by nginx at `/media`. To move to Cloudflare R2 later, set
 `STORAGE_PROVIDER=s3`, the `S3_*` keys and `STORAGE_PUBLIC_URL` to the bucket's
-public URL, then copy the uploads folder into the bucket. No code changes.
+public URL, then copy the uploads folder into the bucket. Also add
+`STORAGE_PUBLIC_URL` as a GitHub Actions variable so the image optimizer allows
+that domain. No code changes.
 
 ## 9. Legal details and review
 

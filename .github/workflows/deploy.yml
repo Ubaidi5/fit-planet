@@ -41,6 +41,8 @@ jobs:
           NEXT_PUBLIC_FIREBASE_APP_ID: ${{ vars.NEXT_PUBLIC_FIREBASE_APP_ID }}
           NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${{ vars.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID }}
           NEXT_PUBLIC_FIREBASE_VAPID_KEY: ${{ vars.NEXT_PUBLIC_FIREBASE_VAPID_KEY }}
+          # Lets next/image load uploads from the bucket's public domain (see next.config.ts)
+          STORAGE_PUBLIC_URL: ${{ vars.STORAGE_PUBLIC_URL }}
 
       - name: Package release
         run: |
