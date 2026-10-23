@@ -1869,7 +1869,8 @@
       "teamFull": "Une salle peut avoir jusqu'à {count} membres du personnel.",
       "alreadyStaff": "Cette personne fait déjà partie de votre équipe.",
       "inviteExpired": "Cette invitation a expiré. Demandez-en une nouvelle.",
-      "inviteOtherEmail": "Cette invitation est destinée à {email}. Connectez-vous avec cet e-mail pour l'accepter."
+      "inviteOtherEmail": "Cette invitation est destinée à {email}. Connectez-vous avec cet e-mail pour l'accepter.",
+      "accountSuspended": "Ce compte a été suspendu. Contactez l'assistance si vous pensez qu'il s'agit d'une erreur."
     },
     "fields": {
       "addExercise": "Ajoutez au moins un exercice",

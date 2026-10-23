@@ -1869,7 +1869,8 @@
       "teamFull": "Bir salonda en fazla {count} personel olabilir.",
       "alreadyStaff": "Bu kişi zaten ekibinde.",
       "inviteExpired": "Bu davetin süresi doldu. Yenisini iste.",
-      "inviteOtherEmail": "Bu davet {email} için. Kabul etmek için bu e-postayla giriş yap."
+      "inviteOtherEmail": "Bu davet {email} için. Kabul etmek için bu e-postayla giriş yap.",
+      "accountSuspended": "Bu hesap askıya alındı. Bunun bir hata olduğunu düşünüyorsan destekle iletişime geç."
     },
     "fields": {
       "addExercise": "En az bir egzersiz ekle",

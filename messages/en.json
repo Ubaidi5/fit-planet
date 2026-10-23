@@ -1869,7 +1869,8 @@
       "teamFull": "A gym can have up to {count} staff members.",
       "alreadyStaff": "That person is already on your team.",
       "inviteExpired": "This invite has expired. Ask for a new one.",
-      "inviteOtherEmail": "This invite is for {email}. Sign in with that email to accept it."
+      "inviteOtherEmail": "This invite is for {email}. Sign in with that email to accept it.",
+      "accountSuspended": "This account has been suspended. Contact support if you think this is a mistake."
     },
     "fields": {
       "addExercise": "Add at least one exercise",

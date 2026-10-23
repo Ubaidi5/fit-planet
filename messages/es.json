@@ -1869,7 +1869,8 @@
       "teamFull": "Un gimnasio puede tener hasta {count} miembros del personal.",
       "alreadyStaff": "Esa persona ya está en tu equipo.",
       "inviteExpired": "Esta invitación ha caducado. Pide una nueva.",
-      "inviteOtherEmail": "Esta invitación es para {email}. Inicia sesión con ese correo para aceptarla."
+      "inviteOtherEmail": "Esta invitación es para {email}. Inicia sesión con ese correo para aceptarla.",
+      "accountSuspended": "Esta cuenta ha sido suspendida. Contacta con soporte si crees que es un error."
     },
     "fields": {
       "addExercise": "Añade al menos un ejercicio",

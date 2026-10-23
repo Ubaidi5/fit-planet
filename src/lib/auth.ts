@@ -20,6 +20,10 @@ class RateLimited extends CredentialsSignin {
   code = "rate_limited";
 }
 
+class Suspended extends CredentialsSignin {
+  code = "suspended";
+}
+
 const credentialsSchema = z.object({
   email: z.email().transform((value) => value.toLowerCase()),
   password: z.string().min(1),
@@ -41,10 +45,13 @@ const providers: Provider[] = [
       const allowed = await allowAll(["login-ip", await clientIp(), 30, 600], ["login-email", parsed.data.email.trim().toLowerCase(), 10, 600]);
       if (!allowed) throw new RateLimited();
       const users = await collections.users();
-      const user = await users.findOne({ email: parsed.data.email });
-      if (!user?.passwordHash || user.suspendedAt) return null;
+      // Accounts are stored with lowercase emails, so "Lena@…" signs in too
+      const user = await users.findOne({ email: parsed.data.email.trim().toLowerCase() });
+      if (!user?.passwordHash) return null;
       const ok = await bcrypt.compare(parsed.data.password, user.passwordHash);
       if (!ok) return null;
+      // Only said after the right password, so it doesn't reveal which emails have accounts
+      if (user.suspendedAt) throw new Suspended();
       return { id: user._id.toHexString(), name: user.name, email: user.email, image: user.image };
     },
   }),

@@ -1869,7 +1869,8 @@
       "teamFull": "Ein Gym kann bis zu {count} Mitarbeiter haben.",
       "alreadyStaff": "Diese Person ist bereits in deinem Team.",
       "inviteExpired": "Diese Einladung ist abgelaufen. Bitte um eine neue.",
-      "inviteOtherEmail": "Diese Einladung gilt für {email}. Melde dich mit dieser E-Mail an, um sie anzunehmen."
+      "inviteOtherEmail": "Diese Einladung gilt für {email}. Melde dich mit dieser E-Mail an, um sie anzunehmen.",
+      "accountSuspended": "Dieses Konto wurde gesperrt. Wende dich an den Support, wenn du das für einen Fehler hältst."
     },
     "fields": {
       "addExercise": "Füge mindestens eine Übung hinzu",

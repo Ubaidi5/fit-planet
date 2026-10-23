@@ -57,7 +57,10 @@ export async function loginAction(_prev: ActionResult | null, formData: FormData
     });
   } catch (error) {
     if (error instanceof AuthError) {
-      if (error.type === "CredentialsSignin") return fail((error as CredentialsSignin).code === "rate_limited" ? "tooManyAttempts" : "badCredentials");
+      if (error.type === "CredentialsSignin") {
+        const code = (error as CredentialsSignin).code;
+        return fail(code === "rate_limited" ? "tooManyAttempts" : code === "suspended" ? "accountSuspended" : "badCredentials");
+      }
       return fail("signInFailed");
     }
     throw error; // the redirect after a successful sign-in
