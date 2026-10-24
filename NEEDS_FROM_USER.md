@@ -74,7 +74,12 @@ works (Amazon SES, Resend, Postmark, Brevo, Gmail app password):
    open ports 80 and 443 in the Lightsail firewall.
 2. Copy the `deploy/` folder to the server and run
    `sudo bash deploy/setup-server.sh yourdomain.com you@email.com`.
-   It installs Bun (pinned in package.json), the app service, nginx and an HTTPS certificate. No Node.js is needed on the server.
+   It installs Bun (the version pinned in package.json), runs the app as the
+   `fitplanet` systemd service (starts on boot, restarts on crash), and sets up
+   nginx with an HTTPS certificate. No Node.js or pm2 is needed on the server.
+   Each deploy checks `/api/health` and rolls back to the previous release if
+   the new one doesn't come up. Logs: `journalctl --user -u fitplanet -f` as
+   the deploy user.
 3. Fill `/var/www/fitplanet/shared/.env` from `.env.example`, with
    `STORAGE_LOCAL_DIR=/var/www/fitplanet/shared/uploads` and a random
    `CRON_SECRET` (`openssl rand -hex 24`). The setup script already installed
