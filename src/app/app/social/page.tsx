@@ -1,435 +1,107 @@
-"use client";
+import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { requireUser, initials } from "@/server/session";
+import { ensureHandle, feed, socialCounts, suggestedPeople } from "@/server/modules/social";
+import { Composer } from "@/components/social/Composer";
+import { FeedList } from "@/components/social/FeedList";
+import { PersonRow } from "@/components/social/PersonRow";
+import { SocialTabs } from "@/components/social/SocialTabs";
+import { Avatar } from "@/components/social/Avatar";
+import { getRegion } from "@/lib/i18n/server";
+import { weightUnitFor } from "@/lib/routines";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
-import { Input } from "@/components/ui/Input";
-import {
-  HiOutlinePlus,
-  HiOutlineHeart,
-  HiHeart,
-  HiOutlineChat,
-  HiOutlineShare,
-} from "react-icons/hi";
-import {
-  mockFeedPosts,
-  mockSharedRoutines,
-  mockGymVisits,
-  formatTimeAgo,
-  formatNumber,
-  type FeedPost,
-  type SharedRoutine,
-  type GymVisit,
-} from "@/lib/data/mock-social";
-
-type FeedFilter = "all" | "routines" | "workouts" | "gym_visits";
-
-export default function SocialFeedPage() {
-  const [filter, setFilter] = useState<FeedFilter>("all");
-  const [feedPosts, setFeedPosts] = useState(mockFeedPosts);
-  const [sharedRoutines] = useState(mockSharedRoutines);
-  const [gymVisits] = useState(mockGymVisits);
-
-  const filteredPosts = feedPosts.filter((post) => {
-    if (filter === "all") return true;
-    if (filter === "routines") return post.type === "routine_share";
-    if (filter === "workouts")
-      return post.type === "workout_complete" || post.type === "milestone";
-    if (filter === "gym_visits") return post.type === "going_to_gym";
-    return true;
-  });
-
-  const handleLikePost = (postId: string) => {
-    setFeedPosts((posts) =>
-      posts.map((post) =>
-        post.id === postId
-          ? {
-              ...post,
-              isLiked: !post.isLiked,
-              likes: post.isLiked ? post.likes - 1 : post.likes + 1,
-            }
-          : post,
-      ),
-    );
-  };
-
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-ink sm:text-3xl tracking-tight">
-            Social Feed
-          </h1>
-          <p className="mt-1 text-gray-500">
-            See what your fitness community is up to
-          </p>
-        </div>
-        <Button beforeIcon={<HiOutlinePlus className="h-5 w-5" />}>
-          Share Routine
-        </Button>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-3">
-        {/* Main Feed */}
-        <div className="space-y-6 lg:col-span-2">
-          {/* Filter Tabs */}
-          <div className="flex gap-2 overflow-x-auto pb-2">
-            {[
-              { key: "all", label: "All Activity" },
-              { key: "routines", label: "Routines" },
-              { key: "workouts", label: "Workouts" },
-              { key: "gym_visits", label: "Gym Visits" },
-            ].map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setFilter(tab.key as FeedFilter)}
-                className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                  filter === tab.key
-                    ? "bg-emerald-500 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Feed Posts */}
-          <div className="space-y-4">
-            {filteredPosts.map((post) => (
-              <FeedPostCard
-                key={post.id}
-                post={post}
-                onLike={() => handleLikePost(post.id)}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Going to Gym Section */}
-          <Card className="p-4">
-            <h3 className="mb-4 font-semibold text-gray-900">
-              🏋️ Friends Going to Gym
-            </h3>
-            <div className="space-y-3">
-              {gymVisits.map((visit) => (
-                <GymVisitCard key={visit.id} visit={visit} />
-              ))}
-            </div>
-            <Button variant="outline" fullWidth className="mt-4">
-              Post Your Gym Visit
-            </Button>
-          </Card>
-
-          {/* Trending Routines */}
-          <Card className="p-4">
-            <h3 className="mb-4 font-semibold text-gray-900">
-              🔥 Trending Routines
-            </h3>
-            <div className="space-y-3">
-              {sharedRoutines.slice(0, 3).map((routine) => (
-                <TrendingRoutineCard key={routine.id} routine={routine} />
-              ))}
-            </div>
-            <Button variant="outline" fullWidth className="mt-4">
-              Browse All Routines
-            </Button>
-          </Card>
-
-          {/* Suggested Users */}
-          <Card className="p-4">
-            <h3 className="mb-4 font-semibold text-gray-900">
-              👥 Suggested to Follow
-            </h3>
-            <div className="space-y-3">
-              {[
-                { name: "Zain Ahmed", username: "zain_fitness", workouts: 891 },
-                { name: "Sara Khan", username: "sara_lifts", workouts: 456 },
-                { name: "Hassan Ali", username: "hassan_fit", workouts: 234 },
-              ].map((user) => (
-                <div
-                  key={user.username}
-                  className="flex items-center justify-between"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-teal-500 text-sm font-bold text-white">
-                      {user.name.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {user.name}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {user.workouts} workouts
-                      </p>
-                    </div>
-                  </div>
-                  <Button variant="outline" size="sm">
-                    Follow
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getTranslations("social"))("title") };
 }
 
-// Feed Post Card Component
-function FeedPostCard({
-  post,
-  onLike,
-}: {
-  post: FeedPost;
-  onLike: () => void;
-}) {
-  const getPostIcon = () => {
-    switch (post.type) {
-      case "routine_share":
-        return "📋";
-      case "workout_complete":
-        return "💪";
-      case "going_to_gym":
-        return "🏋️";
-      case "milestone":
-        return "🎉";
-      case "challenge_complete":
-        return "🏆";
-      default:
-        return "📝";
-    }
-  };
+export default async function SocialPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
+  const { tab } = await searchParams;
+  const mode = tab === "discover" ? "discover" : "following";
+  const user = await requireUser("/app/social");
+  const t = await getTranslations("social");
+  const handle = await ensureHandle(user);
+  const [posts, people, counts] = await Promise.all([feed(user._id, mode), suggestedPeople(user._id, 6), socialCounts(user._id)]);
+  const me = { name: user.name || t("you"), image: user.image ?? null, initials: initials(user.name || t("you")) };
+  const unit = weightUnitFor(await getRegion());
 
   return (
-    <Card className="overflow-hidden">
-      {/* Post Header */}
-      <div className="flex items-center gap-3 p-4">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-teal-500 text-lg font-bold text-white">
-          {post.user.name.charAt(0)}
-        </div>
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
-            <span className="truncate font-semibold text-gray-900">
-              {post.user.name}
-            </span>
-            <span className="text-lg">{getPostIcon()}</span>
-          </div>
-          <p className="text-sm text-gray-500">
-            @{post.user.username} · {formatTimeAgo(post.createdAt)}
-          </p>
-        </div>
-      </div>
-
-      {/* Post Content */}
-      <div className="px-4 pb-3">
-        <p className="text-gray-700">{post.content.text}</p>
-      </div>
-
-      {/* Routine Card (if shared) */}
-      {post.type === "routine_share" && post.content.routine && (
-        <div className="mx-4 mb-4 rounded-lg border border-gray-200 bg-gray-50 p-4">
-          <div className="flex items-start justify-between">
-            <div>
-              <h4 className="font-semibold text-gray-900">
-                {post.content.routine.title}
-              </h4>
-              <p className="mt-1 text-sm text-gray-500">
-                {post.content.routine.description}
-              </p>
-            </div>
-            <Badge
-              variant={
-                post.content.routine.fitnessLevel === "advanced"
-                  ? "danger"
-                  : post.content.routine.fitnessLevel === "intermediate"
-                    ? "warning"
-                    : "success"
-              }
-            >
-              {post.content.routine.fitnessLevel}
-            </Badge>
-          </div>
-          <div className="mt-3 flex flex-wrap gap-2 text-xs text-gray-600">
-            <span>⏱️ {post.content.routine.duration} min</span>
-            <span>•</span>
-            <span>💪 {post.content.routine.exerciseCount} exercises</span>
-            <span>•</span>
-            <span>📁 {post.content.routine.saves} saves</span>
-          </div>
-          <div className="mt-3 flex gap-2">
-            <Button size="sm" variant="outline">
-              View Routine
-            </Button>
-            <Button size="sm">Save to Library</Button>
-          </div>
-        </div>
-      )}
-
-      {/* Workout Summary (if completed) */}
-      {post.type === "workout_complete" && post.content.workout && (
-        <div className="mx-4 mb-4 rounded-lg border border-emerald-200 bg-emerald-50 p-4">
-          <h4 className="font-semibold text-emerald-800">
-            {post.content.workout.name}
-          </h4>
-          <div className="mt-2 flex flex-wrap gap-4 text-sm text-emerald-700">
-            <span>⏱️ {post.content.workout.duration} min</span>
-            <span>💪 {post.content.workout.exerciseCount} exercises</span>
-            {post.content.workout.personalRecords &&
-              post.content.workout.personalRecords > 0 && (
-                <span className="font-semibold">
-                  🏆 {post.content.workout.personalRecords} PRs!
-                </span>
-              )}
-          </div>
-        </div>
-      )}
-
-      {/* Going to Gym Card */}
-      {post.type === "going_to_gym" && post.content.gym && (
-        <div className="mx-4 mb-4 rounded-lg border border-blue-200 bg-blue-50 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h4 className="font-semibold text-blue-800">
-                {post.content.gym.name}
-              </h4>
-              <p className="text-sm text-blue-600">
-                🕐 {post.content.gym.time}
-              </p>
-            </div>
-            {post.content.gym.joinable && <Button size="sm">Join</Button>}
-          </div>
-        </div>
-      )}
-
-      {/* Milestone Badge */}
-      {post.type === "milestone" && post.content.milestone && (
-        <div className="mx-4 mb-4 flex items-center gap-4 rounded-lg border border-purple-200 bg-purple-50 p-4">
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-purple-100 text-3xl">
-            {post.content.milestone.badge?.icon || "🏆"}
-          </div>
+    <div className="grid gap-8 lg:grid-cols-[minmax(0,42rem)_20rem] lg:items-start lg:justify-center">
+      <div className="mx-auto w-full max-w-2xl min-w-0 space-y-4 lg:mx-0">
+        <div className="flex items-end justify-between gap-3">
           <div>
-            <h4 className="font-semibold text-purple-800">
-              {post.content.milestone.type}
-            </h4>
-            <p className="text-sm text-purple-600">
-              {post.content.milestone.badge?.description}
-            </p>
+            <p className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">{t("eyebrow")}</p>
+            <h1 className="mt-1 text-[1.75rem] font-semibold tracking-[-0.035em] text-ink sm:text-4xl">{t("title")}</h1>
           </div>
+          <Link href={`/app/u/${handle}`} className="flex items-center gap-2 rounded-full bg-surface py-1 ps-1 pe-3 text-sm font-medium text-ink shadow-soft ring-1 ring-gray-900/[0.05] lg:hidden">
+            <Avatar name={me.name} image={me.image} initials={me.initials} size="sm" />
+            @{handle}
+          </Link>
         </div>
-      )}
-
-      {/* Challenge Complete */}
-      {post.type === "challenge_complete" && post.content.challenge && (
-        <div className="mx-4 mb-4 rounded-lg border border-amber-200 bg-amber-50 p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-2xl">
-              {post.content.challenge.position === 1
-                ? "🥇"
-                : post.content.challenge.position === 2
-                  ? "🥈"
-                  : "🥉"}
-            </div>
-            <div>
-              <h4 className="font-semibold text-amber-800">
-                {post.content.challenge.name}
-              </h4>
-              <p className="text-sm text-amber-600">
-                Finished #{post.content.challenge.position}
+        <SocialTabs active={mode} />
+        <Composer me={me} />
+        <FeedList
+          key={mode}
+          initial={posts}
+          mode={mode}
+          unit={unit}
+          empty={
+            <div className="rounded-[1.75rem] border-2 border-dashed border-gray-900/10 px-6 py-12 text-center">
+              <p className="font-semibold text-ink">{mode === "following" ? t("empty.followingTitle") : t("empty.discoverTitle")}</p>
+              <p className="mx-auto mt-1 max-w-sm text-sm text-gray-500">
+                {mode === "following" ? t("empty.followingText") : t("empty.discoverText")}
               </p>
+              <Link
+                href={mode === "following" ? "/app/social/people" : "/app/routines"}
+                className="mt-5 inline-flex h-11 items-center rounded-full bg-ink px-5 text-sm font-semibold text-white"
+              >
+                {mode === "following" ? t("empty.findPeople") : t("empty.routines")}
+              </Link>
+            </div>
+          }
+        />
+      </div>
+
+      <aside className="hidden gap-4 lg:sticky lg:top-24 lg:grid">
+        <section className="rounded-3xl bg-surface p-5 shadow-soft ring-1 ring-gray-900/[0.05]">
+          <div className="flex items-center gap-3">
+            <Avatar name={me.name} image={me.image} initials={me.initials} />
+            <div className="min-w-0 leading-tight">
+              <p className="truncate font-semibold text-ink">{me.name}</p>
+              <p className="truncate text-sm text-gray-500">@{handle}</p>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Post Actions */}
-      <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3">
-        <div className="flex gap-4">
-          <button
-            onClick={onLike}
-            className={`flex items-center gap-1.5 text-sm transition-colors ${
-              post.isLiked ? "text-red-500" : "text-gray-500 hover:text-red-500"
-            }`}
-          >
-            {post.isLiked ? (
-              <HiHeart className="h-5 w-5" />
-            ) : (
-              <HiOutlineHeart className="h-5 w-5" />
-            )}
-            {formatNumber(post.likes)}
-          </button>
-          <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-500">
-            <HiOutlineChat className="h-5 w-5" />
-            {post.comments}
-          </button>
-        </div>
-        <button className="text-gray-500 hover:text-gray-700">
-          <HiOutlineShare className="h-5 w-5" />
-        </button>
-      </div>
-    </Card>
-  );
-}
-
-// Gym Visit Card Component
-function GymVisitCard({ visit }: { visit: GymVisit }) {
-  return (
-    <div className="flex items-center justify-between rounded-lg border border-gray-100 bg-gray-50 p-3">
-      <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-blue-400 to-indigo-500 text-sm font-bold text-white">
-          {visit.user.name.charAt(0)}
-        </div>
-        <div className="min-w-0">
-          <p className="truncate text-sm font-medium text-gray-900">
-            {visit.user.name}
-          </p>
-          <p className="truncate text-xs text-gray-500">{visit.gym.name}</p>
-          <p className="text-xs text-blue-600">{visit.time}</p>
-        </div>
-      </div>
-      {visit.joinable && (
-        <Button size="sm" variant="outline">
-          Join
-        </Button>
-      )}
-    </div>
-  );
-}
-
-// Trending Routine Card Component
-function TrendingRoutineCard({ routine }: { routine: SharedRoutine }) {
-  return (
-    <div className="rounded-lg border border-gray-100 bg-gray-50 p-3">
-      <div className="flex items-start justify-between">
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-medium text-gray-900">
-            {routine.title}
-          </p>
-          <p className="text-xs text-gray-500">by @{routine.user.username}</p>
-        </div>
-        <Badge
-          size="sm"
-          variant={
-            routine.fitnessLevel === "advanced"
-              ? "danger"
-              : routine.fitnessLevel === "intermediate"
-                ? "warning"
-                : "success"
-          }
-        >
-          {routine.fitnessLevel}
-        </Badge>
-      </div>
-      <div className="mt-2 flex items-center gap-3 text-xs text-gray-500">
-        <span>❤️ {formatNumber(routine.likes)}</span>
-        <span>💾 {formatNumber(routine.saves)}</span>
-        <span>⏱️ {routine.duration}m</span>
-      </div>
+          <dl className="mt-4 grid grid-cols-2 gap-2 text-center">
+            {[
+              [t("followers"), counts.followers],
+              [t("following"), counts.following],
+            ].map(([label, value]) => (
+              <div key={label} className="rounded-2xl bg-canvas py-2.5">
+                <dd className="text-lg font-semibold text-ink tabular-nums">{value}</dd>
+                <dt className="text-xs text-gray-500">{label}</dt>
+              </div>
+            ))}
+          </dl>
+          <div className="mt-3 flex gap-2 text-sm font-semibold">
+            <Link href={`/app/u/${handle}`} className="flex h-10 flex-1 items-center justify-center rounded-full bg-ink text-white">
+              {t("viewProfile")}
+            </Link>
+            <Link href="/app/social/settings" className="flex h-10 flex-1 items-center justify-center rounded-full ring-1 ring-gray-900/10 hover:bg-canvas">
+              {t("settingsLink")}
+            </Link>
+          </div>
+        </section>
+        {people.length > 0 && (
+          <section className="rounded-3xl bg-surface p-5 shadow-soft ring-1 ring-gray-900/[0.05]">
+            <h2 className="text-base font-semibold text-ink">{t("toFollow")}</h2>
+            <ul className="mt-1 divide-y divide-gray-900/[0.06]">
+              {people.map((p) => (
+                <PersonRow key={p.id} person={p} />
+              ))}
+            </ul>
+          </section>
+        )}
+      </aside>
     </div>
   );
 }

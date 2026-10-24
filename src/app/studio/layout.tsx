@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
-import { StudioLayoutWrapper } from "@/components/studio/StudioLayoutWrapper";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "Studio | Fit Planet",
-  description:
-    "Manage your gym business with Fit Planet Studio. Handle bookings, capacity, pricing, and analytics all in one place.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("studio.meta");
+  return {
+    title: { default: "Studio", template: "%s · Fit Planet Studio" },
+    description: t("description"),
+  };
+}
 
-export default function StudioLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <StudioLayoutWrapper>{children}</StudioLayoutWrapper>;
+export default function StudioLayout({ children }: { children: React.ReactNode }) {
+  return children;
 }

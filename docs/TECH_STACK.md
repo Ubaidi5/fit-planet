@@ -20,7 +20,7 @@
 | **React**      | 19.2.3  | UI library with new React Compiler             |
 | **React DOM**  | 19.2.3  | React rendering                                |
 | **TypeScript** | ^5.x    | Type safety and developer experience           |
-| **Bun**        | Latest  | Package manager and runtime (bun.lock present) |
+| **Bun**        | 1.4.4   | Package manager and runtime everywhere: dev, CI and production (pinned via `packageManager`) |
 
 **Key Features Enabled:**
 

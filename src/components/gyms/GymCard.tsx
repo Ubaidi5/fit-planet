@@ -1,11 +1,13 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { Gym } from "@/lib/data/mock-gyms";
 import { cityCode } from "@/lib/data/cities";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { tagLabel } from "@/lib/i18n/tags";
 import {
   HiArrowUpRight,
   HiCheckBadge,
@@ -23,15 +25,17 @@ interface GymCardProps {
 
 function getCrowd(gym: Gym) {
   const pct = Math.round((gym.capacity.current / gym.capacity.max) * 100);
-  if (pct >= 80) return { pct, label: "Busy", dot: "bg-stamp-magenta" };
-  if (pct >= 50) return { pct, label: "Moderate", dot: "bg-stamp-ochre" };
-  return { pct, label: "Quiet", dot: "bg-emerald-500" };
+  if (pct >= 80) return { pct, label: "busy", dot: "bg-stamp-magenta" };
+  if (pct >= 50) return { pct, label: "moderate", dot: "bg-stamp-ochre" };
+  return { pct, label: "quiet", dot: "bg-emerald-500" };
 }
 
 const GymCard: React.FC<GymCardProps> = ({ gym, layout = "grid", className }) => {
   const crowd = getCrowd(gym);
   const { money, distance, clock } = useLocale();
   const isList = layout === "list";
+  const t = useTranslations("gym");
+  const tt = useTranslations("tags");
 
   return (
     <Link
@@ -66,19 +70,19 @@ const GymCard: React.FC<GymCardProps> = ({ gym, layout = "grid", className }) =>
           {gym.isFeatured && (
             <span className="glass inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold text-ink">
               <HiSparkles className="size-3.5 text-stamp-ochre" />
-              Featured
+              {t("featured")}
             </span>
           )}
         </div>
 
         <span className="glass absolute top-3 end-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold text-ink">
           <span className={cn("size-1.5 rounded-full", crowd.dot)} />
-          {crowd.label} · {crowd.pct}%
+          {t(`crowd.${crowd.label}`)} · {crowd.pct}%
         </span>
 
         <span className="absolute bottom-3 start-3 rounded-full bg-surface px-3 py-1.5 text-sm font-semibold whitespace-nowrap text-ink shadow-soft tabular-nums">
           {money(gym.pricing.dayPass, gym.currency)}
-          <span className="font-normal text-gray-500"> / day</span>
+          <span className="font-normal text-gray-500"> {t("perDay")}</span>
         </span>
       </div>
 
@@ -88,7 +92,7 @@ const GymCard: React.FC<GymCardProps> = ({ gym, layout = "grid", className }) =>
           <h3 className="flex items-center gap-1.5 text-[17px] font-semibold tracking-tight text-ink">
             <span className="line-clamp-1">{gym.name}</span>
             {gym.isVerified && (
-              <HiCheckBadge className="size-4.5 shrink-0 text-emerald-600" aria-label="Verified" />
+              <HiCheckBadge className="size-4.5 shrink-0 text-emerald-600" aria-label={t("verified")} />
             )}
           </h3>
           <span className="flex shrink-0 items-center gap-1 text-sm font-semibold text-ink">
@@ -120,7 +124,7 @@ const GymCard: React.FC<GymCardProps> = ({ gym, layout = "grid", className }) =>
               key={amenity}
               className="rounded-full bg-canvas px-2.5 py-1 text-xs text-gray-600 ring-1 ring-gray-900/[0.04]"
             >
-              {amenity}
+              {tagLabel(tt, amenity)}
             </span>
           ))}
           {gym.amenities.length > (isList ? 5 : 3) && (
@@ -133,7 +137,7 @@ const GymCard: React.FC<GymCardProps> = ({ gym, layout = "grid", className }) =>
         <div className="mt-auto flex items-center justify-between border-t border-gray-900/[0.06] pt-3.5">
           <span className="flex items-center gap-1.5 text-xs text-gray-500">
             <HiOutlineClock className="size-4" />
-            {gym.hours.is24Hours ? "Open 24/7" : `${clock(gym.hours.open)} to ${clock(gym.hours.close)}`}
+            {gym.hours.is24Hours ? t("open247") : t("hours", { open: clock(gym.hours.open), close: clock(gym.hours.close) })}
           </span>
           <span className="flex size-8 items-center justify-center rounded-full bg-canvas text-gray-700 transition-all duration-500 ease-out-expo group-hover:rotate-45 group-hover:bg-ink rtl:-scale-x-100 group-hover:text-white">
             <HiArrowUpRight className="size-4" />

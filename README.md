@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Fit Planet
 
-## Getting Started
+Day, week and month passes for gyms. Members find a gym, pay, and walk in with a
+QR pass; owners get a push the moment someone books and run their desk from a phone.
 
-First, run the development server:
+- **Members** (`/app`, mobile first): passes with QR codes, passport stamps, saved gyms, notifications.
+- **Gym owners** (`/studio`): dashboard, check-in desk with camera scanning, bookings, pricing, reviews, revenue.
+- **Public site**: explore gyms, gym pages, checkout.
+
+## Stack
+
+Next.js 16 (App Router, server actions), React 19, Tailwind CSS v4, MongoDB,
+NextAuth v5, Stripe, Firebase Cloud Messaging. Architecture and the feature
+checklist are in [`docs/PLAN.md`](docs/PLAN.md); security measures in
+[`docs/SECURITY.md`](docs/SECURITY.md).
+
+Third-party providers sit behind small service interfaces in
+`src/server/services/` (payments, storage, push, email). Swapping a provider
+means adding one file there and changing an env var.
+
+## Local development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+bun install
+cp .env.example .env.local   # fill DB_URI and AUTH_SECRET at minimum
+bun run db:seed              # demo gyms + owner@fitplanet.dev / member@fitplanet.dev (fitplanet123)
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Checks: `bun run typecheck`, `bun run lint`, `bun run test:smoke` (end-to-end
+booking flow against the database in `.env.local`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+GitHub Actions builds a standalone bundle and deploys it to an AWS Lightsail
+server running nginx + Bun (systemd service) on every push to `main`. Server setup, secrets and
+everything else needed are listed in [`NEEDS_FROM_USER.md`](NEEDS_FROM_USER.md).
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Each release goes live through `deploy/activate.sh`, which switches the `current` symlink,
+restarts the service and polls `/api/health` (app plus database). If the new release isn't
+healthy within about 40 seconds, it switches back to the previous release and fails the
+deploy, so a bad build never stays live. Point an uptime monitor at `/api/health` too:
+it answers 200 when everything is fine and 503 when the database can't be reached.

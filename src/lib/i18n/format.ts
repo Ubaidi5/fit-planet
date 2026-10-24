@@ -65,3 +65,13 @@ export function formatPassDate(date: Date, locale = "en") {
     .format(date)
     .toUpperCase();
 }
+
+const WEEKDAYS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+
+/** "Monday" or "Mon" (as stored on gyms) in the viewer's language */
+export function weekdayName(day: string, locale = "en", style: "long" | "short" = "long") {
+  const index = WEEKDAYS.findIndex((name) => name.startsWith(day.toLowerCase().slice(0, 3)));
+  if (index < 0) return day;
+  // 2023-01-01 was a Sunday
+  return new Intl.DateTimeFormat(locale, { weekday: style, timeZone: "UTC" }).format(new Date(Date.UTC(2023, 0, 1 + index)));
+}

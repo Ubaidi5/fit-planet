@@ -2,32 +2,57 @@
   "name": "fit-planet",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "bun@1.4.4",
+  "engines": {
+    "bun": ">=1.4.4"
+  },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "bun --bun next dev --webpack",
+    "build": "bun --bun next build",
+    "start": "bun --bun next start",
+    "typecheck": "bun --bun tsc --noEmit",
+    "lint": "bun --bun eslint .",
+    "db:seed": "bun --conditions=react-server scripts/seed.ts",
+    "test:smoke": "bun --conditions=react-server scripts/smoke-test.ts",
+    "i18n:check": "bun scripts/check-messages.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.975.0",
-    "bcrypt": "^6.0.0",
+    "@auth/mongodb-adapter": "^3.11.3",
+    "@aws-sdk/client-s3": "^3.1156.0",
+    "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "mongodb": "^7.0.0",
-    "next": "16.1.4",
-    "next-auth": "^5.0.0-beta.30",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
-    "react-icons": "^5.5.0",
-    "tailwind-merge": "^3.4.0"
+    "firebase": "^13.1.0",
+    "firebase-admin": "^14.5.0",
+    "jsqr": "^1.4.0",
+    "mongodb": "^7.7.0",
+    "next": "16.4.2",
+    "next-auth": "5.0.0-beta.32",
+    "next-intl": "4.14.9",
+    "nodemailer": "^10.2.1",
+    "qrcode": "^1.5.4",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-icons": "^5.7.0",
+    "server-only": "^0.0.1",
+    "stripe": "^23.0.1",
+    "tailwind-merge": "^3.7.0",
+    "use-intl": "4.14.9",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/bcrypt": "^6.0.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/bun": "1.4.4",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/nodemailer": "^8.0.2",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "babel-plugin-react-compiler": "1.0.0",
-    "tailwindcss": "^4",
+    "eslint": "9",
+    "eslint-config-next": "16.4.2",
+    "intl-messageformat": "11.2.15",
+    "tailwindcss": "^4.3.3",
     "typescript": "^5"
   },
   "ignoreScripts": [
@@ -37,5 +62,8 @@
   "trustedDependencies": [
     "sharp",
     "unrs-resolver"
-  ]
+  ],
+  "overrides": {
+    "@grpc/grpc-js": "^1.14.6"
+  }
 }

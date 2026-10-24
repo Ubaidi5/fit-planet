@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { HiArrowRight, HiMapPin, HiOutlineClock, HiStar } from "react-icons/hi2";
@@ -19,9 +20,32 @@ interface OrbitExplorerProps {
 
 export function crowdOf(gym: Gym) {
   const pct = Math.round((gym.capacity.current / gym.capacity.max) * 100);
-  if (pct >= 80) return { pct, label: "Busy", color: "var(--color-stamp-magenta)", text: "text-stamp-magenta" };
-  if (pct >= 50) return { pct, label: "Moderate", color: "var(--color-stamp-ochre)", text: "text-stamp-ochre" };
-  return { pct, label: "Quiet", color: "var(--color-stamp-teal)", text: "text-stamp-teal" };
+  if (pct >= 80) return { pct, key: "busy", color: "var(--color-stamp-magenta)", text: "text-stamp-magenta" } as const;
+  if (pct >= 50) return { pct, key: "moderate", color: "var(--color-stamp-ochre)", text: "text-stamp-ochre" } as const;
+  return { pct, key: "quiet", color: "var(--color-stamp-teal)", text: "text-stamp-teal" } as const;
+}
+
+function centreOf(gyms: Gym[]) {
+  return {
+    lat: gyms.reduce((sum, g) => sum + g.location.lat, 0) / gyms.length,
+    lng: gyms.reduce((sum, g) => sum + g.location.lng, 0) / gyms.length,
+  };
+}
+
+/** Great-circle distance in km */
+function kmBetween(a: { lat: number; lng: number }, b: { lat: number; lng: number }) {
+  const rad = Math.PI / 180;
+  const dLat = (b.lat - a.lat) * rad;
+  const dLng = (b.lng - a.lng) * rad;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * rad) * Math.cos(b.lat * rad) * Math.sin(dLng / 2) ** 2;
+  return 2 * 6371 * Math.asin(Math.sqrt(h));
+}
+
+/** Stored gyms carry no distance, so measure from the middle of the city's gyms */
+function withDistance(gyms: Gym[]): Gym[] {
+  if (gyms.length === 0) return gyms;
+  const centre = centreOf(gyms);
+  return gyms.map((g) => (g.distance === undefined ? { ...g, distance: Math.round(kmBetween(centre, g.location) * 10) / 10 } : g));
 }
 
 interface PlacedGym {
@@ -38,10 +62,7 @@ interface PlacedGym {
  */
 function placeGyms(gyms: Gym[]): PlacedGym[] {
   if (gyms.length === 0) return [];
-  const centre = {
-    lat: gyms.reduce((sum, g) => sum + g.location.lat, 0) / gyms.length,
-    lng: gyms.reduce((sum, g) => sum + g.location.lng, 0) / gyms.length,
-  };
+  const centre = centreOf(gyms);
   const maxDistance = Math.max(...gyms.map((g) => g.distance ?? 1), 1);
 
   const withBearing = gyms
@@ -76,9 +97,11 @@ export function OrbitExplorer({
   className,
 }: OrbitExplorerProps) {
   const { money, distance, clock } = useLocale();
+  const t = useTranslations("orbit.ui");
+  const tg = useTranslations("gym");
   const cities = useMemo(() => Array.from(new Set(gyms.map((g) => g.address.city))), [gyms]);
   const [city, setCity] = useState(initialCity && cities.includes(initialCity) ? initialCity : cities[0]);
-  const cityGyms = useMemo(() => gyms.filter((g) => g.address.city === city), [gyms, city]);
+  const cityGyms = useMemo(() => withDistance(gyms.filter((g) => g.address.city === city)), [gyms, city]);
   const placed = useMemo(() => placeGyms(cityGyms), [cityGyms]);
 
   const quietest = useMemo(
@@ -98,7 +121,7 @@ export function OrbitExplorer({
       {showCityTabs && (
         <div
           role="tablist"
-          aria-label="Choose a city"
+          aria-label={t("chooseCity")}
           className="-mx-4 mb-8 flex gap-2 overflow-x-auto px-4 pb-1 no-scrollbar sm:mx-0 sm:flex-wrap sm:justify-center sm:px-0"
         >
           {cities.map((name) => (
@@ -134,7 +157,7 @@ export function OrbitExplorer({
 
           {/* You */}
           <div className="absolute top-1/2 left-1/2 z-10 flex size-[20%] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full bg-ink text-white shadow-[0_0_0_10px_oklch(0.6_0.1_190/0.12),0_0_0_22px_oklch(0.6_0.1_190/0.06)]">
-            <span className="text-[10px] text-white/60 sm:text-[11px]">You</span>
+            <span className="text-[10px] text-white/60 sm:text-[11px]">{t("you")}</span>
             <span className="font-mono text-xs tracking-[0.14em] text-volt sm:text-sm">{cityCode(city)}</span>
           </div>
 
@@ -147,7 +170,7 @@ export function OrbitExplorer({
                 type="button"
                 onClick={() => setSelectedId(gym.id)}
                 aria-pressed={isSelected}
-                aria-label={`${gym.name}, ${crowd.pct}% full, ${distance(gym.distance ?? 0)} away`}
+                aria-label={t("node", { gym: gym.name, pct: crowd.pct, distance: distance(gym.distance ?? 0) })}
                 className="group absolute z-20 flex -translate-x-1/2 -translate-y-1/2 animate-fade-up flex-col items-center gap-1.5 focus-visible:outline-none"
                 style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${index * 70}ms` }}
               >
@@ -200,32 +223,32 @@ export function OrbitExplorer({
             <div className="grid grid-cols-3 divide-x divide-gray-900/[0.06] px-2 py-4 text-center rtl:divide-x-reverse">
               <div>
                 <p className={cn("text-xl font-semibold tabular-nums", crowdOf(selected).text)}>{crowdOf(selected).pct}%</p>
-                <p className="text-xs text-gray-500">{crowdOf(selected).label} now</p>
+                <p className="text-xs text-gray-500">{tg(`crowdNow.${crowdOf(selected).key}`)}</p>
               </div>
               <div>
                 <p className="flex items-center justify-center gap-1 text-xl font-semibold text-ink">
                   <HiStar className="size-4 text-stamp-ochre" />
                   {selected.rating}
                 </p>
-                <p className="text-xs text-gray-500">{selected.totalReviews} reviews</p>
+                <p className="text-xs text-gray-500">{tg("reviewsCount", { count: selected.totalReviews })}</p>
               </div>
               <div>
                 <p className="text-xl font-semibold text-ink tabular-nums">{money(selected.pricing.dayPass, selected.currency)}</p>
-                <p className="text-xs text-gray-500">Day pass</p>
+                <p className="text-xs text-gray-500">{tg("dayPass")}</p>
               </div>
             </div>
             <div className="flex items-center justify-between gap-3 px-3 pb-3">
               <p className="flex min-w-0 items-center gap-1.5 text-sm text-gray-500">
                 <HiOutlineClock className="size-4 shrink-0" />
                 <span className="truncate">
-                  {selected.hours.is24Hours ? "Open 24/7" : `${clock(selected.hours.open)} to ${clock(selected.hours.close)}`}
+                  {selected.hours.is24Hours ? tg("open247") : tg("hours", { open: clock(selected.hours.open), close: clock(selected.hours.close) })}
                 </span>
               </p>
               <Link
                 href={`/gyms/${selected.slug}`}
                 className="group inline-flex h-11 shrink-0 items-center gap-2 rounded-full bg-ink ps-5 pe-1.5 text-sm font-medium text-white transition-colors hover:bg-gray-800"
               >
-                View gym
+                {t("viewGym")}
                 <span className="flex size-8 items-center justify-center rounded-full bg-volt text-ink transition-transform duration-500 ease-out-expo group-hover:-rotate-45 rtl:rotate-180">
                   <HiArrowRight className="size-4" />
                 </span>

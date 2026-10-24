@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import {
@@ -18,15 +19,30 @@ import {
   type FilterState,
 } from "@/components/gyms/SearchFilters";
 import { Reveal } from "@/components/motion/Reveal";
-import { cityAverageDayPass, gymCities, mockGyms } from "@/lib/data/mock-gyms";
-import { platformStats } from "@/lib/data/mock-platform";
+import type { Gym } from "@/lib/data/mock-gyms";
 import { cn } from "@/lib/utils";
 import { Accent } from "@/components/sections/SectionHeading";
 
 type ViewMode = "orbit" | "grid" | "list";
 
-function applyFilters(filters: FilterState, city: string) {
-  let result = city ? mockGyms.filter((gym) => gym.address.city === city) : [...mockGyms];
+function averageDayPass(gyms: Gym[]) {
+  const byCity = new Map<string, { sum: number; count: number }>();
+  for (const gym of gyms) {
+    const entry = byCity.get(gym.address.city) ?? { sum: 0, count: 0 };
+    entry.sum += gym.pricing.dayPass;
+    entry.count += 1;
+    byCity.set(gym.address.city, entry);
+  }
+  return (city: string) => {
+    const entry = byCity.get(city);
+    return entry ? entry.sum / entry.count : 1;
+  };
+}
+
+function applyFilters(gyms: Gym[], filters: FilterState, city: string) {
+  const cityAverageDayPass = averageDayPass(gyms);
+  const relativePrice = (gym: Gym) => gym.pricing.dayPass / cityAverageDayPass(gym.address.city);
+  let result = city ? gyms.filter((gym) => gym.address.city === city) : [...gyms];
 
   if (filters.search) {
     const searchLower = filters.search.toLowerCase();
@@ -91,21 +107,21 @@ function applyFilters(filters: FilterState, city: string) {
   return result;
 }
 
-const relativePrice = (gym: (typeof mockGyms)[number]) =>
-  gym.pricing.dayPass / cityAverageDayPass(gym.address.city);
-
 const viewModes = [
-  { mode: "orbit", icon: HiOutlineViewfinderCircle, label: "Orbit" },
-  { mode: "grid", icon: HiOutlineSquares2X2, label: "Grid" },
-  { mode: "list", icon: HiOutlineListBullet, label: "List" },
+  { mode: "orbit", icon: HiOutlineViewfinderCircle },
+  { mode: "grid", icon: HiOutlineSquares2X2 },
+  { mode: "list", icon: HiOutlineListBullet },
 ] as const;
 
 interface GymsExplorerProps {
+  gyms: Gym[];
   initialQuery?: string;
   initialCity?: string;
 }
 
-export function GymsExplorer({ initialQuery = "", initialCity = "" }: GymsExplorerProps) {
+export function GymsExplorer({ gyms, initialQuery = "", initialCity = "" }: GymsExplorerProps) {
+  const t = useTranslations("explore");
+  const gymCities = useMemo(() => Array.from(new Set(gyms.map((gym) => gym.address.city))), [gyms]);
   const [filters, setFilters] = useState<FilterState>({
     ...initialFilters,
     search: initialQuery,
@@ -114,7 +130,7 @@ export function GymsExplorer({ initialQuery = "", initialCity = "" }: GymsExplor
   const [city, setCity] = useState(gymCities.includes(initialCity) ? initialCity : "");
   const [viewMode, setViewMode] = useState<ViewMode>(initialCity ? "orbit" : "grid");
 
-  const filteredGyms = useMemo(() => applyFilters(filters, city), [filters, city]);
+  const filteredGyms = useMemo(() => applyFilters(gyms, filters, city), [gyms, filters, city]);
   // Orbit needs one city; with "All" selected it shows its own city tabs
   const orbitCities = useMemo(() => new Set(filteredGyms.map((gym) => gym.address.city)), [filteredGyms]);
 
@@ -134,21 +150,18 @@ export function GymsExplorer({ initialQuery = "", initialCity = "" }: GymsExplor
         </div>
         <div className="mx-auto max-w-7xl px-4 pt-10 pb-8 sm:px-6 sm:pt-14 lg:px-8">
           <p className="animate-fade-up font-mono text-[12px] tracking-[0.16em] text-emerald-700 uppercase">
-            Explore · {city ? `${cityCode(city)} · ${city}` : `${gymCities.length} cities`}
+            {t("eyebrow")} · {city ? `${cityCode(city)} · ${city}` : t("cities", { count: gymCities.length })}
           </p>
           <h1 className="mt-3 max-w-3xl animate-fade-up text-4xl leading-[1.05] font-semibold tracking-[-0.04em] text-ink [animation-delay:80ms] sm:text-5xl lg:text-6xl">
-            Find a gym that fits{" "}
-            <Accent>your day</Accent>
+            {t.rich("title", { accent: (c) => <Accent>{c}</Accent> })}
           </h1>
           <p className="mt-4 max-w-2xl animate-fade-up text-lg text-gray-600 [animation-delay:160ms]">
-            {platformStats.partnerGyms} verified partner gyms in {gymCities.length} cities.
-            Compare passes in local currency, see how busy they are right now and
-            book in seconds.
+            {t("lead", { gyms: gyms.length, cities: gymCities.length })}
           </p>
 
           <div
             role="tablist"
-            aria-label="Choose a city"
+            aria-label={t("chooseCity")}
             className="-mx-4 mt-8 flex animate-fade-up gap-2 overflow-x-auto px-4 pb-1 no-scrollbar [animation-delay:200ms] sm:mx-0 sm:px-0"
           >
             {["", ...gymCities].map((name) => {
@@ -166,9 +179,9 @@ export function GymsExplorer({ initialQuery = "", initialCity = "" }: GymsExplor
                   )}
                 >
                   <span className={cn("font-mono text-[11px] tracking-[0.12em]", active ? "text-volt" : "text-gray-400")}>
-                    {name ? cityCode(name) : "ALL"}
+                    {name ? cityCode(name) : t("allCode")}
                   </span>
-                  {name || "Everywhere"}
+                  {name || t("everywhere")}
                 </button>
               );
             })}
@@ -189,25 +202,21 @@ export function GymsExplorer({ initialQuery = "", initialCity = "" }: GymsExplor
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-6 flex items-center justify-between gap-4">
             <p className="text-sm text-gray-500" aria-live="polite">
-              <span className="font-semibold text-ink tabular-nums">
-                {filteredGyms.length}
-              </span>{" "}
-              {filteredGyms.length === 1 ? "gym" : "gyms"}
-              {filters.search && (
-                <>
-                  {" "}
-                  for <span className="font-medium text-ink">&ldquo;{filters.search}&rdquo;</span>
-                </>
-              )}
+              {t.rich(filters.search ? "resultsFor" : "results", {
+                count: filteredGyms.length,
+                query: filters.search,
+                n: (c) => <span className="font-semibold text-ink tabular-nums">{c}</span>,
+                q: (c) => <span className="font-medium text-ink">{c}</span>,
+              })}
             </p>
 
             <div className="flex shrink-0 items-center rounded-full bg-surface p-1 ring-1 ring-gray-900/[0.07]">
-              {viewModes.map(({ mode, icon: Icon, label }) => (
+              {viewModes.map(({ mode, icon: Icon }) => (
                 <button
                   key={mode}
                   type="button"
                   onClick={() => setViewMode(mode)}
-                  aria-label={`${label} view`}
+                  aria-label={t(`views.${mode}Aria`)}
                   aria-pressed={viewMode === mode}
                   className={cn(
                     "flex h-8 items-center justify-center gap-1.5 rounded-full px-2.5 text-[13px] font-medium transition-all duration-300 sm:px-3",
@@ -215,7 +224,7 @@ export function GymsExplorer({ initialQuery = "", initialCity = "" }: GymsExplor
                   )}
                 >
                   <Icon className="size-4" />
-                  <span className="hidden sm:inline">{label}</span>
+                  <span className="hidden sm:inline">{t(`views.${mode}`)}</span>
                 </button>
               ))}
             </div>
@@ -249,17 +258,16 @@ export function GymsExplorer({ initialQuery = "", initialCity = "" }: GymsExplor
               <span className="flex size-14 items-center justify-center rounded-2xl bg-canvas text-gray-400 ring-1 ring-gray-900/[0.06]">
                 <HiMagnifyingGlass className="size-6" />
               </span>
-              <h2 className="mt-5 text-lg font-semibold text-ink">No gyms match yet</h2>
+              <h2 className="mt-5 text-lg font-semibold text-ink">{t("empty.title")}</h2>
               <p className="mt-1.5 max-w-sm text-sm text-gray-500">
-                Try a different area or loosen a filter. New gyms join the
-                network every week.
+                {t("empty.text")}
               </p>
               <button
                 type="button"
                 onClick={resetAll}
                 className="mt-6 inline-flex h-10 items-center rounded-full bg-ink px-5 text-sm font-medium text-white transition-colors hover:bg-gray-800"
               >
-                Reset search and filters
+                {t("empty.reset")}
               </button>
             </div>
           )}
@@ -268,17 +276,17 @@ export function GymsExplorer({ initialQuery = "", initialCity = "" }: GymsExplor
           <Reveal className="mt-16 flex flex-col items-start justify-between gap-6 rounded-4xl border border-gray-900/[0.06] bg-volt-soft/70 p-7 sm:flex-row sm:items-center sm:p-10">
             <div>
               <h2 className="text-2xl font-semibold tracking-[-0.03em] text-ink">
-                Own a gym{city ? ` in ${city}` : ""}?
+                {city ? t("owner.titleCity", { city }) : t("owner.title")}
               </h2>
               <p className="mt-1.5 text-gray-700">
-                List it on Fit Planet and start taking bookings from new members.
+                {t("owner.text")}
               </p>
             </div>
             <Link
               href="/studio/register"
               className="group inline-flex h-12 shrink-0 items-center gap-2 rounded-full bg-ink pe-1.5 ps-6 text-[15px] font-medium text-white transition-colors hover:bg-gray-800"
             >
-              List your gym
+              {t("owner.cta")}
               <span className="flex size-9 items-center justify-center rounded-full bg-volt text-ink transition-transform duration-500 ease-out-expo group-hover:-rotate-45 rtl:rotate-180">
                 <HiArrowRight className="size-4" />
               </span>

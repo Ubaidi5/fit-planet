@@ -1,10 +1,9 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { defaultRegion, findRegion, guessRegion, type Region } from "./regions";
+import { createContext, useCallback, useContext, useMemo, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { defaultRegion, findRegion, REGION_COOKIE, type Region } from "./regions";
 import { formatClock, formatDistance, formatMoney, formatNumber } from "./format";
-
-const STORAGE_KEY = "fp-region";
 
 interface LocaleContextValue {
   region: Region;
@@ -17,37 +16,28 @@ interface LocaleContextValue {
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
-export function LocaleProvider({ children }: { children: React.ReactNode }) {
-  // Server and first client render use the neutral region so markup matches;
-  // the viewer's saved or guessed region is applied right after hydration.
-  const [region, setRegionState] = useState<Region>(defaultRegion);
+/**
+ * The region is resolved on the server (cookie, then Accept-Language) so the
+ * first render is already in the viewer's language. Switching writes the
+ * cookie and refreshes server components so translations follow.
+ */
+export function LocaleProvider({ initialRegion, children }: { initialRegion: string; children: React.ReactNode }) {
+  const router = useRouter();
+  const [, startTransition] = useTransition();
+  const [region, setRegionState] = useState<Region>(() => findRegion(initialRegion) ?? defaultRegion);
 
-  useEffect(() => {
-    let saved: string | null = null;
-    try {
-      saved = window.localStorage.getItem(STORAGE_KEY);
-    } catch {
-      saved = null;
-    }
-    const next = findRegion(saved) ?? guessRegion(navigator.languages ?? [navigator.language]);
-    if (next.code !== defaultRegion.code) setRegionState(next);
-  }, []);
-
-  useEffect(() => {
-    document.documentElement.lang = region.locale;
-    document.documentElement.dir = region.dir;
-  }, [region]);
-
-  const setRegion = useCallback((code: string) => {
-    const next = findRegion(code);
-    if (!next) return;
-    setRegionState(next);
-    try {
-      window.localStorage.setItem(STORAGE_KEY, code);
-    } catch {
-      // Storage can be blocked; the choice still applies for this visit
-    }
-  }, []);
+  const setRegion = useCallback(
+    (code: string) => {
+      const next = findRegion(code);
+      if (!next) return;
+      setRegionState(next);
+      document.cookie = `${REGION_COOKIE}=${encodeURIComponent(code)}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
+      document.documentElement.lang = next.locale;
+      document.documentElement.dir = next.dir;
+      startTransition(() => router.refresh());
+    },
+    [router],
+  );
 
   const value = useMemo<LocaleContextValue>(
     () => ({

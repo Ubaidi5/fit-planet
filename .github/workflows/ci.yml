@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches-ignore: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      # A throwaway database for the seed and the end-to-end smoke test
+      mongo:
+        image: mongo:7
+        ports: ["27017:27017"]
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          # Pinned through package.json's packageManager field
+          bun-version-file: package.json
+      - run: bun install --frozen-lockfile
+      - run: bun run typecheck
+      - run: bun run lint
+      - run: bun run i18n:check
+      - name: Seed and smoke test (bookings, check-ins, social, staff, admin, privacy)
+        run: bun run db:seed && bun run test:smoke
+        env:
+          DB_URI: mongodb://localhost:27017
+          DB_NAME: fitplanet_ci
+          APP_URL: http://localhost:3000
+      - name: Build
+        run: bun run build
+        env:
+          # Dummy values: the build must succeed without real secrets
+          AUTH_SECRET: ci-only-secret
+          APP_URL: http://localhost:3000
+
+      - name: Start the standalone server on Bun
+        run: |
+          cp -r .next/static .next/standalone/.next/static
+          if [ -d public ]; then cp -r public .next/standalone/public; fi
+          cd .next/standalone
+          PORT=3100 HOSTNAME=127.0.0.1 AUTH_SECRET=ci-only-secret bun server.js > server.log 2>&1 &
+          for i in $(seq 1 30); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3100/login || true)
+            if [ "$code" != "000" ]; then break; fi
+            sleep 1
+          done
+          # Pages that import the database driver must render on Bun, even with no database
+          failed=0
+          for path in /login /privacy /terms /imprint; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:3100$path" || true)
+            echo "$path -> $code"
+            if [ "$code" != "200" ]; then failed=1; fi
+          done
+          if [ "$failed" = 1 ]; then cat server.log; exit 1; fi

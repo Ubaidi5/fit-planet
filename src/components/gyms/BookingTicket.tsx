@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { HiArrowRight, HiOutlineShieldCheck } from "react-icons/hi2";
 import { cn } from "@/lib/utils";
@@ -19,6 +20,7 @@ interface BookingTicketProps {
 /** Sidebar booking card drawn as a pass: pick a pass, see the price, book */
 export function BookingTicket({ gym, annualPass, onBook, className }: BookingTicketProps) {
   const { money } = useLocale();
+  const t = useTranslations("passes");
   const plans = passPlans(gym, annualPass).filter((plan) => plan.key !== "annual");
   const [selected, setSelected] = useState<PassKey>("day");
   const plan = plans.find((p) => p.key === selected) ?? plans[0];
@@ -31,7 +33,7 @@ export function BookingTicket({ gym, annualPass, onBook, className }: BookingTic
           <span>
             {cityCode(gym.address.city)} · {gym.country}
           </span>
-          <span>Boarding pass</span>
+          <span>{t("boarding")}</span>
         </div>
         <div className="mt-4 flex items-end justify-between gap-4">
           <div className="min-w-0">
@@ -53,7 +55,7 @@ export function BookingTicket({ gym, annualPass, onBook, className }: BookingTic
 
       <div className="p-6">
         <fieldset>
-          <legend className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">Choose a pass</legend>
+          <legend className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">{t("choosePass")}</legend>
           <div className="mt-3 space-y-2">
             {plans.map((option) => {
               const active = option.key === selected;
@@ -84,8 +86,8 @@ export function BookingTicket({ gym, annualPass, onBook, className }: BookingTic
                       {active && <span className="size-1.5 rounded-full bg-volt" />}
                     </span>
                     <span className="min-w-0">
-                      <span className="block truncate text-sm font-semibold text-ink">{option.name}</span>
-                      <span className="block font-mono text-[10px] tracking-[0.1em] text-gray-400 uppercase">{option.duration}</span>
+                      <span className="block truncate text-sm font-semibold text-ink">{t(`name.${option.key}`)}</span>
+                      <span className="block font-mono text-[10px] tracking-[0.1em] text-gray-400 uppercase">{t(`duration.${option.key}`)}</span>
                     </span>
                   </span>
                   <span className="shrink-0 text-[15px] font-semibold whitespace-nowrap text-ink tabular-nums">
@@ -98,7 +100,7 @@ export function BookingTicket({ gym, annualPass, onBook, className }: BookingTic
         </fieldset>
 
         <div className="mt-5 flex items-baseline justify-between border-t border-dashed border-gray-900/15 pt-4">
-          <span className="text-sm text-gray-500">Total today</span>
+          <span className="text-sm text-gray-500">{t("totalToday")}</span>
           <span className="text-2xl font-semibold tracking-tight whitespace-nowrap text-ink tabular-nums">
             {money(plan.price, gym.currency)}
           </span>
@@ -109,14 +111,14 @@ export function BookingTicket({ gym, annualPass, onBook, className }: BookingTic
           onClick={() => onBook(selected)}
           className="group mt-5 inline-flex h-13 w-full items-center justify-between rounded-full bg-ink ps-6 pe-1.5 text-[15px] font-medium text-white transition-colors hover:bg-gray-800"
         >
-          Book {plan.name.toLowerCase()}
+          {t(`book.${plan.key}`)}
           <span className="flex size-10 items-center justify-center rounded-full bg-volt text-ink transition-transform duration-500 ease-out-expo group-hover:-rotate-45 rtl:rotate-180">
             <HiArrowRight className="size-4.5" />
           </span>
         </button>
         <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-gray-500">
           <HiOutlineShieldCheck className="size-4 text-emerald-600" />
-          Instant QR pass · Priced in {gym.currency}
+          {t("instant", { currency: gym.currency })}
         </p>
       </div>
     </div>

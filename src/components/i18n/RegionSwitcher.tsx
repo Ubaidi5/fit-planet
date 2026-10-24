@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { HiCheck, HiChevronDown, HiOutlineGlobeAlt } from "react-icons/hi2";
 import { cn } from "@/lib/utils";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
@@ -18,6 +19,7 @@ interface RegionSwitcherProps {
 /** Region and language picker: changes number, date, distance formats and text direction */
 export function RegionSwitcher({ align = "end", placement = "bottom", className }: RegionSwitcherProps) {
   const { region, setRegion } = useLocale();
+  const t = useTranslations("region");
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const menuId = useId();
@@ -43,7 +45,7 @@ export function RegionSwitcher({ align = "end", placement = "bottom", className 
         onClick={() => setOpen((value) => !value)}
         aria-expanded={open}
         aria-controls={menuId}
-        aria-label={`Region: ${region.name}, ${region.language}`}
+        aria-label={t("current", { name: region.name, language: region.language })}
         className="inline-flex h-10 items-center gap-1.5 rounded-full px-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-900/[0.04] hover:text-ink"
       >
         <HiOutlineGlobeAlt className="size-4.5" />
@@ -54,7 +56,7 @@ export function RegionSwitcher({ align = "end", placement = "bottom", className 
       <div
         id={menuId}
         role="listbox"
-        aria-label="Choose your region"
+        aria-label={t("choose")}
         className={cn(
           "absolute z-50 w-72 origin-top rounded-3xl border border-gray-900/[0.06] bg-surface p-2 shadow-lift transition-all duration-300 ease-out-expo",
           align === "end" ? "end-0" : "start-0",
@@ -62,7 +64,7 @@ export function RegionSwitcher({ align = "end", placement = "bottom", className 
           open ? "visible scale-100 opacity-100" : "invisible scale-95 opacity-0",
         )}
       >
-        <p className="px-3 pt-2 pb-2 font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">Region · Language</p>
+        <p className="px-3 pt-2 pb-2 font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">{t("heading")}</p>
         <ul className="max-h-80 overflow-y-auto">
           {regions.map((option) => {
             const selected = option.code === region.code;
@@ -89,7 +91,9 @@ export function RegionSwitcher({ align = "end", placement = "bottom", className 
                       {option.name}
                     </span>
                     <span className="block truncate text-xs text-gray-500">
-                      <span dir={option.dir}>{option.language}</span> · {formatMoney(1234, option.currency, option.locale)}
+                      <span dir={option.dir}>{option.language}</span> ·{" "}
+                      {/* Server and browser ICU data can differ in separators (CHF 1'234 vs 1’234) */}
+                      <span suppressHydrationWarning>{formatMoney(1234, option.currency, option.locale)}</span>
                       {option.units === "imperial" ? " · mi" : " · km"}
                     </span>
                   </span>

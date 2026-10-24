@@ -1,472 +1,120 @@
-"use client";
+import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa6";
+import { HiOutlineEnvelope } from "react-icons/hi2";
+import { requireUser } from "@/server/session";
+import { getDb } from "@/server/db/client";
+import { PasswordForm } from "@/components/member/PasswordForm";
+import { signOutAction } from "@/actions/auth";
+import { signOutOtherDevicesAction } from "@/actions/member";
+import { DeleteAccountForm } from "@/components/member/DeleteAccountForm";
+import { deletionBlocker } from "@/server/modules/privacy";
+import Link from "next/link";
+import { HiOutlineArrowDownTray } from "react-icons/hi2";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { PasswordStrength } from "@/components/ui/PasswordStrength";
-import { cn } from "@/lib/utils";
-import { HiOutlineLockClosed } from "react-icons/hi";
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getTranslations("settings"))("security") };
+}
 
-export default function SecuritySettingsPage() {
-  const [activeTab, setActiveTab] = useState<
-    "password" | "privacy" | "account"
-  >("password");
+const providers = {
+  google: { name: "Google", icon: FcGoogle },
+  facebook: { name: "Facebook", icon: FaFacebook },
+} as const;
 
-  // Password Change State
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPasswords, setShowPasswords] = useState(false);
-  const [isChangingPassword, setIsChangingPassword] = useState(false);
-
-  // Privacy Settings State
-  const [privacySettings, setPrivacySettings] = useState({
-    profileVisibility: "public",
-    showWorkouts: true,
-    showProgress: false,
-    allowMessages: true,
-    showOnlineStatus: true,
-  });
-
-  // Account Actions State
-  const [isExporting, setIsExporting] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [deleteConfirmText, setDeleteConfirmText] = useState("");
-
-  const handlePasswordChange = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsChangingPassword(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsChangingPassword(false);
-    // Reset form
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-  };
-
-  const handleExportData = async () => {
-    setIsExporting(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsExporting(false);
-    // In real app, trigger download
-    console.log("Exporting user data...");
-  };
-
-  const handleDeleteAccount = async () => {
-    if (deleteConfirmText !== "DELETE") return;
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    console.log("Account deleted");
-    // Redirect to homepage
-    window.location.href = "/";
-  };
+export default async function SecurityPage({ searchParams }: { searchParams: Promise<{ devices?: string }> }) {
+  const user = await requireUser("/app/security");
+  const { devices } = await searchParams;
+  const accounts = await (await getDb()).collection("accounts").find({ userId: user._id }, { projection: { provider: 1 } }).toArray();
+  const linked = new Set(accounts.map((a) => String(a.provider)));
+  const [t, tp, blocker] = await Promise.all([getTranslations("settings"), getTranslations("privacy"), deletionBlocker(user._id)]);
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6 p-6">
-      {/* Header */}
+    <div className="mx-auto max-w-3xl space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-ink tracking-tight">Security & Privacy</h1>
-        <p className="mt-1 text-sm text-gray-600">
-          Manage your security settings and privacy preferences
+        <h1 className="text-[1.75rem] font-semibold tracking-[-0.035em] text-ink sm:text-4xl">{t("security")}</h1>
+        <p className="mt-1 text-gray-500">{user.email}</p>
+      </div>
+
+      <section className="rounded-[1.75rem] bg-surface p-5 shadow-soft ring-1 ring-gray-900/[0.05] sm:p-8">
+        <h2 className="text-lg font-semibold text-ink">{user.passwordHash ? t("password") : t("addPassword")}</h2>
+        <p className="mt-1 mb-5 text-sm text-gray-500">
+          {user.passwordHash ? t("passwordHint") : t("addPasswordHint")}
         </p>
-      </div>
+        <PasswordForm hasPassword={Boolean(user.passwordHash)} />
+      </section>
 
-      {/* Tabs */}
-      <div className="border-b border-gray-200">
-        <nav className="flex gap-8">
-          <button
-            onClick={() => setActiveTab("password")}
-            className={cn(
-              "border-b-2 pb-3 text-sm font-medium transition-colors",
-              activeTab === "password"
-                ? "border-emerald-600 text-emerald-600"
-                : "border-transparent text-gray-600 hover:text-gray-900",
-            )}
-          >
-            Password
-          </button>
-          <button
-            onClick={() => setActiveTab("privacy")}
-            className={cn(
-              "border-b-2 pb-3 text-sm font-medium transition-colors",
-              activeTab === "privacy"
-                ? "border-emerald-600 text-emerald-600"
-                : "border-transparent text-gray-600 hover:text-gray-900",
-            )}
-          >
-            Privacy
-          </button>
-          <button
-            onClick={() => setActiveTab("account")}
-            className={cn(
-              "border-b-2 pb-3 text-sm font-medium transition-colors",
-              activeTab === "account"
-                ? "border-emerald-600 text-emerald-600"
-                : "border-transparent text-gray-600 hover:text-gray-900",
-            )}
-          >
-            Account Data
-          </button>
-        </nav>
-      </div>
+      <section className="rounded-[1.75rem] bg-surface p-5 shadow-soft ring-1 ring-gray-900/[0.05] sm:p-8">
+        <h2 className="text-lg font-semibold text-ink">{t("ways")}</h2>
+        <ul className="mt-4 divide-y divide-gray-900/[0.06]">
+          <li className="flex items-center gap-3 py-3">
+            <HiOutlineEnvelope className="size-5 text-gray-500" />
+            <span className="flex-1 text-sm text-ink">{t("emailLink")}</span>
+            <span className="text-xs font-semibold text-emerald-700">{t("alwaysOn")}</span>
+          </li>
+          {Object.entries(providers).map(([key, p]) => (
+            <li key={key} className="flex items-center gap-3 py-3">
+              <p.icon className="size-5 text-[#1877F2]" />
+              <span className="flex-1 text-sm text-ink">{p.name}</span>
+              <span className={linked.has(key) ? "text-xs font-semibold text-emerald-700" : "text-xs text-gray-400"}>{linked.has(key) ? t("connected") : t("notConnected")}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 text-xs text-gray-500">{t("connectHint")}</p>
+      </section>
 
-      {/* Password Tab */}
-      {activeTab === "password" && (
-        <div className="space-y-6">
-          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
-            <h2 className="text-lg font-semibold text-gray-900">
-              Change Password
-            </h2>
-            <p className="mt-1 text-sm text-gray-600">
-              Update your password to keep your account secure
+      <section className="rounded-[1.75rem] bg-surface p-5 shadow-soft ring-1 ring-gray-900/[0.05] sm:p-8">
+        <h2 className="text-lg font-semibold text-ink">{t("devices.title")}</h2>
+        <p className="mt-1 text-sm text-gray-500">{t("devices.text")}</p>
+        {devices === "signed-out" ? (
+          <p role="status" className="mt-5 rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800 ring-1 ring-emerald-600/15">
+            {t("devices.done")}
+          </p>
+        ) : (
+          <form action={signOutOtherDevicesAction} className="mt-5">
+            <button type="submit" className="h-11 w-full cursor-pointer rounded-full bg-canvas px-5 text-sm font-semibold text-ink ring-1 ring-gray-900/[0.08] transition-colors hover:bg-gray-100 sm:w-auto">
+              {t("devices.action")}
+            </button>
+          </form>
+        )}
+      </section>
+
+      <section className="rounded-[1.75rem] bg-surface p-5 shadow-soft ring-1 ring-gray-900/[0.05] sm:p-8">
+        <h2 className="text-lg font-semibold text-ink">{tp("dataTitle")}</h2>
+        <p className="mt-1 text-sm text-gray-500">{tp("dataText")}</p>
+        {/* A plain link: the route answers with a file download */}
+        <a
+          href="/app/security/export"
+          download
+          className="mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-canvas px-5 text-sm font-semibold text-ink ring-1 ring-gray-900/[0.08] transition-colors hover:bg-gray-100 sm:w-auto"
+        >
+          <HiOutlineArrowDownTray className="size-4.5" />
+          {tp("download")}
+        </a>
+
+        <div className="mt-8 border-t border-gray-900/[0.06] pt-6">
+          <h3 className="text-base font-semibold text-ink">{tp("deleteTitle")}</h3>
+          <p className="mt-1 mb-5 text-sm text-gray-500">{tp("deleteText")}</p>
+          {blocker ? (
+            <p className="rounded-2xl bg-amber-50 px-4 py-3 text-sm text-amber-900 ring-1 ring-amber-600/15">
+              {tp(blocker === "runsGym" ? "blockedGym" : "blockedPass")}{" "}
+              {blocker === "activePass" && (
+                <Link href="/app/passes" className="font-semibold underline underline-offset-2">
+                  {tp("seePasses")}
+                </Link>
+              )}
             </p>
-
-            <form onSubmit={handlePasswordChange} className="mt-6 space-y-4">
-              <Input
-                label="Current Password"
-                type={showPasswords ? "text" : "password"}
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                disabled={isChangingPassword}
-                leftIcon={<HiOutlineLockClosed className="h-5 w-5" />}
-              />
-
-              <Input
-                label="New Password"
-                type={showPasswords ? "text" : "password"}
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                disabled={isChangingPassword}
-                hint="At least 8 characters"
-                leftIcon={<HiOutlineLockClosed className="h-5 w-5" />}
-              />
-
-              <PasswordStrength password={newPassword} />
-
-              <Input
-                label="Confirm New Password"
-                type={showPasswords ? "text" : "password"}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                disabled={isChangingPassword}
-                leftIcon={<HiOutlineLockClosed className="h-5 w-5" />}
-              />
-
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="showPasswords"
-                  checked={showPasswords}
-                  onChange={(e) => setShowPasswords(e.target.checked)}
-                  className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
-                />
-                <label
-                  htmlFor="showPasswords"
-                  className="text-sm text-gray-700"
-                >
-                  Show passwords
-                </label>
-              </div>
-
-              <div className="flex justify-end gap-3 pt-2">
-                <Button variant="outline" type="button">
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={isChangingPassword}
-                  loading={isChangingPassword}
-                  loadingText="Updating..."
-                >
-                  Update Password
-                </Button>
-              </div>
-            </form>
-          </div>
-
-          {/* Two-Factor Authentication */}
-          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="font-semibold text-gray-900">
-                  Two-Factor Authentication
-                </h3>
-                <p className="mt-1 text-sm text-gray-600">
-                  Add an extra layer of security to your account
-                </p>
-              </div>
-              <Button variant="outline" size="sm">
-                Enable
-              </Button>
-            </div>
-          </div>
+          ) : (
+            user.email && <DeleteAccountForm email={user.email} />
+          )}
         </div>
-      )}
+      </section>
 
-      {/* Privacy Tab */}
-      {activeTab === "privacy" && (
-        <div className="space-y-6">
-          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
-            <h2 className="text-lg font-semibold text-gray-900">
-              Privacy Settings
-            </h2>
-            <p className="mt-1 text-sm text-gray-600">
-              Control who can see your information and activities
-            </p>
-
-            <div className="mt-6 space-y-4">
-              {/* Profile Visibility */}
-              <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-                <div>
-                  <h4 className="font-medium text-gray-900">
-                    Profile Visibility
-                  </h4>
-                  <p className="text-sm text-gray-600">
-                    Who can view your profile
-                  </p>
-                </div>
-                <select
-                  value={privacySettings.profileVisibility}
-                  onChange={(e) =>
-                    setPrivacySettings((prev) => ({
-                      ...prev,
-                      profileVisibility: e.target.value,
-                    }))
-                  }
-                  className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                >
-                  <option value="public">Public</option>
-                  <option value="friends">Friends Only</option>
-                  <option value="private">Private</option>
-                </select>
-              </div>
-
-              {/* Show Workouts */}
-              <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-                <div>
-                  <h4 className="font-medium text-gray-900">Show Workouts</h4>
-                  <p className="text-sm text-gray-600">
-                    Display your workout routines publicly
-                  </p>
-                </div>
-                <button
-                  onClick={() =>
-                    setPrivacySettings((prev) => ({
-                      ...prev,
-                      showWorkouts: !prev.showWorkouts,
-                    }))
-                  }
-                  className={cn(
-                    "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
-                    privacySettings.showWorkouts
-                      ? "bg-emerald-600"
-                      : "bg-gray-200",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "inline-block h-4 w-4 transform rounded-full bg-white transition-transform",
-                      privacySettings.showWorkouts
-                        ? "translate-x-6"
-                        : "translate-x-1",
-                    )}
-                  />
-                </button>
-              </div>
-
-              {/* Show Progress */}
-              <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-                <div>
-                  <h4 className="font-medium text-gray-900">Show Progress</h4>
-                  <p className="text-sm text-gray-600">
-                    Share your fitness progress and stats
-                  </p>
-                </div>
-                <button
-                  onClick={() =>
-                    setPrivacySettings((prev) => ({
-                      ...prev,
-                      showProgress: !prev.showProgress,
-                    }))
-                  }
-                  className={cn(
-                    "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
-                    privacySettings.showProgress
-                      ? "bg-emerald-600"
-                      : "bg-gray-200",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "inline-block h-4 w-4 transform rounded-full bg-white transition-transform",
-                      privacySettings.showProgress
-                        ? "translate-x-6"
-                        : "translate-x-1",
-                    )}
-                  />
-                </button>
-              </div>
-
-              {/* Allow Messages */}
-              <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-                <div>
-                  <h4 className="font-medium text-gray-900">Allow Messages</h4>
-                  <p className="text-sm text-gray-600">
-                    Let other users send you messages
-                  </p>
-                </div>
-                <button
-                  onClick={() =>
-                    setPrivacySettings((prev) => ({
-                      ...prev,
-                      allowMessages: !prev.allowMessages,
-                    }))
-                  }
-                  className={cn(
-                    "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
-                    privacySettings.allowMessages
-                      ? "bg-emerald-600"
-                      : "bg-gray-200",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "inline-block h-4 w-4 transform rounded-full bg-white transition-transform",
-                      privacySettings.allowMessages
-                        ? "translate-x-6"
-                        : "translate-x-1",
-                    )}
-                  />
-                </button>
-              </div>
-
-              {/* Show Online Status */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="font-medium text-gray-900">
-                    Show Online Status
-                  </h4>
-                  <p className="text-sm text-gray-600">
-                    Let others see when you're active
-                  </p>
-                </div>
-                <button
-                  onClick={() =>
-                    setPrivacySettings((prev) => ({
-                      ...prev,
-                      showOnlineStatus: !prev.showOnlineStatus,
-                    }))
-                  }
-                  className={cn(
-                    "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
-                    privacySettings.showOnlineStatus
-                      ? "bg-emerald-600"
-                      : "bg-gray-200",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "inline-block h-4 w-4 transform rounded-full bg-white transition-transform",
-                      privacySettings.showOnlineStatus
-                        ? "translate-x-6"
-                        : "translate-x-1",
-                    )}
-                  />
-                </button>
-              </div>
-            </div>
-
-            <div className="mt-6 flex justify-end">
-              <Button>Save Privacy Settings</Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Account Data Tab */}
-      {activeTab === "account" && (
-        <div className="space-y-6">
-          {/* Export Data */}
-          <div className="rounded-3xl border border-gray-900/[0.06] bg-surface p-6 shadow-soft">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <h3 className="font-semibold text-gray-900">
-                  Export Your Data
-                </h3>
-                <p className="mt-1 text-sm text-gray-600">
-                  Download a copy of your account data including workouts,
-                  routines, and profile information
-                </p>
-              </div>
-              <Button
-                variant="outline"
-                onClick={handleExportData}
-                disabled={isExporting}
-                loading={isExporting}
-                loadingText="Exporting..."
-              >
-                Export Data
-              </Button>
-            </div>
-          </div>
-
-          {/* Delete Account */}
-          <div className="rounded-lg border border-red-200 bg-red-50 p-6">
-            <h3 className="font-semibold text-red-900">Danger Zone</h3>
-            <p className="mt-1 text-sm text-red-700">
-              Deleting your account is permanent and cannot be undone
-            </p>
-
-            {!showDeleteConfirm ? (
-              <Button
-                variant="danger"
-                size="sm"
-                onClick={() => setShowDeleteConfirm(true)}
-                className="mt-4"
-              >
-                Delete Account
-              </Button>
-            ) : (
-              <div className="mt-4 space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-red-900">
-                    Type DELETE to confirm
-                  </label>
-                  <input
-                    type="text"
-                    value={deleteConfirmText}
-                    onChange={(e) => setDeleteConfirmText(e.target.value)}
-                    className="mt-2 w-full rounded-lg border border-red-300 px-4 py-2 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
-                    placeholder="DELETE"
-                  />
-                </div>
-                <div className="flex gap-3">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      setShowDeleteConfirm(false);
-                      setDeleteConfirmText("");
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    onClick={handleDeleteAccount}
-                    disabled={deleteConfirmText !== "DELETE"}
-                  >
-                    Delete My Account
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      <form action={signOutAction}>
+        <button type="submit" className="h-12 w-full cursor-pointer rounded-full bg-surface text-sm font-semibold text-red-600 shadow-soft ring-1 ring-gray-900/[0.05] hover:bg-red-50 sm:w-auto sm:px-6">
+          {t("signOut")}
+        </button>
+      </form>
     </div>
   );
 }

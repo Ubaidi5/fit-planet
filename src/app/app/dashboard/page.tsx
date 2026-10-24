@@ -1,739 +1,303 @@
-"use client";
-
-import { useState } from "react";
+import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
 import {
-  HiOutlineBell,
-  HiOutlineSearch,
+  HiArrowRight,
+  HiOutlineBookmark,
+  HiOutlineMagnifyingGlass,
+  HiOutlineMapPin,
+  HiOutlineQrCode,
   HiOutlineTicket,
-  HiOutlineClipboardCheck,
-  HiOutlineClock,
-  HiOutlineQrcode,
-  HiOutlineShieldCheck,
-} from "react-icons/hi";
-import { mockBookings, getActiveBookings } from "@/lib/data/mock-bookings";
-import {
-  mockCheckIns,
-  getStreakDays,
-  formatDuration,
-  getTotalDuration,
-} from "@/lib/data/mock-checkins";
+  HiStar,
+} from "react-icons/hi2";
+import { requireUser } from "@/server/session";
+import { listUserBookings, formatMoney } from "@/server/modules/bookings";
+import { passportStamps } from "@/server/modules/checkins";
+import { listPublishedGyms } from "@/server/modules/gyms";
+import { PassQR } from "@/components/pass/PassQR";
+import { Stamp } from "@/components/passport/Stamp";
+import { PushPrompt } from "@/components/notifications/PushManager";
+import { cityCode } from "@/lib/data/cities";
+import { formatDate } from "@/lib/dates";
+import type { BookingView } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { getRegion } from "@/lib/i18n/server";
 
-// Mock user data for dashboard
-const mockUser = {
-  fullName: "Muhammad Ali",
-  phone: "+92 300 1234567",
-  avatar: null,
-  memberSince: "March 2024",
-};
-
-// Mock progress data
-const mockProgress = {
-  totalWorkouts: 156,
-  favoriteGym: "FitZone Premium",
-  totalSpent: 45000,
-  personalRecords: [
-    {
-      exercise: "Bench Press",
-      weight: 80,
-      date: "2026-01-20",
-      improvement: "+5kg",
-    },
-    {
-      exercise: "Squat",
-      weight: 120,
-      date: "2026-01-15",
-      improvement: "+10kg",
-    },
-    {
-      exercise: "Deadlift",
-      weight: 140,
-      date: "2026-01-10",
-      improvement: "+5kg",
-    },
-  ],
-  weeklyWorkouts: [3, 4, 2, 5, 3, 4, 2], // Last 7 weeks
-  monthlyHeatmap: generateHeatmapData(),
-};
-
-// Generate heatmap data for the last 30 days
-function generateHeatmapData() {
-  const data = [];
-  const today = new Date();
-  for (let i = 29; i >= 0; i--) {
-    const date = new Date(today);
-    date.setDate(date.getDate() - i);
-    // Random workout count (0-3)
-    const workouts =
-      Math.random() > 0.3 ? Math.floor(Math.random() * 3) + 1 : 0;
-    data.push({
-      date: date.toISOString().split("T")[0],
-      workouts,
-      day: date.toLocaleDateString("en-US", { weekday: "short" }),
-    });
-  }
-  return data;
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getTranslations("nav"))("home") };
 }
 
-// Mock notifications
-const mockNotifications = [
-  {
-    id: "1",
-    type: "pass_expiry",
-    message: "FitZone Premium pass expires in 3 days",
-    time: "2 hours ago",
-    read: false,
-  },
-  {
-    id: "2",
-    type: "friend",
-    message: "Ali Hassan started following you",
-    time: "5 hours ago",
-    read: false,
-  },
-  {
-    id: "3",
-    type: "achievement",
-    message: 'You earned the "30 Day Streak" badge! 🔥',
-    time: "1 day ago",
-    read: true,
-  },
-];
+const stampTones = ["teal", "magenta", "ochre", "violet"] as const;
 
-// Mock saved gyms
-const mockSavedGyms = [
-  {
-    id: "1",
-    name: "FitZone Premium",
-    location: "Clifton, Karachi",
-    rating: 4.8,
-    image: null,
-  },
-  {
-    id: "2",
-    name: "Iron Paradise",
-    location: "DHA Phase 5",
-    rating: 4.6,
-    image: null,
-  },
-];
+function greeting(hour: number) {
+  if (hour < 5) return "late";
+  if (hour < 12) return "morning";
+  if (hour < 17) return "afternoon";
+  return "evening";
+}
 
-export default function UserDashboardPage() {
-  const [activeTab, setActiveTab] = useState<"overview" | "progress">(
-    "overview",
+async function validity(b: BookingView) {
+  const [{ locale }, t] = await Promise.all([getRegion(), getTranslations("home")]);
+  if (b.startDate === b.endDate) return formatDate(b.startDate, locale, { weekday: "short", day: "numeric", month: "short" });
+  return t("range", { from: formatDate(b.startDate, locale), to: formatDate(b.endDate, locale) });
+}
+
+async function ActivePass({ booking }: { booking: BookingView }) {
+  const [t, tp] = await Promise.all([getTranslations("home"), getTranslations("passes")]);
+  return (
+    <Link
+      href={`/app/passes/${booking.id}`}
+      className="group relative flex overflow-hidden rounded-[1.75rem] bg-ink text-white shadow-pass ring-1 ring-gray-900/[0.06] transition-transform duration-500 ease-out-expo active:scale-[0.99] sm:hover:-translate-y-0.5"
+    >
+      <div className="flex min-w-0 flex-1 flex-col justify-between gap-6 p-5 sm:p-7">
+        <div className="flex items-center justify-between gap-3 font-mono text-[11px] tracking-[0.12em] text-white/60 uppercase">
+          <span className="truncate">
+            {cityCode(booking.gym.city)} · {booking.gym.country}
+          </span>
+          <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-volt/15 px-2.5 py-1 text-volt">
+            <span className="size-1.5 animate-pulse rounded-full bg-volt" />
+            {t("active")}
+          </span>
+        </div>
+        <div className="min-w-0">
+          <p className="font-mono text-[11px] tracking-[0.12em] text-white/60 uppercase">{tp(`name.${booking.passType}`)}</p>
+          <p className="mt-1 truncate text-2xl leading-tight font-semibold tracking-[-0.03em] sm:text-[1.75rem]">{booking.gym.name}</p>
+          <p className="mt-1.5 truncate text-sm text-white/70">
+            {booking.gym.area} · {await validity(booking)}
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <div aria-hidden="true" className="h-1.5 flex-1 rounded-full bg-holo" />
+          <span className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-volt">
+            {t("showPass")}
+            <HiArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 rtl:rotate-180" />
+          </span>
+        </div>
+      </div>
+      <div className="relative flex w-28 shrink-0 items-center justify-center bg-white sm:w-40">
+        <span aria-hidden="true" className="absolute inset-y-3 start-0 border-s-2 border-dashed border-ink/25" />
+        <span aria-hidden="true" className="absolute -top-3 -start-3 size-6 rounded-full bg-canvas" />
+        <span aria-hidden="true" className="absolute -bottom-3 -start-3 size-6 rounded-full bg-canvas" />
+        <PassQR code={booking.code} size={84} className="sm:hidden" />
+        <PassQR code={booking.code} size={112} className="hidden sm:block" />
+      </div>
+    </Link>
   );
-  const activeBookings = getActiveBookings(mockBookings);
-  const recentCheckIns = mockCheckIns.slice(0, 3);
-  const streak = getStreakDays(mockCheckIns);
-  const totalWorkoutTime = getTotalDuration(mockCheckIns);
+}
 
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Good morning";
-    if (hour < 17) return "Good afternoon";
-    return "Good evening";
-  };
+async function EmptyPass() {
+  const t = await getTranslations("home");
+  return (
+    <div className="relative overflow-hidden rounded-[1.75rem] border-2 border-dashed border-gray-900/10 bg-surface/60 p-6 sm:p-8">
+      <div aria-hidden="true" className="absolute -end-6 -top-6 opacity-40">
+        <Stamp code="FIT" label="Planet" tone="teal" size="lg" rotate={12} />
+      </div>
+      <p className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">{t("empty.eyebrow")}</p>
+      <p className="mt-2 max-w-xs text-xl font-semibold tracking-[-0.02em] text-ink sm:text-2xl">{t("empty.title")}</p>
+      <p className="mt-1.5 max-w-sm text-sm leading-relaxed text-gray-600">{t("empty.text")}</p>
+      <Link
+        href="/gyms"
+        className="mt-5 inline-flex h-11 items-center gap-2 rounded-full bg-ink px-5 text-sm font-semibold text-white transition-colors hover:bg-gray-800"
+      >
+        <HiOutlineMagnifyingGlass className="size-4" />
+        {t("empty.cta")}
+      </Link>
+    </div>
+  );
+}
+
+export default async function DashboardPage() {
+  const user = await requireUser("/app/dashboard");
+  const [t, tp, { locale }] = await Promise.all([getTranslations("home"), getTranslations("passes"), getRegion()]);
+  const [bookings, stamps, gyms] = await Promise.all([
+    listUserBookings(user._id),
+    passportStamps(user._id),
+    listPublishedGyms({ city: user.homeCity, limit: 8 }),
+  ]);
+  const suggestions = gyms.length > 0 ? gyms : await listPublishedGyms({ limit: 8 });
+
+  const active = bookings.filter((b) => b.isActive);
+  const upcoming = bookings.filter((b) => b.isUpcoming).sort((a, b) => a.startDate.localeCompare(b.startDate));
+  const cities = new Set(stamps.map((s) => `${s.city}-${s.country}`)).size;
+  const visits = stamps.reduce((sum, s) => sum + s.visits, 0);
+  const firstName = user.name?.split(" ")[0];
+  const hour = new Date().getUTCHours();
+
+  const quick = [
+    { href: "/gyms", label: t("quick.explore"), icon: HiOutlineMagnifyingGlass },
+    { href: "/app/passes", label: t("quick.passes"), icon: HiOutlineTicket },
+    { href: "/app/checkins", label: t("quick.stamps"), icon: HiOutlineQrCode },
+    { href: "/app/saved-gyms", label: t("quick.saved"), icon: HiOutlineBookmark },
+  ];
 
   return (
-    <div className="space-y-6">
-      {/* Welcome Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-gray-600">{getGreeting()},</p>
-          <h1 className="text-2xl font-semibold text-ink sm:text-3xl tracking-tight">
-            {mockUser.fullName} 👋
+    <div className="space-y-8 sm:space-y-10">
+      {/* Greeting */}
+      <header className="flex items-end justify-between gap-4">
+        <div className="min-w-0">
+          <p className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase" suppressHydrationWarning>
+            {t(`greeting.${greeting(hour)}`)}
+          </p>
+          <h1 className="mt-1 truncate text-[1.75rem] leading-tight font-semibold tracking-[-0.035em] text-ink sm:text-4xl">
+            {firstName ? t("hi", { name: firstName }) : t("hiThere")}
           </h1>
         </div>
-        <div className="flex gap-2">
-          <Link href="/app/notifications">
-            <Button beforeIcon={<HiOutlineBell className="h-4 w-4" />}>
-              Notifications
-              <Badge variant="danger" size="sm" className="ms-2">
-                2
-              </Badge>
-            </Button>
-          </Link>
-          <Link href="/gyms">
-            <Button beforeIcon={<HiOutlineSearch className="h-4 w-4" />}>
-              Find Gyms
-            </Button>
-          </Link>
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="flex gap-2 border-b border-gray-200">
-        <button
-          onClick={() => setActiveTab("overview")}
-          className={cn(
-            "px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors",
-            activeTab === "overview"
-              ? "border-emerald-500 text-emerald-600"
-              : "border-transparent text-gray-600 hover:text-gray-900",
-          )}
+        <Link
+          href="/app/checkins"
+          className="inline-flex h-10 shrink-0 items-center gap-2 rounded-full bg-surface ps-1.5 pe-4 text-sm font-semibold text-ink shadow-soft ring-1 ring-gray-900/[0.06]"
         >
-          Overview
-        </button>
-        <button
-          onClick={() => setActiveTab("progress")}
-          className={cn(
-            "px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors",
-            activeTab === "progress"
-              ? "border-emerald-500 text-emerald-600"
-              : "border-transparent text-gray-600 hover:text-gray-900",
-          )}
-        >
-          Progress & Stats
-        </button>
-      </div>
+          <span className="flex size-7 items-center justify-center rounded-full bg-volt font-mono text-xs">{stamps.length}</span>
+          {t("stampsWord", { count: stamps.length })}
+        </Link>
+      </header>
 
-      {activeTab === "overview" && (
-        <div className="grid gap-6 lg:grid-cols-3">
-          {/* Main Content */}
-          <div className="space-y-6 lg:col-span-2">
-            {/* Stats Cards */}
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-              <Card className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100">
-                    <HiOutlineTicket className="h-5 w-5 text-emerald-600" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-semibold text-ink tracking-tight">
-                      {activeBookings.length}
-                    </p>
-                    <p className="text-xs text-gray-500">Active Passes</p>
-                  </div>
-                </div>
-              </Card>
+      <div className="grid gap-8 lg:grid-cols-12 lg:gap-8">
+        <div className="space-y-8 lg:col-span-8">
+          {/* Active pass(es) */}
+          <section aria-label={t("activePass")} className="space-y-3">
+            {active.length > 0 ? active.slice(0, 2).map((b) => <ActivePass key={b.id} booking={b} />) : <EmptyPass />}
+          </section>
 
-              <Card className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100">
-                    <HiOutlineClipboardCheck className="h-5 w-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-semibold text-ink tracking-tight">
-                      {mockProgress.totalWorkouts}
-                    </p>
-                    <p className="text-xs text-gray-500">Total Workouts</p>
-                  </div>
-                </div>
-              </Card>
+          {/* Quick actions */}
+          <nav aria-label={t("shortcuts")} className="grid grid-cols-4 gap-2 sm:gap-3">
+            {quick.map(({ href, label, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className="group flex flex-col items-center gap-2 rounded-3xl bg-surface py-4 shadow-soft ring-1 ring-gray-900/[0.05] transition-transform duration-300 ease-out-expo active:scale-95 sm:flex-row sm:justify-center sm:gap-2.5 sm:py-3.5"
+              >
+                <span className="flex size-10 items-center justify-center rounded-2xl bg-canvas text-ink transition-colors group-hover:bg-volt sm:size-9">
+                  <Icon className="size-5" />
+                </span>
+                <span className="text-xs font-semibold text-gray-700 sm:text-sm">{label}</span>
+              </Link>
+            ))}
+          </nav>
 
-              <Card className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100">
-                    <span className="text-lg">🔥</span>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-semibold text-ink tracking-tight">{streak}</p>
-                    <p className="text-xs text-gray-500">Day Streak</p>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100">
-                    <HiOutlineClock className="h-5 w-5 text-purple-600" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-semibold text-ink tracking-tight">
-                      {formatDuration(totalWorkoutTime)}
-                    </p>
-                    <p className="text-xs text-gray-500">Total Time</p>
-                  </div>
-                </div>
-              </Card>
+          {/* Upcoming */}
+          <section>
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-lg font-semibold tracking-[-0.02em] text-ink">{t("upcoming")}</h2>
+              <Link href="/app/passes" className="text-sm font-semibold text-emerald-700">
+                {t("allPasses")}
+              </Link>
             </div>
-
-            {/* Active Passes */}
-            <Card>
-              <div className="flex items-center justify-between border-b border-gray-100 p-4">
-                <h2 className="font-semibold text-gray-900">Active Passes</h2>
-                <Link
-                  href="/app/passes"
-                  className="text-sm font-medium text-emerald-600 hover:text-emerald-700"
-                >
-                  View All →
-                </Link>
-              </div>
-
-              {activeBookings.length === 0 ? (
-                <div className="p-8 text-center">
-                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
-                    <HiOutlineTicket className="h-6 w-6 text-gray-400" />
-                  </div>
-                  <p className="mb-4 text-gray-600">No active passes</p>
-                  <Link href="/gyms">
-                    <Button size="sm">Book a Pass</Button>
-                  </Link>
-                </div>
-              ) : (
-                <div className="divide-y divide-gray-100">
-                  {activeBookings.map((booking) => (
-                    <div
-                      key={booking.id}
-                      className="flex items-center gap-4 p-4 transition-colors hover:bg-gray-50"
-                    >
-                      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg">
-                        {booking.gymLogo ? (
-                          <Image
-                            src={booking.gymLogo}
-                            alt={booking.gymName}
-                            fill
-                            className="object-cover"
-                          />
-                        ) : (
-                          <div className="flex h-full w-full items-center justify-center bg-emerald-100 font-bold text-emerald-600">
-                            {booking.gymName.charAt(0)}
-                          </div>
-                        )}
+            {upcoming.length === 0 ? (
+              <p className="rounded-3xl bg-surface px-5 py-6 text-sm text-gray-500 shadow-soft ring-1 ring-gray-900/[0.05]">
+                {t("noUpcoming")}
+              </p>
+            ) : (
+              <ul className="divide-y divide-gray-900/[0.06] overflow-hidden rounded-3xl bg-surface shadow-soft ring-1 ring-gray-900/[0.05]">
+                {upcoming.slice(0, 4).map((b) => (
+                  <li key={b.id}>
+                    <Link href={`/app/passes/${b.id}`} className="flex items-center gap-4 px-4 py-3.5 transition-colors hover:bg-canvas/60 sm:px-5">
+                      <div className="flex w-12 shrink-0 flex-col items-center rounded-2xl bg-canvas py-1.5 text-center">
+                        <span className="font-mono text-[10px] tracking-[0.1em] text-gray-500 uppercase">{formatDate(b.startDate, locale, { month: "short" })}</span>
+                        <span className="text-lg leading-none font-semibold text-ink tabular-nums">{formatDate(b.startDate, locale, { day: "numeric" })}</span>
                       </div>
                       <div className="min-w-0 flex-1">
-                        <h3 className="truncate font-medium text-gray-900">
-                          {booking.gymName}
-                        </h3>
-                        <p className="text-sm text-gray-500">
-                          {booking.passType.charAt(0).toUpperCase() +
-                            booking.passType.slice(1)}{" "}
-                          Pass • Expires{" "}
-                          {new Date(booking.endDate).toLocaleDateString(
-                            "en-US",
-                            { month: "short", day: "numeric" },
-                          )}
+                        <p className="truncate text-[15px] font-semibold text-ink">{b.gym.name}</p>
+                        <p className="truncate text-sm text-gray-500">
+                          {tp(`name.${b.passType}`)} · {b.gym.area}
                         </p>
                       </div>
-                      <Link href="/app/passes">
-                        <Button variant="outline" size="sm">
-                          Show QR
-                        </Button>
-                      </Link>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </Card>
-
-            {/* Recent Check-ins */}
-            <Card>
-              <div className="flex items-center justify-between border-b border-gray-100 p-4">
-                <h2 className="font-semibold text-gray-900">
-                  Recent Check-ins
-                </h2>
-                <Link
-                  href="/app/checkins"
-                  className="text-sm font-medium text-emerald-600 hover:text-emerald-700"
-                >
-                  View All →
-                </Link>
-              </div>
-
-              {recentCheckIns.length === 0 ? (
-                <div className="p-8 text-center">
-                  <p className="text-gray-600">No check-ins yet</p>
-                </div>
-              ) : (
-                <div className="divide-y divide-gray-100">
-                  {recentCheckIns.map((checkIn) => {
-                    const checkInDate = new Date(checkIn.checkInTime);
-                    return (
-                      <div
-                        key={checkIn.id}
-                        className="flex items-center gap-4 p-4"
-                      >
-                        <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg">
-                          {checkIn.gymLogo ? (
-                            <Image
-                              src={checkIn.gymLogo}
-                              alt={checkIn.gymName}
-                              fill
-                              className="object-cover"
-                            />
-                          ) : (
-                            <div className="flex h-full w-full items-center justify-center bg-emerald-100 text-sm font-bold text-emerald-600">
-                              {checkIn.gymName.charAt(0)}
-                            </div>
-                          )}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <h3 className="text-sm font-medium text-gray-900">
-                            {checkIn.gymName}
-                          </h3>
-                          <p className="text-xs text-gray-500">
-                            {checkInDate.toLocaleDateString("en-US", {
-                              weekday: "short",
-                              month: "short",
-                              day: "numeric",
-                            })}{" "}
-                            at{" "}
-                            {checkInDate.toLocaleTimeString("en-US", {
-                              hour: "numeric",
-                              minute: "2-digit",
-                            })}
-                          </p>
-                        </div>
-                        {checkIn.duration && (
-                          <span className="text-sm text-gray-500">
-                            {formatDuration(checkIn.duration)}
-                          </span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </Card>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Digital Identity Card */}
-            <div className="rounded-xl bg-linear-to-br from-emerald-600 to-teal-700 p-6 text-white">
-              <div className="mb-6 flex items-center gap-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/20 text-xl font-bold">
-                  {mockUser.fullName.charAt(0)}
-                </div>
-                <div>
-                  <h3 className="font-semibold">{mockUser.fullName}</h3>
-                  <p className="text-sm text-emerald-100">{mockUser.phone}</p>
-                </div>
-              </div>
-
-              <div className="rounded-lg bg-white/10 p-4 text-center">
-                <div className="mx-auto mb-3 flex h-24 w-24 items-center justify-center rounded-lg bg-white">
-                  <HiOutlineQrcode className="h-16 w-16 text-gray-400" />
-                </div>
-                <p className="text-sm text-emerald-100">
-                  Your digital identity for gym access
-                </p>
-              </div>
-
-              <div className="mt-4 flex items-center gap-2 text-sm text-emerald-100">
-                <HiOutlineShieldCheck className="h-4 w-4" />
-                Phone Verified
-              </div>
-            </div>
-
-            {/* Recent Notifications */}
-            <Card>
-              <div className="flex items-center justify-between border-b border-gray-100 p-4">
-                <h2 className="font-semibold text-gray-900">Notifications</h2>
-                <Link
-                  href="/app/notifications"
-                  className="text-sm font-medium text-emerald-600 hover:text-emerald-700"
-                >
-                  View All →
-                </Link>
-              </div>
-              <div className="divide-y divide-gray-100">
-                {mockNotifications.slice(0, 3).map((notif) => (
-                  <div
-                    key={notif.id}
-                    className={cn(
-                      "flex gap-3 p-4",
-                      !notif.read && "bg-emerald-50/50",
-                    )}
-                  >
-                    <div
-                      className={cn(
-                        "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm",
-                        notif.type === "pass_expiry"
-                          ? "bg-amber-100"
-                          : notif.type === "friend"
-                            ? "bg-blue-100"
-                            : "bg-emerald-100",
-                      )}
-                    >
-                      {notif.type === "pass_expiry" && "⏰"}
-                      {notif.type === "friend" && "👤"}
-                      {notif.type === "achievement" && "🏆"}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm text-gray-700">{notif.message}</p>
-                      <p className="text-xs text-gray-500">{notif.time}</p>
-                    </div>
-                    {!notif.read && (
-                      <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
-                    )}
-                  </div>
+                      <HiArrowRight className="size-4 shrink-0 text-gray-300 rtl:rotate-180" />
+                    </Link>
+                  </li>
                 ))}
-              </div>
-            </Card>
-
-            {/* Saved Gyms */}
-            <Card>
-              <div className="flex items-center justify-between border-b border-gray-100 p-4">
-                <h2 className="font-semibold text-gray-900">Saved Gyms</h2>
-                <Link
-                  href="/app/saved-gyms"
-                  className="text-sm font-medium text-emerald-600 hover:text-emerald-700"
-                >
-                  View All →
-                </Link>
-              </div>
-              <div className="divide-y divide-gray-100">
-                {mockSavedGyms.map((gym) => (
-                  <Link
-                    key={gym.id}
-                    href={`/gyms/${gym.id}`}
-                    className="flex items-center gap-3 p-4 transition-colors hover:bg-gray-50"
-                  >
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-100 font-bold text-emerald-600">
-                      {gym.name.charAt(0)}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium text-gray-900">
-                        {gym.name}
-                      </p>
-                      <p className="text-xs text-gray-500">{gym.location}</p>
-                    </div>
-                    <div className="flex items-center gap-1 text-sm text-amber-600">
-                      <span>⭐</span>
-                      {gym.rating}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </Card>
-
-            {/* Streak Motivation */}
-            {streak > 0 && (
-              <Card className="border-orange-200 bg-orange-50 p-4">
-                <div className="mb-2 flex items-center gap-3">
-                  <span className="text-2xl">🔥</span>
-                  <div>
-                    <p className="font-semibold text-orange-800">
-                      {streak} Day Streak!
-                    </p>
-                    <p className="text-sm text-orange-600">Keep it going!</p>
-                  </div>
-                </div>
-                <div className="mt-3 flex gap-1">
-                  {Array.from({ length: 7 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className={cn(
-                        "h-2 flex-1 rounded-full",
-                        i < streak % 7 ? "bg-orange-400" : "bg-orange-200",
-                      )}
-                    />
-                  ))}
-                </div>
-                <p className="mt-2 text-xs text-orange-600">
-                  {7 - (streak % 7)} more days to complete this week!
-                </p>
-              </Card>
+              </ul>
             )}
-          </div>
+          </section>
         </div>
-      )}
 
-      {activeTab === "progress" && (
-        <div className="space-y-6">
-          {/* Progress Stats */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Card className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-2xl">
-                  💪
-                </div>
-                <div>
-                  <p className="text-2xl font-semibold text-ink tracking-tight">
-                    {mockProgress.totalWorkouts}
-                  </p>
-                  <p className="text-sm text-gray-500">Total Workouts</p>
-                </div>
-              </div>
-            </Card>
-            <Card className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-2xl">
-                  🏋️
-                </div>
-                <div className="min-w-0">
-                  <p className="truncate text-lg font-bold text-gray-900">
-                    {mockProgress.favoriteGym}
-                  </p>
-                  <p className="text-sm text-gray-500">Favorite Gym</p>
-                </div>
-              </div>
-            </Card>
-            <Card className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-100 text-2xl">
-                  💰
-                </div>
-                <div>
-                  <p className="text-2xl font-semibold text-ink tracking-tight">
-                    Rs. {mockProgress.totalSpent.toLocaleString()}
-                  </p>
-                  <p className="text-sm text-gray-500">Total Spent</p>
-                </div>
-              </div>
-            </Card>
-            <Card className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 text-2xl">
-                  🔥
-                </div>
-                <div>
-                  <p className="text-2xl font-semibold text-ink tracking-tight">{streak}</p>
-                  <p className="text-sm text-gray-500">Current Streak</p>
-                </div>
-              </div>
-            </Card>
-          </div>
+        <aside className="space-y-6 lg:col-span-4">
+          <PushPrompt title={t("push.title")} body={t("push.body")} />
 
-          <div className="grid gap-6 lg:grid-cols-2">
-            {/* Workout Calendar Heatmap */}
-            <Card className="p-6">
-              <h3 className="mb-4 text-lg font-semibold text-gray-900">
-                Workout Calendar (Last 30 Days)
-              </h3>
-              <div className="grid grid-cols-7 gap-2">
-                {["S", "M", "T", "W", "T", "F", "S"].map((day, i) => (
-                  <div
-                    key={i}
-                    className="text-center text-xs font-medium text-gray-500"
-                  >
-                    {day}
-                  </div>
-                ))}
-                {/* Empty cells for alignment */}
-                {Array.from({
-                  length: new Date(
-                    mockProgress.monthlyHeatmap[0]?.date,
-                  ).getDay(),
-                }).map((_, i) => (
-                  <div key={`empty-${i}`} />
-                ))}
-                {mockProgress.monthlyHeatmap.map((day, i) => (
-                  <div
-                    key={i}
-                    className={cn(
-                      "aspect-square rounded-sm transition-colors",
-                      day.workouts === 0
-                        ? "bg-gray-100"
-                        : day.workouts === 1
-                          ? "bg-emerald-200"
-                          : day.workouts === 2
-                            ? "bg-emerald-400"
-                            : "bg-emerald-600",
-                    )}
-                    title={`${day.date}: ${day.workouts} workout${day.workouts !== 1 ? "s" : ""}`}
+          {/* Passport summary */}
+          <section className="relative overflow-hidden rounded-[1.75rem] bg-surface p-5 shadow-soft ring-1 ring-gray-900/[0.05]">
+            <p className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">{t("passport")}</p>
+            <dl className="mt-4 grid grid-cols-3 gap-2">
+              {[
+                [t("stats.gyms"), stamps.length],
+                [t("stats.cities"), cities],
+                [t("stats.visits"), visits],
+              ].map(([label, value]) => (
+                <div key={label} className="rounded-2xl bg-canvas px-3 py-3">
+                  <dd className="text-2xl font-semibold tracking-tight text-ink tabular-nums">{value}</dd>
+                  <dt className="text-xs text-gray-500">{label}</dt>
+                </div>
+              ))}
+            </dl>
+            {stamps.length > 0 ? (
+              <div className="mt-5 flex items-center gap-1 overflow-hidden">
+                {stamps.slice(0, 4).map((s, i) => (
+                  <Stamp
+                    key={s.gymId}
+                    code={cityCode(s.city)}
+                    label={s.name}
+                    size="sm"
+                    tone={stampTones[i % stampTones.length]}
+                    shape={i % 3 === 1 ? "dashed" : "circle"}
+                    rotate={[-10, 6, -4, 12][i % 4]}
                   />
                 ))}
               </div>
-              <div className="mt-4 flex items-center justify-end gap-2 text-xs text-gray-500">
-                <span>Less</span>
-                <div className="flex gap-1">
-                  <div className="h-3 w-3 rounded-sm bg-gray-100" />
-                  <div className="h-3 w-3 rounded-sm bg-emerald-200" />
-                  <div className="h-3 w-3 rounded-sm bg-emerald-400" />
-                  <div className="h-3 w-3 rounded-sm bg-emerald-600" />
-                </div>
-                <span>More</span>
-              </div>
-            </Card>
+            ) : (
+              <p className="mt-4 text-sm leading-relaxed text-gray-500">{t("firstStamp")}</p>
+            )}
+          </section>
+        </aside>
+      </div>
 
-            {/* Weekly Workouts Chart */}
-            <Card className="p-6">
-              <h3 className="mb-4 text-lg font-semibold text-gray-900">
-                Weekly Workouts (Last 7 Weeks)
-              </h3>
-              <div className="flex h-48 items-end justify-between gap-2">
-                {mockProgress.weeklyWorkouts.map((count, i) => (
-                  <div
-                    key={i}
-                    className="flex flex-1 flex-col items-center gap-2"
-                  >
-                    <div
-                      className="w-full rounded-t-md bg-linear-to-t from-emerald-500 to-teal-400 transition-all"
-                      style={{
-                        height: `${(count / Math.max(...mockProgress.weeklyWorkouts)) * 100}%`,
-                        minHeight: count > 0 ? "20px" : "4px",
-                      }}
-                    />
-                    <span className="text-xs text-gray-500">W{i + 1}</span>
-                  </div>
-                ))}
-              </div>
-              <p className="mt-4 text-center text-sm text-gray-500">
-                Average:{" "}
-                {(
-                  mockProgress.weeklyWorkouts.reduce((a, b) => a + b, 0) /
-                  mockProgress.weeklyWorkouts.length
-                ).toFixed(1)}{" "}
-                workouts/week
-              </p>
-            </Card>
+      {/* Suggestions */}
+      {suggestions.length > 0 && (
+        <section>
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-lg font-semibold tracking-[-0.02em] text-ink">{user.homeCity && gyms.length > 0 ? t("trainIn", { city: user.homeCity }) : t("popular")}</h2>
+            <Link href="/gyms" className="text-sm font-semibold text-emerald-700">
+              {t("seeAll")}
+            </Link>
           </div>
-
-          {/* Personal Records */}
-          <Card className="p-6">
-            <h3 className="mb-4 text-lg font-semibold text-gray-900">
-              🏆 Personal Records
-            </h3>
-            <div className="grid gap-4 sm:grid-cols-3">
-              {mockProgress.personalRecords.map((pr, i) => (
-                <div
-                  key={i}
-                  className="rounded-lg border border-gray-200 bg-gray-50 p-4"
+          <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:-mx-6 sm:px-6 lg:mx-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:px-0">
+            {suggestions.slice(0, 8).map((gym) => {
+              const pct = gym.capacity.max ? Math.round((gym.capacity.current / gym.capacity.max) * 100) : 0;
+              return (
+                <Link
+                  key={gym.id}
+                  href={`/gyms/${gym.slug}`}
+                  className="group w-[72%] shrink-0 snap-start overflow-hidden rounded-3xl bg-surface shadow-soft ring-1 ring-gray-900/[0.05] sm:w-[44%] lg:w-auto"
                 >
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-medium text-gray-900">{pr.exercise}</h4>
-                    <Badge variant="success" size="sm">
-                      {pr.improvement}
-                    </Badge>
+                  <div className="relative aspect-[4/3] overflow-hidden bg-canvas-deep">
+                    <Image src={gym.coverImage} alt="" fill sizes="(max-width: 640px) 72vw, (max-width: 1024px) 44vw, 25vw" className="object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105" />
+                    <span className="absolute top-3 start-3 inline-flex items-center gap-1 rounded-full bg-surface/95 px-2.5 py-1 text-xs font-semibold text-ink">
+                      <HiStar className="size-3.5 text-stamp-ochre" />
+                      {gym.rating.toFixed(1)}
+                    </span>
+                    <span
+                      className={cn(
+                        "absolute top-3 end-3 rounded-full px-2.5 py-1 font-mono text-[10px] tracking-[0.1em] uppercase",
+                        pct >= 80 ? "bg-stamp-magenta text-white" : pct >= 50 ? "bg-stamp-ochre text-white" : "bg-ink/85 text-volt",
+                      )}
+                    >
+                      {pct >= 80 ? t("crowd.busy") : pct >= 50 ? t("crowd.steady") : t("crowd.quiet")}
+                    </span>
                   </div>
-                  <p className="mt-2 text-3xl font-semibold text-emerald-600 tracking-tight">
-                    {pr.weight} kg
-                  </p>
-                  <p className="mt-1 text-xs text-gray-500">
-                    Achieved on{" "}
-                    {new Date(pr.date).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </Card>
-
-          {/* Workout Consistency */}
-          <Card className="p-6">
-            <h3 className="mb-4 text-lg font-semibold text-gray-900">
-              📊 Consistency Stats
-            </h3>
-            <div className="grid gap-6 sm:grid-cols-3">
-              <div className="text-center">
-                <p className="text-4xl font-semibold text-emerald-600 tracking-tight">87%</p>
-                <p className="mt-1 text-sm text-gray-500">
-                  Monthly Consistency
-                </p>
-              </div>
-              <div className="text-center">
-                <p className="text-4xl font-semibold text-blue-600 tracking-tight">4.2</p>
-                <p className="mt-1 text-sm text-gray-500">Avg. Workouts/Week</p>
-              </div>
-              <div className="text-center">
-                <p className="text-4xl font-semibold text-purple-600 tracking-tight">62 min</p>
-                <p className="mt-1 text-sm text-gray-500">
-                  Avg. Workout Duration
-                </p>
-              </div>
-            </div>
-          </Card>
-        </div>
+                  <div className="p-4">
+                    <p className="truncate text-[15px] font-semibold text-ink">{gym.name}</p>
+                    <p className="mt-0.5 flex items-center gap-1 truncate text-sm text-gray-500">
+                      <HiOutlineMapPin className="size-3.5 shrink-0" />
+                      {gym.address.area}, {gym.address.city}
+                    </p>
+                    <p className="mt-3 text-sm text-gray-600">
+                      <span className="font-semibold whitespace-nowrap text-ink">{formatMoney(gym.pricing.dayPass, gym.currency)}</span> {t("perDay")}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
       )}
     </div>
   );

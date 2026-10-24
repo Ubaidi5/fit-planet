@@ -5,16 +5,18 @@ import {
   HiOutlineShieldCheck,
   HiOutlineSparkles,
 } from "react-icons/hi2";
+import { getTranslations } from "next-intl/server";
 import { Reveal } from "@/components/motion/Reveal";
 import { Accent } from "@/components/sections/SectionHeading";
 
 const assurances = [
-  { icon: HiOutlineShieldCheck, label: "Secure payments" },
-  { icon: HiOutlineSparkles, label: "Free for members" },
-  { icon: HiOutlineBuildingStorefront, label: "Verified gyms only" },
+  { icon: HiOutlineShieldCheck, key: "secure" },
+  { icon: HiOutlineSparkles, key: "free" },
+  { icon: HiOutlineBuildingStorefront, key: "verified" },
 ];
 
-const CTA: React.FC = () => {
+const CTA = async () => {
+  const t = await getTranslations("cta");
   return (
     <section className="px-3 py-24 sm:px-4 lg:py-32">
       <Reveal className="relative mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] border border-gray-900/[0.06] bg-surface px-6 py-16 text-center shadow-soft sm:px-12 sm:py-24">
@@ -27,12 +29,10 @@ const CTA: React.FC = () => {
 
         <div className="relative mx-auto max-w-3xl">
           <h2 className="text-[2.25rem] leading-[1.04] font-semibold tracking-[-0.04em] text-ink text-balance-safe sm:text-6xl">
-            Your passport is{" "}
-            <Accent>one tap</Accent> away
+            {t.rich("title", { accent: (c) => <Accent>{c}</Accent> })}
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-gray-600">
-            Get your passport and train in any partner city, or bring your gym
-            onto the network and start taking bookings this week.
+            {t("lead")}
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -40,7 +40,7 @@ const CTA: React.FC = () => {
               href="/gyms"
               className="group inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-ink ps-7 pe-2 text-base font-medium text-white transition-colors hover:bg-gray-800 sm:w-auto"
             >
-              Find gyms near you
+              {t("find")}
               <span className="flex size-10 items-center justify-center rounded-full bg-volt text-ink transition-transform duration-500 ease-out-expo group-hover:-rotate-45 rtl:rotate-180">
                 <HiArrowRight className="size-4.5" />
               </span>
@@ -49,15 +49,15 @@ const CTA: React.FC = () => {
               href="/studio/register"
               className="inline-flex h-14 w-full items-center justify-center rounded-full border border-gray-900/10 bg-surface/80 px-7 text-base font-medium text-gray-800 backdrop-blur transition-colors hover:border-gray-300 sm:w-auto"
             >
-              List your gym
+              {t("list")}
             </Link>
           </div>
 
           <ul className="mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
-            {assurances.map(({ icon: Icon, label }) => (
-              <li key={label} className="flex items-center gap-2 text-sm text-gray-600">
+            {assurances.map(({ icon: Icon, key }) => (
+              <li key={key} className="flex items-center gap-2 text-sm text-gray-600">
                 <Icon className="size-4.5 text-emerald-600" />
-                {label}
+                {t(`assurances.${key}`)}
               </li>
             ))}
           </ul>
