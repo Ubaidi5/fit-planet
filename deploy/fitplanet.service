@@ -13,7 +13,11 @@ Environment=PORT=3000
 Environment=HOSTNAME=127.0.0.1
 Restart=always
 RestartSec=3
-MemoryMax=700M
+# Sized for a 16 GB server shared with MongoDB: the app normally sits well
+# under 1 GB; past MemoryHigh the kernel reclaims, at MemoryMax it restarts.
+MemoryHigh=2G
+MemoryMax=3G
+LimitNOFILE=65536
 
 [Install]
 WantedBy=default.target

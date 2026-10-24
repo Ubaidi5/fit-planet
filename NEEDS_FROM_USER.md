@@ -9,12 +9,14 @@ Every key is described in [`.env.example`](./.env.example).
 
 | What | Where to get it | Goes in |
 | --- | --- | --- |
-| MongoDB URI | MongoDB Atlas > Database > Connect > Drivers (allow the Lightsail static IP under Network Access) | `DB_URI` |
+| MongoDB URI | The MongoDB already on the Lightsail server, e.g. `mongodb://fitplanet:PASSWORD@127.0.0.1:27017/fitplanet?authSource=fitplanet` (see section 6) | `DB_URI`, plus `DB_NAME=fitplanet` |
 | Session secret | `openssl rand -base64 32` | `AUTH_SECRET` |
 | Domain | Point an A record at the Lightsail static IP | `APP_URL=https://yourdomain.com` |
 
-Then load demo data once from your machine (optional): `bun run db:seed` with
-`DB_URI` pointing at the database. It creates `owner@fitplanet.dev` and
+Then load demo data once (optional). The database only listens on the server,
+so tunnel to it from your machine: `ssh -N -L 27018:127.0.0.1:27017 ubuntu@SERVER_IP`,
+then in another terminal run `bun run db:seed` with `DB_URI` set to the same URI
+but port `27018`. It creates `owner@fitplanet.dev` and
 `member@fitplanet.dev` (password `fitplanet123`, or `SEED_PASSWORD`).
 
 ## 2. Firebase push notifications
@@ -70,20 +72,70 @@ works (Amazon SES, Resend, Postmark, Brevo, Gmail app password):
 
 ## 6. Lightsail server (one time)
 
-1. Create an Ubuntu 22.04/24.04 instance (2 GB RAM or more), attach a static IP,
-   open ports 80 and 443 in the Lightsail firewall.
-2. Copy the `deploy/` folder to the server and run
+Your box (16 GB RAM, 320 GB disk, MongoDB on the same server, nginx with
+certbot) is plenty for launch. Steps:
+
+1. **MongoDB.** Keep it bound to localhost and give the app its own user. In
+   `/etc/mongod.conf`:
+
+   ```yaml
+   net:
+     bindIp: 127.0.0.1
+   security:
+     authorization: enabled
+   storage:
+     wiredTiger:
+       engineConfig:
+         cacheSizeGB: 4   # leaves room for the app, nginx and the page cache
+   ```
+
+   Then create the user once in `mongosh` (as your admin user) and restart
+   with `sudo systemctl restart mongod`:
+
+   ```js
+   use fitplanet
+   db.createUser({ user: "fitplanet", pwd: "<long random password>", roles: [{ role: "readWrite", db: "fitplanet" }] })
+   ```
+
+   If your MongoDB doesn't have auth on yet, create an admin user first, or
+   skip `authorization` and use `mongodb://127.0.0.1:27017` as `DB_URI`
+   (still safe while it only listens on localhost). The app creates its own
+   indexes on start.
+
+2. **Server setup.** Copy the `deploy/` folder to the server and run
    `sudo bash deploy/setup-server.sh yourdomain.com you@email.com`.
    It installs Bun (the version pinned in package.json), runs the app as the
-   `fitplanet` systemd service (starts on boot, restarts on crash), and sets up
-   nginx with an HTTPS certificate. No Node.js or pm2 is needed on the server.
+   `fitplanet` systemd service (starts on boot, restarts on crash, capped at
+   3 GB of memory), adds the hourly reminder job and a **nightly database
+   backup** (03:30, kept 14 days in `/var/www/fitplanet/shared/backups`; needs
+   `mongodump` from `mongodb-database-tools`). No Node.js or pm2 is needed.
    Each deploy checks `/api/health` and rolls back to the previous release if
    the new one doesn't come up. Logs: `journalctl --user -u fitplanet -f` as
    the deploy user.
-3. Fill `/var/www/fitplanet/shared/.env` from `.env.example`, with
-   `STORAGE_LOCAL_DIR=/var/www/fitplanet/shared/uploads` and a random
-   `CRON_SECRET` (`openssl rand -hex 24`). The setup script already installed
-   the hourly cron that sends pass reminders.
+
+3. **nginx.** If certbot already issued a certificate for the domain, the
+   script leaves nginx and certbot alone (force this with `SKIP_NGINX=1`). Add
+   Fit Planet to your existing site in two lines:
+
+   ```bash
+   sudo cp /var/www/fitplanet/nginx/nginx-zone.conf /etc/nginx/conf.d/fitplanet-zone.conf
+   ```
+
+   and inside the `listen 443 ssl` server block that certbot manages for the
+   domain, replace any existing `location /` with:
+
+   ```nginx
+   include /var/www/fitplanet/nginx/nginx-locations.conf;
+   ```
+
+   Then `sudo nginx -t && sudo systemctl reload nginx`. That gives you the
+   proxy to the app, uploads served from disk, cached build assets and a
+   per-IP rate limit. On a fresh server without a certificate, the script
+   sets all of this up and runs certbot itself.
+
+4. Fill `/var/www/fitplanet/shared/.env` from `.env.example`, with the
+   `DB_URI` above, `STORAGE_LOCAL_DIR=/var/www/fitplanet/shared/uploads` and a
+   random `CRON_SECRET` (`openssl rand -hex 24`).
 
 ## 7. GitHub Actions (Settings > Secrets and variables > Actions)
 
