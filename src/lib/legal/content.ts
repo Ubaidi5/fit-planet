@@ -22,11 +22,29 @@ export interface LegalDetails {
   jurisdiction?: string;
 }
 
-export const LEGAL_UPDATED = "2026-10-23";
+export const LEGAL_UPDATED = "2026-10-28";
 
 const contact = (d: LegalDetails) => (d.email ? `by email at ${d.email}` : "through the contact details on our imprint page");
 
-export function privacySections(d: LegalDetails): LegalSection[] {
+/** Which analytics and ad tools are switched on, so the policy names exactly those */
+export interface TrackingDisclosure {
+  google: boolean;
+  meta: boolean;
+  openai: boolean;
+}
+
+function trackingTools(t: TrackingDisclosure) {
+  const analytics = t.google ? ["Google Analytics and Google Tag Manager (Google LLC / Google Ireland)"] : [];
+  const ads = [
+    ...(t.google ? ["Google Ads"] : []),
+    ...(t.meta ? ["the Meta Pixel and Meta Conversions API (Meta Platforms Ireland / Meta Platforms Inc.)"] : []),
+    ...(t.openai ? ["the OpenAI Ads Measurement Pixel and Conversions API (OpenAI OpCo, LLC)"] : []),
+  ];
+  return { analytics, ads, any: analytics.length + ads.length > 0, adsOn: t.meta || t.openai || t.google };
+}
+
+export function privacySections(d: LegalDetails, tracking: TrackingDisclosure = { google: false, meta: false, openai: false }): LegalSection[] {
+  const tools = trackingTools(tracking);
   return [
     {
       id: "who-we-are",
@@ -64,7 +82,14 @@ export function privacySections(d: LegalDetails): LegalSection[] {
           "To send push notifications and optional promotional email, only when you switch them on, and you can switch them off at any time in settings (consent, art. 6(1)(a)).",
           "To keep booking and payment records as tax and commercial law requires (legal obligation, art. 6(1)(c)).",
         ],
-        "We do not sell your personal information, we do not share it for cross-context behavioural advertising, and we do not use it to build advertising profiles.",
+        ...(tools.any
+          ? [
+              "Only if you allow it in the cookie banner: to measure how the site is used and which of our ads bring people to Fit Planet (consent, art. 6(1)(a)). You can withdraw consent at any time from Cookie settings at the bottom of every page.",
+            ]
+          : []),
+        tools.adsOn
+          ? "We do not sell your personal information. If you allow advertising cookies, our advertising partners receive data about your visit and sign-ups or bookings (such as a hashed email address, your IP address and the pages you viewed) to measure our ads; some US state laws call this sharing for cross-context behavioural advertising. Reject advertising cookies to opt out."
+          : "We do not sell your personal information, we do not share it for cross-context behavioural advertising, and we do not use it to build advertising profiles.",
       ],
     },
     {
@@ -76,6 +101,7 @@ export function privacySections(d: LegalDetails): LegalSection[] {
           "Other members see what you share on the social side, depending on your visibility setting, and your name next to reviews you write.",
           "Service providers who process data for us under contract: hosting (Amazon Web Services), payments (Stripe), push notifications (Google Firebase), email delivery, and file storage.",
           "Google or Facebook, if you choose to sign in with them.",
+          ...(tools.any ? [`With your consent only: ${[...tools.analytics, ...tools.ads].join(", ")}.`] : []),
           "Authorities, when the law requires it.",
         ],
       ],
@@ -102,9 +128,19 @@ export function privacySections(d: LegalDetails): LegalSection[] {
     {
       id: "cookies",
       title: "Cookies",
-      body: [
-        "We only use cookies the service needs to work: one that keeps you signed in, security cookies used during sign-in, and one that remembers your region and language. We do not use advertising or analytics cookies, so there is nothing to accept or decline.",
-      ],
+      body: tools.any
+        ? [
+            "Essential cookies keep you signed in, protect sign-in and payments, remember your region and language, and remember your cookie choice. They are always on.",
+            "Everything else waits for your choice in the cookie banner, and nothing loads if you reject it:",
+            [
+              ...(tools.analytics.length ? [`Analytics: ${tools.analytics.join(", ")}, to see which pages and booking steps work.`] : []),
+              ...(tools.ads.length ? [`Advertising: ${tools.ads.join(", ")}, to measure which ads bring people to Fit Planet.`] : []),
+            ],
+            "Your choice is kept for six months. Change it any time from Cookie settings at the bottom of every page; withdrawing consent removes those tools' cookies.",
+          ]
+        : [
+            "We only use cookies the service needs to work: one that keeps you signed in, security cookies used during sign-in, and one that remembers your region and language. We do not use advertising or analytics cookies, so there is nothing to accept or decline.",
+          ],
     },
     {
       id: "your-rights",

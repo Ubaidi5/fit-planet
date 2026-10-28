@@ -9,6 +9,7 @@ import { getSessionUser } from "@/server/session";
 import { BookingError, cancelBookingByMember, createBooking } from "@/server/modules/bookings";
 import { done, fail, invalid } from "./utils";
 import { allow } from "@/server/rate-limit";
+import { requestAttribution } from "@/server/tracking";
 
 const bookingSchema = z.object({
   gymId: z.string().min(1),
@@ -32,7 +33,7 @@ export async function bookPassAction(_prev: ActionResult | null, formData: FormD
 
   let destination: string;
   try {
-    const result = await createBooking({ ...parsed.data, user, gymId });
+    const result = await createBooking({ ...parsed.data, user, gymId, attribution: await requestAttribution() });
     destination = result.checkoutUrl ?? `/app/passes/${result.bookingId}?new=1`;
   } catch (error) {
     if (error instanceof BookingError) return fail(error.key, error.values);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   HiArrowRight,
@@ -21,6 +21,7 @@ import {
 import { Reveal } from "@/components/motion/Reveal";
 import type { Gym } from "@/lib/data/mock-gyms";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/analytics/browser";
 import { Accent } from "@/components/sections/SectionHeading";
 
 type ViewMode = "orbit" | "grid" | "list";
@@ -131,6 +132,14 @@ export function GymsExplorer({ gyms, initialQuery = "", initialCity = "" }: Gyms
   const [viewMode, setViewMode] = useState<ViewMode>(initialCity ? "orbit" : "grid");
 
   const filteredGyms = useMemo(() => applyFilters(gyms, filters, city), [gyms, filters, city]);
+
+  // One search event once the visitor stops typing
+  useEffect(() => {
+    const term = filters.search.trim();
+    if (term.length < 2) return;
+    const timer = setTimeout(() => track({ name: "search", term }), 1200);
+    return () => clearTimeout(timer);
+  }, [filters.search]);
   // Orbit needs one city; with "All" selected it shows its own city tabs
   const orbitCities = useMemo(() => new Set(filteredGyms.map((gym) => gym.address.city)), [filteredGyms]);
 

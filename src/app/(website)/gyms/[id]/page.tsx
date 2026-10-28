@@ -10,6 +10,8 @@ import { getSessionUser } from "@/server/session";
 import { collections, toObjectId } from "@/server/db/collections";
 import { env } from "@/server/env";
 import type { Gym } from "@/lib/types";
+import { TrackEvent } from "@/components/analytics/TrackEvent";
+import type { TrackedGym } from "@/lib/analytics/events";
 
 type Props = { params: Promise<{ id: string }>; searchParams: Promise<{ tab?: string }> };
 
@@ -64,6 +66,7 @@ export default async function GymPage({ params, searchParams }: Props) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: gymJsonLd(profile.gym) }} />
+      <TrackEvent event={{ name: "view_gym", gym: viewedGym(profile.gym) }} />
       <GymProfileView
       gym={profile.gym}
       details={profile.details}
@@ -75,6 +78,12 @@ export default async function GymPage({ params, searchParams }: Props) {
       />
     </>
   );
+}
+
+/** The gym as analytics sees it, valued at its cheapest pass */
+function viewedGym(gym: Gym): TrackedGym {
+  const prices = [gym.pricing.dayPass, gym.pricing.weekPass, gym.pricing.monthPass].filter((p) => p > 0);
+  return { id: gym.id, name: gym.name, city: gym.address.city, ...(prices.length ? { price: Math.min(...prices), currency: gym.currency } : {}) };
 }
 
 /** Structured data so search engines can show the gym's rating, address and prices */

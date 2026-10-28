@@ -20,6 +20,7 @@ import { cityCode } from "@/lib/data/cities";
 import type { Gym } from "@/lib/types";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { bookPassAction } from "@/actions/bookings";
+import { track } from "@/lib/analytics/browser";
 import { Input } from "@/components/ui/Input";
 import { FormAlert } from "@/components/auth/FormBits";
 import { useFormStatus } from "react-dom";
@@ -88,7 +89,17 @@ export function CheckoutForm(props: CheckoutFormProps) {
   const cta = payment === "desk" ? tc("reserveDesk") : tc("pay", { total });
 
   return (
-    <form action={action} className="mx-auto max-w-6xl pb-36 lg:pb-16">
+    <form
+      action={action}
+      onSubmit={() =>
+        track({
+          name: "begin_checkout",
+          paymentMethod: payment,
+          pass: { gymId: gym.id, gymName: gym.name, city: gym.address.city, passType, amount: price, currency: gym.currency },
+        })
+      }
+      className="mx-auto max-w-6xl pb-36 lg:pb-16"
+    >
       <input type="hidden" name="gymId" value={gym.id} />
       <input type="hidden" name="passType" value={passType} />
       <input type="hidden" name="startDate" value={startDate} />

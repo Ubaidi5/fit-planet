@@ -15,6 +15,7 @@ import { magicLinkEmail } from "@/server/services/email/templates";
 import { getRegion } from "@/lib/i18n/server";
 import { translatorFor } from "@/server/i18n";
 import { allowAll, clientIp } from "@/server/rate-limit";
+import { trackAuth } from "@/server/tracking";
 
 class RateLimited extends CredentialsSignin {
   code = "rate_limited";
@@ -148,7 +149,11 @@ const config: NextAuthConfig = {
     },
   },
   events: {
-    async signIn({ user, account }) {
+    async signIn({ user, account, isNewUser }) {
+      // Password sign-ups and sign-ins are tracked by their form actions
+      if (user.id && account && account.provider !== "password") {
+        await trackAuth({ method: account.provider, isNewUser: Boolean(isNewUser), user: { id: user.id, email: user.email } });
+      }
       // Someone who proves the inbox (link or Google) takes over an account whose password was set
       // by an unverified sign-up, so a squatter who registered their email first loses access
       if (!user.id || !account || account.provider === "password") return;

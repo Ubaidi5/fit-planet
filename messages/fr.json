@@ -54,7 +54,8 @@
     "legal": "Mentions légales",
     "privacy": "Confidentialité",
     "terms": "Conditions",
-    "imprint": "Mentions légales"
+    "imprint": "Mentions légales",
+    "cookieSettings": "Paramètres des cookies"
   },
   "hero": {
     "liveBadge": "EN DIRECT",
@@ -2207,5 +2208,28 @@
     "errorText": "Nous n'avons pas pu charger cette page. Réessayez, et si le problème persiste, revenez dans quelques minutes.",
     "retry": "Réessayer",
     "reference": "Référence {id}"
+  },
+  "consent": {
+    "label": "Cookies",
+    "title": "Vos données, votre choix",
+    "body": "Nous aimerions mesurer l'utilisation de Fit Planet et savoir quelles publicités amènent les gens ici. Rien n'est suivi avant votre choix, et vous pouvez le modifier à tout moment. <link>Politique de confidentialité</link>",
+    "acceptAll": "Tout accepter",
+    "rejectAll": "Tout refuser",
+    "customize": "Choisir moi-même",
+    "save": "Enregistrer mes choix",
+    "alwaysOn": "Toujours actifs",
+    "close": "Fermer",
+    "necessary": {
+      "title": "Essentiels",
+      "text": "Vous gardent connecté, sécurisent les paiements et retiennent votre région."
+    },
+    "analytics": {
+      "title": "Mesure d'audience",
+      "text": "Google Analytics et Tag Manager nous montrent quelles pages et étapes de réservation fonctionnent."
+    },
+    "ads": {
+      "title": "Publicité",
+      "text": "Permet à Meta, Google et aux publicités ChatGPT de mesurer quelle annonce vous a amené ici."
+    }
   }
 }

@@ -8,6 +8,7 @@ import { HiOutlineArrowTopRightOnSquare, HiOutlineEye, HiOutlineEyeSlash } from 
 import { cn } from "@/lib/utils";
 import { setGymStatusAction } from "@/actions/studio";
 import { useToast } from "@/components/notifications/ToastProvider";
+import { track } from "@/lib/analytics/browser";
 
 export function PublishCard({ gymId, slug, status, checklist }: { gymId: string; slug: string; status: "draft" | "published" | "suspended"; checklist: { label: string; done: boolean }[] }) {
   const t = useTranslations("studio.publish");
@@ -53,6 +54,7 @@ export function PublishCard({ gymId, slug, status, checklist }: { gymId: string;
               startTransition(async () => {
                 const result = await setGymStatusAction(gymId, live ? "draft" : "published");
                 if (result.ok) {
+                  if (!live) track({ name: "publish_gym", gymId });
                   toast.success(result.message ?? t("saved"));
                   router.refresh();
                 } else toast.error(t("failed"), result.error);

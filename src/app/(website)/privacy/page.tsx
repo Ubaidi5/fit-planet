@@ -10,5 +10,5 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function PrivacyPage() {
   const t = await getTranslations("legal");
-  return <LegalPage title={t("privacy")} updated={LEGAL_UPDATED} intro={t("privacyIntro")} sections={privacySections(env.legal)} />;
+  return <LegalPage title={t("privacy")} updated={LEGAL_UPDATED} intro={t("privacyIntro")} sections={privacySections(env.legal, { google: Boolean(env.tracking.gtmId || env.tracking.ga4Id), meta: Boolean(env.tracking.meta.pixelId), openai: Boolean(env.tracking.openai.pixelId) })} />;
 }
