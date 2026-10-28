@@ -7,6 +7,7 @@ import { HiHeart, HiOutlineHeart } from "react-icons/hi2";
 import { cn } from "@/lib/utils";
 import { toggleSavedGymAction } from "@/actions/member";
 import { useToast } from "@/components/notifications/ToastProvider";
+import { track } from "@/lib/analytics/browser";
 
 export function SaveGymButton({ gymId, saved, signedIn, className, label = true }: { gymId: string; saved: boolean; signedIn: boolean; className?: string; label?: boolean }) {
   const [optimistic, setOptimistic] = useOptimistic(saved);
@@ -26,6 +27,7 @@ export function SaveGymButton({ gymId, saved, signedIn, className, label = true 
           setOptimistic(!optimistic);
           const result = await toggleSavedGymAction(gymId);
           if (!result.ok) toast.error(t("saveFailed"), result.error);
+          else if (!optimistic) track({ name: "save_gym", gymId });
           router.refresh();
         });
       }}

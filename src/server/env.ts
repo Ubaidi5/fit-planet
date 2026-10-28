@@ -98,6 +98,28 @@ export const env = {
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean),
 
+  /**
+   * Analytics and ad pixels. Each one loads only when its id is set and the
+   * visitor accepted that category in the cookie banner.
+   */
+  tracking: {
+    gtmId: read("GTM_ID"),
+    ga4Id: read("GA4_MEASUREMENT_ID"),
+    meta: {
+      pixelId: read("META_PIXEL_ID"),
+      /** Conversions API token: Events Manager > dataset > Settings > Generate access token */
+      accessToken: read("META_CAPI_ACCESS_TOKEN"),
+      /** Only while testing in Events Manager > Test events */
+      testEventCode: read("META_TEST_EVENT_CODE"),
+      graphVersion: read("META_GRAPH_VERSION") ?? "v24.0",
+    },
+    openai: {
+      pixelId: read("OPENAI_PIXEL_ID"),
+      /** Conversions API key from the Conversions tab of OpenAI Ads Manager */
+      apiKey: read("OPENAI_CAPI_KEY"),
+    },
+  },
+
   /** Bearer token the server's cron sends to /api/cron/* */
   cronSecret: read("CRON_SECRET"),
 

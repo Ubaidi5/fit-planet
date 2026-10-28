@@ -1,4 +1,5 @@
 import type { ObjectId } from "mongodb";
+import type { Attribution } from "@/server/services/conversions/types";
 import type { AddOn, Equipment, GymClass, OperatingHours, Trainer } from "@/lib/data/mock-gym-details";
 
 /** Document shapes stored in MongoDB. UI-facing types live in `src/lib/types`. */
@@ -125,6 +126,11 @@ export interface BookingDoc {
   cancelledAt?: Date;
   /** Reminders already sent for this booking, so the hourly job never repeats one */
   remindersSent?: ("start" | "end")[];
+  /**
+   * Browser details for the ad platforms' conversion APIs, kept only when the
+   * member accepted ad cookies and removed once the booking is confirmed
+   */
+  attribution?: Attribution;
 }
 
 export interface CheckinDoc {

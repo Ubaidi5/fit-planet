@@ -7,6 +7,10 @@ import { env } from "@/server/env";
 import { LocaleProvider } from "@/lib/i18n/LocaleProvider";
 import { getRegion } from "@/lib/i18n/server";
 import { ToastProvider } from "@/components/notifications/ToastProvider";
+import { Suspense } from "react";
+import { Analytics } from "@/components/analytics/Analytics";
+import { auth } from "@/lib/auth";
+import { readConsent, trackingConfig } from "@/server/tracking";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
@@ -41,7 +45,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [region, messages] = await Promise.all([getRegion(), getMessages()]);
+  const [region, messages, consent, session] = await Promise.all([getRegion(), getMessages(), readConsent(), auth().catch(() => null)]);
   return (
     <html lang={region.locale} dir={region.dir} className="scroll-pt-24" suppressHydrationWarning>
       <body
@@ -50,6 +54,9 @@ export default async function RootLayout({
         <NextIntlClientProvider locale={region.lang} messages={messages} timeZone="UTC">
           <LocaleProvider initialRegion={region.code}>
             <ToastProvider>{children}</ToastProvider>
+            <Suspense>
+              <Analytics config={trackingConfig()} initialConsent={consent} userId={session?.user?.id} />
+            </Suspense>
           </LocaleProvider>
         </NextIntlClientProvider>
       </body>
