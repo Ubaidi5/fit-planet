@@ -54,7 +54,8 @@
     "legal": "Yasal",
     "privacy": "Gizlilik",
     "terms": "Koşullar",
-    "imprint": "Künye"
+    "imprint": "Künye",
+    "allCities": "Tüm şehirler"
   },
   "hero": {
     "liveBadge": "CANLI",
@@ -2207,5 +2208,138 @@
     "errorText": "Bu sayfayı yükleyemedik. Tekrar dene; sorun devam ederse birkaç dakika sonra yeniden gel.",
     "retry": "Tekrar dene",
     "reference": "Referans {id}"
+  },
+  "cityPages": {
+    "trail": "Gezinti yolu",
+    "home": "Ana sayfa",
+    "gyms": "Salonlar",
+    "cities": "Şehirler",
+    "whatGyms": "Spor Salonları",
+    "whatGymsInline": "spor salonları",
+    "title": "<accent>{city}</accent> şehrindeki {what}",
+    "metaTitle": "{city} şehrindeki {what} · Günlük pas {price} başlayan fiyatlarla",
+    "metaDescription": "{city} şehrinde {count, plural, one {# partner salonu} other {# partner salonu}} karşılaştır. Günlük pas {price} başlayan fiyatlarla, üyelik gerekmez. Ne kadar kalabalık olduğunu gör ve yerel para biriminde rezervasyon yap.",
+    "lead": "{city} şehrinde {count, plural, one {# partner salon} other {# partner salon}}, günlük pas {price} başlayan fiyatlarla. Üyelik ve kayıt ücreti yok: bir salon seç, {currency} ile pas al ve telefonundaki QR ile içeri gir.",
+    "stats": {
+      "gyms": "Partner salonlar",
+      "dayFrom": "Günlük pas, en düşük",
+      "rating": "Ortalama puan",
+      "ratingNone": "Yeni",
+      "reviews": "{count, plural, one {# yorum} other {# yorum}}",
+      "open247": "7/24 açık"
+    },
+    "explorer": "Canlı haritayı aç",
+    "passport": "Ücretsiz pasaportunu al",
+    "browse": "Türe göre göz at",
+    "allTypes": "Tüm salonlar",
+    "listTitle": "En yüksek puanlılar önce",
+    "listCount": "{count, plural, one {# salon} other {# salon}}",
+    "prices": {
+      "eyebrow": "Fiyat rehberi",
+      "title": "{city} şehrinde salon pası ne kadar?",
+      "pass": "Pas",
+      "from": "En düşük",
+      "average": "Ortalama",
+      "day": "Günlük pas",
+      "week": "Haftalık pas",
+      "month": "Aylık pas",
+      "note": "Fit Planet'teki {count, plural, one {# partner salona} other {# partner salona}} göre, {currency} cinsinden. Her saat güncellenir."
+    },
+    "areas": {
+      "title": "Semtler",
+      "count": "{count, plural, one {# salon} other {# salon}}"
+    },
+    "faq": {
+      "eyebrow": "SSS",
+      "title": "Gitmeden önce bilmen gerekenler",
+      "priceQ": "{city} şehrindeki {what} için günlük pas ne kadar?",
+      "priceA": "Günlük paslar {from} başlıyor; {count, plural, one {# partner salonda} other {# partner salonda}} ortalama {average}.",
+      "weekA": "Haftalık pas {price} başlıyor.",
+      "monthA": "Aylık pas {price} başlıyor.",
+      "open247Q": "{city} şehrinde 7/24 açık salon var mı?",
+      "open247Yes": "Evet. {count, plural, one {Bir partner salon} other {# partner salon}} gece gündüz açık: {names}.",
+      "open247No": "Henüz yok. Şu anda {city} şehrindeki partner salonlarımızdan hiçbiri 7/24 açık değil; her salonun sayfasından çalışma saatlerine bakabilirsin.",
+      "bestQ": "{city} şehrindeki {what} arasında en yüksek puanlı hangisi?",
+      "bestA": "{area} semtindeki {name} en yüksek puana sahip: {count, plural, one {# yorumla} other {# yorumla}} 5 üzerinden {rating}.",
+      "areasQ": "{city} şehrinin hangi semtlerinde {what} var?",
+      "areasA": "{count, plural, one {Bir partner salon} other {# partner salon}} uyuyor: {areas}.",
+      "membershipQ": "{city} şehrinde antrenman için üyelik gerekir mi?",
+      "membershipA": "Hayır. Bir salon seç, {currency} ile günlük, haftalık ya da aylık pas al ve telefonundaki QR kodla giriş yap. Sözleşme ve kayıt ücreti yok."
+    },
+    "otherCities": "Diğer şehirlerdeki salonlar",
+    "allCities": "Tüm şehirler",
+    "gymsInCity": "{city} salonları",
+    "categories": {
+      "open247": {
+        "title": "7/24 Açık Salonlar",
+        "inline": "7/24 açık salonlar"
+      },
+      "yoga": {
+        "title": "Yoga Stüdyoları",
+        "inline": "yoga stüdyoları"
+      },
+      "pilates": {
+        "title": "Pilates Stüdyoları",
+        "inline": "pilates stüdyoları"
+      },
+      "crossfit": {
+        "title": "CrossFit Salonları",
+        "inline": "CrossFit salonları"
+      },
+      "boxing": {
+        "title": "Boks Salonları",
+        "inline": "boks salonları"
+      },
+      "martialArts": {
+        "title": "Dövüş Sanatları Salonları",
+        "inline": "dövüş sanatları salonları"
+      },
+      "powerlifting": {
+        "title": "Powerlifting Salonları",
+        "inline": "powerlifting salonları"
+      },
+      "spin": {
+        "title": "Spinning Stüdyoları",
+        "inline": "spinning stüdyoları"
+      },
+      "pool": {
+        "title": "Havuzlu Salonlar",
+        "inline": "havuzlu salonlar"
+      },
+      "sauna": {
+        "title": "Saunalı Salonlar",
+        "inline": "saunalı salonlar"
+      },
+      "spa": {
+        "title": "Spa Olan Salonlar",
+        "inline": "spa olan salonlar"
+      },
+      "womenOnly": {
+        "title": "Kadınlara Özel Alanı Olan Salonlar",
+        "inline": "kadınlara özel alanı olan salonlar"
+      },
+      "personalTraining": {
+        "title": "Kişisel Antrenörlü Salonlar",
+        "inline": "kişisel antrenörlü salonlar"
+      },
+      "groupClasses": {
+        "title": "Grup Dersi Olan Salonlar",
+        "inline": "grup dersi olan salonlar"
+      },
+      "wheelchair": {
+        "title": "Tekerlekli Sandalyeye Uygun Salonlar",
+        "inline": "tekerlekli sandalyeye uygun salonlar"
+      }
+    },
+    "hub": {
+      "meta": "Şehirlere göre salonlar",
+      "metaDescription": "{count, plural, one {# şehirde} other {# şehirde}} partner salonları bul. Günlük, haftalık ve aylık pasları yerel para biriminde karşılaştır, üyelik olmadan rezervasyon yap.",
+      "eyebrow": "Şehirler",
+      "title": "Fit Planet'te <accent>her şehirde</accent> salonlar",
+      "lead": "Bir şehir seç; salonlarını, fiyatlarını ve çalışma saatlerini karşılaştır. Her pas yerel para biriminde satılır, üyelik gerekmez.",
+      "cities": "{count, plural, one {# şehir} other {# şehir}}",
+      "gyms": "{count, plural, one {# salon} other {# salon}}",
+      "from": "Günlük pas {price} başlayan fiyatlarla"
+    }
   }
 }

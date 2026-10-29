@@ -54,7 +54,8 @@
     "legal": "Legal",
     "privacy": "Privacidad",
     "terms": "Términos",
-    "imprint": "Aviso legal"
+    "imprint": "Aviso legal",
+    "allCities": "Todas las ciudades"
   },
   "hero": {
     "liveBadge": "EN VIVO",
@@ -2207,5 +2208,138 @@
     "errorText": "No hemos podido cargar esta página. Inténtalo de nuevo y, si sigue pasando, vuelve en unos minutos.",
     "retry": "Reintentar",
     "reference": "Referencia {id}"
+  },
+  "cityPages": {
+    "trail": "Ruta de navegación",
+    "home": "Inicio",
+    "gyms": "Gimnasios",
+    "cities": "Ciudades",
+    "whatGyms": "Gimnasios",
+    "whatGymsInline": "gimnasios",
+    "title": "{what} en <accent>{city}</accent>",
+    "metaTitle": "{what} en {city} · Pases de día desde {price}",
+    "metaDescription": "Compara {count, plural, one {# gimnasio asociado} other {# gimnasios asociados}} en {city}. Pases de día desde {price}, sin cuota de socio. Mira cuánta gente hay y reserva en moneda local.",
+    "lead": "{count, plural, one {# gimnasio asociado} other {# gimnasios asociados}} en {city}, con pases de día desde {price}. Sin cuota ni matrícula: elige un gimnasio, reserva un pase en {currency} y entra con el QR de tu móvil.",
+    "stats": {
+      "gyms": "Gimnasios asociados",
+      "dayFrom": "Pase de día desde",
+      "rating": "Valoración media",
+      "ratingNone": "Nuevo",
+      "reviews": "{count, plural, one {# reseña} other {# reseñas}}",
+      "open247": "Abiertos 24/7"
+    },
+    "explorer": "Abrir el mapa en directo",
+    "passport": "Consigue tu pasaporte gratis",
+    "browse": "Explorar por tipo",
+    "allTypes": "Todos los gimnasios",
+    "listTitle": "Mejor valorados primero",
+    "listCount": "{count, plural, one {# gimnasio} other {# gimnasios}}",
+    "prices": {
+      "eyebrow": "Guía de precios",
+      "title": "Cuánto cuesta un pase de gimnasio en {city}",
+      "pass": "Pase",
+      "from": "Desde",
+      "average": "Media",
+      "day": "Pase de día",
+      "week": "Pase semanal",
+      "month": "Pase mensual",
+      "note": "Basado en {count, plural, one {# gimnasio asociado} other {# gimnasios asociados}} de Fit Planet, en {currency}. Se actualiza cada hora."
+    },
+    "areas": {
+      "title": "Barrios",
+      "count": "{count, plural, one {# gimnasio} other {# gimnasios}}"
+    },
+    "faq": {
+      "eyebrow": "Preguntas frecuentes",
+      "title": "Lo que conviene saber antes de ir",
+      "priceQ": "¿Cuánto cuesta un pase de día en {what} de {city}?",
+      "priceA": "Los pases de día empiezan en {from} y cuestan de media {average} en {count, plural, one {# gimnasio asociado} other {# gimnasios asociados}}.",
+      "weekA": "Un pase semanal empieza en {price}.",
+      "monthA": "Un pase mensual empieza en {price}.",
+      "open247Q": "¿Hay gimnasios abiertos 24/7 en {city}?",
+      "open247Yes": "Sí. {count, plural, one {Un gimnasio asociado abre} other {# gimnasios asociados abren}} las 24 horas: {names}.",
+      "open247No": "Todavía no. Ahora mismo ninguno de nuestros gimnasios asociados en {city} abre 24/7, así que revisa el horario en la página de cada gimnasio.",
+      "bestQ": "¿Cuál de los {what} de {city} tiene mejor valoración?",
+      "bestA": "{name}, en {area}, tiene la mejor valoración: {rating} de 5 con {count, plural, one {# reseña} other {# reseñas}}.",
+      "areasQ": "¿En qué zonas de {city} hay {what}?",
+      "areasA": "{count, plural, one {Hay un gimnasio asociado} other {Hay # gimnasios asociados}}, en {areas}.",
+      "membershipQ": "¿Necesito hacerme socio para entrenar en {city}?",
+      "membershipA": "No. Elige un gimnasio, compra un pase de día, semana o mes en {currency} y haz check-in con el código QR de tu móvil. Sin permanencia ni matrícula."
+    },
+    "otherCities": "Gimnasios en otras ciudades",
+    "allCities": "Todas las ciudades",
+    "gymsInCity": "Gimnasios en {city}",
+    "categories": {
+      "open247": {
+        "title": "Gimnasios 24/7",
+        "inline": "gimnasios 24/7"
+      },
+      "yoga": {
+        "title": "Estudios de yoga",
+        "inline": "estudios de yoga"
+      },
+      "pilates": {
+        "title": "Estudios de pilates",
+        "inline": "estudios de pilates"
+      },
+      "crossfit": {
+        "title": "Boxes de CrossFit",
+        "inline": "boxes de CrossFit"
+      },
+      "boxing": {
+        "title": "Gimnasios de boxeo",
+        "inline": "gimnasios de boxeo"
+      },
+      "martialArts": {
+        "title": "Gimnasios de artes marciales",
+        "inline": "gimnasios de artes marciales"
+      },
+      "powerlifting": {
+        "title": "Gimnasios de powerlifting",
+        "inline": "gimnasios de powerlifting"
+      },
+      "spin": {
+        "title": "Estudios de spinning",
+        "inline": "estudios de spinning"
+      },
+      "pool": {
+        "title": "Gimnasios con piscina",
+        "inline": "gimnasios con piscina"
+      },
+      "sauna": {
+        "title": "Gimnasios con sauna",
+        "inline": "gimnasios con sauna"
+      },
+      "spa": {
+        "title": "Gimnasios con spa",
+        "inline": "gimnasios con spa"
+      },
+      "womenOnly": {
+        "title": "Gimnasios con zona solo para mujeres",
+        "inline": "gimnasios con zona solo para mujeres"
+      },
+      "personalTraining": {
+        "title": "Gimnasios con entrenador personal",
+        "inline": "gimnasios con entrenador personal"
+      },
+      "groupClasses": {
+        "title": "Gimnasios con clases colectivas",
+        "inline": "gimnasios con clases colectivas"
+      },
+      "wheelchair": {
+        "title": "Gimnasios accesibles en silla de ruedas",
+        "inline": "gimnasios accesibles en silla de ruedas"
+      }
+    },
+    "hub": {
+      "meta": "Gimnasios por ciudad",
+      "metaDescription": "Encuentra gimnasios asociados en {count, plural, one {# ciudad} other {# ciudades}}. Compara pases de día, semana y mes en moneda local y reserva sin cuota de socio.",
+      "eyebrow": "Ciudades",
+      "title": "Gimnasios en <accent>cada ciudad</accent> de Fit Planet",
+      "lead": "Elige una ciudad para comparar sus gimnasios, precios y horarios. Cada pase se vende en moneda local, sin hacerte socio.",
+      "cities": "{count, plural, one {# ciudad} other {# ciudades}}",
+      "gyms": "{count, plural, one {# gimnasio} other {# gimnasios}}",
+      "from": "Pase de día desde {price}"
+    }
   }
 }

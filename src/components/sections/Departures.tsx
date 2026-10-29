@@ -9,6 +9,7 @@ import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { countryName, localTimeIn } from "@/lib/i18n/format";
 import { cityCode } from "@/lib/data/cities";
 import type { Gym } from "@/lib/types";
+import { cityPath } from "@/lib/seo";
 
 /** One board row per city, at most this many */
 const MAX_ROWS = 7;
@@ -108,7 +109,7 @@ export default function Departures({ gyms, cities }: { gyms: Gym[]; cities: stri
               return (
                 <Reveal as="li" key={row.city} delay={index * 60}>
                   <Link
-                    href={`/gyms?city=${encodeURIComponent(row.city)}`}
+                    href={cityPath(row.city)}
                     className="group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 border-b border-white/10 py-4 transition-colors hover:bg-white/[0.03] md:grid-cols-[7rem_minmax(0,1fr)_6rem_5rem_7rem_7rem_2.5rem] md:gap-4"
                   >
                     <FlapCode code={row.code} />

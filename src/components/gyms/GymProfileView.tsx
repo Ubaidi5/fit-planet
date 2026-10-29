@@ -37,6 +37,7 @@ import { PassTickets } from "@/components/gyms/PassTickets";
 import { BookingTicket } from "@/components/gyms/BookingTicket";
 import { ReviewCard, ReviewsSummary } from "@/components/gyms/ReviewCard";
 import { CrowdCurve } from "@/components/pulse/CrowdCurve";
+import { cityPath } from "@/lib/seo";
 
 export type TabType = "overview" | "passes" | "classes" | "trainers" | "reviews";
 
@@ -119,7 +120,7 @@ export function GymProfileView({
       <section className="mx-auto max-w-7xl px-4 pt-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-4">
           <Link
-            href={`/gyms?city=${encodeURIComponent(gym.address.city)}`}
+            href={cityPath(gym.address.city)}
             className="group inline-flex h-10 items-center gap-2 rounded-full bg-surface ps-3 pe-4 text-sm font-medium text-gray-700 shadow-soft ring-1 ring-gray-900/[0.06] transition-colors hover:text-ink"
           >
             <HiArrowLeft className="size-4 transition-transform duration-300 group-hover:-translate-x-0.5 rtl:rotate-180" />
