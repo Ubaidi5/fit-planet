@@ -7,6 +7,7 @@ import { Accent } from "@/components/sections/SectionHeading";
 import { cityCode } from "@/lib/data/cities";
 import type { Gym } from "@/lib/types";
 import type { PlatformStats } from "@/server/modules/platform";
+import { cityPath } from "@/lib/seo";
 
 /** Median time from opening the app to a confirmed pass */
 const BOOKING_SECONDS = 45;
@@ -115,7 +116,7 @@ const Hero = async ({ stats, cities, gyms }: { stats: PlatformStats; cities: str
             {cities.slice(0, 5).map((city) => (
               <Link
                 key={city}
-                href={`/gyms?city=${encodeURIComponent(city)}`}
+                href={cityPath(city)}
                 className="group inline-flex items-center gap-1.5 rounded-full border border-gray-900/[0.07] bg-surface/70 py-1 ps-1.5 pe-3 text-[13px] text-gray-600 transition-colors hover:border-gray-300 hover:text-ink"
               >
                 <span className="rounded-full bg-gray-100 px-1.5 py-px font-mono text-[10px] tracking-[0.08em] text-gray-500 transition-colors group-hover:bg-volt group-hover:text-ink">

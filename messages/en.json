@@ -54,7 +54,8 @@
     "legal": "Legal",
     "privacy": "Privacy",
     "terms": "Terms",
-    "imprint": "Imprint"
+    "imprint": "Imprint",
+    "allCities": "All cities"
   },
   "hero": {
     "liveBadge": "LIVE",
@@ -2207,5 +2208,138 @@
     "errorText": "We couldn't load this page. Try again, and if it keeps happening, come back in a few minutes.",
     "retry": "Try again",
     "reference": "Reference {id}"
+  },
+  "cityPages": {
+    "trail": "Breadcrumb",
+    "home": "Home",
+    "gyms": "Gyms",
+    "cities": "Cities",
+    "whatGyms": "Gyms",
+    "whatGymsInline": "gyms",
+    "title": "{what} in <accent>{city}</accent>",
+    "metaTitle": "{what} in {city} · Day passes from {price}",
+    "metaDescription": "Compare {count, plural, one {# partner gym} other {# partner gyms}} in {city}. Day passes from {price}, no membership needed. See how busy each one is and book in local currency.",
+    "lead": "{count, plural, one {# partner gym} other {# partner gyms}} in {city}, with day passes from {price}. No membership and no joining fee: pick a gym, book a pass in {currency} and walk in with the QR on your phone.",
+    "stats": {
+      "gyms": "Partner gyms",
+      "dayFrom": "Day pass from",
+      "rating": "Average rating",
+      "ratingNone": "New",
+      "reviews": "{count, plural, one {# review} other {# reviews}}",
+      "open247": "Open 24/7"
+    },
+    "explorer": "Open the live map",
+    "passport": "Get your free passport",
+    "browse": "Browse by type",
+    "allTypes": "All gyms",
+    "listTitle": "Best rated first",
+    "listCount": "{count, plural, one {# gym} other {# gyms}}",
+    "prices": {
+      "eyebrow": "Price guide",
+      "title": "What a gym pass costs in {city}",
+      "pass": "Pass",
+      "from": "From",
+      "average": "Average",
+      "day": "Day pass",
+      "week": "Week pass",
+      "month": "Month pass",
+      "note": "Based on {count, plural, one {# partner gym} other {# partner gyms}} on Fit Planet, in {currency}. Updated every hour."
+    },
+    "areas": {
+      "title": "Neighbourhoods",
+      "count": "{count, plural, one {# gym} other {# gyms}}"
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Good to know before you go",
+      "priceQ": "How much is a day pass for {what} in {city}?",
+      "priceA": "Day passes start at {from} and average {average} across {count, plural, one {# partner gym} other {# partner gyms}}.",
+      "weekA": "A week pass starts at {price}.",
+      "monthA": "A month pass starts at {price}.",
+      "open247Q": "Are there gyms open 24/7 in {city}?",
+      "open247Yes": "Yes. {count, plural, one {One partner gym is} other {# partner gyms are}} open around the clock: {names}.",
+      "open247No": "Not yet. None of our partner gyms in {city} is open 24/7 right now, so check the opening hours on each gym's page.",
+      "bestQ": "Which of the {what} in {city} is rated best?",
+      "bestA": "{name} in {area} has the best rating: {rating} out of 5 from {count, plural, one {# review} other {# reviews}}.",
+      "areasQ": "Which parts of {city} have {what}?",
+      "areasA": "{count, plural, one {One partner gym matches} other {# partner gyms match}}, in {areas}.",
+      "membershipQ": "Do I need a membership to train in {city}?",
+      "membershipA": "No. Pick a gym, buy a day, week or month pass in {currency} and check in with the QR code on your phone. There is no contract and no joining fee."
+    },
+    "otherCities": "Gyms in other cities",
+    "allCities": "All cities",
+    "gymsInCity": "Gyms in {city}",
+    "categories": {
+      "open247": {
+        "title": "24/7 gyms",
+        "inline": "24/7 gyms"
+      },
+      "yoga": {
+        "title": "Yoga studios",
+        "inline": "yoga studios"
+      },
+      "pilates": {
+        "title": "Pilates studios",
+        "inline": "pilates studios"
+      },
+      "crossfit": {
+        "title": "CrossFit gyms",
+        "inline": "CrossFit gyms"
+      },
+      "boxing": {
+        "title": "Boxing gyms",
+        "inline": "boxing gyms"
+      },
+      "martialArts": {
+        "title": "Martial arts gyms",
+        "inline": "martial arts gyms"
+      },
+      "powerlifting": {
+        "title": "Powerlifting gyms",
+        "inline": "powerlifting gyms"
+      },
+      "spin": {
+        "title": "Spin studios",
+        "inline": "spin studios"
+      },
+      "pool": {
+        "title": "Gyms with a pool",
+        "inline": "gyms with a pool"
+      },
+      "sauna": {
+        "title": "Gyms with a sauna",
+        "inline": "gyms with a sauna"
+      },
+      "spa": {
+        "title": "Gyms with a spa",
+        "inline": "gyms with a spa"
+      },
+      "womenOnly": {
+        "title": "Gyms with a women-only area",
+        "inline": "gyms with a women-only area"
+      },
+      "personalTraining": {
+        "title": "Gyms with personal training",
+        "inline": "gyms with personal training"
+      },
+      "groupClasses": {
+        "title": "Gyms with group classes",
+        "inline": "gyms with group classes"
+      },
+      "wheelchair": {
+        "title": "Wheelchair-accessible gyms",
+        "inline": "wheelchair-accessible gyms"
+      }
+    },
+    "hub": {
+      "meta": "Gyms by city",
+      "metaDescription": "Find partner gyms in {count, plural, one {# city} other {# cities}}. Compare day, week and month passes in local currency and book without a membership.",
+      "eyebrow": "Cities",
+      "title": "Gyms in <accent>every city</accent> on Fit Planet",
+      "lead": "Pick a city to compare its gyms, prices and opening hours. Every pass is sold in local currency, with no membership needed.",
+      "cities": "{count, plural, one {# city} other {# cities}}",
+      "gyms": "{count, plural, one {# gym} other {# gyms}}",
+      "from": "Day pass from {price}"
+    }
   }
 }

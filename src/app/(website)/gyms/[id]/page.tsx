@@ -10,6 +10,8 @@ import { getSessionUser } from "@/server/session";
 import { collections, toObjectId } from "@/server/db/collections";
 import { env } from "@/server/env";
 import type { Gym } from "@/lib/types";
+import { breadcrumbJsonLd } from "@/components/seo/Breadcrumbs";
+import { cityPath, jsonLd } from "@/lib/seo";
 
 type Props = { params: Promise<{ id: string }>; searchParams: Promise<{ tab?: string }> };
 
@@ -36,7 +38,7 @@ export default async function GymPage({ params, searchParams }: Props) {
   if (!profile) notFound();
 
   const user = await getSessionUser();
-  const t = await getTranslations("gym");
+  const [t, tc] = await Promise.all([getTranslations("gym"), getTranslations("cityPages")]);
   let reviewSlot: React.ReactNode = (
     <div className="flex flex-col items-start justify-between gap-4 rounded-4xl border border-dashed border-gray-900/15 bg-surface/60 p-6 sm:flex-row sm:items-center">
       <div>
@@ -64,6 +66,19 @@ export default async function GymPage({ params, searchParams }: Props) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: gymJsonLd(profile.gym) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLd(
+            breadcrumbJsonLd([
+              { label: tc("home"), href: "/" },
+              { label: tc("cities"), href: "/gyms/in" },
+              { label: profile.gym.address.city, href: cityPath(profile.gym.address.city) },
+              { label: profile.gym.name, href: `/gyms/${profile.gym.slug}` },
+            ]),
+          ),
+        }}
+      />
       <GymProfileView
       gym={profile.gym}
       details={profile.details}
@@ -99,6 +114,5 @@ function gymJsonLd(gym: Gym) {
       .map((key) => ({ "@type": "Offer", name: { dayPass: "Day pass", weekPass: "Week pass", monthPass: "Month pass" }[key], price: gym.pricing[key], priceCurrency: gym.currency, url })),
     ...(gym.totalReviews > 0 ? { aggregateRating: { "@type": "AggregateRating", ratingValue: gym.rating, reviewCount: gym.totalReviews, bestRating: 5 } } : {}),
   };
-  // Escape "<" so text from a listing can't close the script tag
-  return JSON.stringify(data).replace(/</g, "\\u003c");
+  return jsonLd(data);
 }
