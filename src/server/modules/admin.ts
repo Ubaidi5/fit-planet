@@ -4,10 +4,10 @@ import { AppError } from "@/server/errors";
 import { collections } from "@/server/db/collections";
 import type { AdminLogDoc, GymDoc, PostDoc, UserDoc } from "@/server/db/models";
 import { notify } from "@/server/modules/notifications";
+import { literalPattern } from "@/server/db/search";
 
 export class AdminError extends AppError {}
 
-const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 async function log(adminId: ObjectId, action: string, targetType: AdminLogDoc["targetType"], targetId: ObjectId, note?: string) {
   await (await collections.adminLog()).insertOne({ _id: new ObjectId(), adminId, action, targetType, targetId, note, at: new Date() });
@@ -53,7 +53,7 @@ export async function adminGyms(filter: GymFilter, q: string) {
   if (filter === "unverified") Object.assign(query, { status: "published", isVerified: false });
   else if (filter !== "all") query.status = filter;
   if (q) {
-    const pattern = new RegExp(escapeRegex(q), "i");
+    const pattern = new RegExp(literalPattern(q), "i");
     query.$or = [{ name: pattern }, { "address.city": pattern }, { slug: pattern }];
   }
   const gyms = await (await collections.gyms()).find(query).sort({ createdAt: -1 }).limit(100).toArray();
@@ -130,7 +130,7 @@ export async function adminUsers(q: string, suspendedOnly: boolean) {
   const query: Filter<UserDoc> = {};
   if (suspendedOnly) query.suspendedAt = { $exists: true };
   if (q) {
-    const pattern = new RegExp(escapeRegex(q), "i");
+    const pattern = new RegExp(literalPattern(q), "i");
     query.$or = [{ email: pattern }, { name: pattern }, { handle: pattern }];
   }
   return (await collections.users())

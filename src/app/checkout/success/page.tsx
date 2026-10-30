@@ -3,6 +3,7 @@ import { collections, toObjectId } from "@/server/db/collections";
 import { confirmOnlinePayment } from "@/server/modules/bookings";
 import { paymentProvider } from "@/server/services/payments";
 import { getSessionUser } from "@/server/session";
+import { reportError } from "@/lib/monitoring";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,7 @@ export default async function CheckoutSuccess({ searchParams }: { searchParams: 
       const status = await paymentProvider(doc.paymentProvider)?.getCheckoutStatus(session);
       if (status?.paid && status.reference === id.toHexString()) await confirmOnlinePayment(id, session);
     } catch (error) {
-      console.error("[checkout] status check failed", error);
+      reportError("[checkout] status check failed", error);
     }
   }
   redirect(`/app/passes/${id.toHexString()}?new=1`);

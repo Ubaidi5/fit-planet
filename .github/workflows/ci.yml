@@ -62,3 +62,11 @@ jobs:
             if [ "$code" != "200" ]; then failed=1; fi
           done
           if [ "$failed" = 1 ]; then cat server.log; exit 1; fi
+          # Every page carries a script nonce, and Next's own scripts use it
+          headers=$(curl -s -D - -o page.html http://127.0.0.1:3100/login)
+          nonce=$(echo "$headers" | grep -i '^content-security-policy:' | grep -o "nonce-[A-Za-z0-9+/=]*" | head -1 | cut -d- -f2-)
+          if [ -z "$nonce" ]; then echo "No CSP nonce on /login"; echo "$headers"; exit 1; fi
+          if grep -o '<script[^>]*>' page.html | grep -v "nonce=\"$nonce\"" | grep -v 'application/ld+json' | grep -q .; then
+            echo "Scripts without the page nonce:"; grep -o '<script[^>]*>' page.html | grep -v "nonce=\"$nonce\""; exit 1
+          fi
+          echo "CSP nonce ok"

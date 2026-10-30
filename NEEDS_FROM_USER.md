@@ -188,3 +188,23 @@ have a lawyer check them for the EU, UAE and Türkiye before going live.
 
 Set `ADMIN_EMAILS` in the server's `.env` to your own email (comma-separated for
 more people), sign in with that account and open `/admin`.
+
+## 11. Error monitoring (Sentry)
+
+1. Create a free account at sentry.io and a project of type **Next.js**. Pick
+   the EU region if most users are in Europe (data stays in the EU).
+2. Copy the project's DSN (Settings, Projects, your project, Client Keys) into
+   `SENTRY_DSN` in the server's `.env` and restart the app. Nothing else is
+   needed; the release name is picked up from the deploy folder.
+3. In Sentry, Settings, Security & Privacy, turn on **Data Scrubber** and
+   **Prevent Storing of IP Addresses** as a second layer behind the app's own
+   scrubbing.
+4. Optional: add an alert rule (Alerts, Create alert, Issues) that emails you
+   when a new issue appears.
+
+## 12. nginx flood limits (one time)
+
+`deploy/nginx-zone.conf` now also caps open connections per visitor and form
+posts per second. Copy it again to `/etc/nginx/conf.d/fitplanet-zone.conf`,
+copy `deploy/nginx-locations.conf` to where your site includes it, then run
+`sudo nginx -t && sudo systemctl reload nginx`.

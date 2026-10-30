@@ -3,6 +3,7 @@ import { paymentProvider } from "@/server/services/payments";
 import { toObjectId } from "@/server/db/collections";
 import { collections } from "@/server/db/collections";
 import { confirmOnlinePayment, markPaymentFailed, refundOrphanedPayment } from "@/server/modules/bookings";
+import { reportError } from "@/lib/monitoring";
 
 /**
  * Payment webhooks: /api/webhooks/payments/stripe (and future providers).
@@ -38,7 +39,7 @@ export async function POST(request: Request, ctx: { params: Promise<{ provider: 
       });
     }
   } catch (error) {
-    console.error(`[webhook:${name}] handler failed`, error);
+    reportError(`[webhook:${name}] handler failed`, error);
     // 500 makes the provider retry later
     return NextResponse.json({ error: "Handler failed" }, { status: 500 });
   }

@@ -45,6 +45,7 @@ export function privacySections(d: LegalDetails): LegalSection[] {
           "Bookings: the gym, pass type, dates, price, payment status and the pass code shown on your QR pass.",
           "Payments: card payments are handled by Stripe. We never see or store your full card number; we keep the payment reference and status.",
           "Gym visits: when a gym scans your pass we record the time and the gym.",
+          "Error reports: when a page fails, the technical details (page address without its query string, browser, device type and the error itself) go to our error monitoring so we can fix it. Reports carry no name, email, cookies or form contents.",
           "Training: routines you build and workouts you log, including sets, reps and weights.",
           "Social: your handle, bio, posts, photos, likes, comments, who you follow and who follows you, and reports you send.",
           "Reviews: the rating and text you write about a gym.",
@@ -74,7 +75,7 @@ export function privacySections(d: LegalDetails): LegalSection[] {
         [
           "The gym you book sees your name, email address, phone number, pass and visit history at that gym.",
           "Other members see what you share on the social side, depending on your visibility setting, and your name next to reviews you write.",
-          "Service providers who process data for us under contract: hosting (Amazon Web Services), payments (Stripe), push notifications (Google Firebase), email delivery, and file storage.",
+          "Service providers who process data for us under contract: hosting (Amazon Web Services), payments (Stripe), push notifications (Google Firebase), error monitoring (Sentry), email delivery, and file storage.",
           "Google or Facebook, if you choose to sign in with them.",
           "Authorities, when the law requires it.",
         ],

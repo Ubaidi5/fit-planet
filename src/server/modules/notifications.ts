@@ -9,6 +9,7 @@ import { formatMoney } from "@/lib/i18n/format";
 import type { Region } from "@/lib/i18n/regions";
 import { formatDate } from "@/lib/dates";
 import { translatorFor, type Translate } from "@/server/i18n";
+import { reportError } from "@/lib/monitoring";
 
 export type NotificationKey =
   | "bookingNew"
@@ -118,7 +119,7 @@ export async function notify(userId: ObjectId, input: NotifyInput) {
       await tokensCol.deleteMany({ token: { $in: result.invalidTokens } });
     }
   } catch (error) {
-    console.error("[notify] push failed", error);
+    reportError("[notify] push failed", error);
   }
 }
 

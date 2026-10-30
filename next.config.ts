@@ -6,15 +6,11 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 const isProd = process.env.NODE_ENV === "production";
 
 /**
- * Baseline browser protections for every page. Scripts aren't restricted by
- * CSP here (Next's inline bootstrap would need nonces); these directives block
- * framing, plugin content and <base> tricks without risking breakage.
+ * Baseline browser protections for every response. The Content Security
+ * Policy is set per page in src/proxy.ts, because it carries a fresh script
+ * nonce on every request.
  */
 const securityHeaders = [
-  {
-    key: "Content-Security-Policy",
-    value: ["frame-ancestors 'none'", "base-uri 'self'", "object-src 'none'", ...(isProd ? ["upgrade-insecure-requests"] : [])].join("; "),
-  },
   { key: "X-Frame-Options", value: "DENY" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },

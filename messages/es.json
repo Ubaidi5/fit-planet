@@ -2205,6 +2205,8 @@
     "home": "Volver al inicio",
     "errorTitle": "Algo ha salido mal",
     "errorText": "No hemos podido cargar esta página. Inténtalo de nuevo y, si sigue pasando, vuelve en unos minutos.",
+    "sectionTitle": "Esta parte no se ha cargado",
+    "sectionText": "El resto de la página funciona. Inténtalo de nuevo en un momento.",
     "retry": "Reintentar",
     "reference": "Referencia {id}"
   }

@@ -20,6 +20,7 @@ import type {
   UserDoc,
   WorkoutDoc,
 } from "./models";
+import { reportError } from "@/lib/monitoring";
 
 /** Typed collection accessors. Collection names match the NextAuth adapter defaults. */
 export const collections = {
@@ -71,6 +72,8 @@ export function ensureIndexes() {
         db.collection("bookings").createIndex({ paymentRef: 1 }, { sparse: true }),
         db.collection("bookings").createIndex({ status: 1, startDate: 1 }),
         db.collection("bookings").createIndex({ status: 1, endDate: 1 }),
+        // Studio dashboard: active, upcoming and unpaid passes per gym
+        db.collection("bookings").createIndex({ gymId: 1, status: 1, endDate: 1 }),
         db.collection("checkins").createIndex({ gymId: 1, at: -1 }),
         db.collection("checkins").createIndex({ userId: 1, at: -1 }),
         db.collection("reviews").createIndex({ gymId: 1, createdAt: -1 }),
@@ -94,7 +97,7 @@ export function ensureIndexes() {
       ]);
     })().catch((error) => {
       indexesReady = null;
-      console.error("[db] failed to create indexes", error);
+      reportError("[db] failed to create indexes", error);
     });
   }
   return indexesReady;

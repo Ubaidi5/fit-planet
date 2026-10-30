@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { env } from "@/server/env";
 import { collections } from "@/server/db/collections";
+import { reportError } from "@/lib/monitoring";
 
 // Rebuilt at most hourly; new gyms appear without a deploy
 export const revalidate = 3600;
@@ -29,7 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ];
   } catch (error) {
     // Without a database the static pages are still worth listing
-    console.error("[sitemap] could not list gyms", error);
+    reportError("[sitemap] could not list gyms", error);
     return pages;
   }
 }
