@@ -10,6 +10,7 @@ import { getSessionUser } from "@/server/session";
 import { collections, toObjectId } from "@/server/db/collections";
 import { env } from "@/server/env";
 import type { Gym } from "@/lib/types";
+import { orFallback } from "@/server/degrade";
 
 type Props = { params: Promise<{ id: string }>; searchParams: Promise<{ tab?: string }> };
 
@@ -53,9 +54,11 @@ export default async function GymPage({ params, searchParams }: Props) {
   );
 
   if (user && profile.ownerId !== user._id.toHexString()) {
-    const booked = await (await collections.bookings()).findOne(
-      { userId: user._id, gymId: toObjectId(profile.gym.id)!, status: "confirmed" },
-      { projection: { _id: 1 } },
+    const booked = await orFallback(
+      "[gyms] review eligibility failed",
+      async () =>
+        (await collections.bookings()).findOne({ userId: user._id, gymId: toObjectId(profile.gym.id)!, status: "confirmed" }, { projection: { _id: 1 } }),
+      null,
     );
     if (booked) reviewSlot = <ReviewForm gymId={profile.gym.id} gymName={profile.gym.name} />;
   }

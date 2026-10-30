@@ -82,10 +82,58 @@ keep in mind when changing it.
 
 ## Transport and headers
 
-- nginx: HTTPS via certbot, per-IP flood limit, `server_tokens off`.
-- App: `X-Frame-Options: DENY`, `frame-ancestors 'none'`, `nosniff`,
-  strict referrer policy, Permissions-Policy (camera and location only for
-  this site), COOP, HSTS in production, no `X-Powered-By`.
+- nginx: HTTPS via certbot, `server_tokens off`, per-IP limits on requests
+  (15/s), form posts (5/s) and open connections (40), and short header/body
+  timeouts against slow-connection floods (`deploy/nginx-*.conf`).
+- App: every page gets a Content Security Policy with a fresh script nonce
+  and `'strict-dynamic'` (`src/proxy.ts`). Only scripts Next renders with the
+  nonce, and what they load, can run, so injected markup can't execute code.
+  CI fails if a page ships a script without the nonce.
+- Also `frame-ancestors 'none'`, `X-Frame-Options: DENY`, `nosniff`, strict
+  referrer policy, Permissions-Policy (camera and location only for this
+  site), COOP, HSTS in production, no `X-Powered-By`.
+
+## Abuse and flood limits
+
+- Second layer in the app (`src/proxy.ts`): per IP, at most 120 form posts or
+  server actions and 300 API calls a minute, counted in memory so it costs
+  nothing per request. Signed payment webhooks are exempt.
+- Finer limits per account and per email for sign-in, sign-up, resets,
+  posting, bookings, check-ins and uploads (`src/server/rate-limit.ts`).
+
+## Injection and request forgery
+
+- Server actions validate their input with zod before it reaches a query, and
+  URL parameters only ever arrive as strings, so `{"$gt": ""}`-style
+  operators can't be injected into database filters.
+- Search boxes are matched as literal text, escaped and cut to 80 characters
+  (`src/server/db/search.ts`).
+- React escapes everything it renders; the only raw HTML is QR code SVG we
+  generate and JSON-LD with `<` escaped.
+- Server actions only accept posts from this site's own origin (Next checks
+  `Origin` against `Host`), Auth.js forms carry a CSRF token, and session
+  cookies are `SameSite=Lax`, `HttpOnly` and `Secure` in production.
+
+## Reliability
+
+- Every database call times out after 15 seconds, so a slow query fails its
+  own part of the page instead of hanging the request.
+- Pages degrade by section (`src/server/degrade.ts`): badge counts, live
+  occupancy, reviews and dashboard blocks fall back on their own and show a
+  "this part didn't load" card with a retry button. The member app, studio
+  and admin have their own error screens inside their navigation, so one
+  failing page never takes the whole shell down.
+- Studio dashboard totals are computed by MongoDB aggregation pipelines, so
+  the server reads a few dozen summary rows instead of every booking.
+
+## Error monitoring
+
+- Sentry reports server and browser errors once `SENTRY_DSN` is set
+  (`src/instrumentation.ts`, `src/lib/monitoring.ts`). Use `reportError()`
+  instead of `console.error` for anything unexpected.
+- Reports carry no user identity, cookies, headers, request bodies, query
+  strings or database values, and email addresses, tokens and card-like
+  numbers are masked in messages before they leave the server or browser.
 
 ## Secrets
 

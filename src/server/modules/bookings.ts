@@ -13,6 +13,8 @@ import { email } from "@/server/services/email";
 import { bookingConfirmedEmail } from "@/server/services/email/templates";
 import { translatorFor } from "@/server/i18n";
 import { notify } from "./notifications";
+import { reportError } from "@/lib/monitoring";
+import { literalPattern } from "@/server/db/search";
 
 /** How far ahead a pass can be booked */
 export const MAX_DAYS_AHEAD = 60;
@@ -311,7 +313,7 @@ async function onBookingConfirmed(booking: BookingDoc, gym: GymDoc) {
         ),
       );
     } catch (error) {
-      console.error("[booking] receipt email failed", error);
+      reportError("[booking] receipt email failed", error);
     }
   }
 }
@@ -389,7 +391,7 @@ export async function listGymBookings(filter: OwnerBookingFilter) {
   if (filter.from) query.startDate = { ...(query.startDate as object), $gte: filter.from };
   if (filter.to) query.startDate = { ...(query.startDate as object), $lte: filter.to };
   if (filter.q) {
-    const pattern = new RegExp(filter.q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+    const pattern = new RegExp(literalPattern(filter.q), "i");
     query.$or = [{ "guest.name": pattern }, { "guest.email": pattern }, { "guest.phone": pattern }, { code: pattern }];
   }
   const docs = await bookings.find(query).sort({ createdAt: -1 }).limit(filter.limit ?? 500).toArray();

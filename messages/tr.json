@@ -2205,6 +2205,8 @@
     "home": "Ana sayfaya dön",
     "errorTitle": "Bir şeyler ters gitti",
     "errorText": "Bu sayfayı yükleyemedik. Tekrar dene; sorun devam ederse birkaç dakika sonra yeniden gel.",
+    "sectionTitle": "Bu bölüm yüklenmedi",
+    "sectionText": "Sayfanın geri kalanı çalışıyor. Birazdan tekrar dene.",
     "retry": "Tekrar dene",
     "reference": "Referans {id}"
   }

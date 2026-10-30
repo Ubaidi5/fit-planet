@@ -2205,6 +2205,8 @@
     "home": "Zur Startseite",
     "errorTitle": "Etwas ist schiefgelaufen",
     "errorText": "Wir konnten diese Seite nicht laden. Versuch es noch einmal, und wenn es weiter passiert, komm in ein paar Minuten wieder.",
+    "sectionTitle": "Dieser Bereich wurde nicht geladen",
+    "sectionText": "Der Rest der Seite funktioniert. Versuch es gleich noch einmal.",
     "retry": "Erneut versuchen",
     "reference": "Referenz {id}"
   }

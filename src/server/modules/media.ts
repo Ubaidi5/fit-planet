@@ -5,6 +5,7 @@ import { ObjectId } from "mongodb";
 import { collections } from "@/server/db/collections";
 import { env } from "@/server/env";
 import { extensionFor, IMAGE_TYPES, keyFromUrl, storage, VIDEO_TYPES } from "@/server/services/storage";
+import { reportError } from "@/lib/monitoring";
 
 export class MediaError extends AppError {}
 
@@ -76,7 +77,7 @@ export async function deleteUpload(ownerId: ObjectId, url: string) {
   try {
     await storage().delete(key);
   } catch (error) {
-    console.error("[media] delete failed", error);
+    reportError("[media] delete failed", error);
   }
 }
 

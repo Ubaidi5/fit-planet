@@ -101,6 +101,14 @@ export const env = {
   /** Bearer token the server's cron sends to /api/cron/* */
   cronSecret: read("CRON_SECRET"),
 
+  /** Error monitoring. Off until SENTRY_DSN is set */
+  monitoring: {
+    sentryDsn: read("SENTRY_DSN"),
+    environment: read("SENTRY_ENVIRONMENT") ?? process.env.NODE_ENV ?? "development",
+    /** Share of requests traced for performance, 0..1. Errors are always sent */
+    tracesSampleRate: Math.min(1, Math.max(0, Number(read("SENTRY_TRACES_SAMPLE_RATE") ?? "0") || 0)),
+  },
+
   /** Platform commission kept from each booking, as a fraction (0.1 = 10%) */
   platformFee: Number(read("PLATFORM_FEE") ?? "0.1"),
 } as const;

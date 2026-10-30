@@ -2205,6 +2205,8 @@
     "home": "Back home",
     "errorTitle": "Something went wrong",
     "errorText": "We couldn't load this page. Try again, and if it keeps happening, come back in a few minutes.",
+    "sectionTitle": "This part didn't load",
+    "sectionText": "The rest of the page works. Try again in a moment.",
     "retry": "Try again",
     "reference": "Reference {id}"
   }

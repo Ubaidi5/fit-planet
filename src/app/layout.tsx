@@ -7,6 +7,8 @@ import { env } from "@/server/env";
 import { LocaleProvider } from "@/lib/i18n/LocaleProvider";
 import { getRegion } from "@/lib/i18n/server";
 import { ToastProvider } from "@/components/notifications/ToastProvider";
+import { MonitoringInit } from "@/components/monitoring/MonitoringInit";
+import { serverRelease } from "@/server/release";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
@@ -50,6 +52,7 @@ export default async function RootLayout({
         <NextIntlClientProvider locale={region.lang} messages={messages} timeZone="UTC">
           <LocaleProvider initialRegion={region.code}>
             <ToastProvider>{children}</ToastProvider>
+            <MonitoringInit config={{ ...env.monitoring, release: serverRelease() }} />
           </LocaleProvider>
         </NextIntlClientProvider>
       </body>

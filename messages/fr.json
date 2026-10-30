@@ -2205,6 +2205,8 @@
     "home": "Retour à l'accueil",
     "errorTitle": "Un problème est survenu",
     "errorText": "Nous n'avons pas pu charger cette page. Réessayez, et si le problème persiste, revenez dans quelques minutes.",
+    "sectionTitle": "Cette partie ne s'est pas chargée",
+    "sectionText": "Le reste de la page fonctionne. Réessayez dans un instant.",
     "retry": "Réessayer",
     "reference": "Référence {id}"
   }
