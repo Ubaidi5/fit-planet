@@ -1995,6 +1995,10 @@
       "title": "{gym} ha vuelto",
       "body": "Tu ficha se ha restaurado como borrador. Revísala y vuelve a publicarla desde el perfil del gimnasio."
     },
+    "gymTransferred": {
+      "title": "{gym} ahora es tuyo",
+      "body": "Un administrador ha pasado este estudio a tu cuenta. Gestiónalo desde el perfil del gimnasio."
+    },
     "postRemoved": {
       "title": "Se ha eliminado una de tus publicaciones",
       "body": "Incumplía nuestras normas de la comunidad tras las denuncias de otros miembros."
@@ -2040,6 +2044,34 @@
       "heading": "Únete a {gym} en Fit Planet",
       "body": "{name} te ha invitado a registrar miembros en {gym}. Abre el enlace en los próximos siete días e inicia sesión con este correo.",
       "cta": "Aceptar invitación"
+    },
+    "suspension": {
+      "accountSubject": "Tu cuenta de Fit Planet está suspendida",
+      "accountHeading": "Tu cuenta está suspendida",
+      "accountBody": "Hemos suspendido tu cuenta de Fit Planet. Mientras esté suspendida no podrás iniciar sesión ni reservar pases.",
+      "gymSubject": "{gym} está suspendido en Fit Planet",
+      "gymHeading": "{gym} está suspendido",
+      "gymBody": "Hemos ocultado {gym} en Fit Planet mientras esté suspendido. Los miembros no pueden encontrarlo ni reservarlo.",
+      "reason": "Motivo",
+      "appeal": "Si crees que es un error, contacta con el soporte de Fit Planet y lo revisaremos de nuevo.",
+      "accountRestoredSubject": "Tu cuenta de Fit Planet vuelve a estar activa",
+      "accountRestoredBody": "Tu cuenta ya no está suspendida. Puedes volver a iniciar sesión y reservar pases.",
+      "gymRestoredSubject": "{gym} ya no está suspendido",
+      "gymRestoredBody": "Tu ficha vuelve a estar como borrador. Revísala y publícala de nuevo desde el perfil del gimnasio.",
+      "signIn": "Iniciar sesión",
+      "openStudio": "Abrir perfil del gimnasio"
+    },
+    "reasons": {
+      "spam": "Spam o actividad falsa",
+      "fakeAccount": "Cuenta falsa o suplantación de identidad",
+      "harassment": "Comportamiento acosador u ofensivo",
+      "fakeListing": "Ficha falsa o no verificable",
+      "misleading": "Fotos, precios o datos engañosos",
+      "safety": "Quejas de seguridad o higiene",
+      "complaints": "Quejas repetidas de miembros",
+      "fraud": "Fraude en pagos o contracargos",
+      "terms": "Incumplimiento de nuestras condiciones de uso",
+      "other": "Otro"
     }
   },
   "exerciseInfo": {

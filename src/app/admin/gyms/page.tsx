@@ -2,8 +2,10 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { requireAdmin } from "@/server/session";
 import { adminGyms, type GymFilter } from "@/server/modules/admin";
-import { moderateGymAction } from "@/actions/admin";
-import { ActionButton, Empty, FilterLinks, PageTitle, Pill, SearchBar } from "@/components/admin/bits";
+import { Empty, FilterLinks, PageTitle, Pill, SearchBar, SuspensionNote } from "@/components/admin/bits";
+import { ConfirmForm } from "@/components/admin/AdminForms";
+import { deleteDemoGymsAction } from "@/actions/admin";
+import { GymActions, GymStatusPill } from "@/components/admin/GymActions";
 
 export const metadata: Metadata = { title: "Gyms" };
 
@@ -11,8 +13,9 @@ const filters: { key: GymFilter; label: string }[] = [
   { key: "all", label: "All" },
   { key: "unverified", label: "Live, unverified" },
   { key: "published", label: "Live" },
-  { key: "draft", label: "Drafts" },
+  { key: "draft", label: "Hidden" },
   { key: "suspended", label: "Suspended" },
+  { key: "demo", label: "Sample studios" },
 ];
 
 export default async function AdminGymsPage({ searchParams }: { searchParams: Promise<{ status?: string; q?: string }> }) {
@@ -25,11 +28,22 @@ export default async function AdminGymsPage({ searchParams }: { searchParams: Pr
 
   return (
     <>
-      <PageTitle title="Gyms" text="Verify real gyms, feature the best ones, and suspend listings that break the rules." />
+      <PageTitle title="Gyms" text="Verify real gyms, feature the best ones, hide or suspend listings that break the rules." />
       <SearchBar q={q} placeholder="Search name, city or slug">
         {filter !== "all" && <input type="hidden" name="status" value={filter} />}
       </SearchBar>
       <FilterLinks items={filters.map((f) => ({ key: f.key, label: f.label, href: href(f.key) }))} active={filter} />
+      {filter === "demo" && rows.length > 0 && (
+        <div className="flex flex-col gap-3 rounded-[1.5rem] bg-surface p-4 shadow-soft ring-1 ring-gray-900/[0.05] sm:flex-row sm:items-center sm:justify-between sm:p-5">
+          <p className="text-sm text-gray-600">Sample studios fill the site before real gyms join. Hide them one by one, or remove them all when you are ready.</p>
+          <ConfirmForm
+            action={deleteDemoGymsAction}
+            label="Remove all samples"
+            confirm={`Delete ${rows.length} studios`}
+            warning="This deletes every sample studio with its reviews and bookings. It can't be undone."
+          />
+        </div>
+      )}
 
       {rows.length === 0 ? (
         <Empty>No gyms match.</Empty>
@@ -42,43 +56,23 @@ export default async function AdminGymsPage({ searchParams }: { searchParams: Pr
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <Link href={`/gyms/${gym.slug}`} target="_blank" className="truncate text-[15px] font-semibold text-ink hover:underline">
+                      <Link href={`/admin/gyms/${id}`} className="truncate text-[15px] font-semibold text-ink hover:underline">
                         {gym.name}
                       </Link>
-                      <Pill tone={gym.status === "published" ? "green" : gym.status === "suspended" ? "red" : "gray"}>
-                        {gym.status === "published" ? "Live" : gym.status === "suspended" ? "Suspended" : "Draft"}
-                      </Pill>
+                      <GymStatusPill status={gym.status} />
                       {gym.isVerified && <Pill tone="blue">Verified</Pill>}
                       {gym.isFeatured && <Pill tone="amber">Featured</Pill>}
+                      {gym.isDemo && <Pill>Sample</Pill>}
                     </div>
                     <p className="mt-1 truncate text-sm text-gray-500">
                       {[gym.address.area, gym.address.city, gym.country].filter(Boolean).join(", ")} · {gym.images.length} photos · {gym.totalReviews} reviews
                     </p>
                     <p className="mt-0.5 truncate text-xs text-gray-500">
-                      Owner: {owner?.name ?? "Unknown"} {owner?.email && <span className="text-gray-400">({owner.email})</span>}
+                      Owner: {gym.isDemo ? "Sample data" : (owner?.name ?? "Unknown")} {owner?.email && <span className="text-gray-400">({owner.email})</span>}
                     </p>
+                    <SuspensionNote suspension={gym.suspension} className="mt-0.5 truncate" />
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {gym.status !== "suspended" && (
-                      <ActionButton action={moderateGymAction} fields={{ gymId: id, action: gym.isVerified ? "unverify" : "verify" }} tone={gym.isVerified ? "default" : "primary"}>
-                        {gym.isVerified ? "Unverify" : "Verify"}
-                      </ActionButton>
-                    )}
-                    {gym.status === "published" && (
-                      <ActionButton action={moderateGymAction} fields={{ gymId: id, action: gym.isFeatured ? "unfeature" : "feature" }}>
-                        {gym.isFeatured ? "Unfeature" : "Feature"}
-                      </ActionButton>
-                    )}
-                    {gym.status === "suspended" ? (
-                      <ActionButton action={moderateGymAction} fields={{ gymId: id, action: "restore" }}>
-                        Restore as draft
-                      </ActionButton>
-                    ) : (
-                      <ActionButton action={moderateGymAction} fields={{ gymId: id, action: "suspend" }} tone="danger">
-                        Suspend
-                      </ActionButton>
-                    )}
-                  </div>
+                  <GymActions gym={gym} />
                 </div>
               </li>
             );

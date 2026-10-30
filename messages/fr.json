@@ -1995,6 +1995,10 @@
       "title": "{gym} est de retour",
       "body": "Votre fiche est restaurée en brouillon. Vérifiez-la et republiez-la depuis le profil de la salle."
     },
+    "gymTransferred": {
+      "title": "{gym} est maintenant à vous",
+      "body": "Un administrateur a transféré ce studio sur votre compte. Gérez-le depuis le profil de la salle."
+    },
     "postRemoved": {
       "title": "Une de vos publications a été supprimée",
       "body": "Elle enfreignait nos règles de la communauté après des signalements de membres."
@@ -2040,6 +2044,34 @@
       "heading": "Rejoignez {gym} sur Fit Planet",
       "body": "{name} vous invite à enregistrer les membres chez {gym}. Ouvrez le lien sous sept jours et connectez-vous avec cette adresse e-mail.",
       "cta": "Accepter l'invitation"
+    },
+    "suspension": {
+      "accountSubject": "Votre compte Fit Planet est suspendu",
+      "accountHeading": "Votre compte est suspendu",
+      "accountBody": "Nous avons suspendu votre compte Fit Planet. Tant qu'il est suspendu, vous ne pouvez ni vous connecter ni réserver de pass.",
+      "gymSubject": "{gym} est suspendu sur Fit Planet",
+      "gymHeading": "{gym} est suspendu",
+      "gymBody": "Nous avons masqué {gym} sur Fit Planet pendant la suspension. Les membres ne peuvent ni le trouver ni le réserver.",
+      "reason": "Motif",
+      "appeal": "Si vous pensez qu'il s'agit d'une erreur, contactez le support Fit Planet et nous réexaminerons la situation.",
+      "accountRestoredSubject": "Votre compte Fit Planet est de nouveau actif",
+      "accountRestoredBody": "Votre compte n'est plus suspendu. Vous pouvez de nouveau vous connecter et réserver des pass.",
+      "gymRestoredSubject": "{gym} n'est plus suspendu",
+      "gymRestoredBody": "Votre annonce est revenue en brouillon. Vérifiez-la et publiez-la à nouveau depuis le profil de la salle.",
+      "signIn": "Se connecter",
+      "openStudio": "Ouvrir le profil de la salle"
+    },
+    "reasons": {
+      "spam": "Spam ou fausse activité",
+      "fakeAccount": "Compte faux ou usurpation d'identité",
+      "harassment": "Comportement harcelant ou abusif",
+      "fakeListing": "Annonce fausse ou invérifiable",
+      "misleading": "Photos, prix ou informations trompeurs",
+      "safety": "Plaintes liées à la sécurité ou à l'hygiène",
+      "complaints": "Plaintes répétées de membres",
+      "fraud": "Fraude au paiement ou rétrofacturations",
+      "terms": "Non-respect de nos conditions d'utilisation",
+      "other": "Autre"
     }
   },
   "exerciseInfo": {

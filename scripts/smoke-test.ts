@@ -20,7 +20,21 @@ import { addDays, todayIn } from "@/lib/dates";
 import { createHash, randomBytes } from "node:crypto";
 import { registerWithPassword } from "@/server/modules/users";
 import { acceptInvite, inviteStaff } from "@/server/modules/team";
-import { setUserSuspended } from "@/server/modules/admin";
+import {
+  adminBookings,
+  adminCancelBooking,
+  adminGrowth,
+  adminGymDetail,
+  adminUpdateGym,
+  adminUserDetail,
+  deleteGym,
+  moderateGym,
+  setUserAdmin,
+  setUserSuspended,
+  suspendGym,
+  transferGym,
+} from "@/server/modules/admin";
+import { ObjectId } from "mongodb";
 import { deleteAccount, deletionBlocker, exportAccount } from "@/server/modules/privacy";
 
 async function main() {
@@ -155,12 +169,62 @@ async function main() {
   assert.equal(await deletionBlocker(staffUser._id), null, "staff can delete their account");
   assert.equal(await deletionBlocker(owner._id), "runsGym", "owners can't delete while running a gym");
 
-  // Admin: suspending ends access and is logged
-  await setUserSuspended(owner, staffUser._id, true, "smoke");
-  assert((await users.findOne({ _id: staffUser._id }))?.suspendedAt, "suspended");
-  assert(await (await collections.adminLog()).findOne({ targetId: staffUser._id, action: "user.suspend" }), "suspension logged");
-  await assert.rejects(setUserSuspended(owner, owner._id, true), /cannotSuspendSelf/, "admins can't suspend themselves");
-  await setUserSuspended(owner, staffUser._id, false);
+  // Admin: suspending ends access, keeps the reason and is logged
+  await setUserSuspended(owner, staffUser._id, { reason: "other", details: "smoke test" });
+  const suspended = await users.findOne({ _id: staffUser._id });
+  assert(suspended?.suspendedAt && suspended.suspension?.details === "smoke test", "suspended with reason");
+  assert(await (await collections.adminLog()).findOne({ targetId: staffUser._id, action: "user.suspend", note: "smoke test" }), "suspension logged");
+  await assert.rejects(setUserSuspended(owner, owner._id, { reason: "spam" }), /cannotSuspendSelf/, "admins can't suspend themselves");
+  await setUserSuspended(owner, staffUser._id, null);
+  assert(!(await users.findOne({ _id: staffUser._id }))?.suspension, "reason cleared on restore");
+
+  // Admin: sample studios can be hidden, suspended with a reason and deleted; real ones with sales can't be deleted
+  const gymsCol = await collections.gyms();
+  const sample = await gymsCol.findOne({ isDemo: true, status: "published" });
+  assert(sample, "seed marks sample studios");
+  await moderateGym(owner, sample._id, "hide");
+  assert.equal((await gymsCol.findOne({ _id: sample._id }))?.status, "draft", "hidden from the site");
+  await moderateGym(owner, sample._id, "publish");
+  await suspendGym(owner, sample._id, { reason: "misleading", details: "Photos are from another gym" });
+  assert.equal((await gymsCol.findOne({ _id: sample._id }))?.suspension?.reason, "misleading", "gym suspension reason stored");
+  await moderateGym(owner, sample._id, "restore");
+  const restoredGym = await gymsCol.findOne({ _id: sample._id });
+  assert(restoredGym?.status === "draft" && !restoredGym.suspension, "gym restored as draft without reason");
+  await moderateGym(owner, sample._id, "publish");
+  await assert.rejects(deleteGym(owner, home._id), /gymHasBookings/, "gyms with sales can't be deleted");
+  const temp = { ...sample, _id: new ObjectId(), slug: `${sample.slug}-smoke-${Date.now()}` };
+  await gymsCol.insertOne(temp);
+  await deleteGym(owner, temp._id);
+  assert.equal(await gymsCol.countDocuments({ _id: temp._id }), 0, "sample studio deleted");
+
+  // Admin: account and studio views, admin access, listing edits and ownership moves
+  const memberView = await adminUserDetail(member._id);
+  assert(memberView && memberView.bookings.length > 0 && !("passwordHash" in memberView.user), "account view without password hash");
+  await setUserAdmin(owner, staffUser._id, true);
+  assert((await users.findOne({ _id: staffUser._id }))?.roles?.includes("admin"), "admin granted");
+  await setUserAdmin(owner, staffUser._id, false);
+  const revoked = await users.findOne({ _id: staffUser._id });
+  assert(!revoked?.roles?.includes("admin") && revoked?.sessionsValidFrom, "admin removed and signed out");
+  await assert.rejects(setUserAdmin(owner, owner._id, false), /cannotChangeOwnAccess/, "admins can't remove their own access");
+
+  const gymView = await adminGymDetail(home._id);
+  assert(gymView?.owner?._id.equals(owner._id) && gymView.staff.some((s) => s._id.equals(staffUser._id)), "studio view lists owner and staff");
+  const edit = { ...home.address, name: home.name, description: home.description, capacity: home.capacity.max, ...home.pricing, phone: "+1 555 0100" };
+  assert.equal(await adminUpdateGym(owner, home._id, edit, "smoke"), home.slug, "edit keeps the slug");
+  assert.equal((await (await collections.gyms()).findOne({ _id: home._id }))?.contact?.phone, "+1 555 0100", "edit saved");
+
+  await transferGym(owner, home._id, staffEmail);
+  const moved = await (await collections.gyms()).findOne({ _id: home._id });
+  assert(moved?.ownerId.equals(staffUser._id) && moved.staffIds?.some((id) => id.equals(owner._id)), "new owner, old owner kept as staff");
+  await transferGym(owner, home._id, "owner@fitplanet.dev");
+  assert((await (await collections.gyms()).findOne({ _id: home._id }))?.ownerId.equals(owner._id), "moved back");
+  await assert.rejects(transferGym(owner, home._id, "nobody@fitplanet.dev"), /accountNotFound/, "transfer needs an account");
+
+  assert((await adminBookings("all", deskDoc!.code)).some((r) => r.booking._id.equals(deskDoc!._id)), "booking search by code");
+  await adminCancelBooking(owner, aheadDoc!._id, "smoke");
+  assert.equal((await bookings.findOne({ _id: aheadDoc!._id }))?.status, "cancelled", "admin cancelled a desk pass");
+  await assert.rejects(adminCancelBooking(owner, aheadDoc!._id), /onlyConfirmedCancel/, "cancel happens once");
+  assert.equal((await adminGrowth()).series.length, 30, "growth covers 30 days");
 
   // Privacy: export leaves out secrets; deletion erases the account and its social traces
   const exported = await exportAccount(member._id);

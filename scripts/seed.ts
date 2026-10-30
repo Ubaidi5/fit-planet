@@ -7,16 +7,14 @@
  */
 import { ObjectId } from "mongodb";
 import bcrypt from "bcryptjs";
-import { mockGyms } from "@/lib/data/mock-gyms";
-import { getGymDetails, generateDefaultDetails } from "@/lib/data/mock-gym-details";
 import { addDays, todayIn } from "@/lib/dates";
 import { getMongoClient } from "@/server/db/client";
 import { collections, ensureIndexes } from "@/server/db/collections";
-import type { BookingDoc, CheckinDoc, GymDoc, UserDoc } from "@/server/db/models";
+import type { BookingDoc, CheckinDoc, UserDoc } from "@/server/db/models";
 import { generatePassCode } from "@/server/modules/bookings";
-import { refreshRating } from "@/server/modules/gyms";
 import { ensureHandle } from "@/server/modules/social";
 import { routineTemplates } from "@/lib/data/exercises";
+import { SAMPLE_OWNER_ID, upsertDemoGyms } from "./lib/demo-gyms";
 
 const PASSWORD = process.env.SEED_PASSWORD || "fitplanet123";
 const withActivity = !process.argv.includes("--no-activity");
@@ -41,76 +39,9 @@ async function main() {
   const owner = await upsertUser("owner@fitplanet.dev", "Kamran Owner", ["member", "owner"]);
   const member = await upsertUser("member@fitplanet.dev", "Muhammad Ali", ["member"]);
   const gyms = await collections.gyms();
-  const reviews = await collections.reviews();
 
-  const gymIds: ObjectId[] = [];
-  for (const [index, gym] of mockGyms.entries()) {
-    const details = getGymDetails(gym.id) ?? generateDefaultDetails(gym);
-    const now = new Date();
-    const doc: Omit<GymDoc, "_id"> = {
-      // The demo owner runs the first gym; the rest belong to a placeholder owner id
-      ownerId: index === 0 ? owner._id : new ObjectId("000000000000000000000001"),
-      status: "published",
-      name: gym.name,
-      slug: gym.slug,
-      description: gym.description,
-      longDescription: details.longDescription,
-      coverImage: gym.coverImage,
-      images: [...new Set([gym.coverImage, ...gym.images, ...details.gallery.map((g) => g.url)])],
-      address: gym.address,
-      country: gym.country,
-      currency: gym.currency,
-      timezone: gym.timezone,
-      location: { type: "Point", coordinates: [gym.location.lng, gym.location.lat] },
-      pricing: { ...gym.pricing, annualPass: details.annualPass },
-      amenities: gym.amenities,
-      equipmentTypes: gym.equipmentTypes,
-      hours: gym.hours,
-      operatingHours: details.operatingHours,
-      capacity: { max: gym.capacity.max },
-      equipment: details.equipment,
-      trainers: details.trainers,
-      classes: details.classes,
-      addOns: details.addOns,
-      policies: details.policies,
-      contact: details.contact,
-      rating: gym.rating,
-      totalReviews: gym.totalReviews,
-      ratingBreakdown: details.ratingBreakdown,
-      isVerified: gym.isVerified,
-      isFeatured: gym.isFeatured,
-      createdAt: now,
-      updatedAt: now,
-    };
-    const { createdAt, ...updatable } = doc;
-    await gyms.updateOne({ slug: gym.slug }, { $set: updatable, $setOnInsert: { _id: new ObjectId(), createdAt } }, { upsert: true });
-    const saved = (await gyms.findOne({ slug: gym.slug }))!;
-    gymIds.push(saved._id);
-
-    if (details.reviews.length > 0 && (await reviews.countDocuments({ gymId: saved._id })) === 0) {
-      await reviews.insertMany(
-        details.reviews.map((r) => ({
-          _id: new ObjectId(),
-          gymId: saved._id,
-          userId: null,
-          authorName: r.userName,
-          authorImage: r.userAvatar ?? null,
-          rating: r.rating,
-          title: r.title,
-          comment: r.comment,
-          categories: r.categories,
-          isVerified: r.isVerified,
-          helpful: r.helpful,
-          reply: r.gymResponse ? { text: r.gymResponse.response, at: new Date(r.gymResponse.date) } : undefined,
-          createdAt: new Date(r.date),
-        })),
-      );
-      // Keep the headline review count from the demo data, but refresh breakdowns
-      const totals = { rating: saved.rating, totalReviews: saved.totalReviews };
-      await refreshRating(saved._id);
-      await gyms.updateOne({ _id: saved._id }, { $set: totals });
-    }
-  }
+  // The demo owner runs the first gym and it behaves like a real one; the rest are samples
+  const gymIds = await upsertDemoGyms((index) => (index === 0 ? { ownerId: owner._id, isDemo: false } : { ownerId: SAMPLE_OWNER_ID, isDemo: true }));
   console.log(`✓ ${gymIds.length} gyms`);
 
   if (withActivity) {

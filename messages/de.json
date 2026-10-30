@@ -1995,6 +1995,10 @@
       "title": "{gym} ist zurück",
       "body": "Dein Eintrag wurde als Entwurf wiederhergestellt. Prüfe ihn und veröffentliche ihn erneut im Gym-Profil."
     },
+    "gymTransferred": {
+      "title": "{gym} gehört jetzt dir",
+      "body": "Ein Admin hat dieses Studio auf dein Konto übertragen. Verwalte es unter Studioprofil."
+    },
     "postRemoved": {
       "title": "Ein Beitrag von dir wurde entfernt",
       "body": "Er hat nach Meldungen von Mitgliedern gegen unsere Community-Richtlinien verstoßen."
@@ -2040,6 +2044,34 @@
       "heading": "Tritt {gym} auf Fit Planet bei",
       "body": "{name} hat dich eingeladen, Mitglieder bei {gym} einzuchecken. Öffne den Link innerhalb von sieben Tagen und melde dich mit dieser E-Mail-Adresse an.",
       "cta": "Einladung annehmen"
+    },
+    "suspension": {
+      "accountSubject": "Dein Fit Planet Konto ist gesperrt",
+      "accountHeading": "Dein Konto ist gesperrt",
+      "accountBody": "Wir haben dein Fit Planet Konto gesperrt. Solange die Sperre gilt, kannst du dich nicht anmelden und keine Pässe buchen.",
+      "gymSubject": "{gym} ist auf Fit Planet gesperrt",
+      "gymHeading": "{gym} ist gesperrt",
+      "gymBody": "Wir haben {gym} auf Fit Planet ausgeblendet, solange die Sperre gilt. Mitglieder können das Studio weder finden noch buchen.",
+      "reason": "Grund",
+      "appeal": "Wenn du denkst, dass das ein Fehler ist, wende dich an den Fit Planet Support. Wir prüfen es dann erneut.",
+      "accountRestoredSubject": "Dein Fit Planet Konto ist wieder aktiv",
+      "accountRestoredBody": "Dein Konto ist nicht mehr gesperrt. Du kannst dich wieder anmelden und Pässe buchen.",
+      "gymRestoredSubject": "{gym} ist nicht mehr gesperrt",
+      "gymRestoredBody": "Dein Eintrag ist wieder als Entwurf da. Prüfe ihn und veröffentliche ihn erneut unter Studioprofil.",
+      "signIn": "Anmelden",
+      "openStudio": "Studioprofil öffnen"
+    },
+    "reasons": {
+      "spam": "Spam oder gefälschte Aktivität",
+      "fakeAccount": "Gefälschtes Konto oder Identitätsmissbrauch",
+      "harassment": "Belästigendes oder beleidigendes Verhalten",
+      "fakeListing": "Gefälschter oder nicht überprüfbarer Eintrag",
+      "misleading": "Irreführende Fotos, Preise oder Angaben",
+      "safety": "Beschwerden zu Sicherheit oder Hygiene",
+      "complaints": "Wiederholte Beschwerden von Mitgliedern",
+      "fraud": "Zahlungsbetrug oder Rückbuchungen",
+      "terms": "Verstoß gegen unsere Nutzungsbedingungen",
+      "other": "Sonstiges"
     }
   },
   "exerciseInfo": {
