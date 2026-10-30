@@ -306,10 +306,9 @@ export async function transferGym(admin: UserDoc, gymId: ObjectId, newOwnerEmail
   if (next._id.equals(gym.ownerId)) return;
   const now = new Date();
   // The old owner stays on as staff so the front desk keeps working until the new owner decides
-  await gyms.updateOne(
-    { _id: gymId },
-    { $set: { ownerId: next._id, updatedAt: now }, $addToSet: { staffIds: gym.ownerId }, $pull: { staffIds: next._id } },
-  );
+  // One $set, since Mongo refuses $addToSet and $pull on the same array in a single update
+  const staffIds = [...(gym.staffIds ?? []).filter((id) => !id.equals(next._id) && !id.equals(gym.ownerId)), gym.ownerId];
+  await gyms.updateOne({ _id: gymId }, { $set: { ownerId: next._id, staffIds, updatedAt: now } });
   await users.updateOne({ _id: next._id }, { $addToSet: { roles: "owner" }, $set: { updatedAt: now } });
   await log(admin._id, "gym.transfer", "gym", gymId, `to ${next.email}`);
   await notify(next._id, { type: "system", key: "gymTransferred", params: { gym: gym.name }, link: "/studio/profile" });
