@@ -2,7 +2,7 @@ import "server-only";
 import { cookies, headers } from "next/headers";
 import { env } from "@/server/env";
 import { clientIp } from "@/server/rate-limit";
-import { CONSENT_COOKIE, parseConsent, type Consent, type TrackingConfig } from "@/lib/analytics/consent";
+import { CONSENT_COOKIE, parseConsent, withPrivacySignal, type Consent, type TrackingConfig } from "@/lib/analytics/consent";
 import { EVENTS_COOKIE, eventIds, type AnalyticsEvent } from "@/lib/analytics/events";
 import { sendConversion, type Attribution } from "@/server/services/conversions";
 
@@ -12,9 +12,20 @@ export function trackingConfig(): TrackingConfig {
   return { gtmId: t.gtmId, ga4Id: t.ga4Id, metaPixelId: t.meta.pixelId, openaiPixelId: t.openai.pixelId };
 }
 
+/** Whether the browser sends the Global Privacy Control signal */
+export async function readPrivacySignal(): Promise<boolean> {
+  try {
+    return (await headers()).get("sec-gpc") === "1";
+  } catch {
+    return false;
+  }
+}
+
+/** The saved choice, with advertising off when the browser sends GPC */
 export async function readConsent(): Promise<Consent | null> {
   try {
-    return parseConsent((await cookies()).get(CONSENT_COOKIE)?.value);
+    const [jar, gpc] = await Promise.all([cookies(), readPrivacySignal()]);
+    return withPrivacySignal(parseConsent(jar.get(CONSENT_COOKIE)?.value), gpc);
   } catch {
     return null;
   }

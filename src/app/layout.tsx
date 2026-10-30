@@ -10,7 +10,7 @@ import { ToastProvider } from "@/components/notifications/ToastProvider";
 import { Suspense } from "react";
 import { Analytics } from "@/components/analytics/Analytics";
 import { auth } from "@/lib/auth";
-import { readConsent, trackingConfig } from "@/server/tracking";
+import { readConsent, readPrivacySignal, trackingConfig } from "@/server/tracking";
 import { MonitoringInit } from "@/components/monitoring/MonitoringInit";
 import { serverRelease } from "@/server/release";
 
@@ -47,7 +47,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [region, messages, consent, session] = await Promise.all([getRegion(), getMessages(), readConsent(), auth().catch(() => null)]);
+  const [region, messages, consent, gpc, session] = await Promise.all([getRegion(), getMessages(), readConsent(), readPrivacySignal(), auth().catch(() => null)]);
   return (
     <html lang={region.locale} dir={region.dir} className="scroll-pt-24" suppressHydrationWarning>
       <body
@@ -57,7 +57,7 @@ export default async function RootLayout({
           <LocaleProvider initialRegion={region.code}>
             <ToastProvider>{children}</ToastProvider>
             <Suspense>
-              <Analytics config={trackingConfig()} initialConsent={consent} userId={session?.user?.id} />
+              <Analytics config={trackingConfig()} initialConsent={consent} privacySignal={gpc} userId={session?.user?.id} />
             </Suspense>
             <MonitoringInit config={{ ...env.monitoring, release: serverRelease() }} />
           </LocaleProvider>
