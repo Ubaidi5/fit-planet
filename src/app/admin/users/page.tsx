@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { requireAdmin } from "@/server/session";
 import { adminUsers } from "@/server/modules/admin";
@@ -17,7 +18,7 @@ export default async function AdminUsersPage({ searchParams }: { searchParams: P
 
   return (
     <>
-      <PageTitle title="Users" text="Find an account and suspend it if needed. Suspending signs it out everywhere." />
+      <PageTitle title="Users" text="Find an account, open it for the full picture, and suspend it if needed. Suspending signs it out everywhere." />
       <SearchBar q={q} placeholder="Search email, name or @handle">
         {suspendedOnly && <input type="hidden" name="filter" value="suspended" />}
       </SearchBar>
@@ -40,7 +41,9 @@ export default async function AdminUsersPage({ searchParams }: { searchParams: P
               <li key={id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:px-5">
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="truncate text-[15px] font-semibold text-ink">{u.name || "No name"}</span>
+                    <Link href={`/admin/users/${id}`} className="truncate text-[15px] font-semibold text-ink hover:underline">
+                      {u.name || "No name"}
+                    </Link>
                     {u.handle && <span className="text-sm text-gray-500">@{u.handle}</span>}
                     {u.roles?.includes("owner") && <Pill tone="blue">Owner</Pill>}
                     {u.roles?.includes("admin") && <Pill tone="amber">Admin</Pill>}

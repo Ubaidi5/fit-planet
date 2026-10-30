@@ -20,7 +20,17 @@ import { addDays, todayIn } from "@/lib/dates";
 import { createHash, randomBytes } from "node:crypto";
 import { registerWithPassword } from "@/server/modules/users";
 import { acceptInvite, inviteStaff } from "@/server/modules/team";
-import { setUserSuspended } from "@/server/modules/admin";
+import {
+  adminBookings,
+  adminCancelBooking,
+  adminGrowth,
+  adminGymDetail,
+  adminUpdateGym,
+  adminUserDetail,
+  setUserAdmin,
+  setUserSuspended,
+  transferGym,
+} from "@/server/modules/admin";
 import { deleteAccount, deletionBlocker, exportAccount } from "@/server/modules/privacy";
 
 async function main() {
@@ -161,6 +171,35 @@ async function main() {
   assert(await (await collections.adminLog()).findOne({ targetId: staffUser._id, action: "user.suspend" }), "suspension logged");
   await assert.rejects(setUserSuspended(owner, owner._id, true), /cannotSuspendSelf/, "admins can't suspend themselves");
   await setUserSuspended(owner, staffUser._id, false);
+
+  // Admin: account and studio views, admin access, listing edits and ownership moves
+  const memberView = await adminUserDetail(member._id);
+  assert(memberView && memberView.bookings.length > 0 && !("passwordHash" in memberView.user), "account view without password hash");
+  await setUserAdmin(owner, staffUser._id, true);
+  assert((await users.findOne({ _id: staffUser._id }))?.roles?.includes("admin"), "admin granted");
+  await setUserAdmin(owner, staffUser._id, false);
+  const revoked = await users.findOne({ _id: staffUser._id });
+  assert(!revoked?.roles?.includes("admin") && revoked?.sessionsValidFrom, "admin removed and signed out");
+  await assert.rejects(setUserAdmin(owner, owner._id, false), /cannotChangeOwnAccess/, "admins can't remove their own access");
+
+  const gymView = await adminGymDetail(home._id);
+  assert(gymView?.owner?._id.equals(owner._id) && gymView.staff.some((s) => s._id.equals(staffUser._id)), "studio view lists owner and staff");
+  const edit = { ...home.address, name: home.name, description: home.description, capacity: home.capacity.max, ...home.pricing, phone: "+1 555 0100" };
+  assert.equal(await adminUpdateGym(owner, home._id, edit, "smoke"), home.slug, "edit keeps the slug");
+  assert.equal((await (await collections.gyms()).findOne({ _id: home._id }))?.contact?.phone, "+1 555 0100", "edit saved");
+
+  await transferGym(owner, home._id, staffEmail);
+  const moved = await (await collections.gyms()).findOne({ _id: home._id });
+  assert(moved?.ownerId.equals(staffUser._id) && moved.staffIds?.some((id) => id.equals(owner._id)), "new owner, old owner kept as staff");
+  await transferGym(owner, home._id, "owner@fitplanet.dev");
+  assert((await (await collections.gyms()).findOne({ _id: home._id }))?.ownerId.equals(owner._id), "moved back");
+  await assert.rejects(transferGym(owner, home._id, "nobody@fitplanet.dev"), /accountNotFound/, "transfer needs an account");
+
+  assert((await adminBookings("all", deskDoc!.code)).some((r) => r.booking._id.equals(deskDoc!._id)), "booking search by code");
+  await adminCancelBooking(owner, aheadDoc!._id, "smoke");
+  assert.equal((await bookings.findOne({ _id: aheadDoc!._id }))?.status, "cancelled", "admin cancelled a desk pass");
+  await assert.rejects(adminCancelBooking(owner, aheadDoc!._id), /onlyConfirmedCancel/, "cancel happens once");
+  assert.equal((await adminGrowth()).series.length, 30, "growth covers 30 days");
 
   // Privacy: export leaves out secrets; deletion erases the account and its social traces
   const exported = await exportAccount(member._id);

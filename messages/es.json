@@ -1995,6 +1995,10 @@
       "title": "{gym} ha vuelto",
       "body": "Tu ficha se ha restaurado como borrador. Revísala y vuelve a publicarla desde el perfil del gimnasio."
     },
+    "gymTransferred": {
+      "title": "{gym} ahora es tuyo",
+      "body": "Un administrador ha pasado este estudio a tu cuenta. Gestiónalo desde el perfil del gimnasio."
+    },
     "postRemoved": {
       "title": "Se ha eliminado una de tus publicaciones",
       "body": "Incumplía nuestras normas de la comunidad tras las denuncias de otros miembros."

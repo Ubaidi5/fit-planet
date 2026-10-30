@@ -1995,6 +1995,10 @@
       "title": "{gym} is back",
       "body": "Your listing is restored as a draft. Check it and publish it again from Gym profile."
     },
+    "gymTransferred": {
+      "title": "{gym} is now yours",
+      "body": "An admin moved this studio to your account. Manage it from Gym profile."
+    },
     "postRemoved": {
       "title": "A post of yours was removed",
       "body": "It broke our community guidelines after members reported it."

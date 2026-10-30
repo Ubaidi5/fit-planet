@@ -2,8 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { requireAdmin } from "@/server/session";
 import { adminGyms, type GymFilter } from "@/server/modules/admin";
-import { moderateGymAction } from "@/actions/admin";
-import { ActionButton, Empty, FilterLinks, PageTitle, Pill, SearchBar } from "@/components/admin/bits";
+import { Empty, FilterLinks, PageTitle, Pill, SearchBar } from "@/components/admin/bits";
+import { GymActions, GymStatusPill } from "@/components/admin/GymActions";
 
 export const metadata: Metadata = { title: "Gyms" };
 
@@ -42,12 +42,10 @@ export default async function AdminGymsPage({ searchParams }: { searchParams: Pr
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <Link href={`/gyms/${gym.slug}`} target="_blank" className="truncate text-[15px] font-semibold text-ink hover:underline">
+                      <Link href={`/admin/gyms/${id}`} className="truncate text-[15px] font-semibold text-ink hover:underline">
                         {gym.name}
                       </Link>
-                      <Pill tone={gym.status === "published" ? "green" : gym.status === "suspended" ? "red" : "gray"}>
-                        {gym.status === "published" ? "Live" : gym.status === "suspended" ? "Suspended" : "Draft"}
-                      </Pill>
+                      <GymStatusPill status={gym.status} />
                       {gym.isVerified && <Pill tone="blue">Verified</Pill>}
                       {gym.isFeatured && <Pill tone="amber">Featured</Pill>}
                     </div>
@@ -58,27 +56,7 @@ export default async function AdminGymsPage({ searchParams }: { searchParams: Pr
                       Owner: {owner?.name ?? "Unknown"} {owner?.email && <span className="text-gray-400">({owner.email})</span>}
                     </p>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {gym.status !== "suspended" && (
-                      <ActionButton action={moderateGymAction} fields={{ gymId: id, action: gym.isVerified ? "unverify" : "verify" }} tone={gym.isVerified ? "default" : "primary"}>
-                        {gym.isVerified ? "Unverify" : "Verify"}
-                      </ActionButton>
-                    )}
-                    {gym.status === "published" && (
-                      <ActionButton action={moderateGymAction} fields={{ gymId: id, action: gym.isFeatured ? "unfeature" : "feature" }}>
-                        {gym.isFeatured ? "Unfeature" : "Feature"}
-                      </ActionButton>
-                    )}
-                    {gym.status === "suspended" ? (
-                      <ActionButton action={moderateGymAction} fields={{ gymId: id, action: "restore" }}>
-                        Restore as draft
-                      </ActionButton>
-                    ) : (
-                      <ActionButton action={moderateGymAction} fields={{ gymId: id, action: "suspend" }} tone="danger">
-                        Suspend
-                      </ActionButton>
-                    )}
-                  </div>
+                  <GymActions gym={gym} />
                 </div>
               </li>
             );

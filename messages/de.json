@@ -1995,6 +1995,10 @@
       "title": "{gym} ist zurück",
       "body": "Dein Eintrag wurde als Entwurf wiederhergestellt. Prüfe ihn und veröffentliche ihn erneut im Gym-Profil."
     },
+    "gymTransferred": {
+      "title": "{gym} gehört jetzt dir",
+      "body": "Ein Admin hat dieses Studio auf dein Konto übertragen. Verwalte es unter Studioprofil."
+    },
     "postRemoved": {
       "title": "Ein Beitrag von dir wurde entfernt",
       "body": "Er hat nach Meldungen von Mitgliedern gegen unsere Community-Richtlinien verstoßen."

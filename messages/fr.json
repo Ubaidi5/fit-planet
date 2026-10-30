@@ -1995,6 +1995,10 @@
       "title": "{gym} est de retour",
       "body": "Votre fiche est restaurée en brouillon. Vérifiez-la et republiez-la depuis le profil de la salle."
     },
+    "gymTransferred": {
+      "title": "{gym} est maintenant à vous",
+      "body": "Un administrateur a transféré ce studio sur votre compte. Gérez-le depuis le profil de la salle."
+    },
     "postRemoved": {
       "title": "Une de vos publications a été supprimée",
       "body": "Elle enfreignait nos règles de la communauté après des signalements de membres."

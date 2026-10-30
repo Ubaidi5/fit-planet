@@ -299,7 +299,7 @@ export interface AdminLogDoc {
   _id: ObjectId;
   adminId: ObjectId;
   action: string;
-  targetType: "gym" | "user" | "post";
+  targetType: "gym" | "user" | "post" | "booking";
   targetId: ObjectId;
   note?: string;
   at: Date;

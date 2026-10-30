@@ -1995,6 +1995,10 @@
       "title": "{gym} geri döndü",
       "body": "İlanın taslak olarak geri yüklendi. Kontrol et ve salon profilinden yeniden yayınla."
     },
+    "gymTransferred": {
+      "title": "{gym} artık senin",
+      "body": "Bir yönetici bu stüdyoyu hesabına aktardı. Spor salonu profilinden yönetebilirsin."
+    },
     "postRemoved": {
       "title": "Bir gönderin kaldırıldı",
       "body": "Üyelerin şikâyetleri sonrası topluluk kurallarımızı ihlal ettiği görüldü."
