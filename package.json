@@ -13,6 +13,7 @@
     "typecheck": "bun --bun tsc --noEmit",
     "lint": "bun --bun eslint .",
     "db:seed": "bun --conditions=react-server scripts/seed.ts",
+    "db:demo-studios": "bun --conditions=react-server scripts/demo-studios.ts",
     "test:smoke": "bun --conditions=react-server scripts/smoke-test.ts",
     "i18n:check": "bun scripts/check-messages.ts"
   },

@@ -2044,6 +2044,34 @@
       "heading": "Join {gym} on Fit Planet",
       "body": "{name} invited you to check members in at {gym}. Open the link within seven days and sign in with this email address.",
       "cta": "Accept invite"
+    },
+    "suspension": {
+      "accountSubject": "Your Fit Planet account is suspended",
+      "accountHeading": "Your account is suspended",
+      "accountBody": "We have suspended your Fit Planet account. You can't sign in or book passes while it is suspended.",
+      "gymSubject": "{gym} is suspended on Fit Planet",
+      "gymHeading": "{gym} is suspended",
+      "gymBody": "We have hidden {gym} from Fit Planet while it is suspended. Members can't find or book it.",
+      "reason": "Reason",
+      "appeal": "If you think this is a mistake, contact Fit Planet support and we will look at it again.",
+      "accountRestoredSubject": "Your Fit Planet account is active again",
+      "accountRestoredBody": "Your account is no longer suspended. You can sign in and book passes again.",
+      "gymRestoredSubject": "{gym} is no longer suspended",
+      "gymRestoredBody": "Your listing is back as a draft. Check it and publish it again from Gym profile.",
+      "signIn": "Sign in",
+      "openStudio": "Open Gym profile"
+    },
+    "reasons": {
+      "spam": "Spam or fake activity",
+      "fakeAccount": "Fake or impersonating account",
+      "harassment": "Harassing or abusive behaviour",
+      "fakeListing": "Fake or unverifiable listing",
+      "misleading": "Misleading photos, prices or details",
+      "safety": "Safety or hygiene complaints",
+      "complaints": "Repeated member complaints",
+      "fraud": "Payment fraud or chargebacks",
+      "terms": "Breaking our terms of service",
+      "other": "Other"
     }
   },
   "exerciseInfo": {

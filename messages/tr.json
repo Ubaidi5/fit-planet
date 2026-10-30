@@ -2044,6 +2044,34 @@
       "heading": "Fit Planet'te {gym} ekibine katıl",
       "body": "{name} seni {gym} salonunda üyeleri giriş yaptırmak için davet etti. Bağlantıyı yedi gün içinde aç ve bu e-posta adresiyle giriş yap.",
       "cta": "Daveti kabul et"
+    },
+    "suspension": {
+      "accountSubject": "Fit Planet hesabın askıya alındı",
+      "accountHeading": "Hesabın askıya alındı",
+      "accountBody": "Fit Planet hesabını askıya aldık. Askıda olduğu sürece giriş yapamaz ve pass satın alamazsın.",
+      "gymSubject": "{gym} Fit Planet'te askıya alındı",
+      "gymHeading": "{gym} askıya alındı",
+      "gymBody": "{gym} askıda olduğu sürece Fit Planet'te gizlendi. Üyeler onu bulamaz ve rezervasyon yapamaz.",
+      "reason": "Neden",
+      "appeal": "Bunun bir hata olduğunu düşünüyorsan Fit Planet destek ekibiyle iletişime geç, durumu yeniden inceleyelim.",
+      "accountRestoredSubject": "Fit Planet hesabın yeniden aktif",
+      "accountRestoredBody": "Hesabın artık askıda değil. Yeniden giriş yapabilir ve pass satın alabilirsin.",
+      "gymRestoredSubject": "{gym} artık askıda değil",
+      "gymRestoredBody": "İlanın taslak olarak geri geldi. Kontrol et ve Spor salonu profilinden yeniden yayınla.",
+      "signIn": "Giriş yap",
+      "openStudio": "Spor salonu profilini aç"
+    },
+    "reasons": {
+      "spam": "Spam veya sahte etkinlik",
+      "fakeAccount": "Sahte hesap veya kimliğe bürünme",
+      "harassment": "Taciz edici veya saldırgan davranış",
+      "fakeListing": "Sahte veya doğrulanamayan ilan",
+      "misleading": "Yanıltıcı fotoğraf, fiyat veya bilgiler",
+      "safety": "Güvenlik veya hijyen şikayetleri",
+      "complaints": "Üyelerden tekrarlanan şikayetler",
+      "fraud": "Ödeme dolandırıcılığı veya ters ibraz",
+      "terms": "Kullanım koşullarımızın ihlali",
+      "other": "Diğer"
     }
   },
   "exerciseInfo": {

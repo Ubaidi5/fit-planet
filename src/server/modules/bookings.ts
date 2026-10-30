@@ -106,7 +106,8 @@ export interface CreateBookingResult {
 export async function createBooking(input: CreateBookingInput): Promise<CreateBookingResult> {
   const gyms = await collections.gyms();
   const gym = await gyms.findOne({ _id: input.gymId });
-  if (!gym || gym.status !== "published") throw new BookingError("gymNotBooking");
+  // Sample studios are for show only: nobody should pay for a pass at a gym that may not exist
+  if (!gym || gym.status !== "published" || gym.isDemo) throw new BookingError("gymNotBooking");
 
   const today = todayIn(gym.timezone);
   if (!isIsoDate(input.startDate)) throw new BookingError("pickStartDate");

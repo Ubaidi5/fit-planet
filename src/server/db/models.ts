@@ -29,8 +29,19 @@ export interface UserDoc {
   sessionsValidFrom?: Date;
   /** Set by an admin; a suspended account can't sign in */
   suspendedAt?: Date;
+  suspension?: Suspension;
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+/** Why and when an admin suspended an account or a studio; cleared on restore */
+export interface Suspension {
+  /** A key from src/lib/suspension.ts */
+  reason: string;
+  /** The admin's own words, required for "other" */
+  details?: string;
+  at: Date;
+  by: ObjectId;
 }
 
 export interface SocialPrefs {
@@ -85,6 +96,9 @@ export interface GymDoc {
   ratingBreakdown?: { cleanliness: number; equipment: number; staff: number; value: number };
   isVerified: boolean;
   isFeatured: boolean;
+  /** Sample studio loaded by scripts/demo-studios.ts; the admin console can remove them all at once */
+  isDemo?: boolean;
+  suspension?: Suspension;
   createdAt: Date;
   updatedAt: Date;
 }

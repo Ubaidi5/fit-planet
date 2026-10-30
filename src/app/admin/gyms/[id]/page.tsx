@@ -4,10 +4,10 @@ import type { Metadata } from "next";
 import { requireAdmin } from "@/server/session";
 import { toObjectId } from "@/server/db/collections";
 import { adminGymDetail } from "@/server/modules/admin";
-import { adminUpdateGymAction, transferGymAction } from "@/actions/admin";
+import { adminUpdateGymAction, deleteGymAction, transferGymAction } from "@/actions/admin";
 import { formatMoney } from "@/lib/i18n/format";
-import { Empty, Panel, Pill } from "@/components/admin/bits";
-import { AdminForm, Field } from "@/components/admin/AdminForms";
+import { Empty, Panel, Pill, SuspensionNote } from "@/components/admin/bits";
+import { AdminForm, ConfirmForm, Field } from "@/components/admin/AdminForms";
 import { BookingRow } from "@/components/admin/BookingRow";
 import { GymActions, GymStatusPill } from "@/components/admin/GymActions";
 import { History } from "@/components/admin/History";
@@ -44,10 +44,12 @@ export default async function AdminGymPage({ params }: { params: Promise<{ id: s
               <GymStatusPill status={gym.status} />
               {gym.isVerified && <Pill tone="blue">Verified</Pill>}
               {gym.isFeatured && <Pill tone="amber">Featured</Pill>}
+              {gym.isDemo && <Pill>Sample</Pill>}
             </div>
             <p className="mt-1 text-gray-500">
               {[gym.address.area, gym.address.city, gym.country].filter(Boolean).join(", ")} · {gym.rating.toFixed(1)} from {gym.totalReviews} reviews
             </p>
+            <SuspensionNote suspension={gym.suspension} className="mt-2" />
             {gym.status === "published" && (
               <Link href={`/gyms/${gym.slug}`} target="_blank" className="mt-2 inline-block text-sm font-semibold text-emerald-700 hover:underline">
                 View public page ↗
@@ -131,7 +133,9 @@ export default async function AdminGymPage({ params }: { params: Promise<{ id: s
 
           <Panel>
             <h2 className="text-lg font-semibold text-ink">Move to a new owner</h2>
-            <p className="mt-0.5 text-sm text-gray-500">They need a Fit Planet account. The current owner stays on as staff.</p>
+            <p className="mt-0.5 text-sm text-gray-500">
+              {gym.isDemo ? "Hand this sample studio to a real gym owner. It stops being a sample." : "They need a Fit Planet account. The current owner stays on as staff."}
+            </p>
             <AdminForm action={transferGymAction} hidden={{ gymId }} submit="Move gym" className="mt-4">
               <Field label="New owner's email" name="email" type="email" required autoComplete="off" />
             </AdminForm>
@@ -153,6 +157,18 @@ export default async function AdminGymPage({ params }: { params: Promise<{ id: s
       </section>
 
       <History entries={data.history} />
+
+      <Panel className="ring-red-600/15">
+        <h2 className="text-lg font-semibold text-ink">Delete gym</h2>
+        <p className="mt-0.5 mb-4 text-sm text-gray-500">
+          {gym.isDemo || stats.bookings === 0
+            ? "Removes the listing with its reviews and check-ins for good. To take it off the site for now, use Hide from site instead."
+            : "This gym has sold passes, so its records stay for members and accounting. Hide or suspend it instead."}
+        </p>
+        {(gym.isDemo || stats.bookings === 0) && (
+          <ConfirmForm action={deleteGymAction} hidden={{ gymId }} label="Delete gym" confirm="Delete for good" warning={`${gym.name} and everything attached to it will be deleted. This can't be undone.`} />
+        )}
+      </Panel>
     </>
   );
 }

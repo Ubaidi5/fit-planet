@@ -13,11 +13,17 @@ Every key is described in [`.env.example`](./.env.example).
 | Session secret | `openssl rand -base64 32` | `AUTH_SECRET` |
 | Domain | Point an A record at the Lightsail static IP | `APP_URL=https://yourdomain.com` |
 
-Then load demo data once (optional). The database only listens on the server,
-so tunnel to it from your machine: `ssh -N -L 27018:127.0.0.1:27017 ubuntu@SERVER_IP`,
-then in another terminal run `bun run db:seed` with `DB_URI` set to the same URI
-but port `27018`. It creates `owner@fitplanet.dev` and
-`member@fitplanet.dev` (password `fitplanet123`, or `SEED_PASSWORD`).
+To show sample studios on the live site before real gyms join, load them once
+(optional). The database only listens on the server, so tunnel to it from your
+machine: `ssh -N -L 27018:127.0.0.1:27017 ubuntu@SERVER_IP`, then in another
+terminal run `bun run db:demo-studios` with `DB_URI` set to the same URI but
+port `27018`. It adds only gyms and their reviews, tagged as samples: no accounts
+and no bookings, and members can't buy passes at them. Remove them later in
+`/admin/gyms` under "Sample studios" (all at once, or hide them one by one).
+
+`bun run db:seed` is for local development only: it also creates
+`owner@fitplanet.dev` and `member@fitplanet.dev` with a known password
+(`fitplanet123`, or `SEED_PASSWORD`), so don't run it against production.
 
 ## 2. Firebase push notifications
 

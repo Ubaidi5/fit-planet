@@ -90,3 +90,41 @@ export function staffInviteEmail(to: string, data: { gym: string; inviter: strin
     }),
   };
 }
+
+/** Sent when an admin suspends an account or a studio; `gym` set means the studio */
+export function suspendedEmail(to: string, data: { gym?: string; reason: string }, t: Translate): EmailMessage {
+  const values = { gym: data.gym ?? "" };
+  const kind = data.gym ? "gym" : "account";
+  const heading = t(`suspension.${kind}Heading`, values);
+  const intro = t(`suspension.${kind}Body`, values);
+  const reason = `${t("suspension.reason")}: ${data.reason}`;
+  return {
+    to,
+    subject: t(`suspension.${kind}Subject`, values),
+    text: `${heading}\n\n${intro}\n\n${reason}\n\n${t("suspension.appeal")}`,
+    html: layout(t, {
+      preheader: reason,
+      heading,
+      body: `${escape(intro)}<br/><br/><strong>${escape(t("suspension.reason"))}:</strong> ${escape(data.reason)}<br/><br/>${escape(t("suspension.appeal"))}`,
+    }),
+  };
+}
+
+/** Sent when an admin lifts a suspension */
+export function restoredEmail(to: string, data: { gym?: string; url: string }, t: Translate): EmailMessage {
+  const values = { gym: data.gym ?? "" };
+  const kind = data.gym ? "gym" : "account";
+  const subject = t(`suspension.${kind}RestoredSubject`, values);
+  const body = t(`suspension.${kind}RestoredBody`, values);
+  return {
+    to,
+    subject,
+    text: `${body}\n\n${data.url}`,
+    html: layout(t, {
+      preheader: body,
+      heading: subject,
+      body: escape(body),
+      cta: { label: t(data.gym ? "suspension.openStudio" : "suspension.signIn"), url: data.url },
+    }),
+  };
+}

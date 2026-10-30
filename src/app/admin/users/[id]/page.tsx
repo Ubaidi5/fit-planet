@@ -4,10 +4,12 @@ import type { Metadata } from "next";
 import { isAdmin, requireAdmin } from "@/server/session";
 import { toObjectId } from "@/server/db/collections";
 import { adminUserDetail } from "@/server/modules/admin";
-import { setUserAdminAction, setUserSuspendedAction } from "@/actions/admin";
+import { setUserAdminAction, setUserSuspendedAction, suspendAction } from "@/actions/admin";
 import { env } from "@/server/env";
 import { formatMoney } from "@/lib/i18n/format";
-import { ActionButton, Empty, Panel, Pill } from "@/components/admin/bits";
+import { reasonsFor } from "@/lib/suspension";
+import { SuspendForm } from "@/components/admin/AdminForms";
+import { ActionButton, Empty, Panel, Pill, SuspensionNote } from "@/components/admin/bits";
 import { BookingRow } from "@/components/admin/BookingRow";
 import { History } from "@/components/admin/History";
 
@@ -64,17 +66,16 @@ export default async function AdminUserPage({ params }: { params: Promise<{ id: 
                 </ActionButton>
               )}
               {user.suspendedAt ? (
-                <ActionButton action={setUserSuspendedAction} fields={{ userId, suspend: "false" }}>
+                <ActionButton action={setUserSuspendedAction} fields={{ userId }}>
                   Restore account
                 </ActionButton>
               ) : (
-                <ActionButton action={setUserSuspendedAction} fields={{ userId, suspend: "true" }} tone="danger">
-                  Suspend
-                </ActionButton>
+                <SuspendForm action={suspendAction} target="user" id={userId} reasons={reasonsFor("user")} />
               )}
             </div>
           )}
         </div>
+        <SuspensionNote suspension={user.suspension} className="mt-3" />
         {viaEnv && <p className="mt-3 text-sm text-gray-500">Admin through ADMIN_EMAILS on the server, so it can’t be removed here.</p>}
 
         <dl className="mt-6 grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">

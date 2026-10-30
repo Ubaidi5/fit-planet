@@ -2,8 +2,10 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { requireAdmin } from "@/server/session";
 import { adminUsers } from "@/server/modules/admin";
-import { setUserSuspendedAction } from "@/actions/admin";
-import { ActionButton, Empty, FilterLinks, PageTitle, Pill, SearchBar } from "@/components/admin/bits";
+import { setUserSuspendedAction, suspendAction } from "@/actions/admin";
+import { reasonsFor } from "@/lib/suspension";
+import { SuspendForm } from "@/components/admin/AdminForms";
+import { ActionButton, Empty, FilterLinks, PageTitle, Pill, SearchBar, SuspensionNote } from "@/components/admin/bits";
 
 export const metadata: Metadata = { title: "Users" };
 
@@ -53,16 +55,15 @@ export default async function AdminUsersPage({ searchParams }: { searchParams: P
                     {u.email ?? "No email"} · joined {u.createdAt ? date.format(u.createdAt) : "unknown"}
                     {u.regionCode ? ` · ${u.regionCode}` : ""}
                   </p>
+                  <SuspensionNote suspension={u.suspension} className="mt-0.5 truncate" />
                 </div>
                 {!self &&
                   (u.suspendedAt ? (
-                    <ActionButton action={setUserSuspendedAction} fields={{ userId: id, suspend: "false" }}>
+                    <ActionButton action={setUserSuspendedAction} fields={{ userId: id }}>
                       Restore
                     </ActionButton>
                   ) : (
-                    <ActionButton action={setUserSuspendedAction} fields={{ userId: id, suspend: "true" }} tone="danger">
-                      Suspend
-                    </ActionButton>
+                    <SuspendForm action={suspendAction} target="user" id={id} reasons={reasonsFor("user")} />
                   ))}
               </li>
             );

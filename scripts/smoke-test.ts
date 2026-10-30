@@ -27,10 +27,14 @@ import {
   adminGymDetail,
   adminUpdateGym,
   adminUserDetail,
+  deleteGym,
+  moderateGym,
   setUserAdmin,
   setUserSuspended,
+  suspendGym,
   transferGym,
 } from "@/server/modules/admin";
+import { ObjectId } from "mongodb";
 import { deleteAccount, deletionBlocker, exportAccount } from "@/server/modules/privacy";
 
 async function main() {
@@ -165,12 +169,33 @@ async function main() {
   assert.equal(await deletionBlocker(staffUser._id), null, "staff can delete their account");
   assert.equal(await deletionBlocker(owner._id), "runsGym", "owners can't delete while running a gym");
 
-  // Admin: suspending ends access and is logged
-  await setUserSuspended(owner, staffUser._id, true, "smoke");
-  assert((await users.findOne({ _id: staffUser._id }))?.suspendedAt, "suspended");
-  assert(await (await collections.adminLog()).findOne({ targetId: staffUser._id, action: "user.suspend" }), "suspension logged");
-  await assert.rejects(setUserSuspended(owner, owner._id, true), /cannotSuspendSelf/, "admins can't suspend themselves");
-  await setUserSuspended(owner, staffUser._id, false);
+  // Admin: suspending ends access, keeps the reason and is logged
+  await setUserSuspended(owner, staffUser._id, { reason: "other", details: "smoke test" });
+  const suspended = await users.findOne({ _id: staffUser._id });
+  assert(suspended?.suspendedAt && suspended.suspension?.details === "smoke test", "suspended with reason");
+  assert(await (await collections.adminLog()).findOne({ targetId: staffUser._id, action: "user.suspend", note: "smoke test" }), "suspension logged");
+  await assert.rejects(setUserSuspended(owner, owner._id, { reason: "spam" }), /cannotSuspendSelf/, "admins can't suspend themselves");
+  await setUserSuspended(owner, staffUser._id, null);
+  assert(!(await users.findOne({ _id: staffUser._id }))?.suspension, "reason cleared on restore");
+
+  // Admin: sample studios can be hidden, suspended with a reason and deleted; real ones with sales can't be deleted
+  const gymsCol = await collections.gyms();
+  const sample = await gymsCol.findOne({ isDemo: true, status: "published" });
+  assert(sample, "seed marks sample studios");
+  await moderateGym(owner, sample._id, "hide");
+  assert.equal((await gymsCol.findOne({ _id: sample._id }))?.status, "draft", "hidden from the site");
+  await moderateGym(owner, sample._id, "publish");
+  await suspendGym(owner, sample._id, { reason: "misleading", details: "Photos are from another gym" });
+  assert.equal((await gymsCol.findOne({ _id: sample._id }))?.suspension?.reason, "misleading", "gym suspension reason stored");
+  await moderateGym(owner, sample._id, "restore");
+  const restoredGym = await gymsCol.findOne({ _id: sample._id });
+  assert(restoredGym?.status === "draft" && !restoredGym.suspension, "gym restored as draft without reason");
+  await moderateGym(owner, sample._id, "publish");
+  await assert.rejects(deleteGym(owner, home._id), /gymHasBookings/, "gyms with sales can't be deleted");
+  const temp = { ...sample, _id: new ObjectId(), slug: `${sample.slug}-smoke-${Date.now()}` };
+  await gymsCol.insertOne(temp);
+  await deleteGym(owner, temp._id);
+  assert.equal(await gymsCol.countDocuments({ _id: temp._id }), 0, "sample studio deleted");
 
   // Admin: account and studio views, admin access, listing edits and ownership moves
   const memberView = await adminUserDetail(member._id);

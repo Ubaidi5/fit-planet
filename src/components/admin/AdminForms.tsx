@@ -117,3 +117,126 @@ export function ConfirmAction({
     </form>
   );
 }
+
+/**
+ * Suspend with a reason from the list, or "Other" with the admin's own words.
+ * Opens in place under the button; the person gets the reason by email.
+ */
+export function SuspendForm({
+  action,
+  target,
+  id,
+  reasons,
+}: {
+  action: (prev: AdminFormState, formData: FormData) => Promise<AdminFormState>;
+  target: "user" | "gym";
+  id: string;
+  reasons: readonly { key: string; label: string }[];
+}) {
+  const [open, setOpen] = useState(false);
+  const [reason, setReason] = useState("");
+  const [state, formAction, pending] = useActionState(action, null);
+  if (!open || state?.ok) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="h-9 cursor-pointer rounded-full bg-red-50 px-3.5 text-[13px] font-semibold whitespace-nowrap text-red-700 ring-1 ring-red-600/15 transition-colors hover:bg-red-100"
+      >
+        Suspend
+      </button>
+    );
+  }
+  return (
+    <form action={formAction} className="w-full basis-full space-y-3 rounded-2xl bg-red-50/60 p-4 ring-1 ring-red-600/10 sm:w-96 sm:basis-auto">
+      <input type="hidden" name="target" value={target} />
+      <input type="hidden" name="id" value={id} />
+      <label className="block">
+        <span className="mb-1.5 block text-[13px] font-medium text-gray-600">Reason</span>
+        <select name="reason" required value={reason} onChange={(e) => setReason(e.target.value)} className={cn(inputClass, "cursor-pointer bg-surface pe-9")}>
+          <option value="" disabled>
+            Choose a reason
+          </option>
+          {reasons.map((r) => (
+            <option key={r.key} value={r.key}>
+              {r.label}
+            </option>
+          ))}
+        </select>
+      </label>
+      {reason && (
+        <label className="block">
+          <span className="mb-1.5 block text-[13px] font-medium text-gray-600">{reason === "other" ? "Write the reason" : "Details (optional)"}</span>
+          <textarea
+            name="details"
+            rows={3}
+            required={reason === "other"}
+            minLength={reason === "other" ? 3 : undefined}
+            maxLength={500}
+            placeholder={reason === "other" ? "This goes in the email they receive" : "Added to the email after the reason"}
+            className="w-full resize-y rounded-xl bg-surface px-3.5 py-3 text-[15px] text-ink ring-1 ring-gray-900/[0.08] outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-emerald-500/40"
+          />
+        </label>
+      )}
+      <p className="text-xs text-gray-500">{target === "user" ? "They are signed out everywhere" : "The listing leaves the site"} and get an email with the reason.</p>
+      <Status state={state} />
+      <div className="flex justify-end gap-2">
+        <button type="button" onClick={() => setOpen(false)} className="h-10 cursor-pointer rounded-full px-4 text-sm font-semibold text-gray-500 hover:text-ink">
+          Cancel
+        </button>
+        <SubmitButton pending={pending} tone="danger">
+          {pending ? "Suspending…" : "Suspend and email"}
+        </SubmitButton>
+      </div>
+    </form>
+  );
+}
+
+/** A destructive one-off (delete a gym, clear sample data) behind a second tap, with the result shown in place */
+export function ConfirmForm({
+  action,
+  hidden = {},
+  label,
+  confirm,
+  warning,
+}: {
+  action: (prev: AdminFormState, formData: FormData) => Promise<AdminFormState>;
+  hidden?: Record<string, string>;
+  label: string;
+  confirm: string;
+  warning: string;
+}) {
+  const [asking, setAsking] = useState(false);
+  const [state, formAction, pending] = useActionState(action, null);
+  if (!asking || state?.ok) {
+    return (
+      <div className="space-y-2">
+        <button
+          type="button"
+          onClick={() => setAsking(true)}
+          className="h-10 cursor-pointer rounded-full bg-red-50 px-4 text-sm font-semibold whitespace-nowrap text-red-700 ring-1 ring-red-600/15 transition-colors hover:bg-red-100"
+        >
+          {label}
+        </button>
+        <Status state={state} />
+      </div>
+    );
+  }
+  return (
+    <form action={formAction} className="space-y-3">
+      {Object.entries(hidden).map(([name, value]) => (
+        <input key={name} type="hidden" name={name} value={value} />
+      ))}
+      <p className="text-sm text-red-700">{warning}</p>
+      <Status state={state} />
+      <div className="flex flex-wrap gap-2">
+        <SubmitButton pending={pending} tone="danger">
+          {pending ? "Working…" : confirm}
+        </SubmitButton>
+        <button type="button" onClick={() => setAsking(false)} className="h-11 cursor-pointer rounded-full px-4 text-sm font-semibold text-gray-500 hover:text-ink">
+          Keep
+        </button>
+      </div>
+    </form>
+  );
+}

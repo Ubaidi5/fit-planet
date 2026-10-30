@@ -6,6 +6,11 @@ import type { AdminLogDoc, BookingDoc, GymDoc, PostDoc, UserDoc } from "@/server
 import { notify } from "@/server/modules/notifications";
 import { paymentProvider } from "@/server/services/payments";
 import { addDays } from "@/lib/dates";
+import { env } from "@/server/env";
+import { email } from "@/server/services/email";
+import { restoredEmail, suspendedEmail } from "@/server/services/email/templates";
+import { translatorFor } from "@/server/i18n";
+import { reasonLabel, type SuspensionReason } from "@/lib/suspension";
 
 export class AdminError extends AppError {}
 
@@ -48,11 +53,12 @@ export async function adminOverview() {
   };
 }
 
-export type GymFilter = "all" | "published" | "draft" | "suspended" | "unverified";
+export type GymFilter = "all" | "published" | "draft" | "suspended" | "unverified" | "demo";
 
 export async function adminGyms(filter: GymFilter, q: string) {
   const query: Filter<GymDoc> = {};
   if (filter === "unverified") Object.assign(query, { status: "published", isVerified: false });
+  else if (filter === "demo") query.isDemo = true;
   else if (filter !== "all") query.status = filter;
   if (q) {
     const pattern = new RegExp(escapeRegex(q), "i");
@@ -63,29 +69,128 @@ export async function adminGyms(filter: GymFilter, q: string) {
   return gyms.map((g) => ({ gym: g, owner: owners.find((o) => o._id.equals(g.ownerId)) ?? null }));
 }
 
-export type GymModeration = "verify" | "unverify" | "feature" | "unfeature" | "suspend" | "restore";
+export type GymModeration = "verify" | "unverify" | "feature" | "unfeature" | "hide" | "publish" | "restore";
+
+export interface SuspensionInput {
+  reason: SuspensionReason;
+  /** Required when the reason is "other" */
+  details?: string;
+}
+
+/** The reason as it reads in the audit log */
+const logNote = (input: SuspensionInput) => [input.reason === "other" ? null : reasonLabel(input.reason), input.details].filter(Boolean).join(": ");
+
+/**
+ * Emails never block a moderation step: the change is already saved and logged,
+ * so a mail outage is reported but doesn't undo it.
+ */
+async function sendQuietly(send: () => Promise<void>) {
+  try {
+    await send();
+  } catch (error) {
+    console.error("[admin] email failed", error);
+  }
+}
+
+async function emailSuspension(to: { email?: string | null; regionCode?: string }, input: SuspensionInput, gym?: string) {
+  if (!to.email) return;
+  const { t } = await translatorFor(to.regionCode, "email");
+  const reason = input.reason === "other" ? (input.details ?? "") : input.details ? `${t(`reasons.${input.reason}`)}. ${input.details}` : t(`reasons.${input.reason}`);
+  await sendQuietly(() => email().send(suspendedEmail(to.email!, { gym, reason }, t)));
+}
+
+async function emailRestore(to: { email?: string | null; regionCode?: string }, gym?: string) {
+  if (!to.email) return;
+  const { t } = await translatorFor(to.regionCode, "email");
+  const url = `${env.appUrl}${gym ? "/studio/profile" : "/login"}`;
+  await sendQuietly(() => email().send(restoredEmail(to.email!, { gym, url }, t)));
+}
 
 export async function moderateGym(admin: UserDoc, gymId: ObjectId, action: GymModeration, note?: string) {
   const gyms = await collections.gyms();
   const gym = await gyms.findOne({ _id: gymId });
   if (!gym) throw new AdminError("gymNotFound");
+  if (action === "publish" && gym.images.length === 0) throw new AdminError("addPhotoFirst");
   const now = new Date();
   const changes: Record<GymModeration, Partial<GymDoc>> = {
     verify: { isVerified: true },
     unverify: { isVerified: false },
     feature: { isFeatured: true },
     unfeature: { isFeatured: false },
-    suspend: { status: "suspended", isFeatured: false },
+    // Hidden listings go back to draft: off the site, but nothing is lost
+    hide: { status: "draft", isFeatured: false },
+    publish: { status: "published" },
     // Back to draft: the owner checks the listing and publishes it again
     restore: { status: "draft" },
   };
-  await gyms.updateOne({ _id: gymId }, { $set: { ...changes[action], updatedAt: now } });
+  await gyms.updateOne(
+    { _id: gymId },
+    action === "restore" ? { $set: { ...changes.restore, updatedAt: now }, $unset: { suspension: "" } } : { $set: { ...changes[action], updatedAt: now } },
+  );
   await log(admin._id, `gym.${action}`, "gym", gymId, note);
 
+  // Sample studios have no real owner to tell
+  if (gym.isDemo) return;
   const link = "/studio/profile";
   if (action === "verify") await notify(gym.ownerId, { type: "system", key: "gymVerified", params: { gym: gym.name }, link });
-  if (action === "suspend") await notify(gym.ownerId, { type: "system", key: "gymSuspended", params: { gym: gym.name }, link });
-  if (action === "restore") await notify(gym.ownerId, { type: "system", key: "gymRestored", params: { gym: gym.name }, link });
+  if (action === "restore") {
+    await notify(gym.ownerId, { type: "system", key: "gymRestored", params: { gym: gym.name }, link });
+    const owner = await (await collections.users()).findOne({ _id: gym.ownerId }, { projection: { email: 1, regionCode: 1 } });
+    if (owner) await emailRestore(owner, gym.name);
+  }
+}
+
+/** Hides a studio from the site with a reason, and tells the owner in the app and by email */
+export async function suspendGym(admin: UserDoc, gymId: ObjectId, input: SuspensionInput) {
+  const gyms = await collections.gyms();
+  const gym = await gyms.findOne({ _id: gymId });
+  if (!gym) throw new AdminError("gymNotFound");
+  const now = new Date();
+  await gyms.updateOne(
+    { _id: gymId },
+    { $set: { status: "suspended", isFeatured: false, suspension: { ...input, at: now, by: admin._id }, updatedAt: now } },
+  );
+  await log(admin._id, "gym.suspend", "gym", gymId, logNote(input));
+  if (gym.isDemo) return;
+  await notify(gym.ownerId, { type: "system", key: "gymSuspended", params: { gym: gym.name }, link: "/studio/profile" });
+  const owner = await (await collections.users()).findOne({ _id: gym.ownerId }, { projection: { email: 1, regionCode: 1 } });
+  if (owner) await emailSuspension(owner, input, gym.name);
+}
+
+/** Everything that only exists because of the given studios */
+async function eraseGyms(gymIds: ObjectId[]) {
+  await Promise.all([
+    (await collections.reviews()).deleteMany({ gymId: { $in: gymIds } }),
+    (await collections.checkins()).deleteMany({ gymId: { $in: gymIds } }),
+    (await collections.bookings()).deleteMany({ gymId: { $in: gymIds } }),
+    (await collections.staffInvites()).deleteMany({ gymId: { $in: gymIds } }),
+    (await collections.users()).updateMany({ savedGymIds: { $in: gymIds } }, { $pull: { savedGymIds: { $in: gymIds } } as never }),
+  ]);
+  await (await collections.gyms()).deleteMany({ _id: { $in: gymIds } });
+}
+
+/**
+ * Deletes a studio for good. Real studios with passes sold keep their records
+ * for members and accounting, so those can only be hidden or suspended.
+ */
+export async function deleteGym(admin: UserDoc, gymId: ObjectId) {
+  const gym = await (await collections.gyms()).findOne({ _id: gymId });
+  if (!gym) throw new AdminError("gymNotFound");
+  if (!gym.isDemo && (await (await collections.bookings()).countDocuments({ gymId, status: { $in: ["confirmed", "expired", "refunded"] } })) > 0) {
+    throw new AdminError("gymHasBookings");
+  }
+  await eraseGyms([gymId]);
+  await log(admin._id, "gym.delete", "gym", gymId, gym.name);
+  return gym;
+}
+
+/** Removes every sample studio loaded by scripts/demo-studios.ts */
+export async function deleteDemoGyms(admin: UserDoc) {
+  const ids = await (await collections.gyms()).distinct("_id", { isDemo: true });
+  if (!ids.length) return 0;
+  await eraseGyms(ids);
+  await log(admin._id, "gym.deleteDemo", "gym", admin._id, `${ids.length} sample studios`);
+  return ids.length;
 }
 
 /** Reported posts, most reported first, with the post and its author */
@@ -136,24 +241,34 @@ export async function adminUsers(q: string, suspendedOnly: boolean) {
     query.$or = [{ email: pattern }, { name: pattern }, { handle: pattern }];
   }
   return (await collections.users())
-    .find(query, { projection: { name: 1, email: 1, handle: 1, roles: 1, createdAt: 1, suspendedAt: 1, regionCode: 1 } })
+    .find(query, { projection: { name: 1, email: 1, handle: 1, roles: 1, createdAt: 1, suspendedAt: 1, suspension: 1, regionCode: 1 } })
     .sort({ createdAt: -1 })
     .limit(100)
     .toArray();
 }
 
-export async function setUserSuspended(admin: UserDoc, userId: ObjectId, suspended: boolean, note?: string) {
+/** Suspends an account with a reason, or lifts it with `null`. Either way the person gets an email. */
+export async function setUserSuspended(admin: UserDoc, userId: ObjectId, suspension: SuspensionInput | null) {
   if (admin._id.equals(userId)) throw new AdminError("cannotSuspendSelf");
   const users = await collections.users();
   const now = new Date();
   // Suspending also ends every session the account has open
-  const result = await users.updateOne(
+  const user = await users.findOneAndUpdate(
     { _id: userId },
-    suspended ? { $set: { suspendedAt: now, sessionsValidFrom: now, updatedAt: now } } : { $unset: { suspendedAt: "" }, $set: { updatedAt: now } },
+    suspension
+      ? { $set: { suspendedAt: now, suspension: { ...suspension, at: now, by: admin._id }, sessionsValidFrom: now, updatedAt: now } }
+      : { $unset: { suspendedAt: "", suspension: "" }, $set: { updatedAt: now } },
+    { projection: { email: 1, regionCode: 1 } },
   );
-  if (!result.matchedCount) throw new AdminError("accountNotFound");
-  if (suspended) await (await collections.pushTokens()).deleteMany({ userId });
-  await log(admin._id, suspended ? "user.suspend" : "user.restore", "user", userId, note);
+  if (!user) throw new AdminError("accountNotFound");
+  if (suspension) {
+    await (await collections.pushTokens()).deleteMany({ userId });
+    await log(admin._id, "user.suspend", "user", userId, logNote(suspension));
+    await emailSuspension(user, suspension);
+  } else {
+    await log(admin._id, "user.restore", "user", userId);
+    await emailRestore(user);
+  }
 }
 
 /** Last admin actions taken on one record, newest first, with the admin's name */
@@ -308,7 +423,8 @@ export async function transferGym(admin: UserDoc, gymId: ObjectId, newOwnerEmail
   // The old owner stays on as staff so the front desk keeps working until the new owner decides
   // One $set, since Mongo refuses $addToSet and $pull on the same array in a single update
   const staffIds = [...(gym.staffIds ?? []).filter((id) => !id.equals(next._id) && !id.equals(gym.ownerId)), gym.ownerId];
-  await gyms.updateOne({ _id: gymId }, { $set: { ownerId: next._id, staffIds, updatedAt: now } });
+  // A sample studio handed to a real owner becomes a real listing
+  await gyms.updateOne({ _id: gymId }, { $set: { ownerId: next._id, staffIds, updatedAt: now }, $unset: { isDemo: "" } });
   await users.updateOne({ _id: next._id }, { $addToSet: { roles: "owner" }, $set: { updatedAt: now } });
   await log(admin._id, "gym.transfer", "gym", gymId, `to ${next.email}`);
   await notify(next._id, { type: "system", key: "gymTransferred", params: { gym: gym.name }, link: "/studio/profile" });

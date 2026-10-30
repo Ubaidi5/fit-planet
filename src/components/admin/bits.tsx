@@ -1,4 +1,6 @@
 import { cn } from "@/lib/utils";
+import { reasonLabel } from "@/lib/suspension";
+import type { Suspension } from "@/server/db/models";
 
 // Small building blocks for the admin console. The console is internal, so its copy is English only.
 
@@ -95,4 +97,11 @@ export function FilterLinks({ items, active }: { items: { key: string; label: st
 
 export function Empty({ children }: { children: React.ReactNode }) {
   return <p className="rounded-[1.75rem] bg-surface px-6 py-12 text-center text-sm text-gray-500 ring-1 ring-gray-900/[0.05]">{children}</p>;
+}
+
+/** Why a record is suspended, in one line */
+export function SuspensionNote({ suspension, className }: { suspension?: Suspension; className?: string }) {
+  if (!suspension) return null;
+  const text = suspension.reason === "other" ? suspension.details : [reasonLabel(suspension.reason), suspension.details].filter(Boolean).join(": ");
+  return <p className={cn("text-sm text-red-700", className)}>Suspended for: {text}</p>;
 }
