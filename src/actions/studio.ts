@@ -18,6 +18,7 @@ import { done, fail, invalid } from "./utils";
 import { getRegion } from "@/lib/i18n/server";
 import { formatDate } from "@/lib/dates";
 import { allow } from "@/server/rate-limit";
+import { reportError } from "@/lib/monitoring";
 
 const time = z.string().regex(/^([01]\d|2[0-4]):[0-5]\d$/, "time");
 const money = z.coerce.number().min(0).max(10_000_000);
@@ -241,7 +242,7 @@ export async function ownerCancelBookingAction(bookingId: string): Promise<Actio
     await cancelBookingByOwner(ownedGyms(ctx.user, ctx.gyms).map((g) => g._id), id);
   } catch (error) {
     if (error instanceof BookingError) return fail(error.key, error.values);
-    console.error("[studio] cancel failed", error);
+    reportError("[studio] cancel failed", error);
     return fail("cancelFailed");
   }
   revalidatePath("/studio/bookings");

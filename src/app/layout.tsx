@@ -11,6 +11,8 @@ import { Suspense } from "react";
 import { Analytics } from "@/components/analytics/Analytics";
 import { auth } from "@/lib/auth";
 import { readConsent, trackingConfig } from "@/server/tracking";
+import { MonitoringInit } from "@/components/monitoring/MonitoringInit";
+import { serverRelease } from "@/server/release";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
@@ -57,6 +59,7 @@ export default async function RootLayout({
             <Suspense>
               <Analytics config={trackingConfig()} initialConsent={consent} userId={session?.user?.id} />
             </Suspense>
+            <MonitoringInit config={{ ...env.monitoring, release: serverRelease() }} />
           </LocaleProvider>
         </NextIntlClientProvider>
       </body>

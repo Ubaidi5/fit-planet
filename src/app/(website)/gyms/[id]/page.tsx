@@ -14,6 +14,7 @@ import { TrackEvent } from "@/components/analytics/TrackEvent";
 import type { TrackedGym } from "@/lib/analytics/events";
 import { breadcrumbJsonLd } from "@/components/seo/Breadcrumbs";
 import { cityPath, jsonLd } from "@/lib/seo";
+import { orFallback } from "@/server/degrade";
 
 type Props = { params: Promise<{ id: string }>; searchParams: Promise<{ tab?: string }> };
 
@@ -57,9 +58,11 @@ export default async function GymPage({ params, searchParams }: Props) {
   );
 
   if (user && profile.ownerId !== user._id.toHexString()) {
-    const booked = await (await collections.bookings()).findOne(
-      { userId: user._id, gymId: toObjectId(profile.gym.id)!, status: "confirmed" },
-      { projection: { _id: 1 } },
+    const booked = await orFallback(
+      "[gyms] review eligibility failed",
+      async () =>
+        (await collections.bookings()).findOne({ userId: user._id, gymId: toObjectId(profile.gym.id)!, status: "confirmed" }, { projection: { _id: 1 } }),
+      null,
     );
     if (booked) reviewSlot = <ReviewForm gymId={profile.gym.id} gymName={profile.gym.name} />;
   }

@@ -37,10 +37,19 @@ let config: TrackingConfig = {};
 /** Waiting for the consent decision; null once it's made */
 let pending: AnalyticsEvent[] | null = [];
 
+/** The page's CSP nonce, read from one of Next's own scripts (src/proxy.ts sets it) */
+function pageNonce() {
+  return document.querySelector<HTMLScriptElement>("script[nonce]")?.nonce || undefined;
+}
+
 function injectScript(src: string) {
   const script = document.createElement("script");
   script.async = true;
   script.src = src;
+  // 'strict-dynamic' already trusts scripts added from here. The nonce also lets
+  // GTM hand it on to Custom HTML tags, which it inserts inline.
+  const nonce = pageNonce();
+  if (nonce) script.nonce = nonce;
   document.head.appendChild(script);
 }
 

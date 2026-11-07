@@ -5,6 +5,8 @@ import type { GymDoc, ReviewDoc } from "@/server/db/models";
 import type { Gym, GymDetail, GymProfile, Review } from "@/lib/types";
 import { generateDefaultDetails } from "@/lib/data/mock-gym-details";
 import { crowdForecast } from "@/lib/data/crowd";
+import { orFallback } from "@/server/degrade";
+import { literalPattern } from "@/server/db/search";
 
 /** How long a check-in counts towards "people in the gym right now" */
 export const VISIT_MINUTES = 90;
@@ -78,6 +80,25 @@ export async function occupancyFor(gymIds: ObjectId[]): Promise<Map<string, numb
   return result;
 }
 
+/**
+ * Lists only need what a gym card shows. Leaving out the long profile fields
+ * (and owner, staff and contact details) keeps result pages small and never
+ * loads data a list has no business holding.
+ */
+const LIST_PROJECTION = {
+  longDescription: 0,
+  operatingHours: 0,
+  equipment: 0,
+  trainers: 0,
+  classes: 0,
+  addOns: 0,
+  policies: 0,
+  contact: 0,
+  ratingBreakdown: 0,
+  ownerId: 0,
+  staffIds: 0,
+} as const;
+
 export interface GymQuery {
   city?: string;
   country?: string;
@@ -92,11 +113,11 @@ export async function listPublishedGyms(query: GymQuery = {}): Promise<Gym[]> {
   if (query.city) filter["address.city"] = query.city;
   if (query.country) filter.country = query.country;
   if (query.q) {
-    const pattern = new RegExp(query.q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+    const pattern = new RegExp(literalPattern(query.q), "i");
     filter.$or = [{ name: pattern }, { "address.area": pattern }, { "address.city": pattern }, { amenities: pattern }];
   }
   const docs = await gyms
-    .find(filter)
+    .find(filter, { projection: LIST_PROJECTION })
     .sort({ isFeatured: -1, rating: -1 })
     .limit(query.limit ?? 200)
     .toArray();
@@ -125,9 +146,10 @@ export async function findGymDoc(idOrSlug: string): Promise<GymDoc | null> {
 
 /** Builds the full profile (details, reviews, crowd curve) for a gym page */
 export async function buildProfile(doc: GymDoc): Promise<GymProfile> {
+  // Live occupancy and reviews are extras: the gym page still opens without them
   const [occupancy, reviewDocs] = await Promise.all([
-    occupancyFor([doc._id]),
-    (await collections.reviews()).find({ gymId: doc._id }).sort({ createdAt: -1 }).limit(30).toArray(),
+    orFallback("[gyms] occupancy failed", occupancyFor([doc._id]), new Map<string, number>()),
+    orFallback("[gyms] reviews failed", async () => (await collections.reviews()).find({ gymId: doc._id }).sort({ createdAt: -1 }).limit(30).toArray(), []),
   ]);
   const gym = toGym(doc, occupancy.get(doc._id.toHexString()) ?? 0);
   const defaults = generateDefaultDetails(gym);

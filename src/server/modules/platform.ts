@@ -3,6 +3,7 @@ import { cache } from "react";
 import { collections } from "@/server/db/collections";
 import type { Gym } from "@/lib/types";
 import { listPublishedGyms } from "./gyms";
+import { reportError } from "@/lib/monitoring";
 
 export interface PlatformStats {
   gyms: number;
@@ -41,7 +42,7 @@ export const platformSnapshot = cache(async (): Promise<{ gyms: Gym[]; stats: Pl
     const gyms = await listPublishedGyms();
     return { gyms, stats: statsOf(gyms) };
   } catch (error) {
-    console.error("[platform] could not load gyms", error);
+    reportError("[platform] could not load gyms", error);
     return { gyms: [], stats: statsOf([]) };
   }
 });
@@ -77,7 +78,7 @@ export async function memberStories(gyms: Gym[], limit = 3): Promise<Story[]> {
     }
     return stories;
   } catch (error) {
-    console.error("[platform] could not load stories", error);
+    reportError("[platform] could not load stories", error);
     return [];
   }
 }

@@ -61,6 +61,9 @@ async function main() {
 
   const stats = await ownerStats([home]);
   assert(stats.todayBookings >= 2 && stats.occupancy.current >= 1, "stats reflect new activity");
+  assert(stats.todayCheckins >= 1 && stats.hourly.some((h) => h > 0), "check-ins counted by hour in the gym's timezone");
+  assert(stats.series.length === 30 && stats.series.at(-1)!.date === stats.today && stats.series.at(-1)!.bookings === stats.todayBookings, "daily series ends today");
+  assert(stats.bookings30 === stats.series.reduce((n, p) => n + p.bookings, 0) && stats.bookings30 === Object.values(stats.passMix).reduce((n, m) => n + m.count, 0), "totals add up");
 
   await upsertReview(member, home._id, { rating: 5, title: "Great floor", comment: "Clean, friendly and not too busy.", categories: { cleanliness: 5, equipment: 4, staff: 5, value: 4 } });
 
