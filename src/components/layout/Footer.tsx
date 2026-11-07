@@ -3,6 +3,9 @@ import { getTranslations } from "next-intl/server";
 import { FaFacebookF, FaInstagram, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { Logo } from "@/components/brand/Logo";
 import { platformSnapshot } from "@/server/modules/platform";
+import { CookieSettingsButton } from "@/components/analytics/CookieSettingsButton";
+import { hasTracking } from "@/lib/analytics/consent";
+import { trackingConfig } from "@/server/tracking";
 
 type FooterGroup = { title: string; links: { href: string; label: string; city?: string }[] };
 
@@ -114,6 +117,9 @@ const Footer = async () => {
                   {t(link.label)}
                 </Link>
               ))}
+              {hasTracking(trackingConfig()) && (
+                <CookieSettingsButton label={t("cookieSettings")} className="cursor-pointer transition-colors hover:text-ink" />
+              )}
             </nav>
           </div>
           {stats.cities.length > 0 && (

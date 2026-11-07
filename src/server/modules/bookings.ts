@@ -13,6 +13,8 @@ import { email } from "@/server/services/email";
 import { bookingConfirmedEmail } from "@/server/services/email/templates";
 import { translatorFor } from "@/server/i18n";
 import { notify } from "./notifications";
+import { sendConversion, type Attribution } from "@/server/services/conversions";
+import { eventIds } from "@/lib/analytics/events";
 
 /** How far ahead a pass can be booked */
 export const MAX_DAYS_AHEAD = 60;
@@ -95,6 +97,8 @@ export interface CreateBookingInput {
   paymentMethod: "online" | "desk";
   guestName?: string;
   guestPhone?: string;
+  /** Present when the member accepted ad cookies */
+  attribution?: Attribution | null;
 }
 
 export interface CreateBookingResult {
@@ -159,6 +163,7 @@ export async function createBooking(input: CreateBookingInput): Promise<CreateBo
     checkinCount: 0,
     createdAt: now,
     confirmedAt: input.paymentMethod === "desk" ? now : undefined,
+    ...(input.attribution ? { attribution: input.attribution } : {}),
   };
 
   let booking: BookingDoc | null = null;
@@ -270,6 +275,8 @@ async function onBookingConfirmed(booking: BookingDoc, gym: GymDoc) {
     paid: booking.paymentMethod === "desk" ? "desk" : "online",
   };
 
+  if (booking.attribution) void reportConversion(booking, gym, booking.attribution).catch((error) => console.error("[booking] conversion report failed", error));
+
   await Promise.all([
     notify(booking.ownerId, {
       type: "booking.new",
@@ -314,6 +321,20 @@ async function onBookingConfirmed(booking: BookingDoc, gym: GymDoc) {
       console.error("[booking] receipt email failed", error);
     }
   }
+}
+
+/** Tells the ad platforms about the booking, then forgets the browser details */
+async function reportConversion(booking: BookingDoc, gym: GymDoc, attribution: Attribution) {
+  const method = booking.paymentMethod === "desk" ? "desk" : "online";
+  await sendConversion({
+    kind: method === "desk" ? "reserve" : "purchase",
+    eventId: eventIds.booking(booking._id.toHexString(), method),
+    at: booking.confirmedAt ?? new Date(),
+    attribution,
+    user: { id: booking.userId.toHexString(), email: booking.guest.email, phone: booking.guest.phone },
+    value: { amount: booking.amount, currency: booking.currency, itemId: `${gym._id.toHexString()}:${booking.passType}`, itemName: gym.name },
+  });
+  await (await collections.bookings()).updateOne({ _id: booking._id }, { $unset: { attribution: "" } });
 }
 
 export async function listUserBookings(userId: ObjectId) {

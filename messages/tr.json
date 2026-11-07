@@ -54,7 +54,8 @@
     "legal": "Yasal",
     "privacy": "Gizlilik",
     "terms": "Koşullar",
-    "imprint": "Künye"
+    "imprint": "Künye",
+    "cookieSettings": "Çerez ayarları"
   },
   "hero": {
     "liveBadge": "CANLI",
@@ -2207,5 +2208,28 @@
     "errorText": "Bu sayfayı yükleyemedik. Tekrar dene; sorun devam ederse birkaç dakika sonra yeniden gel.",
     "retry": "Tekrar dene",
     "reference": "Referans {id}"
+  },
+  "consent": {
+    "label": "Çerezler",
+    "title": "Verilerin, kararın",
+    "body": "Fit Planet'in nasıl kullanıldığını ve insanları buraya hangi reklamların getirdiğini ölçmek istiyoruz. Sen seçene kadar hiçbir şey izlenmez ve fikrini istediğin zaman değiştirebilirsin. <link>Gizlilik politikası</link>",
+    "acceptAll": "Tümünü kabul et",
+    "rejectAll": "Tümünü reddet",
+    "customize": "Kendim seçeyim",
+    "save": "Seçimimi kaydet",
+    "alwaysOn": "Her zaman açık",
+    "close": "Kapat",
+    "necessary": {
+      "title": "Zorunlu",
+      "text": "Oturumunu açık tutar, ödemeleri korur ve bölgeni hatırlar."
+    },
+    "analytics": {
+      "title": "Analiz",
+      "text": "Google Analytics ve Tag Manager hangi sayfaların ve rezervasyon adımlarının işe yaradığını gösterir."
+    },
+    "ads": {
+      "title": "Reklam",
+      "text": "Meta, Google ve ChatGPT reklamlarının seni buraya hangi reklamın getirdiğini ölçmesini sağlar."
+    }
   }
 }

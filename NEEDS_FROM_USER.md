@@ -188,3 +188,48 @@ have a lawyer check them for the EU, UAE and Türkiye before going live.
 
 Set `ADMIN_EMAILS` in the server's `.env` to your own email (comma-separated for
 more people), sign in with that account and open `/admin`.
+
+## 11. Analytics and ad pixels
+
+All optional. Add only the ones you run ads on to the server's
+`/var/www/fitplanet/shared/.env`, then restart the service
+(`systemctl --user restart fitplanet`). No rebuild is needed. Nothing loads
+until a visitor accepts in the cookie banner, and the banner only appears once
+at least one id below is set.
+
+| Variable | Where to get it |
+| --- | --- |
+| `GTM_ID` | tagmanager.google.com > create a Web container > id like `GTM-ABC1234` |
+| `GA4_MEASUREMENT_ID` | analytics.google.com > Admin > Data streams > Web > id like `G-ABC123XYZ` |
+| `META_PIXEL_ID` | business.facebook.com > Events Manager > Connect data sources > Web > dataset id |
+| `META_CAPI_ACCESS_TOKEN` | Same dataset > Settings > Conversions API > Generate access token |
+| `META_TEST_EVENT_CODE` | Only while testing: Events Manager > Test events. Remove after |
+| `OPENAI_PIXEL_ID` | ChatGPT ads: OpenAI Ads Manager > Conversions tab > create a pixel |
+| `OPENAI_CAPI_KEY` | Same Conversions tab > Conversions API key |
+
+What gets tracked (browser, plus server side for Meta and OpenAI):
+
+| Step | GA4 / dataLayer | Meta | OpenAI |
+| --- | --- | --- | --- |
+| Every page | `page_view` | `PageView` | `page_viewed` |
+| Gym page | `view_item` | `ViewContent` | `contents_viewed` |
+| Search on /gyms | `search` | `Search` | |
+| Save a gym | `add_to_wishlist` | `AddToWishlist` | |
+| Member sign-up | `sign_up` | `CompleteRegistration` (+ server) | `registration_completed` (+ server) |
+| Gym owner sign-up | `sign_up`, `generate_lead` | `Lead` (+ server) | `lead_created` (+ server) |
+| Login | `login` | | |
+| Checkout started | `begin_checkout` | `InitiateCheckout` | `checkout_started` |
+| Paid online (Stripe) | `purchase` | `Purchase` (+ server) | `order_created` (+ server) |
+| Reserved, pay at desk | `reserve_pass` | `Schedule` (+ server) | `appointment_scheduled` (+ server) |
+| Gym published (owner) | `publish_gym` | | |
+
+Browser and server events share an event id, so Meta and OpenAI count each
+conversion once. Signed-in members get a GA4 `user_id` so journeys join up
+across devices.
+
+Setup notes:
+- Use GA4 directly (`GA4_MEASUREMENT_ID`) or through GTM, not both.
+- In GA4 > Admin > Events, mark `sign_up`, `purchase` and `reserve_pass` as key events.
+- For Google Ads, add a Google Ads conversion tag in GTM triggered by the
+  `purchase` custom event (value from `ecommerce.value`).
+- In Meta Events Manager, verify your domain and prioritise `Purchase`.

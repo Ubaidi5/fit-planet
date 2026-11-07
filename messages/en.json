@@ -54,7 +54,8 @@
     "legal": "Legal",
     "privacy": "Privacy",
     "terms": "Terms",
-    "imprint": "Imprint"
+    "imprint": "Imprint",
+    "cookieSettings": "Cookie settings"
   },
   "hero": {
     "liveBadge": "LIVE",
@@ -2207,5 +2208,28 @@
     "errorText": "We couldn't load this page. Try again, and if it keeps happening, come back in a few minutes.",
     "retry": "Try again",
     "reference": "Reference {id}"
+  },
+  "consent": {
+    "label": "Cookies",
+    "title": "Your data, your call",
+    "body": "We'd like to measure how Fit Planet is used and which ads bring people here. Nothing is tracked until you choose, and you can change your mind any time. <link>Privacy policy</link>",
+    "acceptAll": "Accept all",
+    "rejectAll": "Reject all",
+    "customize": "Choose what to allow",
+    "save": "Save my choices",
+    "alwaysOn": "Always on",
+    "close": "Close",
+    "necessary": {
+      "title": "Essential",
+      "text": "Keeps you signed in, secures payments and remembers your region."
+    },
+    "analytics": {
+      "title": "Analytics",
+      "text": "Google Analytics and Tag Manager show us which pages and booking steps work."
+    },
+    "ads": {
+      "title": "Advertising",
+      "text": "Lets Meta, Google and ChatGPT ads measure which ads brought you here."
+    }
   }
 }
