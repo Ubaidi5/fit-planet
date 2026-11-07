@@ -1,29 +1,40 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { HiXMark } from "react-icons/hi2";
 import { cn } from "@/lib/utils";
 import { applyConsent, flushServerEvents, saveConsent, setUserId, trackPageView } from "@/lib/analytics/browser";
-import { hasTracking, OPEN_CONSENT_EVENT, type Consent, type TrackingConfig } from "@/lib/analytics/consent";
+import { hasTracking, OPEN_CONSENT_EVENT, OPT_OUT_EVENT, withPrivacySignal, type Consent, type TrackingConfig } from "@/lib/analytics/consent";
 
 interface AnalyticsProps {
   config: TrackingConfig;
   /** The saved choice, read from the cookie on the server so the banner doesn't flash */
   initialConsent: Consent | null;
+  /** The request carried Sec-GPC: 1 */
+  privacySignal: boolean;
   userId?: string;
 }
+
+const noSubscribe = () => () => {};
 
 /**
  * Loads analytics and ad tags once the visitor agrees, tracks page views on
  * client-side navigation, and shows the cookie banner. Renders nothing when
  * no tracking ids are configured.
  */
-export function Analytics({ config, initialConsent, userId }: AnalyticsProps) {
+export function Analytics({ config, initialConsent, privacySignal, userId }: AnalyticsProps) {
   const enabled = hasTracking(config);
-  const [consent, setConsent] = useState(initialConsent);
+  const [saved, setConsent] = useState(initialConsent);
+  // The header covers the first page; the browser API is the same signal, read once hydrated
+  const gpc = useSyncExternalStore(
+    noSubscribe,
+    () => privacySignal || (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl === true,
+    () => privacySignal,
+  );
+  const consent = withPrivacySignal(saved, gpc);
   const [open, setOpen] = useState(enabled && !initialConsent);
   const pathname = usePathname();
   const search = useSearchParams().toString();
@@ -36,22 +47,36 @@ export function Analytics({ config, initialConsent, userId }: AnalyticsProps) {
     return () => window.removeEventListener(OPEN_CONSENT_EVENT, show);
   }, []);
 
-  // Runs before the page view effect below, so tags are loaded first
+  // "Do not sell or share": advertising off right away, analytics as it was
   useEffect(() => {
-    if (!enabled || !consent) return;
+    const optOut = () => {
+      const next = { analytics: saved?.analytics ?? false, ads: false };
+      saveConsent(next);
+      setConsent(next);
+      setOpen(true);
+    };
+    window.addEventListener(OPT_OUT_EVENT, optOut);
+    return () => window.removeEventListener(OPT_OUT_EVENT, optOut);
+  }, [saved]);
+
+  // Runs before the page view effect below, so tags are loaded first
+  const analytics = consent?.analytics;
+  const ads = consent?.ads;
+  useEffect(() => {
+    if (!enabled || analytics === undefined || ads === undefined) return;
     // Scripts can't be unloaded, so withdrawing consent reloads without them
-    if (applyConsent(consent, config, lastUser.current)) window.location.reload();
-  }, [enabled, consent, config]);
+    if (applyConsent({ analytics, ads }, config, lastUser.current)) window.location.reload();
+  }, [enabled, analytics, ads, config]);
 
   useEffect(() => {
-    if (!enabled || !consent || (!consent.analytics && !consent.ads)) return;
+    if (!enabled || (!analytics && !ads)) return;
     const key = `${pathname}?${search}`;
     if (tracked.current === key) return;
     tracked.current = key;
     if (pathname.startsWith("/admin")) return;
     trackPageView();
     flushServerEvents();
-  }, [enabled, consent, pathname, search]);
+  }, [enabled, analytics, ads, pathname, search]);
 
   useEffect(() => {
     if (lastUser.current === userId) return;
@@ -63,6 +88,7 @@ export function Analytics({ config, initialConsent, userId }: AnalyticsProps) {
   return (
     <ConsentBanner
       current={consent}
+      gpc={gpc}
       onClose={consent ? () => setOpen(false) : undefined}
       onChoose={(next) => {
         saveConsent(next);
@@ -73,15 +99,15 @@ export function Analytics({ config, initialConsent, userId }: AnalyticsProps) {
   );
 }
 
-function ConsentBanner({ current, onChoose, onClose }: { current: Consent | null; onChoose: (consent: Consent) => void; onClose?: () => void }) {
+function ConsentBanner({ current, gpc, onChoose, onClose }: { current: Consent | null; gpc: boolean; onChoose: (consent: Consent) => void; onClose?: () => void }) {
   const t = useTranslations("consent");
   const [customizing, setCustomizing] = useState(Boolean(current));
-  const [choice, setChoice] = useState<Consent>(current ?? { analytics: true, ads: true });
+  const [choice, setChoice] = useState<Consent>(current ?? { analytics: true, ads: !gpc });
 
   const rows = [
     { key: "necessary", locked: true },
     { key: "analytics", locked: false },
-    { key: "ads", locked: false },
+    { key: "ads", locked: gpc },
   ] as const;
 
   return (
@@ -131,9 +157,10 @@ function ConsentBanner({ current, onChoose, onClose }: { current: Consent | null
                     {t(`${key}.title`)}
                   </p>
                   <p className="mt-0.5 text-xs leading-relaxed text-gray-500">{t(`${key}.text`)}</p>
+                  {key === "ads" && gpc && <p className="mt-1.5 text-xs leading-relaxed font-medium text-emerald-700">{t("gpcOn")}</p>}
                 </div>
                 {locked ? (
-                  <span className="mt-0.5 shrink-0 font-mono text-[10px] leading-5 tracking-[0.12em] text-gray-400 uppercase">{t("alwaysOn")}</span>
+                  <span className="mt-0.5 shrink-0 font-mono text-[10px] leading-5 tracking-[0.12em] text-gray-400 uppercase">{t(key === "ads" ? "alwaysOff" : "alwaysOn")}</span>
                 ) : (
                   <Switch
                     labelledBy={`consent-${key}`}
@@ -157,7 +184,7 @@ function ConsentBanner({ current, onChoose, onClose }: { current: Consent | null
           </button>
           <button
             type="button"
-            onClick={() => onChoose({ analytics: true, ads: true })}
+            onClick={() => onChoose({ analytics: true, ads: !gpc })}
             className="flex h-11 cursor-pointer items-center justify-center rounded-full bg-ink px-4 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-gray-800 active:scale-[0.98]"
           >
             {t("acceptAll")}

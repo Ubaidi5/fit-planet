@@ -56,6 +56,7 @@
     "terms": "AGB",
     "imprint": "Impressum",
     "cookieSettings": "Cookie-Einstellungen",
+    "doNotSell": "Meine personenbezogenen Daten nicht verkaufen oder teilen",
     "allCities": "Alle Städte"
   },
   "hero": {
@@ -2253,7 +2254,9 @@
     "customize": "Selbst auswählen",
     "save": "Auswahl speichern",
     "alwaysOn": "Immer aktiv",
+    "alwaysOff": "Aus",
     "close": "Schließen",
+    "gpcOn": "Die Global Privacy Control deines Browsers ist aktiv, daher bleibt Werbung aus.",
     "necessary": {
       "title": "Notwendig",
       "text": "Hält dich angemeldet, sichert Zahlungen und merkt sich deine Region."

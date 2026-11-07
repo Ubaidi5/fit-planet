@@ -56,6 +56,7 @@
     "terms": "Terms",
     "imprint": "Imprint",
     "cookieSettings": "Cookie settings",
+    "doNotSell": "Do not sell or share my personal information",
     "allCities": "All cities"
   },
   "hero": {
@@ -2253,7 +2254,9 @@
     "customize": "Choose what to allow",
     "save": "Save my choices",
     "alwaysOn": "Always on",
+    "alwaysOff": "Off",
     "close": "Close",
+    "gpcOn": "Your browser's Global Privacy Control is on, so advertising stays off.",
     "necessary": {
       "title": "Essential",
       "text": "Keeps you signed in, secures payments and remembers your region."
