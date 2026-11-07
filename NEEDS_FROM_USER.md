@@ -7,11 +7,11 @@ Every key is described in [`.env.example`](./.env.example).
 
 ## 1. Required to run
 
-| What | Where to get it | Goes in |
-| --- | --- | --- |
-| MongoDB URI | The MongoDB already on the Lightsail server, e.g. `mongodb://fitplanet:PASSWORD@127.0.0.1:27017/fitplanet?authSource=fitplanet` (see section 6) | `DB_URI`, plus `DB_NAME=fitplanet` |
-| Session secret | `openssl rand -base64 32` | `AUTH_SECRET` |
-| Domain | Point an A record at the Lightsail static IP | `APP_URL=https://yourdomain.com` |
+| What           | Where to get it                                                                                                                                  | Goes in                            |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------- |
+| MongoDB URI    | The MongoDB already on the Lightsail server, e.g. `mongodb://fitplanet:PASSWORD@127.0.0.1:27017/fitplanet?authSource=fitplanet` (see section 6)  | `DB_URI`, plus `DB_NAME=fitplanet` |
+| Session secret | `$bytes = New-Object Byte[] 32; (New-Object Security.Cryptography.RNGCryptoServiceProvider).GetBytes($bytes); [Convert]::ToBase64String($bytes)` | `AUTH_SECRET`                      |
+| Domain         | Point an A record at the Lightsail static IP                                                                                                     | `APP_URL=https://yourdomain.com`   |
 
 To show sample studios on the live site before real gyms join, load them once
 (optional). The database only listens on the server, so tunnel to it from your
@@ -33,13 +33,13 @@ public; they are read in `src/lib/firebase/config.ts`.
 
 ```ts
 export const firebasePublicConfig = {
-  apiKey: "",            // NEXT_PUBLIC_FIREBASE_API_KEY
-  authDomain: "",        // NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
-  projectId: "",         // NEXT_PUBLIC_FIREBASE_PROJECT_ID
-  storageBucket: "",     // NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+  apiKey: "", // NEXT_PUBLIC_FIREBASE_API_KEY
+  authDomain: "", // NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+  projectId: "", // NEXT_PUBLIC_FIREBASE_PROJECT_ID
+  storageBucket: "", // NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
   messagingSenderId: "", // NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
-  appId: "",             // NEXT_PUBLIC_FIREBASE_APP_ID
-  measurementId: "",     // NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+  appId: "", // NEXT_PUBLIC_FIREBASE_APP_ID
+  measurementId: "", // NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 // Cloud Messaging > Web Push certificates > Generate key pair
 // NEXT_PUBLIC_FIREBASE_VAPID_KEY = ""
@@ -47,7 +47,7 @@ export const firebasePublicConfig = {
 
 Also needed (secret, server only): **service account JSON** from Project settings >
 Service accounts > Generate new private key, as `FIREBASE_SERVICE_ACCOUNT`
-(one-line JSON or `base64 -w0 file.json`).
+(one-line JSON or `([Convert]::ToBase64String([IO.File]::ReadAllBytes("fit-planet-prod-firebase-adminsdk-fbsvc-5fbece6c86.json")) -replace "`r|`n", "") | Set-Clipboard`).
 
 ## 3. Stripe payments
 
@@ -92,7 +92,7 @@ certbot) is plenty for launch. Steps:
    storage:
      wiredTiger:
        engineConfig:
-         cacheSizeGB: 4   # leaves room for the app, nginx and the page cache
+         cacheSizeGB: 4 # leaves room for the app, nginx and the page cache
    ```
 
    Then create the user once in `mongosh` (as your admin user) and restart
@@ -150,12 +150,12 @@ Pushing to `main` builds the app on GitHub and ships it to the server
 
 **Secrets**
 
-| Name | Value |
-| --- | --- |
-| `LIGHTSAIL_HOST` | Static IP or hostname |
-| `LIGHTSAIL_USER` | `ubuntu` |
+| Name                | Value                                                                      |
+| ------------------- | -------------------------------------------------------------------------- |
+| `LIGHTSAIL_HOST`    | Static IP or hostname                                                      |
+| `LIGHTSAIL_USER`    | `ubuntu`                                                                   |
 | `LIGHTSAIL_SSH_KEY` | Private key whose public half is in `~/.ssh/authorized_keys` on the server |
-| `LIGHTSAIL_PORT` | Optional, defaults to 22 |
+| `LIGHTSAIL_PORT`    | Optional, defaults to 22                                                   |
 
 **Variables** (baked into the browser bundle at build time)
 
@@ -175,16 +175,16 @@ that domain. No code changes.
 The site now has `/privacy`, `/terms` and `/imprint`, linked from the footer
 and the sign-up form. They read the business details from these keys:
 
-| Key | Example |
-| --- | --- |
-| `LEGAL_NAME` | Fit Planet LLC |
-| `LEGAL_ADDRESS` | 123 Main St \| Suite 4 \| Wilmington, DE 19801 \| United States |
-| `LEGAL_EMAIL` | privacy@yourdomain.com |
-| `LEGAL_PHONE` | Optional |
-| `LEGAL_REPRESENTATIVE` | Managing director's name (needed for Germany) |
-| `LEGAL_REGISTER` | Company register and number, once registered |
-| `LEGAL_VAT_ID` | EU VAT ID, if you have one |
-| `LEGAL_JURISDICTION` | Delaware, United States |
+| Key                    | Example                                                         |
+| ---------------------- | --------------------------------------------------------------- |
+| `LEGAL_NAME`           | Fit Planet LLC                                                  |
+| `LEGAL_ADDRESS`        | 123 Main St \| Suite 4 \| Wilmington, DE 19801 \| United States |
+| `LEGAL_EMAIL`          | privacy@yourdomain.com                                          |
+| `LEGAL_PHONE`          | Optional                                                        |
+| `LEGAL_REPRESENTATIVE` | Managing director's name (needed for Germany)                   |
+| `LEGAL_REGISTER`       | Company register and number, once registered                    |
+| `LEGAL_VAT_ID`         | EU VAT ID, if you have one                                      |
+| `LEGAL_JURISDICTION`   | Delaware, United States                                         |
 
 Germany requires a real name, postal address and email on the imprint before
 launch. The texts are written in plain English as a solid starting point;
@@ -203,37 +203,38 @@ All optional. Add only the ones you run ads on to the server's
 until a visitor accepts in the cookie banner, and the banner only appears once
 at least one id below is set.
 
-| Variable | Where to get it |
-| --- | --- |
-| `GTM_ID` | tagmanager.google.com > create a Web container > id like `GTM-ABC1234` |
-| `GA4_MEASUREMENT_ID` | analytics.google.com > Admin > Data streams > Web > id like `G-ABC123XYZ` |
-| `META_PIXEL_ID` | business.facebook.com > Events Manager > Connect data sources > Web > dataset id |
-| `META_CAPI_ACCESS_TOKEN` | Same dataset > Settings > Conversions API > Generate access token |
-| `META_TEST_EVENT_CODE` | Only while testing: Events Manager > Test events. Remove after |
-| `OPENAI_PIXEL_ID` | ChatGPT ads: OpenAI Ads Manager > Conversions tab > create a pixel |
-| `OPENAI_CAPI_KEY` | Same Conversions tab > Conversions API key |
+| Variable                 | Where to get it                                                                  |
+| ------------------------ | -------------------------------------------------------------------------------- |
+| `GTM_ID`                 | tagmanager.google.com > create a Web container > id like `GTM-ABC1234`           |
+| `GA4_MEASUREMENT_ID`     | analytics.google.com > Admin > Data streams > Web > id like `G-ABC123XYZ`        |
+| `META_PIXEL_ID`          | business.facebook.com > Events Manager > Connect data sources > Web > dataset id |
+| `META_CAPI_ACCESS_TOKEN` | Same dataset > Settings > Conversions API > Generate access token                |
+| `META_TEST_EVENT_CODE`   | Only while testing: Events Manager > Test events. Remove after                   |
+| `OPENAI_PIXEL_ID`        | ChatGPT ads: OpenAI Ads Manager > Conversions tab > create a pixel               |
+| `OPENAI_CAPI_KEY`        | Same Conversions tab > Conversions API key                                       |
 
 What gets tracked (browser, plus server side for Meta and OpenAI):
 
-| Step | GA4 / dataLayer | Meta | OpenAI |
-| --- | --- | --- | --- |
-| Every page | `page_view` | `PageView` | `page_viewed` |
-| Gym page | `view_item` | `ViewContent` | `contents_viewed` |
-| Search on /gyms | `search` | `Search` | |
-| Save a gym | `add_to_wishlist` | `AddToWishlist` | |
-| Member sign-up | `sign_up` | `CompleteRegistration` (+ server) | `registration_completed` (+ server) |
-| Gym owner sign-up | `sign_up`, `generate_lead` | `Lead` (+ server) | `lead_created` (+ server) |
-| Login | `login` | | |
-| Checkout started | `begin_checkout` | `InitiateCheckout` | `checkout_started` |
-| Paid online (Stripe) | `purchase` | `Purchase` (+ server) | `order_created` (+ server) |
-| Reserved, pay at desk | `reserve_pass` | `Schedule` (+ server) | `appointment_scheduled` (+ server) |
-| Gym published (owner) | `publish_gym` | | |
+| Step                  | GA4 / dataLayer            | Meta                              | OpenAI                              |
+| --------------------- | -------------------------- | --------------------------------- | ----------------------------------- |
+| Every page            | `page_view`                | `PageView`                        | `page_viewed`                       |
+| Gym page              | `view_item`                | `ViewContent`                     | `contents_viewed`                   |
+| Search on /gyms       | `search`                   | `Search`                          |                                     |
+| Save a gym            | `add_to_wishlist`          | `AddToWishlist`                   |                                     |
+| Member sign-up        | `sign_up`                  | `CompleteRegistration` (+ server) | `registration_completed` (+ server) |
+| Gym owner sign-up     | `sign_up`, `generate_lead` | `Lead` (+ server)                 | `lead_created` (+ server)           |
+| Login                 | `login`                    |                                   |                                     |
+| Checkout started      | `begin_checkout`           | `InitiateCheckout`                | `checkout_started`                  |
+| Paid online (Stripe)  | `purchase`                 | `Purchase` (+ server)             | `order_created` (+ server)          |
+| Reserved, pay at desk | `reserve_pass`             | `Schedule` (+ server)             | `appointment_scheduled` (+ server)  |
+| Gym published (owner) | `publish_gym`              |                                   |                                     |
 
 Browser and server events share an event id, so Meta and OpenAI count each
 conversion once. Signed-in members get a GA4 `user_id` so journeys join up
 across devices.
 
 Setup notes:
+
 - Use GA4 directly (`GA4_MEASUREMENT_ID`) or through GTM, not both.
 - In GA4 > Admin > Events, mark `sign_up`, `purchase` and `reserve_pass` as key events.
 - For Google Ads, add a Google Ads conversion tag in GTM triggered by the

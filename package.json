@@ -1,13 +1,13 @@
 {
   "name": "fit-planet",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "packageManager": "bun@1.4.4",
   "engines": {
     "bun": ">=1.4.4"
   },
   "scripts": {
-    "dev": "bun --bun next dev --webpack",
+    "dev": "bun --bun next dev --port 9000",
     "build": "bun --bun next build",
     "start": "bun --bun next start",
     "typecheck": "bun --bun tsc --noEmit",
@@ -28,7 +28,7 @@
     "firebase-admin": "^14.5.0",
     "jsqr": "^1.4.0",
     "mongodb": "^7.7.0",
-    "next": "16.4.2",
+    "next": "^16.4.5",
     "next-auth": "5.0.0-beta.32",
     "next-intl": "4.14.9",
     "nodemailer": "^10.2.1",
