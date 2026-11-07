@@ -11,6 +11,7 @@ import { env } from "@/server/env";
 import { email } from "@/server/services/email";
 import { restoredEmail, suspendedEmail } from "@/server/services/email/templates";
 import { translatorFor } from "@/server/i18n";
+import { reportError } from "@/lib/monitoring";
 import { reasonLabel, type SuspensionReason } from "@/lib/suspension";
 
 export class AdminError extends AppError {}
@@ -88,7 +89,7 @@ async function sendQuietly(send: () => Promise<void>) {
   try {
     await send();
   } catch (error) {
-    console.error("[admin] email failed", error);
+    reportError("[admin] email failed", error);
   }
 }
 
