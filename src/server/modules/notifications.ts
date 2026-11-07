@@ -29,6 +29,7 @@ export type NotificationKey =
   | "gymVerified"
   | "gymSuspended"
   | "gymRestored"
+  | "gymTransferred"
   | "postRemoved"
   | "staffJoined";
 
