@@ -1,12 +1,13 @@
 import { StudioLayoutWrapper } from "@/components/studio/StudioLayoutWrapper";
 import { requireOwner, initials } from "@/server/session";
 import { unreadCount } from "@/server/modules/notifications";
+import { orFallback } from "@/server/degrade";
 
 export const dynamic = "force-dynamic";
 
 export default async function StudioPortalLayout({ children }: { children: React.ReactNode }) {
   const { user, gym, gyms, role } = await requireOwner();
-  const unread = await unreadCount(user._id);
+  const unread = await orFallback("[studio] unread count failed", unreadCount(user._id), 0);
   return (
     <StudioLayoutWrapper
       role={role}

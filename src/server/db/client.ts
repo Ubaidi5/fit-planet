@@ -20,6 +20,10 @@ export function getMongoClient(): Promise<MongoClient> {
       serverApi: { version: ServerApiVersion.v1, strict: false, deprecationErrors: true },
       maxPoolSize: 20,
       serverSelectionTimeoutMS: 8000,
+      connectTimeoutMS: 8000,
+      // No single database call may hold a request longer than this; a slow
+      // query fails its own section instead of hanging the whole page
+      timeoutMS: 15_000,
     });
     global._fitPlanetMongo = client.connect().catch((error) => {
       global._fitPlanetMongo = undefined;

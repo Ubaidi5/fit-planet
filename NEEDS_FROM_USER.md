@@ -13,11 +13,17 @@ Every key is described in [`.env.example`](./.env.example).
 | Session secret | `openssl rand -base64 32` | `AUTH_SECRET` |
 | Domain | Point an A record at the Lightsail static IP | `APP_URL=https://yourdomain.com` |
 
-Then load demo data once (optional). The database only listens on the server,
-so tunnel to it from your machine: `ssh -N -L 27018:127.0.0.1:27017 ubuntu@SERVER_IP`,
-then in another terminal run `bun run db:seed` with `DB_URI` set to the same URI
-but port `27018`. It creates `owner@fitplanet.dev` and
-`member@fitplanet.dev` (password `fitplanet123`, or `SEED_PASSWORD`).
+To show sample studios on the live site before real gyms join, load them once
+(optional). The database only listens on the server, so tunnel to it from your
+machine: `ssh -N -L 27018:127.0.0.1:27017 ubuntu@SERVER_IP`, then in another
+terminal run `bun run db:demo-studios` with `DB_URI` set to the same URI but
+port `27018`. It adds only gyms and their reviews, tagged as samples: no accounts
+and no bookings, and members can't buy passes at them. Remove them later in
+`/admin/gyms` under "Sample studios" (all at once, or hide them one by one).
+
+`bun run db:seed` is for local development only: it also creates
+`owner@fitplanet.dev` and `member@fitplanet.dev` with a known password
+(`fitplanet123`, or `SEED_PASSWORD`), so don't run it against production.
 
 ## 2. Firebase push notifications
 
@@ -188,3 +194,68 @@ have a lawyer check them for the EU, UAE and Türkiye before going live.
 
 Set `ADMIN_EMAILS` in the server's `.env` to your own email (comma-separated for
 more people), sign in with that account and open `/admin`.
+
+## 11. Analytics and ad pixels
+
+All optional. Add only the ones you run ads on to the server's
+`/var/www/fitplanet/shared/.env`, then restart the service
+(`systemctl --user restart fitplanet`). No rebuild is needed. Nothing loads
+until a visitor accepts in the cookie banner, and the banner only appears once
+at least one id below is set.
+
+| Variable | Where to get it |
+| --- | --- |
+| `GTM_ID` | tagmanager.google.com > create a Web container > id like `GTM-ABC1234` |
+| `GA4_MEASUREMENT_ID` | analytics.google.com > Admin > Data streams > Web > id like `G-ABC123XYZ` |
+| `META_PIXEL_ID` | business.facebook.com > Events Manager > Connect data sources > Web > dataset id |
+| `META_CAPI_ACCESS_TOKEN` | Same dataset > Settings > Conversions API > Generate access token |
+| `META_TEST_EVENT_CODE` | Only while testing: Events Manager > Test events. Remove after |
+| `OPENAI_PIXEL_ID` | ChatGPT ads: OpenAI Ads Manager > Conversions tab > create a pixel |
+| `OPENAI_CAPI_KEY` | Same Conversions tab > Conversions API key |
+
+What gets tracked (browser, plus server side for Meta and OpenAI):
+
+| Step | GA4 / dataLayer | Meta | OpenAI |
+| --- | --- | --- | --- |
+| Every page | `page_view` | `PageView` | `page_viewed` |
+| Gym page | `view_item` | `ViewContent` | `contents_viewed` |
+| Search on /gyms | `search` | `Search` | |
+| Save a gym | `add_to_wishlist` | `AddToWishlist` | |
+| Member sign-up | `sign_up` | `CompleteRegistration` (+ server) | `registration_completed` (+ server) |
+| Gym owner sign-up | `sign_up`, `generate_lead` | `Lead` (+ server) | `lead_created` (+ server) |
+| Login | `login` | | |
+| Checkout started | `begin_checkout` | `InitiateCheckout` | `checkout_started` |
+| Paid online (Stripe) | `purchase` | `Purchase` (+ server) | `order_created` (+ server) |
+| Reserved, pay at desk | `reserve_pass` | `Schedule` (+ server) | `appointment_scheduled` (+ server) |
+| Gym published (owner) | `publish_gym` | | |
+
+Browser and server events share an event id, so Meta and OpenAI count each
+conversion once. Signed-in members get a GA4 `user_id` so journeys join up
+across devices.
+
+Setup notes:
+- Use GA4 directly (`GA4_MEASUREMENT_ID`) or through GTM, not both.
+- In GA4 > Admin > Events, mark `sign_up`, `purchase` and `reserve_pass` as key events.
+- For Google Ads, add a Google Ads conversion tag in GTM triggered by the
+  `purchase` custom event (value from `ecommerce.value`).
+- In Meta Events Manager, verify your domain and prioritise `Purchase`.
+
+## 12. Error monitoring (Sentry)
+
+1. Create a free account at sentry.io and a project of type **Next.js**. Pick
+   the EU region if most users are in Europe (data stays in the EU).
+2. Copy the project's DSN (Settings, Projects, your project, Client Keys) into
+   `SENTRY_DSN` in the server's `.env` and restart the app. Nothing else is
+   needed; the release name is picked up from the deploy folder.
+3. In Sentry, Settings, Security & Privacy, turn on **Data Scrubber** and
+   **Prevent Storing of IP Addresses** as a second layer behind the app's own
+   scrubbing.
+4. Optional: add an alert rule (Alerts, Create alert, Issues) that emails you
+   when a new issue appears.
+
+## 13. nginx flood limits (one time)
+
+`deploy/nginx-zone.conf` now also caps open connections per visitor and form
+posts per second. Copy it again to `/etc/nginx/conf.d/fitplanet-zone.conf`,
+copy `deploy/nginx-locations.conf` to where your site includes it, then run
+`sudo nginx -t && sudo systemctl reload nginx`.

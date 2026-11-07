@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import type { z } from "zod";
 import { AppError } from "@/server/errors";
+import { reportError } from "@/lib/monitoring";
 
 type Values = Record<string, string | number>;
 
@@ -19,7 +20,7 @@ export async function done<T extends object = object>(key: string, values?: Valu
 /** Maps a thrown AppError to its message, and anything else to a logged generic failure */
 export async function failFrom(error: unknown, fallbackKey: string, logLabel: string) {
   if (error instanceof AppError) return fail(error.key, error.values);
-  console.error(logLabel, error);
+  reportError(logLabel, error);
   return fail(fallbackKey);
 }
 

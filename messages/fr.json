@@ -54,7 +54,9 @@
     "legal": "Mentions légales",
     "privacy": "Confidentialité",
     "terms": "Conditions",
-    "imprint": "Mentions légales"
+    "imprint": "Mentions légales",
+    "cookieSettings": "Paramètres des cookies",
+    "allCities": "Toutes les villes"
   },
   "hero": {
     "liveBadge": "EN DIRECT",
@@ -1995,6 +1997,10 @@
       "title": "{gym} est de retour",
       "body": "Votre fiche est restaurée en brouillon. Vérifiez-la et republiez-la depuis le profil de la salle."
     },
+    "gymTransferred": {
+      "title": "{gym} est maintenant à vous",
+      "body": "Un administrateur a transféré ce studio sur votre compte. Gérez-le depuis le profil de la salle."
+    },
     "postRemoved": {
       "title": "Une de vos publications a été supprimée",
       "body": "Elle enfreignait nos règles de la communauté après des signalements de membres."
@@ -2040,6 +2046,34 @@
       "heading": "Rejoignez {gym} sur Fit Planet",
       "body": "{name} vous invite à enregistrer les membres chez {gym}. Ouvrez le lien sous sept jours et connectez-vous avec cette adresse e-mail.",
       "cta": "Accepter l'invitation"
+    },
+    "suspension": {
+      "accountSubject": "Votre compte Fit Planet est suspendu",
+      "accountHeading": "Votre compte est suspendu",
+      "accountBody": "Nous avons suspendu votre compte Fit Planet. Tant qu'il est suspendu, vous ne pouvez ni vous connecter ni réserver de pass.",
+      "gymSubject": "{gym} est suspendu sur Fit Planet",
+      "gymHeading": "{gym} est suspendu",
+      "gymBody": "Nous avons masqué {gym} sur Fit Planet pendant la suspension. Les membres ne peuvent ni le trouver ni le réserver.",
+      "reason": "Motif",
+      "appeal": "Si vous pensez qu'il s'agit d'une erreur, contactez le support Fit Planet et nous réexaminerons la situation.",
+      "accountRestoredSubject": "Votre compte Fit Planet est de nouveau actif",
+      "accountRestoredBody": "Votre compte n'est plus suspendu. Vous pouvez de nouveau vous connecter et réserver des pass.",
+      "gymRestoredSubject": "{gym} n'est plus suspendu",
+      "gymRestoredBody": "Votre annonce est revenue en brouillon. Vérifiez-la et publiez-la à nouveau depuis le profil de la salle.",
+      "signIn": "Se connecter",
+      "openStudio": "Ouvrir le profil de la salle"
+    },
+    "reasons": {
+      "spam": "Spam ou fausse activité",
+      "fakeAccount": "Compte faux ou usurpation d'identité",
+      "harassment": "Comportement harcelant ou abusif",
+      "fakeListing": "Annonce fausse ou invérifiable",
+      "misleading": "Photos, prix ou informations trompeurs",
+      "safety": "Plaintes liées à la sécurité ou à l'hygiène",
+      "complaints": "Plaintes répétées de membres",
+      "fraud": "Fraude au paiement ou rétrofacturations",
+      "terms": "Non-respect de nos conditions d'utilisation",
+      "other": "Autre"
     }
   },
   "exerciseInfo": {
@@ -2205,7 +2239,165 @@
     "home": "Retour à l'accueil",
     "errorTitle": "Un problème est survenu",
     "errorText": "Nous n'avons pas pu charger cette page. Réessayez, et si le problème persiste, revenez dans quelques minutes.",
+    "sectionTitle": "Cette partie ne s'est pas chargée",
+    "sectionText": "Le reste de la page fonctionne. Réessayez dans un instant.",
     "retry": "Réessayer",
     "reference": "Référence {id}"
+  },
+  "consent": {
+    "label": "Cookies",
+    "title": "Vos données, votre choix",
+    "body": "Nous aimerions mesurer l'utilisation de Fit Planet et savoir quelles publicités amènent les gens ici. Rien n'est suivi avant votre choix, et vous pouvez le modifier à tout moment. <link>Politique de confidentialité</link>",
+    "acceptAll": "Tout accepter",
+    "rejectAll": "Tout refuser",
+    "customize": "Choisir moi-même",
+    "save": "Enregistrer mes choix",
+    "alwaysOn": "Toujours actifs",
+    "close": "Fermer",
+    "necessary": {
+      "title": "Essentiels",
+      "text": "Vous gardent connecté, sécurisent les paiements et retiennent votre région."
+    },
+    "analytics": {
+      "title": "Mesure d'audience",
+      "text": "Google Analytics et Tag Manager nous montrent quelles pages et étapes de réservation fonctionnent."
+    },
+    "ads": {
+      "title": "Publicité",
+      "text": "Permet à Meta, Google et aux publicités ChatGPT de mesurer quelle annonce vous a amené ici."
+    }
+  },
+  "cityPages": {
+    "trail": "Fil d'Ariane",
+    "home": "Accueil",
+    "gyms": "Salles",
+    "cities": "Villes",
+    "whatGyms": "Salles de sport",
+    "whatGymsInline": "salles de sport",
+    "title": "{what} à <accent>{city}</accent>",
+    "metaTitle": "{what} à {city} · Pass journée dès {price}",
+    "metaDescription": "Comparez {count, plural, one {# salle partenaire} other {# salles partenaires}} à {city}. Pass journée dès {price}, sans abonnement. Voyez l'affluence en direct et réservez en devise locale.",
+    "lead": "{count, plural, one {# salle partenaire} other {# salles partenaires}} à {city}, avec des pass journée dès {price}. Ni abonnement ni frais d'inscription : choisissez une salle, réservez un pass en {currency} et entrez avec le QR sur votre téléphone.",
+    "stats": {
+      "gyms": "Salles partenaires",
+      "dayFrom": "Pass journée dès",
+      "rating": "Note moyenne",
+      "ratingNone": "Nouveau",
+      "reviews": "{count, plural, one {# avis} other {# avis}}",
+      "open247": "Ouvertes 24 h/24"
+    },
+    "explorer": "Ouvrir la carte en direct",
+    "passport": "Obtenir votre passeport gratuit",
+    "browse": "Parcourir par type",
+    "allTypes": "Toutes les salles",
+    "listTitle": "Les mieux notées d'abord",
+    "listCount": "{count, plural, one {# salle} other {# salles}}",
+    "prices": {
+      "eyebrow": "Guide des prix",
+      "title": "Combien coûte un pass à {city}",
+      "pass": "Pass",
+      "from": "Dès",
+      "average": "Moyenne",
+      "day": "Pass journée",
+      "week": "Pass semaine",
+      "month": "Pass mois",
+      "note": "Basé sur {count, plural, one {# salle partenaire} other {# salles partenaires}} sur Fit Planet, en {currency}. Mis à jour toutes les heures."
+    },
+    "areas": {
+      "title": "Quartiers",
+      "count": "{count, plural, one {# salle} other {# salles}}"
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Bon à savoir avant d'y aller",
+      "priceQ": "Combien coûte un pass journée pour les {what} à {city} ?",
+      "priceA": "Les pass journée commencent à {from}, pour une moyenne de {average} sur {count, plural, one {# salle partenaire} other {# salles partenaires}}.",
+      "weekA": "Un pass semaine commence à {price}.",
+      "monthA": "Un pass mois commence à {price}.",
+      "open247Q": "Y a-t-il des salles ouvertes 24 h/24 à {city} ?",
+      "open247Yes": "Oui. {count, plural, one {Une salle partenaire est ouverte} other {# salles partenaires sont ouvertes}} jour et nuit : {names}.",
+      "open247No": "Pas encore. Aucune de nos salles partenaires à {city} n'est ouverte 24 h/24 pour le moment : consultez les horaires sur la page de chaque salle.",
+      "bestQ": "Parmi les {what} à {city}, quelle adresse est la mieux notée ?",
+      "bestA": "{name}, à {area}, a la meilleure note : {rating} sur 5 sur {count, plural, one {# avis} other {# avis}}.",
+      "areasQ": "Dans quels quartiers de {city} trouver des {what} ?",
+      "areasA": "{count, plural, one {Une salle partenaire correspond} other {# salles partenaires correspondent}}, à {areas}.",
+      "membershipQ": "Faut-il un abonnement pour s'entraîner à {city} ?",
+      "membershipA": "Non. Choisissez une salle, achetez un pass journée, semaine ou mois en {currency} et enregistrez-vous avec le QR code sur votre téléphone. Sans engagement ni frais d'inscription."
+    },
+    "otherCities": "Salles dans d'autres villes",
+    "allCities": "Toutes les villes",
+    "gymsInCity": "Salles à {city}",
+    "categories": {
+      "open247": {
+        "title": "Salles ouvertes 24 h/24",
+        "inline": "salles ouvertes 24 h/24"
+      },
+      "yoga": {
+        "title": "Studios de yoga",
+        "inline": "studios de yoga"
+      },
+      "pilates": {
+        "title": "Studios de Pilates",
+        "inline": "studios de Pilates"
+      },
+      "crossfit": {
+        "title": "Box de CrossFit",
+        "inline": "box de CrossFit"
+      },
+      "boxing": {
+        "title": "Salles de boxe",
+        "inline": "salles de boxe"
+      },
+      "martialArts": {
+        "title": "Salles d'arts martiaux",
+        "inline": "salles d'arts martiaux"
+      },
+      "powerlifting": {
+        "title": "Salles de powerlifting",
+        "inline": "salles de powerlifting"
+      },
+      "spin": {
+        "title": "Studios de spinning",
+        "inline": "studios de spinning"
+      },
+      "pool": {
+        "title": "Salles avec piscine",
+        "inline": "salles avec piscine"
+      },
+      "sauna": {
+        "title": "Salles avec sauna",
+        "inline": "salles avec sauna"
+      },
+      "spa": {
+        "title": "Salles avec spa",
+        "inline": "salles avec spa"
+      },
+      "womenOnly": {
+        "title": "Salles avec espace femmes",
+        "inline": "salles avec espace femmes"
+      },
+      "personalTraining": {
+        "title": "Salles avec coaching personnel",
+        "inline": "salles avec coaching personnel"
+      },
+      "groupClasses": {
+        "title": "Salles avec cours collectifs",
+        "inline": "salles avec cours collectifs"
+      },
+      "wheelchair": {
+        "title": "Salles accessibles en fauteuil",
+        "inline": "salles accessibles en fauteuil"
+      }
+    },
+    "hub": {
+      "meta": "Salles par ville",
+      "metaDescription": "Trouvez des salles partenaires dans {count, plural, one {# ville} other {# villes}}. Comparez pass journée, semaine et mois en devise locale et réservez sans abonnement.",
+      "eyebrow": "Villes",
+      "title": "Des salles dans <accent>chaque ville</accent> Fit Planet",
+      "lead": "Choisissez une ville pour comparer ses salles, ses prix et ses horaires. Chaque pass est vendu en devise locale, sans abonnement.",
+      "cities": "{count, plural, one {# ville} other {# villes}}",
+      "gyms": "{count, plural, one {# salle} other {# salles}}",
+      "from": "Pass journée dès {price}"
+    }
   }
 }

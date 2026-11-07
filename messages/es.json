@@ -54,7 +54,9 @@
     "legal": "Legal",
     "privacy": "Privacidad",
     "terms": "Términos",
-    "imprint": "Aviso legal"
+    "imprint": "Aviso legal",
+    "cookieSettings": "Configuración de cookies",
+    "allCities": "Todas las ciudades"
   },
   "hero": {
     "liveBadge": "EN VIVO",
@@ -1995,6 +1997,10 @@
       "title": "{gym} ha vuelto",
       "body": "Tu ficha se ha restaurado como borrador. Revísala y vuelve a publicarla desde el perfil del gimnasio."
     },
+    "gymTransferred": {
+      "title": "{gym} ahora es tuyo",
+      "body": "Un administrador ha pasado este estudio a tu cuenta. Gestiónalo desde el perfil del gimnasio."
+    },
     "postRemoved": {
       "title": "Se ha eliminado una de tus publicaciones",
       "body": "Incumplía nuestras normas de la comunidad tras las denuncias de otros miembros."
@@ -2040,6 +2046,34 @@
       "heading": "Únete a {gym} en Fit Planet",
       "body": "{name} te ha invitado a registrar miembros en {gym}. Abre el enlace en los próximos siete días e inicia sesión con este correo.",
       "cta": "Aceptar invitación"
+    },
+    "suspension": {
+      "accountSubject": "Tu cuenta de Fit Planet está suspendida",
+      "accountHeading": "Tu cuenta está suspendida",
+      "accountBody": "Hemos suspendido tu cuenta de Fit Planet. Mientras esté suspendida no podrás iniciar sesión ni reservar pases.",
+      "gymSubject": "{gym} está suspendido en Fit Planet",
+      "gymHeading": "{gym} está suspendido",
+      "gymBody": "Hemos ocultado {gym} en Fit Planet mientras esté suspendido. Los miembros no pueden encontrarlo ni reservarlo.",
+      "reason": "Motivo",
+      "appeal": "Si crees que es un error, contacta con el soporte de Fit Planet y lo revisaremos de nuevo.",
+      "accountRestoredSubject": "Tu cuenta de Fit Planet vuelve a estar activa",
+      "accountRestoredBody": "Tu cuenta ya no está suspendida. Puedes volver a iniciar sesión y reservar pases.",
+      "gymRestoredSubject": "{gym} ya no está suspendido",
+      "gymRestoredBody": "Tu ficha vuelve a estar como borrador. Revísala y publícala de nuevo desde el perfil del gimnasio.",
+      "signIn": "Iniciar sesión",
+      "openStudio": "Abrir perfil del gimnasio"
+    },
+    "reasons": {
+      "spam": "Spam o actividad falsa",
+      "fakeAccount": "Cuenta falsa o suplantación de identidad",
+      "harassment": "Comportamiento acosador u ofensivo",
+      "fakeListing": "Ficha falsa o no verificable",
+      "misleading": "Fotos, precios o datos engañosos",
+      "safety": "Quejas de seguridad o higiene",
+      "complaints": "Quejas repetidas de miembros",
+      "fraud": "Fraude en pagos o contracargos",
+      "terms": "Incumplimiento de nuestras condiciones de uso",
+      "other": "Otro"
     }
   },
   "exerciseInfo": {
@@ -2205,7 +2239,165 @@
     "home": "Volver al inicio",
     "errorTitle": "Algo ha salido mal",
     "errorText": "No hemos podido cargar esta página. Inténtalo de nuevo y, si sigue pasando, vuelve en unos minutos.",
+    "sectionTitle": "Esta parte no se ha cargado",
+    "sectionText": "El resto de la página funciona. Inténtalo de nuevo en un momento.",
     "retry": "Reintentar",
     "reference": "Referencia {id}"
+  },
+  "consent": {
+    "label": "Cookies",
+    "title": "Tus datos, tu decisión",
+    "body": "Queremos medir cómo se usa Fit Planet y qué anuncios traen a la gente aquí. No se registra nada hasta que elijas, y puedes cambiar de opinión cuando quieras. <link>Política de privacidad</link>",
+    "acceptAll": "Aceptar todo",
+    "rejectAll": "Rechazar todo",
+    "customize": "Elegir qué permitir",
+    "save": "Guardar mi elección",
+    "alwaysOn": "Siempre activas",
+    "close": "Cerrar",
+    "necessary": {
+      "title": "Esenciales",
+      "text": "Mantienen tu sesión, protegen los pagos y recuerdan tu región."
+    },
+    "analytics": {
+      "title": "Analítica",
+      "text": "Google Analytics y Tag Manager nos muestran qué páginas y pasos de reserva funcionan."
+    },
+    "ads": {
+      "title": "Publicidad",
+      "text": "Permite que Meta, Google y los anuncios de ChatGPT midan qué anuncio te trajo aquí."
+    }
+  },
+  "cityPages": {
+    "trail": "Ruta de navegación",
+    "home": "Inicio",
+    "gyms": "Gimnasios",
+    "cities": "Ciudades",
+    "whatGyms": "Gimnasios",
+    "whatGymsInline": "gimnasios",
+    "title": "{what} en <accent>{city}</accent>",
+    "metaTitle": "{what} en {city} · Pases de día desde {price}",
+    "metaDescription": "Compara {count, plural, one {# gimnasio asociado} other {# gimnasios asociados}} en {city}. Pases de día desde {price}, sin cuota de socio. Mira cuánta gente hay y reserva en moneda local.",
+    "lead": "{count, plural, one {# gimnasio asociado} other {# gimnasios asociados}} en {city}, con pases de día desde {price}. Sin cuota ni matrícula: elige un gimnasio, reserva un pase en {currency} y entra con el QR de tu móvil.",
+    "stats": {
+      "gyms": "Gimnasios asociados",
+      "dayFrom": "Pase de día desde",
+      "rating": "Valoración media",
+      "ratingNone": "Nuevo",
+      "reviews": "{count, plural, one {# reseña} other {# reseñas}}",
+      "open247": "Abiertos 24/7"
+    },
+    "explorer": "Abrir el mapa en directo",
+    "passport": "Consigue tu pasaporte gratis",
+    "browse": "Explorar por tipo",
+    "allTypes": "Todos los gimnasios",
+    "listTitle": "Mejor valorados primero",
+    "listCount": "{count, plural, one {# gimnasio} other {# gimnasios}}",
+    "prices": {
+      "eyebrow": "Guía de precios",
+      "title": "Cuánto cuesta un pase de gimnasio en {city}",
+      "pass": "Pase",
+      "from": "Desde",
+      "average": "Media",
+      "day": "Pase de día",
+      "week": "Pase semanal",
+      "month": "Pase mensual",
+      "note": "Basado en {count, plural, one {# gimnasio asociado} other {# gimnasios asociados}} de Fit Planet, en {currency}. Se actualiza cada hora."
+    },
+    "areas": {
+      "title": "Barrios",
+      "count": "{count, plural, one {# gimnasio} other {# gimnasios}}"
+    },
+    "faq": {
+      "eyebrow": "Preguntas frecuentes",
+      "title": "Lo que conviene saber antes de ir",
+      "priceQ": "¿Cuánto cuesta un pase de día en {what} de {city}?",
+      "priceA": "Los pases de día empiezan en {from} y cuestan de media {average} en {count, plural, one {# gimnasio asociado} other {# gimnasios asociados}}.",
+      "weekA": "Un pase semanal empieza en {price}.",
+      "monthA": "Un pase mensual empieza en {price}.",
+      "open247Q": "¿Hay gimnasios abiertos 24/7 en {city}?",
+      "open247Yes": "Sí. {count, plural, one {Un gimnasio asociado abre} other {# gimnasios asociados abren}} las 24 horas: {names}.",
+      "open247No": "Todavía no. Ahora mismo ninguno de nuestros gimnasios asociados en {city} abre 24/7, así que revisa el horario en la página de cada gimnasio.",
+      "bestQ": "¿Cuál de los {what} de {city} tiene mejor valoración?",
+      "bestA": "{name}, en {area}, tiene la mejor valoración: {rating} de 5 con {count, plural, one {# reseña} other {# reseñas}}.",
+      "areasQ": "¿En qué zonas de {city} hay {what}?",
+      "areasA": "{count, plural, one {Hay un gimnasio asociado} other {Hay # gimnasios asociados}}, en {areas}.",
+      "membershipQ": "¿Necesito hacerme socio para entrenar en {city}?",
+      "membershipA": "No. Elige un gimnasio, compra un pase de día, semana o mes en {currency} y haz check-in con el código QR de tu móvil. Sin permanencia ni matrícula."
+    },
+    "otherCities": "Gimnasios en otras ciudades",
+    "allCities": "Todas las ciudades",
+    "gymsInCity": "Gimnasios en {city}",
+    "categories": {
+      "open247": {
+        "title": "Gimnasios 24/7",
+        "inline": "gimnasios 24/7"
+      },
+      "yoga": {
+        "title": "Estudios de yoga",
+        "inline": "estudios de yoga"
+      },
+      "pilates": {
+        "title": "Estudios de pilates",
+        "inline": "estudios de pilates"
+      },
+      "crossfit": {
+        "title": "Boxes de CrossFit",
+        "inline": "boxes de CrossFit"
+      },
+      "boxing": {
+        "title": "Gimnasios de boxeo",
+        "inline": "gimnasios de boxeo"
+      },
+      "martialArts": {
+        "title": "Gimnasios de artes marciales",
+        "inline": "gimnasios de artes marciales"
+      },
+      "powerlifting": {
+        "title": "Gimnasios de powerlifting",
+        "inline": "gimnasios de powerlifting"
+      },
+      "spin": {
+        "title": "Estudios de spinning",
+        "inline": "estudios de spinning"
+      },
+      "pool": {
+        "title": "Gimnasios con piscina",
+        "inline": "gimnasios con piscina"
+      },
+      "sauna": {
+        "title": "Gimnasios con sauna",
+        "inline": "gimnasios con sauna"
+      },
+      "spa": {
+        "title": "Gimnasios con spa",
+        "inline": "gimnasios con spa"
+      },
+      "womenOnly": {
+        "title": "Gimnasios con zona solo para mujeres",
+        "inline": "gimnasios con zona solo para mujeres"
+      },
+      "personalTraining": {
+        "title": "Gimnasios con entrenador personal",
+        "inline": "gimnasios con entrenador personal"
+      },
+      "groupClasses": {
+        "title": "Gimnasios con clases colectivas",
+        "inline": "gimnasios con clases colectivas"
+      },
+      "wheelchair": {
+        "title": "Gimnasios accesibles en silla de ruedas",
+        "inline": "gimnasios accesibles en silla de ruedas"
+      }
+    },
+    "hub": {
+      "meta": "Gimnasios por ciudad",
+      "metaDescription": "Encuentra gimnasios asociados en {count, plural, one {# ciudad} other {# ciudades}}. Compara pases de día, semana y mes en moneda local y reserva sin cuota de socio.",
+      "eyebrow": "Ciudades",
+      "title": "Gimnasios en <accent>cada ciudad</accent> de Fit Planet",
+      "lead": "Elige una ciudad para comparar sus gimnasios, precios y horarios. Cada pase se vende en moneda local, sin hacerte socio.",
+      "cities": "{count, plural, one {# ciudad} other {# ciudades}}",
+      "gyms": "{count, plural, one {# gimnasio} other {# gimnasios}}",
+      "from": "Pase de día desde {price}"
+    }
   }
 }

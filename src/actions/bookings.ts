@@ -9,6 +9,8 @@ import { getSessionUser } from "@/server/session";
 import { BookingError, cancelBookingByMember, createBooking } from "@/server/modules/bookings";
 import { done, fail, invalid } from "./utils";
 import { allow } from "@/server/rate-limit";
+import { requestAttribution } from "@/server/tracking";
+import { reportError } from "@/lib/monitoring";
 
 const bookingSchema = z.object({
   gymId: z.string().min(1),
@@ -32,11 +34,11 @@ export async function bookPassAction(_prev: ActionResult | null, formData: FormD
 
   let destination: string;
   try {
-    const result = await createBooking({ ...parsed.data, user, gymId });
+    const result = await createBooking({ ...parsed.data, user, gymId, attribution: await requestAttribution() });
     destination = result.checkoutUrl ?? `/app/passes/${result.bookingId}?new=1`;
   } catch (error) {
     if (error instanceof BookingError) return fail(error.key, error.values);
-    console.error("[booking] create failed", error);
+    reportError("[booking] create failed", error);
     return fail("bookingCrashed");
   }
   redirect(destination);
@@ -50,7 +52,7 @@ export async function cancelBookingAction(bookingId: string): Promise<ActionResu
     await cancelBookingByMember(user._id, id);
   } catch (error) {
     if (error instanceof BookingError) return fail(error.key, error.values);
-    console.error("[booking] cancel failed", error);
+    reportError("[booking] cancel failed", error);
     return fail("cancelFailed");
   }
   revalidatePath("/app/passes");

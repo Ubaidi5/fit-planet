@@ -5,6 +5,7 @@ import { getSessionUser } from "@/server/session";
 import { MediaError, saveUpload } from "@/server/modules/media";
 import { fail } from "./utils";
 import { allow } from "@/server/rate-limit";
+import { reportError } from "@/lib/monitoring";
 
 /** Generic upload used by avatar and gym photo pickers. Returns the public URL. */
 export async function uploadImageAction(formData: FormData): Promise<ActionResult<{ url: string }>> {
@@ -20,7 +21,7 @@ export async function uploadImageAction(formData: FormData): Promise<ActionResul
     return { ok: true, data: { url } };
   } catch (error) {
     if (error instanceof MediaError) return fail(error.key, error.values);
-    console.error("[media] upload failed", error);
+    reportError("[media] upload failed", error);
     return fail("uploadFailed");
   }
 }

@@ -23,6 +23,8 @@ import { formatDate } from "@/lib/dates";
 import type { BookingView } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { getRegion } from "@/lib/i18n/server";
+import { attempt, orFallback } from "@/server/degrade";
+import { SectionUnavailable } from "@/components/ui/SectionUnavailable";
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations("nav"))("home") };
@@ -110,13 +112,16 @@ async function EmptyPass() {
 export default async function DashboardPage() {
   const user = await requireUser("/app/dashboard");
   const [t, tp, { locale }] = await Promise.all([getTranslations("home"), getTranslations("passes"), getRegion()]);
-  const [bookings, stamps, gyms] = await Promise.all([
-    listUserBookings(user._id),
-    passportStamps(user._id),
-    listPublishedGyms({ city: user.homeCity, limit: 8 }),
+  // Each block loads on its own: if one source is down, only that block says so
+  const [bookingsResult, stampsResult, gyms] = await Promise.all([
+    attempt("[dashboard] passes failed", listUserBookings(user._id)),
+    attempt("[dashboard] stamps failed", passportStamps(user._id)),
+    orFallback("[dashboard] suggestions failed", listPublishedGyms({ city: user.homeCity, limit: 8 }), []),
   ]);
-  const suggestions = gyms.length > 0 ? gyms : await listPublishedGyms({ limit: 8 });
+  const suggestions = gyms.length > 0 ? gyms : await orFallback("[dashboard] suggestions failed", listPublishedGyms({ limit: 8 }), []);
 
+  const bookings = bookingsResult.ok ? bookingsResult.value : [];
+  const stamps = stampsResult.ok ? stampsResult.value : [];
   const active = bookings.filter((b) => b.isActive);
   const upcoming = bookings.filter((b) => b.isUpcoming).sort((a, b) => a.startDate.localeCompare(b.startDate));
   const cities = new Set(stamps.map((s) => `${s.city}-${s.country}`)).size;
@@ -143,20 +148,28 @@ export default async function DashboardPage() {
             {firstName ? t("hi", { name: firstName }) : t("hiThere")}
           </h1>
         </div>
-        <Link
-          href="/app/checkins"
-          className="inline-flex h-10 shrink-0 items-center gap-2 rounded-full bg-surface ps-1.5 pe-4 text-sm font-semibold text-ink shadow-soft ring-1 ring-gray-900/[0.06]"
-        >
-          <span className="flex size-7 items-center justify-center rounded-full bg-volt font-mono text-xs">{stamps.length}</span>
-          {t("stampsWord", { count: stamps.length })}
-        </Link>
+        {stampsResult.ok && (
+          <Link
+            href="/app/checkins"
+            className="inline-flex h-10 shrink-0 items-center gap-2 rounded-full bg-surface ps-1.5 pe-4 text-sm font-semibold text-ink shadow-soft ring-1 ring-gray-900/[0.06]"
+          >
+            <span className="flex size-7 items-center justify-center rounded-full bg-volt font-mono text-xs">{stamps.length}</span>
+            {t("stampsWord", { count: stamps.length })}
+          </Link>
+        )}
       </header>
 
       <div className="grid gap-8 lg:grid-cols-12 lg:gap-8">
         <div className="space-y-8 lg:col-span-8">
           {/* Active pass(es) */}
           <section aria-label={t("activePass")} className="space-y-3">
-            {active.length > 0 ? active.slice(0, 2).map((b) => <ActivePass key={b.id} booking={b} />) : <EmptyPass />}
+            {!bookingsResult.ok ? (
+              <SectionUnavailable />
+            ) : active.length > 0 ? (
+              active.slice(0, 2).map((b) => <ActivePass key={b.id} booking={b} />)
+            ) : (
+              <EmptyPass />
+            )}
           </section>
 
           {/* Quick actions */}
@@ -183,7 +196,9 @@ export default async function DashboardPage() {
                 {t("allPasses")}
               </Link>
             </div>
-            {upcoming.length === 0 ? (
+            {!bookingsResult.ok ? (
+              <SectionUnavailable />
+            ) : upcoming.length === 0 ? (
               <p className="rounded-3xl bg-surface px-5 py-6 text-sm text-gray-500 shadow-soft ring-1 ring-gray-900/[0.05]">
                 {t("noUpcoming")}
               </p>
@@ -215,38 +230,42 @@ export default async function DashboardPage() {
           <PushPrompt title={t("push.title")} body={t("push.body")} />
 
           {/* Passport summary */}
-          <section className="relative overflow-hidden rounded-[1.75rem] bg-surface p-5 shadow-soft ring-1 ring-gray-900/[0.05]">
-            <p className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">{t("passport")}</p>
-            <dl className="mt-4 grid grid-cols-3 gap-2">
-              {[
-                [t("stats.gyms"), stamps.length],
-                [t("stats.cities"), cities],
-                [t("stats.visits"), visits],
-              ].map(([label, value]) => (
-                <div key={label} className="rounded-2xl bg-canvas px-3 py-3">
-                  <dd className="text-2xl font-semibold tracking-tight text-ink tabular-nums">{value}</dd>
-                  <dt className="text-xs text-gray-500">{label}</dt>
-                </div>
-              ))}
-            </dl>
-            {stamps.length > 0 ? (
-              <div className="mt-5 flex items-center gap-1 overflow-hidden">
-                {stamps.slice(0, 4).map((s, i) => (
-                  <Stamp
-                    key={s.gymId}
-                    code={cityCode(s.city)}
-                    label={s.name}
-                    size="sm"
-                    tone={stampTones[i % stampTones.length]}
-                    shape={i % 3 === 1 ? "dashed" : "circle"}
-                    rotate={[-10, 6, -4, 12][i % 4]}
-                  />
+          {!stampsResult.ok ? (
+            <SectionUnavailable />
+          ) : (
+            <section className="relative overflow-hidden rounded-[1.75rem] bg-surface p-5 shadow-soft ring-1 ring-gray-900/[0.05]">
+              <p className="font-mono text-[11px] tracking-[0.14em] text-gray-400 uppercase">{t("passport")}</p>
+              <dl className="mt-4 grid grid-cols-3 gap-2">
+                {[
+                  [t("stats.gyms"), stamps.length],
+                  [t("stats.cities"), cities],
+                  [t("stats.visits"), visits],
+                ].map(([label, value]) => (
+                  <div key={label} className="rounded-2xl bg-canvas px-3 py-3">
+                    <dd className="text-2xl font-semibold tracking-tight text-ink tabular-nums">{value}</dd>
+                    <dt className="text-xs text-gray-500">{label}</dt>
+                  </div>
                 ))}
-              </div>
-            ) : (
-              <p className="mt-4 text-sm leading-relaxed text-gray-500">{t("firstStamp")}</p>
-            )}
-          </section>
+              </dl>
+              {stamps.length > 0 ? (
+                <div className="mt-5 flex items-center gap-1 overflow-hidden">
+                  {stamps.slice(0, 4).map((s, i) => (
+                    <Stamp
+                      key={s.gymId}
+                      code={cityCode(s.city)}
+                      label={s.name}
+                      size="sm"
+                      tone={stampTones[i % stampTones.length]}
+                      shape={i % 3 === 1 ? "dashed" : "circle"}
+                      rotate={[-10, 6, -4, 12][i % 4]}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-4 text-sm leading-relaxed text-gray-500">{t("firstStamp")}</p>
+              )}
+            </section>
+          )}
         </aside>
       </div>
 

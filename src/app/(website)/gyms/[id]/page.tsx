@@ -10,6 +10,11 @@ import { getSessionUser } from "@/server/session";
 import { collections, toObjectId } from "@/server/db/collections";
 import { env } from "@/server/env";
 import type { Gym } from "@/lib/types";
+import { TrackEvent } from "@/components/analytics/TrackEvent";
+import type { TrackedGym } from "@/lib/analytics/events";
+import { breadcrumbJsonLd } from "@/components/seo/Breadcrumbs";
+import { cityPath, jsonLd } from "@/lib/seo";
+import { orFallback } from "@/server/degrade";
 
 type Props = { params: Promise<{ id: string }>; searchParams: Promise<{ tab?: string }> };
 
@@ -36,7 +41,7 @@ export default async function GymPage({ params, searchParams }: Props) {
   if (!profile) notFound();
 
   const user = await getSessionUser();
-  const t = await getTranslations("gym");
+  const [t, tc] = await Promise.all([getTranslations("gym"), getTranslations("cityPages")]);
   let reviewSlot: React.ReactNode = (
     <div className="flex flex-col items-start justify-between gap-4 rounded-4xl border border-dashed border-gray-900/15 bg-surface/60 p-6 sm:flex-row sm:items-center">
       <div>
@@ -53,9 +58,11 @@ export default async function GymPage({ params, searchParams }: Props) {
   );
 
   if (user && profile.ownerId !== user._id.toHexString()) {
-    const booked = await (await collections.bookings()).findOne(
-      { userId: user._id, gymId: toObjectId(profile.gym.id)!, status: "confirmed" },
-      { projection: { _id: 1 } },
+    const booked = await orFallback(
+      "[gyms] review eligibility failed",
+      async () =>
+        (await collections.bookings()).findOne({ userId: user._id, gymId: toObjectId(profile.gym.id)!, status: "confirmed" }, { projection: { _id: 1 } }),
+      null,
     );
     if (booked) reviewSlot = <ReviewForm gymId={profile.gym.id} gymName={profile.gym.name} />;
   }
@@ -64,6 +71,20 @@ export default async function GymPage({ params, searchParams }: Props) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: gymJsonLd(profile.gym) }} />
+      <TrackEvent event={{ name: "view_gym", gym: viewedGym(profile.gym) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLd(
+            breadcrumbJsonLd([
+              { label: tc("home"), href: "/" },
+              { label: tc("cities"), href: "/gyms/in" },
+              { label: profile.gym.address.city, href: cityPath(profile.gym.address.city) },
+              { label: profile.gym.name, href: `/gyms/${profile.gym.slug}` },
+            ]),
+          ),
+        }}
+      />
       <GymProfileView
       gym={profile.gym}
       details={profile.details}
@@ -75,6 +96,12 @@ export default async function GymPage({ params, searchParams }: Props) {
       />
     </>
   );
+}
+
+/** The gym as analytics sees it, valued at its cheapest pass */
+function viewedGym(gym: Gym): TrackedGym {
+  const prices = [gym.pricing.dayPass, gym.pricing.weekPass, gym.pricing.monthPass].filter((p) => p > 0);
+  return { id: gym.id, name: gym.name, city: gym.address.city, ...(prices.length ? { price: Math.min(...prices), currency: gym.currency } : {}) };
 }
 
 /** Structured data so search engines can show the gym's rating, address and prices */
@@ -99,6 +126,5 @@ function gymJsonLd(gym: Gym) {
       .map((key) => ({ "@type": "Offer", name: { dayPass: "Day pass", weekPass: "Week pass", monthPass: "Month pass" }[key], price: gym.pricing[key], priceCurrency: gym.currency, url })),
     ...(gym.totalReviews > 0 ? { aggregateRating: { "@type": "AggregateRating", ratingValue: gym.rating, reviewCount: gym.totalReviews, bestRating: 5 } } : {}),
   };
-  // Escape "<" so text from a listing can't close the script tag
-  return JSON.stringify(data).replace(/</g, "\\u003c");
+  return jsonLd(data);
 }

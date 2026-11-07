@@ -1,9 +1,15 @@
 "use client";
 
 import "@/styles/globals.css";
+import { useEffect } from "react";
+import { reportError } from "@/lib/monitoring";
 
 // Last resort when the root layout itself fails, so translations aren't available here
 export default function GlobalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+  useEffect(() => {
+    if (!error.digest) reportError("[layout] render failed", error);
+  }, [error]);
+
   return (
     <html lang="en">
       <body className="bg-canvas font-sans text-ink antialiased">

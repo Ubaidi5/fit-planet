@@ -13,6 +13,8 @@ import { cityCode } from "@/lib/data/cities";
 import { formatDate, todayIn } from "@/lib/dates";
 import { getRegion } from "@/lib/i18n/server";
 import { cn } from "@/lib/utils";
+import { TrackEvent } from "@/components/analytics/TrackEvent";
+import { eventIds } from "@/lib/analytics/events";
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations("pass"))("meta") };
@@ -56,6 +58,18 @@ export default async function PassPage({ params, searchParams }: { params: Promi
         <HiArrowLeft className="size-4 rtl:rotate-180" />
         {t("all")}
       </Link>
+
+      {isNew && usable && (booking.paymentMethod === "desk" || booking.paymentStatus === "paid") && (
+        <TrackEvent
+          once={eventIds.booking(booking.id, booking.paymentMethod)}
+          event={{
+            name: booking.paymentMethod === "desk" ? "reserve" : "purchase",
+            id: eventIds.booking(booking.id, booking.paymentMethod),
+            transactionId: booking.id,
+            pass: { gymId: booking.gym.id, gymName: booking.gym.name, city: booking.gym.city, passType: booking.passType, amount: booking.amount, currency: booking.currency },
+          }}
+        />
+      )}
 
       {isNew && usable && (
         <div className="mb-5 flex items-start gap-3 rounded-3xl bg-emerald-50 p-4 ring-1 ring-emerald-600/15 animate-fade-up">

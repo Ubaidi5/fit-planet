@@ -2,6 +2,7 @@ import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { env } from "@/server/env";
 import { releaseAbandonedCheckouts, sendPassReminders } from "@/server/modules/reminders";
+import { reportError } from "@/lib/monitoring";
 
 const jobs: Record<string, () => Promise<object>> = {
   hourly: async () => ({ ...(await sendPassReminders()), ...(await releaseAbandonedCheckouts()) }),
@@ -23,7 +24,7 @@ export async function POST(request: Request, ctx: { params: Promise<{ job: strin
   try {
     return NextResponse.json({ ok: true, ...(await run()) });
   } catch (error) {
-    console.error(`[cron] ${job} failed`, error);
+    reportError(`[cron] ${job} failed`, error);
     return NextResponse.json({ ok: false }, { status: 500 });
   }
 }

@@ -7,6 +7,7 @@ import type { CommentView, PersonView, PostView } from "@/lib/types";
 import { initials } from "@/lib/initials";
 import { notify } from "./notifications";
 import { ownedUploads } from "./media";
+import { literalPattern } from "@/server/db/search";
 
 export class SocialError extends AppError {}
 
@@ -352,7 +353,7 @@ const personProjection = { name: 1, handle: 1, image: 1, bio: 1 } as const;
 export async function searchPeople(viewerId: ObjectId, query: string) {
   const q = query.trim().replace(/^@/, "");
   if (q.length < 2) return [];
-  const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const escaped = literalPattern(q);
   const docs = await (await collections.users())
     .find({ handle: { $exists: true }, $or: [{ handle: { $regex: `^${escaped.toLowerCase()}` } }, { name: { $regex: escaped, $options: "i" } }] }, { projection: personProjection })
     .limit(20)

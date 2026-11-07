@@ -3,6 +3,10 @@ import { getTranslations } from "next-intl/server";
 import { FaFacebookF, FaInstagram, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { Logo } from "@/components/brand/Logo";
 import { platformSnapshot } from "@/server/modules/platform";
+import { CookieSettingsButton } from "@/components/analytics/CookieSettingsButton";
+import { hasTracking } from "@/lib/analytics/consent";
+import { trackingConfig } from "@/server/tracking";
+import { cityPath } from "@/lib/seo";
 
 type FooterGroup = { title: string; links: { href: string; label: string; city?: string }[] };
 
@@ -45,7 +49,8 @@ const Footer = async () => {
     title: "explore",
     links: [
       ...(stats.gyms > 0 ? [{ href: "/#orbit", label: "exploreNearby" }] : []),
-      ...stats.cities.slice(0, 3).map((city) => ({ href: `/gyms?city=${encodeURIComponent(city)}`, label: "gymsIn", city })),
+      ...stats.cities.slice(0, 3).map((city) => ({ href: cityPath(city), label: "gymsIn", city })),
+      ...(stats.cities.length > 0 ? [{ href: "/gyms/in", label: "allCities" }] : []),
     ],
   };
   const groups = explore.links.length > 0 ? [...footerLinks, explore] : footerLinks;
@@ -114,6 +119,9 @@ const Footer = async () => {
                   {t(link.label)}
                 </Link>
               ))}
+              {hasTracking(trackingConfig()) && (
+                <CookieSettingsButton label={t("cookieSettings")} className="cursor-pointer transition-colors hover:text-ink" />
+              )}
             </nav>
           </div>
           {stats.cities.length > 0 && (

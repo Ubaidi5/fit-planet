@@ -4,13 +4,16 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Stamp } from "@/components/passport/Stamp";
+import { reportError } from "@/lib/monitoring";
 
 /** Shown when a page throws; the rest of the app keeps working */
 export default function ErrorPage({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   const t = useTranslations("errorPage");
 
   useEffect(() => {
-    console.error(error);
+    // Errors with a digest were thrown on the server and are already reported there
+    if (error.digest) console.error(error);
+    else reportError("[page] render failed", error);
   }, [error]);
 
   return (

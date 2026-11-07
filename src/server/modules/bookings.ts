@@ -13,6 +13,10 @@ import { email } from "@/server/services/email";
 import { bookingConfirmedEmail } from "@/server/services/email/templates";
 import { translatorFor } from "@/server/i18n";
 import { notify } from "./notifications";
+import { sendConversion, type Attribution } from "@/server/services/conversions";
+import { eventIds } from "@/lib/analytics/events";
+import { reportError } from "@/lib/monitoring";
+import { literalPattern } from "@/server/db/search";
 
 /** How far ahead a pass can be booked */
 export const MAX_DAYS_AHEAD = 60;
@@ -95,6 +99,8 @@ export interface CreateBookingInput {
   paymentMethod: "online" | "desk";
   guestName?: string;
   guestPhone?: string;
+  /** Present when the member accepted ad cookies */
+  attribution?: Attribution | null;
 }
 
 export interface CreateBookingResult {
@@ -106,7 +112,8 @@ export interface CreateBookingResult {
 export async function createBooking(input: CreateBookingInput): Promise<CreateBookingResult> {
   const gyms = await collections.gyms();
   const gym = await gyms.findOne({ _id: input.gymId });
-  if (!gym || gym.status !== "published") throw new BookingError("gymNotBooking");
+  // Sample studios are for show only: nobody should pay for a pass at a gym that may not exist
+  if (!gym || gym.status !== "published" || gym.isDemo) throw new BookingError("gymNotBooking");
 
   const today = todayIn(gym.timezone);
   if (!isIsoDate(input.startDate)) throw new BookingError("pickStartDate");
@@ -159,6 +166,7 @@ export async function createBooking(input: CreateBookingInput): Promise<CreateBo
     checkinCount: 0,
     createdAt: now,
     confirmedAt: input.paymentMethod === "desk" ? now : undefined,
+    ...(input.attribution ? { attribution: input.attribution } : {}),
   };
 
   let booking: BookingDoc | null = null;
@@ -270,6 +278,8 @@ async function onBookingConfirmed(booking: BookingDoc, gym: GymDoc) {
     paid: booking.paymentMethod === "desk" ? "desk" : "online",
   };
 
+  if (booking.attribution) void reportConversion(booking, gym, booking.attribution).catch((error) => console.error("[booking] conversion report failed", error));
+
   await Promise.all([
     notify(booking.ownerId, {
       type: "booking.new",
@@ -311,9 +321,23 @@ async function onBookingConfirmed(booking: BookingDoc, gym: GymDoc) {
         ),
       );
     } catch (error) {
-      console.error("[booking] receipt email failed", error);
+      reportError("[booking] receipt email failed", error);
     }
   }
+}
+
+/** Tells the ad platforms about the booking, then forgets the browser details */
+async function reportConversion(booking: BookingDoc, gym: GymDoc, attribution: Attribution) {
+  const method = booking.paymentMethod === "desk" ? "desk" : "online";
+  await sendConversion({
+    kind: method === "desk" ? "reserve" : "purchase",
+    eventId: eventIds.booking(booking._id.toHexString(), method),
+    at: booking.confirmedAt ?? new Date(),
+    attribution,
+    user: { id: booking.userId.toHexString(), email: booking.guest.email, phone: booking.guest.phone },
+    value: { amount: booking.amount, currency: booking.currency, itemId: `${gym._id.toHexString()}:${booking.passType}`, itemName: gym.name },
+  });
+  await (await collections.bookings()).updateOne({ _id: booking._id }, { $unset: { attribution: "" } });
 }
 
 export async function listUserBookings(userId: ObjectId) {
@@ -389,7 +413,7 @@ export async function listGymBookings(filter: OwnerBookingFilter) {
   if (filter.from) query.startDate = { ...(query.startDate as object), $gte: filter.from };
   if (filter.to) query.startDate = { ...(query.startDate as object), $lte: filter.to };
   if (filter.q) {
-    const pattern = new RegExp(filter.q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+    const pattern = new RegExp(literalPattern(filter.q), "i");
     query.$or = [{ "guest.name": pattern }, { "guest.email": pattern }, { "guest.phone": pattern }, { code: pattern }];
   }
   const docs = await bookings.find(query).sort({ createdAt: -1 }).limit(filter.limit ?? 500).toArray();

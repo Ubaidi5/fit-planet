@@ -45,24 +45,51 @@ export async function ownerStats(gyms: GymDoc[]): Promise<OwnerStats> {
 
   const bookings = await collections.bookings();
   const checkins = await collections.checkins();
+  const scope = { gymId: { $in: gymIds } };
+  const day = (field: string) => ({ $dateToString: { format: "%Y-%m-%d", date: field, timezone: tz } });
 
-  const [recent, occupancy, checkinRows] = await Promise.all([
+  // Totals are added up inside MongoDB, so only a few dozen rows come back
+  // however many bookings and check-ins a gym has
+  const [[bookingFacets], [checkinFacets], occupancy, activePasses, upcomingPasses, unpaidAtDesk] = await Promise.all([
     bookings
-      .find({ gymId: { $in: gymIds }, status: { $in: ["confirmed", "refunded"] }, createdAt: { $gte: new Date(`${from60}T00:00:00Z`) } })
-      .project<{ amount: number; currency: string; passType: PassType; createdAt: Date; status: string; paymentStatus: string }>({
-        amount: 1,
-        currency: 1,
-        passType: 1,
-        createdAt: 1,
-        status: 1,
-        paymentStatus: 1,
-      })
+      .aggregate<{
+        byDay: { _id: string; bookings: number; revenue: number }[];
+        byPass: { _id: PassType; count: number; revenue: number }[];
+        previous: { revenue: number }[];
+      }>([
+        { $match: { ...scope, status: { $in: ["confirmed", "refunded"] }, createdAt: { $gte: new Date(`${from60}T00:00:00Z`) } } },
+        {
+          $project: {
+            day: day("$createdAt"),
+            passType: 1,
+            // Refunds count as bookings but not revenue; other currencies can't be summed
+            amount: { $cond: [{ $and: [{ $eq: ["$status", "confirmed"] }, { $eq: ["$currency", primary.currency] }] }, "$amount", 0] },
+          },
+        },
+        {
+          $facet: {
+            byDay: [{ $match: { day: { $gte: from30 } } }, { $group: { _id: "$day", bookings: { $sum: 1 }, revenue: { $sum: "$amount" } } }],
+            byPass: [{ $match: { day: { $gte: from30 } } }, { $group: { _id: "$passType", count: { $sum: 1 }, revenue: { $sum: "$amount" } } }],
+            previous: [{ $match: { day: { $lt: from30 } } }, { $group: { _id: null, revenue: { $sum: "$amount" } } }],
+          },
+        },
+      ])
+      .toArray(),
+    checkins
+      .aggregate<{ byHour: { _id: number; count: number }[]; today: { count: number }[] }>([
+        { $match: { ...scope, at: { $gte: new Date(Date.now() - 30 * 86_400_000) } } },
+        {
+          $facet: {
+            byHour: [{ $group: { _id: { $hour: { date: "$at", timezone: tz } }, count: { $sum: 1 } } }],
+            today: [{ $match: { $expr: { $eq: [day("$at"), today] } } }, { $count: "count" }],
+          },
+        },
+      ])
       .toArray(),
     occupancyFor(gymIds),
-    checkins
-      .find({ gymId: { $in: gymIds }, at: { $gte: new Date(Date.now() - 30 * 86_400_000) } })
-      .project<{ at: Date }>({ at: 1 })
-      .toArray(),
+    bookings.countDocuments({ ...scope, status: "confirmed", startDate: { $lte: today }, endDate: { $gte: today } }),
+    bookings.countDocuments({ ...scope, status: "confirmed", startDate: { $gt: today } }),
+    bookings.countDocuments({ ...scope, status: "confirmed", paymentMethod: "desk", paymentStatus: "unpaid", endDate: { $gte: today } }),
   ]);
 
   const series = new Map<string, DailyPoint>();
@@ -70,49 +97,21 @@ export async function ownerStats(gyms: GymDoc[]): Promise<OwnerStats> {
     const date = addDays(from30, i);
     series.set(date, { date, revenue: 0, bookings: 0 });
   }
-  const passMix: OwnerStats["passMix"] = { day: { count: 0, revenue: 0 }, week: { count: 0, revenue: 0 }, month: { count: 0, revenue: 0 } };
-  let revenue30 = 0;
-  let revenuePrev30 = 0;
-  let bookings30 = 0;
-  let todayBookings = 0;
-  let todayRevenue = 0;
-
-  for (const b of recent) {
-    const date = todayIn(tz, b.createdAt);
-    const counts = b.status === "confirmed" && b.currency === primary.currency;
-    const amount = counts ? b.amount : 0;
-    if (date >= from30) {
-      bookings30++;
-      revenue30 += amount;
-      passMix[b.passType].count++;
-      passMix[b.passType].revenue += amount;
-      const point = series.get(date);
-      if (point) {
-        point.bookings++;
-        point.revenue += amount;
-      }
-      if (date === today) {
-        todayBookings++;
-        todayRevenue += amount;
-      }
-    } else {
-      revenuePrev30 += amount;
-    }
+  for (const row of bookingFacets.byDay) {
+    const point = series.get(row._id);
+    if (point) Object.assign(point, { bookings: row.bookings, revenue: row.revenue });
   }
+  const passMix: OwnerStats["passMix"] = { day: { count: 0, revenue: 0 }, week: { count: 0, revenue: 0 }, month: { count: 0, revenue: 0 } };
+  for (const row of bookingFacets.byPass) if (passMix[row._id]) passMix[row._id] = { count: row.count, revenue: row.revenue };
+  const points = [...series.values()];
+  const bookings30 = points.reduce((sum, p) => sum + p.bookings, 0);
+  const revenue30 = points.reduce((sum, p) => sum + p.revenue, 0);
+  const revenuePrev30 = bookingFacets.previous[0]?.revenue ?? 0;
+  const todayPoint = series.get(today);
 
   const hourCounts = new Array(24).fill(0);
-  let todayCheckins = 0;
-  const hourFormat = new Intl.DateTimeFormat("en-US", { hour: "numeric", hourCycle: "h23", timeZone: tz });
-  for (const c of checkinRows) {
-    hourCounts[Number(hourFormat.format(c.at)) % 24]++;
-    if (todayIn(tz, c.at) === today) todayCheckins++;
-  }
-
-  const [activePasses, upcomingPasses, unpaidAtDesk] = await Promise.all([
-    bookings.countDocuments({ gymId: { $in: gymIds }, status: "confirmed", startDate: { $lte: today }, endDate: { $gte: today } }),
-    bookings.countDocuments({ gymId: { $in: gymIds }, status: "confirmed", startDate: { $gt: today } }),
-    bookings.countDocuments({ gymId: { $in: gymIds }, status: "confirmed", paymentMethod: "desk", paymentStatus: "unpaid", endDate: { $gte: today } }),
-  ]);
+  for (const row of checkinFacets.byHour) hourCounts[row._id % 24] = row.count;
+  const todayCheckins = checkinFacets.today[0]?.count ?? 0;
 
   return {
     currency: primary.currency,
@@ -121,8 +120,8 @@ export async function ownerStats(gyms: GymDoc[]): Promise<OwnerStats> {
       current: gymIds.reduce((sum, id) => sum + (occupancy.get(id.toHexString()) ?? 0), 0),
       max: gyms.reduce((sum, g) => sum + g.capacity.max, 0),
     },
-    todayBookings,
-    todayRevenue,
+    todayBookings: todayPoint?.bookings ?? 0,
+    todayRevenue: todayPoint?.revenue ?? 0,
     todayCheckins,
     activePasses,
     upcomingPasses,
@@ -130,7 +129,7 @@ export async function ownerStats(gyms: GymDoc[]): Promise<OwnerStats> {
     revenue30,
     revenuePrev30,
     bookings30,
-    series: [...series.values()],
+    series: points,
     passMix,
     hourly: hourCounts.map((count) => Math.round((count / 30) * 10) / 10),
   };

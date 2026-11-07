@@ -4,6 +4,7 @@ import { Logo } from "@/components/brand/Logo";
 import { AdminNav } from "@/components/admin/AdminNav";
 import { requireAdmin } from "@/server/session";
 import { collections } from "@/server/db/collections";
+import { orFallback } from "@/server/degrade";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const admin = await requireAdmin();
-  const openReports = (await (await collections.reports()).distinct("postId")).length;
+  const openReports = await orFallback("[admin] report count failed", async () => (await (await collections.reports()).distinct("postId")).length, 0);
   return (
     <div className="min-h-dvh bg-canvas">
       <header className="sticky top-0 z-40 border-b border-gray-900/[0.06] bg-canvas/85 backdrop-blur-md">

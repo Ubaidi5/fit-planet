@@ -6,7 +6,9 @@ import { signIn, signOut } from "@/lib/auth";
 import type { ActionResult } from "@/lib/types";
 import { registerWithPassword, requestPasswordReset, resetPassword, UserError } from "@/server/modules/users";
 import { allow, allowAll, clientIp } from "@/server/rate-limit";
+import { queueBrowserEvent, trackAuth } from "@/server/tracking";
 import { done, fail, invalid, safeRedirect } from "./utils";
+import { reportError } from "@/lib/monitoring";
 
 const passwordRule = z.string().min(8, "passwordLength").max(128);
 
@@ -24,18 +26,21 @@ export async function registerAction(_prev: ActionResult | null, formData: FormD
   if (!parsed.success) return invalid(parsed.error);
   if (!(await allow("register", await clientIp(), 10, 3600))) return fail("tooManyAttempts");
 
+  let userId: string;
   try {
-    await registerWithPassword(parsed.data);
+    userId = (await registerWithPassword(parsed.data))._id.toHexString();
   } catch (error) {
     if (error instanceof UserError) return fail(error.key, error.values);
-    console.error("[auth] register failed", error);
+    reportError("[auth] register failed", error);
     return fail("registerFailed");
   }
 
+  const next = safeRedirect(parsed.data.next, "/app/dashboard");
+  await trackAuth({ method: "password", isNewUser: true, owner: next.startsWith("/studio"), user: { id: userId, email: parsed.data.email } });
   await signIn("password", {
     email: parsed.data.email,
     password: parsed.data.password,
-    redirectTo: safeRedirect(parsed.data.next, "/app/dashboard"),
+    redirectTo: next,
   });
   return { ok: true };
 }
@@ -63,7 +68,9 @@ export async function loginAction(_prev: ActionResult | null, formData: FormData
       }
       return fail("signInFailed");
     }
-    throw error; // the redirect after a successful sign-in
+    // The redirect after a successful sign-in
+    await queueBrowserEvent({ name: "login", method: "password" });
+    throw error;
   }
   return { ok: true };
 }
@@ -103,7 +110,7 @@ export async function forgotPasswordAction(_prev: ActionResult | null, formData:
   try {
     if (allowed) await requestPasswordReset(parsed.data.email, parsed.data.portal);
   } catch (error) {
-    console.error("[auth] reset request failed", error);
+    reportError("[auth] reset request failed", error);
   }
   return done("resetSent");
 }
