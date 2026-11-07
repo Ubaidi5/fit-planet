@@ -22,7 +22,7 @@ export interface LegalDetails {
   jurisdiction?: string;
 }
 
-export const LEGAL_UPDATED = "2026-10-28";
+export const LEGAL_UPDATED = "2026-10-30";
 
 const contact = (d: LegalDetails) => (d.email ? `by email at ${d.email}` : "through the contact details on our imprint page");
 
@@ -89,7 +89,7 @@ export function privacySections(d: LegalDetails, tracking: TrackingDisclosure = 
             ]
           : []),
         tools.adsOn
-          ? "We do not sell your personal information. If you allow advertising cookies, our advertising partners receive data about your visit and sign-ups or bookings (such as a hashed email address, your IP address and the pages you viewed) to measure our ads; some US state laws call this sharing for cross-context behavioural advertising. Reject advertising cookies to opt out."
+          ? "We do not sell your personal information. If you allow advertising cookies, our advertising partners receive data about your visit and sign-ups or bookings (such as a hashed email address, your IP address and the pages you viewed) to measure our ads; some US state laws call this sharing for cross-context behavioural advertising. To opt out, reject advertising cookies, use “Do not sell or share my personal information” at the bottom of every page, or turn on Global Privacy Control in your browser; we honour that signal automatically."
           : "We do not sell your personal information, we do not share it for cross-context behavioural advertising, and we do not use it to build advertising profiles.",
       ],
     },
@@ -154,7 +154,24 @@ export function privacySections(d: LegalDetails, tracking: TrackingDisclosure = 
           "Change your profile, notification and social privacy settings at any time.",
         ],
         `For anything else, contact us ${contact(d)}. We answer within one month, or sooner where the law requires.`,
-        "If you are in the EU or UK you can also complain to your local data protection authority. Residents of California and other US states have the rights described here, and we will not treat you differently for using them. Australian residents may contact the Office of the Australian Information Commissioner. Residents of the UAE and Türkiye have the rights given by the UAE Personal Data Protection Law and Law No. 6698 (KVKK).",
+        "If you are in the EU or UK you can also complain to your local data protection authority. Residents of California and other US states have the additional rights listed below. Australian residents may contact the Office of the Australian Information Commissioner. Residents of the UAE and Türkiye have the rights given by the UAE Personal Data Protection Law and Law No. 6698 (KVKK).",
+      ],
+    },
+    {
+      id: "us-privacy",
+      title: "US state privacy rights (California and others)",
+      body: [
+        "If you live in California, Colorado, Connecticut, Virginia, Utah, Texas, Oregon or another US state with a consumer privacy law, you have these rights in addition to the ones above:",
+        [
+          "To know what personal information we collect, use and disclose, set out in this policy, and to get a copy of yours.",
+          "To delete or correct your personal information.",
+          tools.adsOn
+            ? "To opt out of the sale or sharing of your personal information. We never sell it for money; advertising cookies count as sharing, and they stay off until you accept them. Opt out any time with “Do not sell or share my personal information” at the bottom of every page, or with Global Privacy Control, which we treat as a valid opt-out."
+            : "To opt out of the sale or sharing of your personal information. We do not sell or share it, so there is nothing to opt out of.",
+          "To limit the use of sensitive personal information. We only use it to provide the service (for example, precise location when you ask for gyms near you).",
+          "Not to be treated differently, in price or service, for using any of these rights.",
+        ],
+        `Use Settings, Security for a copy or deletion, or contact us ${contact(d)}. You can also send someone you authorise to act for you; we may ask them for proof and ask you to confirm your identity. We answer within 45 days. In the last 12 months we have not sold personal information.`,
       ],
     },
     {

@@ -56,6 +56,7 @@
     "terms": "Conditions",
     "imprint": "Mentions légales",
     "cookieSettings": "Paramètres des cookies",
+    "doNotSell": "Ne pas vendre ni partager mes informations personnelles",
     "allCities": "Toutes les villes"
   },
   "hero": {
@@ -2253,7 +2254,9 @@
     "customize": "Choisir moi-même",
     "save": "Enregistrer mes choix",
     "alwaysOn": "Toujours actifs",
+    "alwaysOff": "Désactivé",
     "close": "Fermer",
+    "gpcOn": "Le Global Privacy Control de votre navigateur est activé, la publicité reste donc désactivée.",
     "necessary": {
       "title": "Essentiels",
       "text": "Vous gardent connecté, sécurisent les paiements et retiennent votre région."

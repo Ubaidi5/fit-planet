@@ -120,7 +120,11 @@ const Footer = async () => {
                 </Link>
               ))}
               {hasTracking(trackingConfig()) && (
-                <CookieSettingsButton label={t("cookieSettings")} className="cursor-pointer transition-colors hover:text-ink" />
+                <>
+                  <CookieSettingsButton label={t("cookieSettings")} className="cursor-pointer transition-colors hover:text-ink" />
+                  {/* Required by California law (CCPA/CPRA) wherever ads are measured */}
+                  <CookieSettingsButton optOut label={t("doNotSell")} className="cursor-pointer transition-colors hover:text-ink" />
+                </>
               )}
             </nav>
           </div>

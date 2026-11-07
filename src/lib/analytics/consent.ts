@@ -40,3 +40,19 @@ export function hasTracking(config: TrackingConfig) {
 
 /** Window event the footer's "Cookie settings" link sends to reopen the banner */
 export const OPEN_CONSENT_EVENT = "fp:open-consent";
+
+/**
+ * Window event of the footer's "Do not sell or share" link (CCPA/CPRA): turns
+ * advertising off in one step and shows the banner so the visitor sees it.
+ */
+export const OPT_OUT_EVENT = "fp:opt-out-ads";
+
+/**
+ * Global Privacy Control (Sec-GPC header, navigator.globalPrivacyControl) is
+ * a legally binding opt-out of selling and sharing in California and several
+ * other US states. With it on, ad tags stay off whatever was saved.
+ */
+export function withPrivacySignal(consent: Consent | null, gpc: boolean): Consent | null {
+  if (!gpc || !consent) return consent;
+  return { ...consent, ads: false };
+}

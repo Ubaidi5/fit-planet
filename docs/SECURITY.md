@@ -77,8 +77,13 @@ keep in mind when changing it.
   bookings keep their amounts for the gym's books but lose contact details.
 - Accounts that manage a gym, or hold an active or upcoming pass, can't be
   deleted until that is sorted out, so no paid pass or gym is left orphaned.
-- Only essential cookies are used (session, sign-in security, region), so no
-  consent banner is needed.
+- Analytics and ad tags (GTM, GA4, Meta, OpenAI) load only after the visitor
+  accepts them in the cookie banner; server-side conversions only send for
+  visitors who accepted ads. Reject and accept carry equal weight.
+- CCPA/CPRA: the footer's "Do not sell or share my personal information"
+  turns ads off in one click, and the Global Privacy Control signal
+  (`Sec-GPC` header or `navigator.globalPrivacyControl`) forces ads off on the
+  server and in the browser, whatever was saved (`withPrivacySignal()`).
 
 ## Transport and headers
 

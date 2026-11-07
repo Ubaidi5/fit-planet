@@ -56,6 +56,7 @@
     "terms": "Koşullar",
     "imprint": "Künye",
     "cookieSettings": "Çerez ayarları",
+    "doNotSell": "Kişisel bilgilerimi satma veya paylaşma",
     "allCities": "Tüm şehirler"
   },
   "hero": {
@@ -2253,7 +2254,9 @@
     "customize": "Kendim seçeyim",
     "save": "Seçimimi kaydet",
     "alwaysOn": "Her zaman açık",
+    "alwaysOff": "Kapalı",
     "close": "Kapat",
+    "gpcOn": "Tarayıcının Global Privacy Control ayarı açık, bu yüzden reklamlar kapalı kalır.",
     "necessary": {
       "title": "Zorunlu",
       "text": "Oturumunu açık tutar, ödemeleri korur ve bölgeni hatırlar."
